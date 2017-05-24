@@ -1,39 +1,30 @@
 package com.correios;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.correios.bot.ConsultaCEP;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.annotation.Bean;
-import org.springframework.hateoas.hal.Jackson2HalModule;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 
 @SpringBootApplication
-@EnableDiscoveryClient
-public class CorreioApplication {
+public class CorreioApplication implements CommandLineRunner {
+
+	static Logger logger = LoggerFactory.getLogger(CorreioApplication.class);
+
+	@Autowired
+	private ConsultaCEP consultaCEP;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CorreioApplication.class, args);
 	}
 
-	@Bean
-	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
-		MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-		jsonConverter.setSupportedMediaTypes(MediaType.parseMediaTypes("application/hal+json"));
-		objectMapper(jsonConverter);
-		return jsonConverter;
+	@Override
+	public void run(String... strings) throws Exception {
+		logger.info(consultaCEP.getEndereco(strings[0]).toString());
 	}
+	
 
-	private void objectMapper(MappingJackson2HttpMessageConverter jsonConverter) {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-		objectMapper.configure(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY, true);
-		objectMapper.registerModule(new Jackson2HalModule());
-		jsonConverter.setObjectMapper(objectMapper);
-	}
 
 }

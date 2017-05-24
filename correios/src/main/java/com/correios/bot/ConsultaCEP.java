@@ -64,11 +64,11 @@ public class ConsultaCEP {
         caps.setJavascriptEnabled(true);
         caps.setCapability("takesScreenshot", true);
 
-        List<String> cliArgsCap = Arrays.asList("--webdriver=192.168.10.101:8910");
+        List<String> cliArgsCap = Arrays.asList("--webdriver=54.224.242.0:8910");
         caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap);
 
         try {
-            driver = new RemoteWebDriver(new URL("http://192.168.10.101:8910"), caps);
+            driver = new RemoteWebDriver(new URL("http://54.224.242.0:8910"), caps);
         } catch (MalformedURLException e) {
             logger.error("ocorreu um problema no RemoteWebDriver: {} ", e);
         }

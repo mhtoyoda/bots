@@ -1,8 +1,12 @@
 package com.correios.domain;
 
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
+
 /**
  * Created by valdisnei on 16/05/17.
  */
+@AutoProperty
 public class Endereco {
     private final String logradouro;
     private final String bairro;
@@ -30,5 +34,11 @@ public class Endereco {
 
     public String getCep() {
         return cep;
+    }
+
+
+    @Override
+    public String toString() {
+        return Pojomatic.toString(this);
     }
 }
