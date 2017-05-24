@@ -1,6 +1,12 @@
 package com.correios.bot;
 
-import com.correios.domain.Endereco;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -11,14 +17,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import com.correios.domain.Endereco;
+import com.fiveware.annotation.Bot;
 
 @Component
+@Bot
 public class ConsultaCEP {
 
     static Logger logger = LoggerFactory.getLogger(ConsultaCEP.class);
@@ -94,7 +97,6 @@ public class ConsultaCEP {
                 break;
         }
     }
-
 
 }
 
