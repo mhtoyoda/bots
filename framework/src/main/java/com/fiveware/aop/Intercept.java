@@ -20,8 +20,6 @@ public class Intercept {
 
     @Before("execution(public * com.fiveware.Automation.*(..))")
     public void interceptarApiOy(JoinPoint joinPoint) throws JsonProcessingException {
-
-
         logger.info("teste aspect");
     }
 }
