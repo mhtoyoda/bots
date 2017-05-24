@@ -1,0 +1,10 @@
+---
+# Properties active for ALL profiles:
+spring:
+  application:
+    name: correios
+
+# For simplicity, disable security when posting to bus/refresh:
+management:
+  security:
+    enabled: false
