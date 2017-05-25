@@ -1,4 +1,4 @@
-package com.correios.domain;
+package com.fiveware.domain;
 
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;

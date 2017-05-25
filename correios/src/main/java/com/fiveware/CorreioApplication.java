@@ -1,6 +1,6 @@
-package com.correios;
+package com.fiveware;
 
-import com.correios.bot.ConsultaCEP;
+import com.fiveware.bot.ConsultaCEP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

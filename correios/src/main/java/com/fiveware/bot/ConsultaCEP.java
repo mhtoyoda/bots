@@ -1,12 +1,11 @@
-package com.correios.bot;
+package com.fiveware.bot;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
+import com.fiveware.Automation;
+import com.fiveware.annotation.Bot;
+import com.fiveware.annotation.InputDictionary;
+import com.fiveware.converter.ConverterRecordLine;
+import com.fiveware.domain.Endereco;
+import com.fiveware.file.RecordLine;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -15,19 +14,25 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.correios.domain.Endereco;
-import com.fiveware.Automation;
-import com.fiveware.annotation.Bot;
-import com.fiveware.annotation.InputDictionary;
-import com.fiveware.file.RecordLine;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Bot
 public class ConsultaCEP implements Automation{
 
     static Logger logger = LoggerFactory.getLogger(ConsultaCEP.class);
+
+
+    @Autowired
+    private ConverterRecordLine converterRecordLine;
 
     private WebDriver driver;
     private String baseUrl;
@@ -106,8 +111,10 @@ public class ConsultaCEP implements Automation{
 	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
 	public RecordLine execute(RecordLine recordLine) {
 		try {
-			getEndereco(recordLine.getRecordMap().get("cep").toString());
-		} catch (Exception e) {
+            Endereco endereco = getEndereco(recordLine.getValue("cep"));
+            return converterRecordLine.converter(endereco);
+
+        } catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
