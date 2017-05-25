@@ -5,13 +5,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-/**
- * 
- * Indica como classe de automação  
- * 
- */
-@Target(value = ElementType.TYPE)
+@Target(value = ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Bot {
+public @interface OutputDictionary {
 
+	String typeFileOut() default "txt";
+	String[] fields();
+	String separator() default "|";
 }

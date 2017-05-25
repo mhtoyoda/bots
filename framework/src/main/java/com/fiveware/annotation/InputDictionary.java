@@ -8,8 +8,8 @@ import java.lang.annotation.Target;
 @Target(value = ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InputDictionary {
-	
-	String typeFile() default "txt";
+
+	String typeFileIn() default "txt";
 	String[] fields();
 	String separator() default "|";
 }

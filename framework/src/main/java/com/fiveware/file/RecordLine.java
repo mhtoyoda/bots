@@ -1,6 +1,6 @@
 package com.fiveware.file;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class RecordLine {
@@ -9,7 +9,7 @@ public class RecordLine {
 
 	public RecordLine() {
 		if (recordMap == null) {
-			recordMap = new HashMap<String, String>();
+			recordMap = new LinkedHashMap<String, String>();
 		}
 	}
 

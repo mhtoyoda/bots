@@ -18,11 +18,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.correios.domain.Endereco;
+import com.fiveware.Automation;
 import com.fiveware.annotation.Bot;
+import com.fiveware.annotation.InputDictionary;
+import com.fiveware.file.RecordLine;
 
 @Component
 @Bot
-public class ConsultaCEP {
+public class ConsultaCEP implements Automation{
 
     static Logger logger = LoggerFactory.getLogger(ConsultaCEP.class);
 
@@ -97,6 +100,19 @@ public class ConsultaCEP {
                 break;
         }
     }
+
+
+	@Override
+	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
+	public RecordLine execute(RecordLine recordLine) {
+		try {
+			getEndereco(recordLine.getRecordMap().get("cep").toString());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 }
 
