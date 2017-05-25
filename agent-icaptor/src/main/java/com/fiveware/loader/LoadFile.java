@@ -29,9 +29,10 @@ public class LoadFile {
 	
 	public void executeLoad(){
 		File file = fileUtil.getFile("cep.txt");
+		String separatorInput = dictionary.getSeparatorInput(automation);
 		String[] fieldsInput = dictionary.getFieldsInput(automation);
-		List<RecordLine> recordLine = fileUtil.getLines(file, fieldsInput);
-		for (RecordLine line : recordLine) {
+		List<RecordLine> recordLines = fileUtil.getLines(file, fieldsInput, separatorInput);
+		for (RecordLine line : recordLines) {
 			try{
 				//TODO validar line
 				RecordLine result = automation.execute(line);

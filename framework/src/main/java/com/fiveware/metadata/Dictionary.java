@@ -20,4 +20,16 @@ public class Dictionary {
 		}
 		return null;
 	}
+	
+	public String getSeparatorInput(Object objeto) {
+		Class<? extends Object> clazz = objeto.getClass();
+		for (Method method : clazz.getDeclaredMethods()) {
+			if (method.isAnnotationPresent(InputDictionary.class)) {
+				InputDictionary inputDictionary = method.getAnnotation(InputDictionary.class);
+				String separator = inputDictionary.separator();
+				return separator;
+			}
+		}
+		return null;
+	}
 }

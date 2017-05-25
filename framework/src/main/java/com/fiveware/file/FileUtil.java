@@ -11,11 +11,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class FileUtil {
 
-	public List<RecordLine> getLines(File file, String[] fields) {
+	public List<RecordLine> getLines(File file, String[] fields, String separator) {
 		List<RecordLine> recordsLines = Lists.newArrayList();
-		RecordLine recordLines = new RecordLine();
-		List<String> lines = getLines(file);
-		lines.forEach(record -> recordLines.addRecordLine("cep", record));
+
+		List<String> lines = linesFrom(file);
+		lines.forEach(record -> {
+			String[] recordArray = record.split(separator);
+			if (recordArray.length == fields.length) {
+				RecordLine recordLines = new RecordLine();
+				for (int i = 0; i < fields.length; i++) {
+					recordLines.addRecordLine(fields[i], recordArray[i]);
+				}
+				recordsLines.add(recordLines);
+			}
+		});
 		return recordsLines;
 	}
 
@@ -25,7 +34,7 @@ public class FileUtil {
 		return file;
 	}
 
-	private List<String> getLines(File file) {
+	private List<String> linesFrom(File file) {
 		List<String> linhas = Lists.newArrayList();
 		try (Scanner scanner = new Scanner(file)) {
 
@@ -40,4 +49,5 @@ public class FileUtil {
 
 		return linhas;
 	}
+
 }
