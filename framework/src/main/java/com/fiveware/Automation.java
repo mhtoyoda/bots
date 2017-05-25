@@ -1,12 +1,11 @@
 package com.fiveware;
 
-import com.fiveware.file.RecordLine;
-import org.springframework.stereotype.Component;
+import com.fiveware.model.OutTextRecord;
 
 /**
  * Created by valdisnei on 24/05/17.
  */
-@Component
-public interface Automation {
-    RecordLine execute(RecordLine recordLine);
+public interface Automation<T> {
+    
+	OutTextRecord execute(T recordLine);
 }

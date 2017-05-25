@@ -1,16 +1,16 @@
-package com.fiveware.file;
+package com.fiveware.model;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class RecordLine {
+public class Record {
 
 	private Map<String, String> recordMap = new LinkedHashMap<String, String>();
 
-	public RecordLine() {
+	public Record() {
 	}
 
-	public RecordLine(Map<String, String> recordMap) {
+	public Record(Map<String, String> recordMap) {
 		this.recordMap = recordMap;
 	}
 

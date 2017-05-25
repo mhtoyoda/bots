@@ -1,11 +1,12 @@
 package com.fiveware.bot;
 
-import com.fiveware.Automation;
-import com.fiveware.annotation.Bot;
-import com.fiveware.annotation.InputDictionary;
-import com.fiveware.converter.ConverterRecordLine;
-import com.fiveware.domain.Endereco;
-import com.fiveware.file.RecordLine;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -17,16 +18,18 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import com.fiveware.Automation;
+import com.fiveware.annotation.Bot;
+import com.fiveware.annotation.InputDictionary;
+import com.fiveware.annotation.OutputDictionary;
+import com.fiveware.converter.ConverterRecordLine;
+import com.fiveware.domain.Endereco;
+import com.fiveware.model.OutTextRecord;
+import com.fiveware.model.Record;
 
 @Component
 @Bot
-public class ConsultaCEP implements Automation{
+public class ConsultaCEP implements Automation<String> {
 
     static Logger logger = LoggerFactory.getLogger(ConsultaCEP.class);
 
@@ -106,20 +109,17 @@ public class ConsultaCEP implements Automation{
         }
     }
 
-
 	@Override
 	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
-	public RecordLine execute(RecordLine recordLine) {
+	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, separator = ",", typeFileOut = "csv")
+	public OutTextRecord execute(String recordLine) {
 		try {
-            Endereco endereco = getEndereco(recordLine.getValue("cep"));
+            Endereco endereco = getEndereco(recordLine);
             return converterRecordLine.converter(endereco);
 
         } catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+        	logger.error(e.getMessage());
 		}
 		return null;
 	}
-
 }
-
