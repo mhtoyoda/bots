@@ -38,7 +38,7 @@ public class ConsultaCEP implements Automation<String> {
     private ConverterRecordLine converterRecordLine;
 
     private WebDriver driver;
-    private String baseUrl;
+    private String baseUrl = "http://www.correios.com.br/";
 
     public Endereco getEndereco(String cepPesquisa) throws Exception {
 
@@ -87,7 +87,7 @@ public class ConsultaCEP implements Automation<String> {
             logger.error("ocorreu um problema no RemoteWebDriver: {} ", e);
         }
 
-        baseUrl = "http://www.correios.com.br/";
+
         driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
 
     }

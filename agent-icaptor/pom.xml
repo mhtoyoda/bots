@@ -50,11 +50,6 @@
 			<artifactId>guava</artifactId>
 			<version>22.0</version>
 		</dependency>
-		<dependency>
-			<groupId>correios-api</groupId>
-			<artifactId>correios</artifactId>
-			<version>1.0-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>
