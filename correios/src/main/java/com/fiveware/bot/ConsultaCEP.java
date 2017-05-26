@@ -4,7 +4,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
@@ -16,23 +18,21 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import com.fiveware.Automation;
-import com.fiveware.annotation.Bot;
+import com.fiveware.annotation.IcaptorMethod;
+import com.fiveware.annotation.Field;
+import com.fiveware.annotation.Icaptor;
 import com.fiveware.annotation.InputDictionary;
 import com.fiveware.annotation.OutputDictionary;
 import com.fiveware.converter.ConverterRecordLine;
 import com.fiveware.domain.Endereco;
 import com.fiveware.model.OutTextRecord;
-import com.fiveware.model.Record;
 
-@Component
-@Bot
+@Icaptor(description = "Bot para consulta de ceps, serviço do Correio", value = "consultaCEP", version = "1.0.0")
 public class ConsultaCEP implements Automation<String> {
 
     static Logger logger = LoggerFactory.getLogger(ConsultaCEP.class);
-
 
     @Autowired
     private ConverterRecordLine converterRecordLine;
@@ -110,13 +110,18 @@ public class ConsultaCEP implements Automation<String> {
     }
 
 	@Override
+	@IcaptorMethod
 	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
-	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, separator = ",", typeFileOut = "csv")
-	public OutTextRecord execute(String recordLine) {
+	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, nameFileOut= "/home/fiveware/Documentos/saida.txt", separator = "|", typeFileOut = "csv")
+	public OutTextRecord execute(@Field(length=9, regexValidate = "\\d{5}\\-?\\d{3}") String recordLine) {
 		try {
             Endereco endereco = getEndereco(recordLine);
-            return converterRecordLine.converter(endereco);
-
+            if(null != endereco){
+            	return converterRecordLine.converter(endereco);            	
+            }
+            Map<String, String> map = new LinkedHashMap<>();
+            map.put("cep", recordLine);
+			return new OutTextRecord(map);
         } catch (Exception e) {
         	logger.error(e.getMessage());
 		}

@@ -18,11 +18,9 @@ public class AgentIcaptorApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(AgentIcaptorApplication.class, args);
 		try {
-			context.getBean(LoadFile.class).executeLoad(new File(""));
+			context.getBean(LoadFile.class).executeLoad(new File("/home/fiveware/Documentos/cep.txt"));
 		} catch (Exception e) {
 			log.error("Erro : "+e.getMessage());
 		}
 	}
-
-
 }

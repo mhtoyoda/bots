@@ -2,22 +2,22 @@ package com.fiveware.file;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.Record;
 import com.google.common.collect.Lists;
 
 @Component
 public class FileUtil {
 
-	public List<Record> linesFrom(File file, String[] fields, String separator) {
+	public List<Record> linesFrom(File file, String[] fields, String separator) throws IOException {
 		List<String> linhas = Lists.newArrayList();
 		try (Scanner scanner = new Scanner(file)) {
 			while (scanner.hasNextLine()) {
@@ -25,28 +25,29 @@ public class FileUtil {
 				linhas.add(line);
 			}
 			scanner.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (IOException exception) {
+			throw exception;
 		}
 
 		List<Record> lines = getLines(linhas, fields, separator);
 		return lines;
 	}
 
-	public void writeFile(List<Record> results) throws IOException {
-		File fout = new File("cep_out.txt");
-		FileOutputStream fos = new FileOutputStream(fout);
-
-		BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-
-		for (Record result : results) {
-			Map<String, String> recordMap = result.getRecordMap();
-			StringBuilder builder = new StringBuilder(recordMap.get(""));
-			bw.write(builder.toString());
+	public void writeFile(String fileNameOut, String separator, OutTextRecord result) throws IOException {		
+		File fileOut = new File(fileNameOut);
+		FileWriter fileWriter = new FileWriter(fileOut, true);
+		try (BufferedWriter bw = new BufferedWriter(fileWriter);) {
+			if (null != result.getMap()) {
+				StringBuilder line = new StringBuilder();
+				result.getMap().entrySet().forEach(entry -> {
+					line.append(entry.getValue()).append(separator);
+				});
+				bw.write(StringUtils.removeEnd(line.toString(), separator));
+			} else {
+				bw.write("");
+			}
 			bw.newLine();
 		}
-
-		bw.close();
 	}
 
 	private List<Record> getLines(List<String> lines, String[] fields, String separator) {

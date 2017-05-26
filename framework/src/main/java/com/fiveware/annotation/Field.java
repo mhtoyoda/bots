@@ -10,11 +10,12 @@ import java.lang.annotation.Target;
  * Configura atributos de classe do objeto referente a automação
  * 
  */
-@Target(value = ElementType.FIELD)
+@Target(value = {ElementType.PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Field {
 	
 	int position() default 0;
-	int length() default 1;
-	String regexValidate();
+	int length() default 0;
+	String regexValidate() default "";
+	
 }

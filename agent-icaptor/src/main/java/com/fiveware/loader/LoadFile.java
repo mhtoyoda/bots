@@ -1,8 +1,10 @@
 package com.fiveware.loader;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,37 +12,55 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.Automation;
+import com.fiveware.exception.ValidationFieldException;
 import com.fiveware.file.FileUtil;
-import com.fiveware.metadata.Dictionary;
+import com.fiveware.metadata.DataInputDictionary;
+import com.fiveware.metadata.DataInputDictionary.InputDictionaryAttribute;
+import com.fiveware.metadata.DataOutputDictionary;
+import com.fiveware.metadata.DataOutputDictionary.OutputDictionaryAttribute;
+import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.Record;
+import com.fiveware.validate.Validate;
 
 @Component
 public class LoadFile {
 
 	Logger logger = LoggerFactory.getLogger(LoadFile.class);
-	
+
 	@Autowired
-	private Automation automation;
-	
+	private Automation<String> automation;
+
 	@Autowired
 	private FileUtil fileUtil;
+
+	@Autowired
+	private DataInputDictionary dataInputDictionary;
 	
 	@Autowired
-	private Dictionary dictionary;
+	private DataOutputDictionary dataOutputDictionary;
 	
-	public void executeLoad(File file) throws FileNotFoundException{
-		String separatorInput = dictionary.getSeparatorInput(automation);
-		String[] fieldsInput = dictionary.getFieldsInput(automation);
+	@Autowired
+	private Validate<String> validate;
+
+	public void executeLoad(File file) throws IOException {
+		logger.info("Init Import File "+file.getName());
+		String separatorInput = (String) dataInputDictionary.getValueAtribute(automation, InputDictionaryAttribute.SEPARATOR);
+		String[] fieldsInput = (String[]) dataInputDictionary.getValueAtribute(automation, InputDictionaryAttribute.FIELDS);
+		String fileNameOut = (String) dataOutputDictionary.getValueAtribute(automation, OutputDictionaryAttribute.NAMEFILEOUT);
 		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput);
 		for (Record line : recordLines) {
-			try{
-				//TODO validar line
-				Record result = automation.execute(line);
-				//TODO result joga para o buffer
-			}catch (Exception e) {
-				logger.error(e.getMessage());
+			String cep = line.getValue("cep");
+			try {
+				validate.validate(cep, automation);
+				OutTextRecord result = automation.execute(cep);
+				fileUtil.writeFile(fileNameOut, separatorInput, result);
+			} catch (ValidationFieldException e) {
+				logger.error("Unprocessed Record - Cause: "+e.getMessage());
+				Map<String, String> map = new LinkedHashMap<>();
+		        map.put("cep", cep);					
+				fileUtil.writeFile(fileNameOut, separatorInput, new OutTextRecord(map));
 			}
 		}
-		//TODO gera o arquivo de saida
+		logger.info("End Import File "+file.getName());
 	}
 }

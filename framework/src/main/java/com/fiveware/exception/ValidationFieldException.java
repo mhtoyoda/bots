@@ -1,13 +1,13 @@
 package com.fiveware.exception;
 
-public class FileInvalidException extends RuntimeException{
+public class ValidationFieldException extends Exception{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 6891350134618236467L;
 
-	public FileInvalidException(String message){
+	public ValidationFieldException(String message){
 		super(message);
 	}
 }
