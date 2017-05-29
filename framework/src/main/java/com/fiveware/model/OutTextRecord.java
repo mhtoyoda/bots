@@ -2,15 +2,15 @@ package com.fiveware.model;
 
 import java.util.Map;
 
-public class OutTextRecord extends Record {
+public class OutTextRecord {
 
-	private Map<String, String> map;
-
-	public OutTextRecord(Map<String, String> map) {
+	private Map<String, Object> map;
+	
+	public OutTextRecord(Map<String, Object> map) {
 		this.map = map;
 	}
 	
-	public Map<String, String> getMap() {
+	public Map<String, Object> getMap() {
 		return map;
 	}
 }

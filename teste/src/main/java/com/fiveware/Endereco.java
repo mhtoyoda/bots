@@ -1,5 +1,7 @@
 package com.fiveware;
 
+import java.io.Serializable;
+
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
@@ -7,8 +9,12 @@ import org.pojomatic.annotations.AutoProperty;
  * Created by valdisnei on 16/05/17.
  */
 @AutoProperty
-public class Endereco {
-    private final String logradouro;
+public class Endereco implements Serializable {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4321879773490723975L;
+	private final String logradouro;
     private final String bairro;
     private final String localidade;
     private final String cep;

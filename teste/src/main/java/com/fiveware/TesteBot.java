@@ -1,7 +1,12 @@
 package com.fiveware;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiveware.model.OutTextRecord;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -10,21 +15,18 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import com.fiveware.annotation.Field;
+import com.fiveware.annotation.Icaptor;
+import com.fiveware.annotation.IcaptorMethod;
+import com.fiveware.annotation.InputDictionary;
+import com.fiveware.annotation.OutputDictionary;
 
 /**
  * Created by valdisnei on 5/28/17.
  */
-@Component
-public class TesteBot implements Automation<String>{
+@Icaptor(classloader = "com.fiveware.bot.ConsultaCEP", description = "Bot para consulta de ceps, serviço do Correio", value = "consultaCEP", version = "1.0.0")
+public class TesteBot implements Automation<String, Endereco>{
 
     static Logger  logger = LoggerFactory.getLogger(TesteBot.class);
 
@@ -108,14 +110,14 @@ public class TesteBot implements Automation<String>{
         }
     }
 
-    public OutTextRecord execute(String cep) {
+    @IcaptorMethod
+	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
+	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, nameFileOut= "/home/fiveware/Documentos/saida.txt", separator = "|", typeFileOut = "csv")
+    public Endereco execute(@Field(length=9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
         try {
             Endereco endereco = getEndereco(cep);
 
-            logger.info("Endereco: {}",endereco);
-
-            Map<String, String> map = (Map)new ObjectMapper().convertValue(endereco, Map.class);
-            return new OutTextRecord(map);
+            return endereco;
         } catch (Exception e) {
             logger.error(e.getMessage());
         }

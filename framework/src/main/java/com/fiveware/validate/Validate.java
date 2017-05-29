@@ -5,5 +5,5 @@ import com.fiveware.exception.ValidationFieldException;
 
 public interface Validate<T> {
 
-	void validate(T value, Automation<?> automation) throws ValidationFieldException;
+//	void validate(T value, Automation<?> automation) throws ValidationFieldException;
 }
