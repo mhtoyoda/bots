@@ -17,19 +17,7 @@ import com.google.common.collect.Lists;
 @Component
 public class FileUtil {
 
-	public List<Record> linesFrom(File file, String[] fields, String separator) throws IOException {
-		List<String> linhas = Lists.newArrayList();
-		try (Scanner scanner = new Scanner(file)) {
-			while (scanner.hasNextLine()) {
-				String line = scanner.nextLine();
-				linhas.add(line);
-			}
-			scanner.close();
-		} catch (IOException exception) {
-			throw exception;
-		}
-
-    public List<Record> linesFrom(File file, String[] fields, String separator) {
+    public List<Record> linesFrom(File file, String[] fields, String separator) throws IOException {
         List<String> linhas = Lists.newArrayList();
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
@@ -37,28 +25,29 @@ public class FileUtil {
                 linhas.add(line);
             }
             scanner.close();
-        } catch (IOException e) {
-            logger.error("linesFrom error: {}", e);
+        } catch (IOException exception) {
+            throw exception;
         }
 
-	public void writeFile(String fileNameOut, String separator, OutTextRecord result) throws IOException {
-		File fileOut = new File(fileNameOut);
-		FileWriter fileWriter = new FileWriter(fileOut, true);
-		try (BufferedWriter bw = new BufferedWriter(fileWriter);) {
-			if (null != result.getMap()) {
-				StringBuilder line = new StringBuilder();
-				result.getMap().entrySet().forEach(entry -> {
-					line.append(entry.getValue()).append(separator);
-				});
-				bw.write(StringUtils.removeEnd(line.toString(), separator));
-			} else {
-				bw.write("");
-			}
-			bw.newLine();
-		}
-	}
+        List<Record> lines = getLines(linhas, fields, separator);
+        return lines;
+    }
 
-        bw.close();
+    public void writeFile(String fileNameOut, String separator, OutTextRecord result) throws IOException {
+        File fileOut = new File(fileNameOut);
+        FileWriter fileWriter = new FileWriter(fileOut, true);
+        try (BufferedWriter bw = new BufferedWriter(fileWriter);) {
+            if (null != result.getMap()) {
+                StringBuilder line = new StringBuilder();
+                result.getMap().entrySet().forEach(entry -> {
+                    line.append(entry.getValue()).append(separator);
+                });
+                bw.write(StringUtils.removeEnd(line.toString(), separator));
+            } else {
+                bw.write("");
+            }
+            bw.newLine();
+        }
     }
 
     private List<Record> getLines(List<String> lines, String[] fields, String separator) {

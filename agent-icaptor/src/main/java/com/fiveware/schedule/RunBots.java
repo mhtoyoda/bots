@@ -1,10 +1,7 @@
 package com.fiveware.schedule;
 
-import com.fiveware.converter.ConverterRecordLine;
-import com.fiveware.util.PropertiesCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,7 +13,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.nio.file.*;
 import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
