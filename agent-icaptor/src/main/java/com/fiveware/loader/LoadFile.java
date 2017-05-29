@@ -22,40 +22,40 @@ import com.fiveware.validate.Validate;
 @Component
 public class LoadFile {
 
-	Logger logger = LoggerFactory.getLogger(LoadFile.class);
+    Logger logger = LoggerFactory.getLogger(LoadFile.class);
 
-	@Autowired
-	private FileUtil fileUtil;
-	
-	@Autowired
-	private ServiceBot<String> serviceBot;
-	
-	@Autowired
-	private Validate<String> validate;
-	
-	@SuppressWarnings("rawtypes")
-	public void executeLoad(File file) throws IOException, AttributeLoadException, ClassNotFoundException {
-		logger.info("Init Import File "+file.getName());
-		Class classLoader = serviceBot.loadClassLoader();
-		String separatorInput = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(classLoader, "InputDictionary");
-		String[] fieldsInput = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(classLoader, "InputDictionary");
-		String fileNameOut = (String) IcaptorMetaInfo.NAMEFILEOUT.getValueAtribute(classLoader, "OutputDictionary");
-		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput );
-		
-		for (Record line : recordLines) {
-			String cep = (String) line.getValue("cep");
-			try {
-				validate.validate(cep, classLoader);
-				OutTextRecord result = serviceBot.callBot(cep);
-				fileUtil.writeFile(fileNameOut, separatorInput, result);
-			} catch (Exception e) {
-				logger.error("Unprocessed Record - Cause: "+e.getMessage());
-				Map<String, Object> map = new LinkedHashMap<>();
-		        map.put("cep", cep);
-				fileUtil.writeFile(fileNameOut, separatorInput, new OutTextRecord(map));
-			}
-		}
-		
-		logger.info("End Import File "+file.getName());
-	}
+    @Autowired
+    private FileUtil fileUtil;
+
+    @Autowired
+    private ServiceBot<String> serviceBot;
+
+    @Autowired
+    private Validate<String> validate;
+
+    @SuppressWarnings("rawtypes")
+    public void executeLoad(File file) throws IOException, AttributeLoadException, ClassNotFoundException {
+        logger.info("Init Import File {}", file.getName());
+        Class classLoader = serviceBot.loadClassLoader();
+        String separatorInput = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(classLoader, "InputDictionary");
+        String[] fieldsInput = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(classLoader, "InputDictionary");
+        String fileNameOut = (String) IcaptorMetaInfo.NAMEFILEOUT.getValueAtribute(classLoader, "OutputDictionary");
+        List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput);
+
+        for (Record line : recordLines) {
+            String cep = (String) line.getValue("cep");
+            try {
+                validate.validate(cep, classLoader);
+                OutTextRecord result = serviceBot.callBot(cep);
+                fileUtil.writeFile(fileNameOut, separatorInput, result);
+            } catch (Exception e) {
+                logger.error("Unprocessed Record - Cause: {}", e.getMessage());
+                Map<String, Object> map = new LinkedHashMap<>();
+                map.put("cep", cep);
+                fileUtil.writeFile(fileNameOut, separatorInput, new OutTextRecord(map));
+            }
+        }
+
+        logger.info("End Import File {}", file.getName());
+    }
 }

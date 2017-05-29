@@ -1,12 +1,6 @@
 package com.fiveware;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
+import com.fiveware.annotation.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -16,11 +10,12 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fiveware.annotation.Field;
-import com.fiveware.annotation.Icaptor;
-import com.fiveware.annotation.IcaptorMethod;
-import com.fiveware.annotation.InputDictionary;
-import com.fiveware.annotation.OutputDictionary;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by valdisnei on 5/28/17.
