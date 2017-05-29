@@ -31,10 +31,10 @@ public class TesteBot implements Automation<String>{
 
 
     public static void main(String[] args) {
-//        System.out.println(new TesteBot().hello(args[0]));
+        System.out.println(new TesteBot().getEndereco(args[0]));
     }
 
-    public Endereco hello(String args){
+    public Endereco getEndereco(String args){
 
         WebDriver driver =setupPhantomJS();
         String baseUrl = "http://www.correios.com.br/";
@@ -78,11 +78,11 @@ public class TesteBot implements Automation<String>{
         caps.setJavascriptEnabled(true);
         caps.setCapability("takesScreenshot", true);
 
-        List<String> cliArgsCap = Arrays.asList("--webdriver=54.224.242.0:8910");
+        List<String> cliArgsCap = Arrays.asList("--webdriver=34.205.146.238:8910");
         caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap);
 
         try {
-            driver = new RemoteWebDriver(new URL("http://54.224.242.0:8910"), caps);
+            driver = new RemoteWebDriver(new URL("http://34.205.146.238:8910"), caps);
             driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         } catch (MalformedURLException e) {
            // logger.error("ocorreu um problema no RemoteWebDriver: {} ", e);
@@ -110,7 +110,7 @@ public class TesteBot implements Automation<String>{
 
     public OutTextRecord execute(String cep) {
         try {
-            Endereco endereco = hello(cep);
+            Endereco endereco = getEndereco(cep);
 
             logger.info("Endereco: {}",endereco);
 
