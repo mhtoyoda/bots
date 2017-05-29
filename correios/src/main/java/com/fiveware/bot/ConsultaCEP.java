@@ -29,7 +29,7 @@ import com.fiveware.converter.ConverterRecordLine;
 import com.fiveware.domain.Endereco;
 import com.fiveware.model.OutTextRecord;
 
-@Icaptor(description = "Bot para consulta de ceps, serviço do Correio", value = "consultaCEP", version = "1.0.0")
+@Icaptor(classloader = "com.fiveware.bot.ConsultaCEP", description = "Bot para consulta de ceps, serviço do Correio", value = "consultaCEP", version = "1.0.0")
 public class ConsultaCEP implements Automation<String> {
 
     static Logger logger = LoggerFactory.getLogger(ConsultaCEP.class);

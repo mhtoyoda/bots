@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 public @interface Icaptor {
 
 	String value();
-	String classloader() default "";
+	String classloader();
 	String version();
 	String description();
 	
