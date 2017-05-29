@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 
 @RestController
-public class AgentController implements ApiBot<String>{
+public class AgentController implements ApiBot<String,Object>{
 
 
 
@@ -20,8 +20,8 @@ public class AgentController implements ApiBot<String>{
     public ServiceBot serviceBot;
 
     @Override
-    public ResponseEntity<String> callBot(@PathVariable  String parameter) {
+    public ResponseEntity<Object> callBot(@PathVariable  String parameter) {
         Object o = serviceBot.callBot(parameter);
-        return ResponseEntity.ok(o.toString());
+        return ResponseEntity.ok(o);
     }
 }
