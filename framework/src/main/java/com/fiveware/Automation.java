@@ -1,12 +1,12 @@
 package com.fiveware;
 
 import com.fiveware.model.OutTextRecord;
-
-import java.io.Serializable;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by valdisnei on 24/05/17.
  */
-public interface Automation<T extends Serializable> {
+@Component
+public interface Automation<T> {
 	OutTextRecord execute(T recordLine);
 }
