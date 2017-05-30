@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiveware.loader.BotJar;
 import com.fiveware.model.OutTextRecord;
 import com.google.common.base.Strings;
 
@@ -22,7 +21,7 @@ import com.google.common.base.Strings;
  * Created by valdisnei on 29/05/17.
  */
 @Service
-public class ServiceBot<T> {
+public class ServiceBot<T>  {
 
 	public static final String BOT_CLASS_MAIN = "bot.class.main";
     public static final String METHOD_EXECUTE = "execute";
@@ -59,6 +58,13 @@ public class ServiceBot<T> {
     	ClassLoader classLoader = new URLClassLoader(new URL[]{botJar.getFile().toURI().toURL()});
     	Class cls = classLoader.loadClass(className);
     	return cls;
+    }
+
+    public Class loadClassLoader(BotJar botJar) throws MalformedURLException, ClassNotFoundException {
+        String className = botJar.getConfigProp(BOT_CLASS_MAIN).getClassLoader();
+        ClassLoader classLoader = new URLClassLoader(new URL[]{botJar.getFile().toURI().toURL()});
+        Class cls = classLoader.loadClass(className);
+        return cls;
     }
 
     private OutTextRecord executeMainClass(T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {

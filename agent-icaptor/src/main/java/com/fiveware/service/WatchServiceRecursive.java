@@ -1,5 +1,6 @@
 package com.fiveware.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,18 +19,42 @@ public class WatchServiceRecursive {
     private static final Map<WatchKey, Path> keyPathMap = new HashMap<>();
 
 
+    @Autowired
+    private BotJar botJar;
+
+
     @Value("${worker.dir}")
     private String workerDir;
 
+    @Value("${bot.extension.file}")
+    private String extensionFile;
+
     @PostConstruct
-    public void initialize () throws Exception {
-        try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
+    public void initialize () {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                upWathservice();
+            }
+        });
+
+        thread.start();
+    }
+
+    private void upWathservice() {
+        try (
+            WatchService watchService = FileSystems.getDefault().newWatchService()) {
             registerDir(Paths.get(workerDir), watchService);
             startListening(watchService);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    private static void registerDir (Path path, WatchService watchService) throws IOException {
+    private void registerDir (Path path, WatchService watchService) throws IOException {
 
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
             return;
@@ -49,7 +74,7 @@ public class WatchServiceRecursive {
         }
     }
 
-    private static void startListening (WatchService watchService) throws Exception {
+    private void startListening (WatchService watchService) throws Exception {
         while (true) {
             WatchKey queuedKey = watchService.take();
             for (WatchEvent<?> watchEvent : queuedKey.pollEvents()) {
@@ -68,7 +93,10 @@ public class WatchServiceRecursive {
                     //get complete path
                     path = parentPath.resolve(path);
 
-                    registerDir(path, watchService);
+                    if (isValidFileType(path)) {
+                        botJar.loadFile(path.toFile());
+                        registerDir(path, watchService);
+                    }
                 }
             }
             if (!queuedKey.reset()) {
@@ -78,5 +106,9 @@ public class WatchServiceRecursive {
                 break;
             }
         }
+    }
+
+    private boolean isValidFileType(Path file) {
+        return (file.toString().endsWith(extensionFile));
     }
 }
