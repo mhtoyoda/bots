@@ -13,7 +13,7 @@ import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ValidationFieldException;
 
 @Service
-public class CepValidate implements Validate<String> {
+public class FieldValidate implements Validate<String> {
 
 	@SuppressWarnings("rawtypes")
 	@Override

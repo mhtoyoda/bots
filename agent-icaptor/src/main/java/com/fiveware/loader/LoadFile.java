@@ -13,10 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.file.FileUtil;
-import com.fiveware.metadata.DataIcaptorMethod;
-import com.fiveware.metadata.DataIcaptorMethod.IcaptorMethodAttribute;
-import com.fiveware.metadata.DataInputDictionary;
-import com.fiveware.metadata.DataOutputDictionary;
+import com.fiveware.metadata.IcaptorMetaInfo;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.Record;
 import com.fiveware.service.ServiceBot;
@@ -29,31 +26,22 @@ public class LoadFile {
 
 	@Autowired
 	private FileUtil fileUtil;
-
-	@Autowired
-	private DataInputDictionary dataInputDictionary;
 	
 	@Autowired
-	private DataOutputDictionary dataOutputDictionary;
-	
-	@Autowired
-	private DataIcaptorMethod dataIcaptorMethod;
+	private ServiceBot<String> serviceBot;
 	
 	@Autowired
 	private Validate<String> validate;
 	
-	@Autowired
-	private ServiceBot<String> serviceBot;
-
 	@SuppressWarnings("rawtypes")
 	public void executeLoad(File file) throws IOException, AttributeLoadException {
 		logger.info("Init Import File "+file.getName());
 		Class classLoader = serviceBot.loadClassLoader();
-		String nameMethod = (String) dataIcaptorMethod.getValueAtribute(classLoader, IcaptorMethodAttribute.VALUE);
-		String separatorInput = (String) dataInputDictionary.getValueAtribute(classLoader, nameMethod, DataInputDictionary.InputDictionaryAttribute.SEPARATOR);
-		String[] fieldsInput = (String[]) dataInputDictionary.getValueAtribute(classLoader, nameMethod, DataInputDictionary.InputDictionaryAttribute.FIELDS);
-		String fileNameOut = (String) dataOutputDictionary.getValueAtribute(classLoader, nameMethod, DataOutputDictionary.OutputDictionaryAttribute.NAMEFILEOUT);
+		String separatorInput = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(classLoader, "InputDictionary");
+		String[] fieldsInput = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(classLoader, "InputDictionary");
+		String fileNameOut = (String) IcaptorMetaInfo.NAMEFILEOUT.getValueAtribute(classLoader, "OutputDictionary");
 		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput );
+		
 		for (Record line : recordLines) {
 			String cep = line.getValue("cep");
 			try {
@@ -67,6 +55,7 @@ public class LoadFile {
 				fileUtil.writeFile(fileNameOut, separatorInput, new OutTextRecord(map));
 			}
 		}
+		
 		logger.info("End Import File "+file.getName());
 	}
 }

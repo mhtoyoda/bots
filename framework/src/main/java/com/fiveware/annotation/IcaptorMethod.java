@@ -15,4 +15,5 @@ import java.lang.annotation.Target;
 public @interface IcaptorMethod {
 	
 	String value() default "execute";
+	String endpoint() default "execute";
 }
