@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import com.fiveware.loader.LoadFile;
+import com.fiveware.service.ServiceBot;
 
 
 @SpringBootApplication
@@ -19,7 +20,9 @@ public class AgentIcaptorApplication{
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context = SpringApplication.run(AgentIcaptorApplication.class, args);
 		try {
-			context.getBean(LoadFile.class).executeLoad(new File("/home/fiveware/Documentos/cep.txt"));
+			ServiceBot serviceBot = context.getBean(ServiceBot.class);
+			Class classLoader = serviceBot.loadClassLoader();
+			context.getBean(LoadFile.class).executeLoad(classLoader, new File("/home/fiveware/Documentos/cep.txt"));
 		} catch (Exception e) {
 			log.error("Erro : "+e.getMessage());
 		}

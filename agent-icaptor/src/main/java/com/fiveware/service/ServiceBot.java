@@ -34,7 +34,7 @@ public class ServiceBot<T> {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private BotJar botJar;
+    private BotJar botJar;    
     
     public OutTextRecord callBot(T parameter) {
         try {
@@ -55,16 +55,16 @@ public class ServiceBot<T> {
     }
 
     public Class loadClassLoader() throws MalformedURLException, ClassNotFoundException {
-    	String className = botJar.getConfigProp(BOT_CLASS_MAIN);
+    	String className = botJar.getConfigProp(BOT_CLASS_MAIN).getClassLoader();
     	ClassLoader classLoader = new URLClassLoader(new URL[]{botJar.getFile().toURI().toURL()});
     	Class cls = classLoader.loadClass(className);
     	return cls;
     }
 
-    private OutTextRecord executeMainClass(T cep) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {      
+    private OutTextRecord executeMainClass(T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {      
         Class cls = loadClassLoader();
-        Method execute = cls.getMethod(METHOD_EXECUTE, String.class);
-        Object obj =  execute.invoke(cls.newInstance(), cep);
+        Method execute = cls.getMethod(METHOD_EXECUTE, parameter.getClass());
+        Object obj =  execute.invoke(cls.newInstance(), parameter);
 
         Map map = (Map) objectMapper.convertValue(obj, Map.class);
 
@@ -72,8 +72,8 @@ public class ServiceBot<T> {
     }
 
     private Boolean hasEndPoint(String endPoint) {
-        if (Strings.isNullOrEmpty(botJar.getConfigProp(BOT_ENDPOINT)) ||
-                !endPoint.equals(botJar.getConfigProp(BOT_ENDPOINT)))
+        if (Strings.isNullOrEmpty(botJar.getConfigProp(BOT_ENDPOINT).getEndpoint()) ||
+                !endPoint.equals(botJar.getConfigProp(BOT_ENDPOINT).getEndpoint()))
             return Boolean.FALSE;
 
         return Boolean.TRUE;

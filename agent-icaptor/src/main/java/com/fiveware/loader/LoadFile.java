@@ -34,9 +34,8 @@ public class LoadFile {
 	private Validate<String> validate;
 	
 	@SuppressWarnings("rawtypes")
-	public void executeLoad(File file) throws IOException, AttributeLoadException, ClassNotFoundException {
-		logger.info("Init Import File "+file.getName());
-		Class classLoader = serviceBot.loadClassLoader();
+	public void executeLoad(Class classLoader, File file) throws IOException, AttributeLoadException, ClassNotFoundException {
+		logger.info("Init Import File "+file.getName());		
 		String separatorInput = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(classLoader, "InputDictionary");
 		String[] fieldsInput = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(classLoader, "InputDictionary");
 		String fileNameOut = (String) IcaptorMetaInfo.NAMEFILEOUT.getValueAtribute(classLoader, "OutputDictionary");
