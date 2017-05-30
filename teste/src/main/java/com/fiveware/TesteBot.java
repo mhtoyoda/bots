@@ -1,6 +1,7 @@
 package com.fiveware;
 
 import com.fiveware.annotation.*;
+import com.google.common.base.MoreObjects;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -21,17 +22,32 @@ import java.util.concurrent.TimeUnit;
  * Created by valdisnei on 5/28/17.
  */
 @Icaptor(classloader = "com.fiveware.TesteBot", description = "Bot para consulta de ceps, serviço do Correio", value = "consultaCEP", version = "1.0.0")
-public class TesteBot implements Automation<String, Endereco>{
+public class TesteBot implements Automation<String, Endereco> {
 
-    static Logger  logger = LoggerFactory.getLogger(TesteBot.class);
+    static Logger logger = LoggerFactory.getLogger(TesteBot.class);
 
     public static void main(String[] args) {
-        System.out.println(new TesteBot().getEndereco(args[0]));
+        logger.info("Resultado: {}", new TesteBot().getEndereco(args[0]));
     }
 
-    public Endereco getEndereco(String args){
 
-        WebDriver driver =setupPhantomJS();
+    @IcaptorMethod(value = "execute")
+    @InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
+    @OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, nameFileOut = "/home/fiveware/Documentos/saida.txt", separator = "|", typeFileOut = "csv")
+    public Endereco execute(@Field(length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
+        try {
+            Endereco endereco = getEndereco(cep);
+
+            return endereco;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
+
+    public Endereco getEndereco(String args) {
+
+        WebDriver driver = remotePhantomJS(null);
         String baseUrl = "http://www.correios.com.br/";
 
         driver.get(baseUrl + "/para-voce");
@@ -59,28 +75,27 @@ public class TesteBot implements Automation<String, Endereco>{
         String cep = driver.findElement(By.xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[4]")).getText();
 
 
-        logger.info(" endereco: {}",logradouro+" - "+bairro+" - "+localidade+" - "+cep);
+        logger.info(" endereco: {}", logradouro + " - " + bairro + " - " + localidade + " - " + cep);
 
 
-        return new Endereco(logradouro,bairro,localidade,cep);
+        return new Endereco(logradouro, bairro, localidade, cep);
     }
 
-
-    private WebDriver setupPhantomJS() {
-        WebDriver driver=null;
+    public WebDriver remotePhantomJS(String host) {
+        WebDriver driver = null;
 
         DesiredCapabilities caps = new DesiredCapabilities();
         caps.setJavascriptEnabled(true);
         caps.setCapability("takesScreenshot", true);
 
-        List<String> cliArgsCap = Arrays.asList("--webdriver=34.205.146.238:8910");
+        List<String> cliArgsCap = Arrays.asList("--webdriver=" + MoreObjects.firstNonNull(host,"34.205.146.238:8910"));
         caps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS, cliArgsCap);
 
         try {
-            driver = new RemoteWebDriver(new URL("http://34.205.146.238:8910"), caps);
+            driver = new RemoteWebDriver(new URL("http://" + MoreObjects.firstNonNull(host, "34.205.146.238:8910")), caps);
             driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
         } catch (MalformedURLException e) {
-           // logger.error("ocorreu um problema no RemoteWebDriver: {} ", e);
+            logger.error("ocorreu um problema no RemoteWebDriver: {} ", e);
         }
         return driver;
     }
@@ -103,17 +118,5 @@ public class TesteBot implements Automation<String, Endereco>{
         }
     }
 
-    @IcaptorMethod(value = "execute")
-	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
-	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, nameFileOut= "/home/fiveware/Documentos/saida.txt", separator = "|", typeFileOut = "csv")
-    public Endereco execute(@Field(length=9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
-        try {
-            Endereco endereco = getEndereco(cep);
 
-            return endereco;
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
-        return null;
-    }
 }

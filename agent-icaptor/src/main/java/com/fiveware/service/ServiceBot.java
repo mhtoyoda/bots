@@ -1,5 +1,14 @@
 package com.fiveware.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiveware.loader.BotJar;
+import com.fiveware.model.OutTextRecord;
+import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -7,16 +16,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiveware.loader.BotJar;
-import com.fiveware.model.OutTextRecord;
-import com.google.common.base.Strings;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -35,7 +34,7 @@ public class ServiceBot<T> {
 
     @Autowired
     private BotJar botJar;
-    
+
     public OutTextRecord callBot(T parameter) {
         try {
             return executeMainClass(parameter);
@@ -47,6 +46,7 @@ public class ServiceBot<T> {
 
         return null;
     }
+
 
     public OutTextRecord callBot(String endPoint,T parameter) {
             if (hasEndPoint(endPoint))
@@ -72,6 +72,7 @@ public class ServiceBot<T> {
     }
 
     private Boolean hasEndPoint(String endPoint) {
+
         if (Strings.isNullOrEmpty(botJar.getConfigProp(BOT_ENDPOINT)) ||
                 !endPoint.equals(botJar.getConfigProp(BOT_ENDPOINT)))
             return Boolean.FALSE;

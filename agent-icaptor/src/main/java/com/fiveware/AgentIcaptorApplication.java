@@ -20,9 +20,5 @@ public class AgentIcaptorApplication{
 //			log.error("Erro : "+e.getMessage());
 //		}
 
-
-
-
-
 	}
 }
