@@ -11,7 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.file.FileUtil;
+import com.fiveware.metadata.DataIcaptorMethod;
+import com.fiveware.metadata.DataIcaptorMethod.IcaptorMethodAttribute;
 import com.fiveware.metadata.DataInputDictionary;
 import com.fiveware.metadata.DataOutputDictionary;
 import com.fiveware.model.OutTextRecord;
@@ -24,9 +27,6 @@ public class LoadFile {
 
 	Logger logger = LoggerFactory.getLogger(LoadFile.class);
 
-//	@Autowired
-//	private Automation<String> automation;
-
 	@Autowired
 	private FileUtil fileUtil;
 
@@ -36,27 +36,29 @@ public class LoadFile {
 	@Autowired
 	private DataOutputDictionary dataOutputDictionary;
 	
-//	@Autowired
-//	private Validate<String> validate;
+	@Autowired
+	private DataIcaptorMethod dataIcaptorMethod;
+	
+	@Autowired
+	private Validate<String> validate;
 	
 	@Autowired
 	private ServiceBot<String> serviceBot;
 
-	public void executeLoad(File file) throws IOException {
-//		logger.info("Init Import File "+file.getName());
-//		String separatorInput = (String) dataInputDictionary.getValueAtribute(automation, DataInputDictionary.InputDictionaryAttribute.SEPARATOR);
-//		String[] fieldsInput = (String[]) dataInputDictionary.getValueAtribute(automation, DataInputDictionary.InputDictionaryAttribute.FIELDS);
-//		String fileNameOut = (String) dataOutputDictionary.getValueAtribute(automation, DataOutputDictionary.OutputDictionaryAttribute.NAMEFILEOUT);
-		String[] fieldsInput = {"cep"};
-		String separatorInput = ",";
+	@SuppressWarnings("rawtypes")
+	public void executeLoad(File file) throws IOException, AttributeLoadException {
+		logger.info("Init Import File "+file.getName());
+		Class classLoader = serviceBot.loadClassLoader();
+		String nameMethod = (String) dataIcaptorMethod.getValueAtribute(classLoader, IcaptorMethodAttribute.VALUE);
+		String separatorInput = (String) dataInputDictionary.getValueAtribute(classLoader, nameMethod, DataInputDictionary.InputDictionaryAttribute.SEPARATOR);
+		String[] fieldsInput = (String[]) dataInputDictionary.getValueAtribute(classLoader, nameMethod, DataInputDictionary.InputDictionaryAttribute.FIELDS);
+		String fileNameOut = (String) dataOutputDictionary.getValueAtribute(classLoader, nameMethod, DataOutputDictionary.OutputDictionaryAttribute.NAMEFILEOUT);
 		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput );
 		for (Record line : recordLines) {
 			String cep = line.getValue("cep");
-			String fileNameOut = "/home/fiveware/Documentos/saida.txt";
 			try {
-//				validate.validate(cep, automation);
-//				OutTextRecord result = automation.execute(cep);
-				OutTextRecord result = serviceBot.callBot(cep);
+				validate.validate(cep, classLoader);
+				OutTextRecord result = serviceBot.callBot(classLoader, cep);
 				fileUtil.writeFile(fileNameOut, separatorInput, result);
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: "+e.getMessage());

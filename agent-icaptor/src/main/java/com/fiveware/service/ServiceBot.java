@@ -31,39 +31,39 @@ public class ServiceBot<T> {
     @Value("${loader.path}")
     private String directory;
 
-
-    public OutTextRecord callBot(T cep) {
-        File file = new File(directory);
+    @SuppressWarnings("rawtypes")
+	public Class loadClassLoader(){
+    	File file = new File(directory);
         JarFile jarFile = null;
         try {
-            jarFile = new JarFile(file);
-            //        jarFile.stream().forEach( jarEntry -> System.out.println("jarEntry = " + jarEntry.getName()) );
-
-            JarEntry jarEntry = jarFile.getJarEntry("application.properties");
-            JarEntry fileEntry = jarFile.getJarEntry(jarEntry.getName());
-            InputStream input = jarFile.getInputStream(fileEntry);
-            Properties configProp = new Properties();
-            configProp.load(input);
-            String className2 = configProp.getProperty("icaptor.class.main");
-            String method = configProp.getProperty("icaptor.method.execute");
-
-
-            ClassLoader classLoader = new URLClassLoader(new URL[]{file.toURI().toURL()});
-            Class cls = classLoader.loadClass(className2);
-            Object o = cls.newInstance();
-            Method execute = cls.getMethod(method, String.class);
-            Object obj =  execute.invoke(o, cep);
-            Map<String, Object> map = (Map)new ObjectMapper().convertValue(obj, Map.class);
-            
-            return new OutTextRecord(map);
-
-        } catch (IOException | ClassNotFoundException |
-                IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            logger.error(" ServiceBot: {}  ", e);
-        }
-
+			jarFile = new JarFile(file);
+	        JarEntry jarEntry = jarFile.getJarEntry("application.properties");
+	        JarEntry fileEntry = jarFile.getJarEntry(jarEntry.getName());
+	        InputStream input = jarFile.getInputStream(fileEntry);
+	        Properties configProp = new Properties();
+	        configProp.load(input);
+	        String className = configProp.getProperty("icaptor.class.main");
+	        ClassLoader classLoader = new URLClassLoader(new URL[]{file.toURI().toURL()});
+	        Class clazz = classLoader.loadClass(className);
+	        return clazz;
+		} catch (IOException | ClassNotFoundException e) {	
+			logger.error(" ServiceBot: {}  ", e);
+		}
         return null;
 
     }
-
+    
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+	public OutTextRecord callBot(Class clazz, T parameter) {    	
+        try {
+            Object o = clazz.newInstance();
+            Method execute = clazz.getMethod("execute", String.class);
+            Object obj =  execute.invoke(o, parameter);
+            Map<String, Object> map = (Map)new ObjectMapper().convertValue(obj, Map.class);        
+            return new OutTextRecord(map);
+        } catch (IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            logger.error(" ServiceBot: {}  ", e);
+        }
+        return null;
+    }
 }

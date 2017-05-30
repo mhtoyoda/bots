@@ -25,12 +25,10 @@ import com.fiveware.annotation.OutputDictionary;
 /**
  * Created by valdisnei on 5/28/17.
  */
-@Icaptor(classloader = "com.fiveware.bot.ConsultaCEP", description = "Bot para consulta de ceps, serviço do Correio", value = "consultaCEP", version = "1.0.0")
+@Icaptor(classloader = "com.fiveware.TesteBot", description = "Bot para consulta de ceps, serviço do Correio", value = "consultaCEP", version = "1.0.0")
 public class TesteBot implements Automation<String, Endereco>{
 
     static Logger  logger = LoggerFactory.getLogger(TesteBot.class);
-
-
 
     public static void main(String[] args) {
         System.out.println(new TesteBot().getEndereco(args[0]));
@@ -110,9 +108,9 @@ public class TesteBot implements Automation<String, Endereco>{
         }
     }
 
-    @IcaptorMethod
+    @IcaptorMethod(value = "execute")
 	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
-	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, nameFileOut= "/home/fiveware/Documentos/saida.txt", separator = "|", typeFileOut = "csv")
+	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, nameFileOut= "/Users/marcelotoyoda/Documents/Projetos/saida.txt", separator = "|", typeFileOut = "csv")
     public Endereco execute(@Field(length=9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
         try {
             Endereco endereco = getEndereco(cep);

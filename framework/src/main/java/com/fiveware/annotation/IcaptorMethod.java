@@ -7,11 +7,12 @@ import java.lang.annotation.Target;
 
 /**
  * 
- * Indica como classe de automação  
+ * Indica método de classe de automação  
  * 
  */
 @Target(value = ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface IcaptorMethod {
 	
+	String value() default "execute";
 }

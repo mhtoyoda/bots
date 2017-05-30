@@ -1,51 +1,63 @@
 package com.fiveware.metadata;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.springframework.stereotype.Component;
 
-import com.fiveware.annotation.OutputDictionary;
+import com.fiveware.exception.AttributeLoadException;
 
 @Component
 public class DataOutputDictionary {
 
-	public Object getValueAtribute(Object objeto, OutputDictionaryAttribute attribute) {
-		Class<? extends Object> clazz = objeto.getClass();
+	@SuppressWarnings("rawtypes")
+	public Object getValueAtribute(Class clazz, String nameMethod, OutputDictionaryAttribute attribute) throws AttributeLoadException {
 		for (Method method : clazz.getDeclaredMethods()) {
-			if (method.isAnnotationPresent(OutputDictionary.class)) {
-				OutputDictionary outputDictionary = method.getAnnotation(OutputDictionary.class);
-				return attribute.getValue(outputDictionary);
+			if(method.getName().equals(nameMethod)){
+				for (Annotation annotation : method.getAnnotations()) {
+					Class<? extends Annotation> type = annotation.annotationType();
+		            if(type.getSimpleName().equals("OutputDictionary")){
+		            	try {
+							Method methodTarget = type.getMethod(attribute.getName());							
+							Object value = methodTarget.invoke(annotation);
+							return value;
+						} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {							
+							throw new AttributeLoadException(e.getMessage());
+						}		        
+		            }
+				}
 			}
-		}
+		}	
 		return null;
 	}
 
 	public enum OutputDictionaryAttribute {
 		TYPEFILEOUT {
 			@Override
-			public Object getValue(OutputDictionary outputDictionary) {
-				return outputDictionary.typeFileOut();
+			public String getName() {
+				return "typeFileOut";
 			}
 		},
 		FIELDS {
 			@Override
-			public Object getValue(OutputDictionary outputDictionary) {
-				return outputDictionary.fields();
+			public String getName() {
+				return "fields";
 			}
 		},
 		SEPARATOR {
 			@Override
-			public Object getValue(OutputDictionary outputDictionary) {
-				return outputDictionary.separator();
+			public String getName() {
+				return "separator";
 			}
 		},
 		NAMEFILEOUT {
 			@Override
-			public Object getValue(OutputDictionary outputDictionary) {
-				return outputDictionary.nameFileOut();
+			public String getName() {
+				return "nameFileOut";
 			}
 		};
 
-		public abstract Object getValue(OutputDictionary outputDictionary);
+		public abstract String getName();
 	}
 }
