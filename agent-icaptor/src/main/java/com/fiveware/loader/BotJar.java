@@ -46,6 +46,7 @@ public class BotJar {
         this.configProp.load(this.input);        
     }
 
+
     public File getFile() {
         return file;
     }

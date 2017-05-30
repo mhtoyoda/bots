@@ -11,7 +11,6 @@ import org.springframework.context.ConfigurableApplicationContext;
 import com.fiveware.loader.LoadFile;
 import com.fiveware.service.ServiceBot;
 
-
 @SpringBootApplication
 public class AgentIcaptorApplication{
 	

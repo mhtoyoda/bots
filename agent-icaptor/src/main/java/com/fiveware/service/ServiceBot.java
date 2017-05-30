@@ -48,6 +48,7 @@ public class ServiceBot<T> {
         return null;
     }
 
+
     public OutTextRecord callBot(String endPoint,T parameter) {
             if (hasEndPoint(endPoint))
                 return callBot(parameter);
