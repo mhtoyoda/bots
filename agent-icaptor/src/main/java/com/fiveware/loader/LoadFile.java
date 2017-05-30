@@ -34,7 +34,7 @@ public class LoadFile {
 	private Validate<String> validate;
 	
 	@SuppressWarnings("rawtypes")
-	public void executeLoad(File file) throws IOException, AttributeLoadException {
+	public void executeLoad(File file) throws IOException, AttributeLoadException, ClassNotFoundException {
 		logger.info("Init Import File "+file.getName());
 		Class classLoader = serviceBot.loadClassLoader();
 		String separatorInput = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(classLoader, "InputDictionary");
@@ -43,10 +43,10 @@ public class LoadFile {
 		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput );
 		
 		for (Record line : recordLines) {
-			String cep = line.getValue("cep");
+			String cep = (String) line.getValue("cep");
 			try {
 				validate.validate(cep, classLoader);
-				OutTextRecord result = serviceBot.callBot(classLoader, cep);
+				OutTextRecord result = serviceBot.callBot(cep);
 				fileUtil.writeFile(fileNameOut, separatorInput, result);
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: "+e.getMessage());
