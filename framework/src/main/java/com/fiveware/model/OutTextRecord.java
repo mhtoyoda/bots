@@ -7,9 +7,9 @@ import java.util.Map;
 public class OutTextRecord {
 
 	@JsonProperty("bot")
-	private Map<String, Object> map;
+	private final Map<String, Object> map;
 	
-	public OutTextRecord(Map<String, Object> map) {
+	public OutTextRecord(final Map<String, Object> map) {
 		this.map = map;
 	}
 	

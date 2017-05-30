@@ -8,7 +8,7 @@ public class MessageBot {
     private final Integer status;
     private final String message;
 
-    public MessageBot(Integer status, String message) {
+    public MessageBot(final Integer status, final String message) {
         this.status = status;
         this.message=message;
     }

@@ -9,10 +9,10 @@ public class BotClassLoaderContext implements Serializable {
 	 */
 	private static final long serialVersionUID = -5344664787240666880L;
 	
-	private String classLoader;
-	private String method;
-	private String endpoint;
-	private String nameJar;
+	private final String classLoader;
+	private final String method;
+	private final String endpoint;
+	private final String nameJar;
 
 	public BotClassLoaderContext(String classLoader, String method, String endpoint, String nameJar) {
 		super();

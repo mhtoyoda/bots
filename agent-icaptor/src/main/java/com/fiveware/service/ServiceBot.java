@@ -42,9 +42,8 @@ public class ServiceBot<T> {
 
         } catch (IOException | ClassNotFoundException |
                 IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
-            logger.error(" ServiceBot: {}  ", e);
+            logger.error(" ServiceBot: ", e);
         }
-
         return null;
     }
 
@@ -62,7 +61,7 @@ public class ServiceBot<T> {
     	return cls;
     }
 
-    private OutTextRecord executeMainClass(T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {      
+    private OutTextRecord executeMainClass(T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         Class cls = loadClassLoader();
         Method execute = cls.getMethod(METHOD_EXECUTE, parameter.getClass());
         Object obj =  execute.invoke(cls.newInstance(), parameter);

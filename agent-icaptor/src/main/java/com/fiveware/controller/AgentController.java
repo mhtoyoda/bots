@@ -26,12 +26,12 @@ import com.fiveware.service.ServiceBot;
 public class AgentController {
 
     @Autowired
-    public ServiceBot serviceBot;
+    public ServiceBot<Object> serviceBot;
 
 
-    @GetMapping("/{endPoint}/{parameter}")
-    public ResponseEntity<Object> getBot(@PathVariable String endPoint, @PathVariable Object parameter, HttpServletRequest request) {
-        Object o = serviceBot.callBot(endPoint,parameter);
+    @GetMapping("/{botName}/{parameter}")
+    public ResponseEntity<Object> getBot(@PathVariable String botName, @PathVariable Object parameter, HttpServletRequest request) {
+        Object o = serviceBot.callBot(botName,parameter);
 
 
         if (Objects.isNull(o))
@@ -41,9 +41,9 @@ public class AgentController {
         return ResponseEntity.ok(o);
     }
 
-    @PostMapping("/{endPoint}")
-    public ResponseEntity<Object> postBot(@PathVariable String endPoint,@RequestBody Object parameter, HttpServletRequest request) {
-        return getBot(endPoint,parameter,request);
+    @PostMapping("/{botName}")
+    public ResponseEntity<Object> postBot(@PathVariable String botName,@RequestBody Object parameter, HttpServletRequest request) {
+        return getBot(botName,parameter,request);
     }
 }
 
