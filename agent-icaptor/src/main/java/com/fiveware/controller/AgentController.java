@@ -1,18 +1,12 @@
 package com.fiveware.controller;
 
-import java.util.Objects;
-
 import javax.servlet.http.HttpServletRequest;
 
+import com.fiveware.exception.ExceptionBot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.fiveware.service.MessageBot;
 import com.fiveware.service.ServiceBot;
@@ -29,21 +23,33 @@ public class AgentController {
     public ServiceBot<Object> serviceBot;
 
 
-    @GetMapping("/{botName}/{parameter}")
-    public ResponseEntity<Object> getBot(@PathVariable String botName, @PathVariable Object parameter, HttpServletRequest request) {
-        Object o = serviceBot.callBot(botName,parameter);
+    @GetMapping("/{botName}/{endPoint}/{parameter}")
+    public ResponseEntity<Object> getBot(@PathVariable String botName,@PathVariable String endPoint,
+                                         @PathVariable Object parameter,HttpServletRequest request) {
+        Object obj = null;
+        try {
+            obj = serviceBot.callBot(botName,endPoint,parameter);
+        } catch (ExceptionBot e) {
+            return ResponseEntity.badRequest().
+                    body(new MessageBot(HttpStatus.BAD_REQUEST.value(),e.getMessage()));
+        }
 
-
-        if (Objects.isNull(o))
-            return ResponseEntity.badRequest().body(
-                    new MessageBot(HttpStatus.BAD_REQUEST.value(), "Bot Não Encontrado!"));
-
-        return ResponseEntity.ok(o);
+        return ResponseEntity.ok(obj);
     }
 
-    @PostMapping("/{botName}")
-    public ResponseEntity<Object> postBot(@PathVariable String botName,@RequestBody Object parameter, HttpServletRequest request) {
-        return getBot(botName,parameter,request);
+    @PostMapping("/{botName}/{endPoint}")
+    public ResponseEntity<Object> postBot(@PathVariable String botName,
+                                          @PathVariable String endPoint,
+                                          @RequestBody Object parameter,
+                                          HttpServletRequest request) {
+        return getBot(botName,endPoint,parameter,request);
+    }
+
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<MessageBot> illegalArgumentExceptional(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().
+                body(new MessageBot(HttpStatus.BAD_REQUEST.value(),e.getMessage()));
     }
 }
 

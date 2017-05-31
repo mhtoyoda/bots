@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Optional;
 
+import com.fiveware.exception.ExceptionBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,15 +18,12 @@ import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.OutTextRecord;
-import com.google.common.base.Strings;
 
 /**
  * Created by valdisnei on 29/05/17.
  */
 @Service
-public class ServiceBot<T>  {
-
-    public static final String METHOD_EXECUTE = "execute";    
+public class ServiceBot<T> {
 
     static Logger logger = LoggerFactory.getLogger(ServiceBot.class);
 
@@ -35,13 +35,15 @@ public class ServiceBot<T>  {
     
     @Autowired
     private ClassLoaderRunner classLoaderRunner;
+
+
+    @Autowired
+    private MessageSource messageSource;
     
-    public OutTextRecord callBot(String nameBot, T parameter) {
-    	BotClassLoaderContext botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
+    public OutTextRecord callBot(String nameBot, T parameter) throws ExceptionBot {
+    	Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
     	try {        	
-        	if(botClassLoaderContext != null){
-        		return executeMainClass(botClassLoaderContext, parameter);        		
-        	}
+			return executeMainClass(botClassLoaderContext.get(), parameter);
         } catch (IOException | ClassNotFoundException |
                 IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             logger.error(" ServiceBot: ", e);
@@ -49,12 +51,14 @@ public class ServiceBot<T>  {
         return null;
     }
     
-    public OutTextRecord callBot(String nameBot, String endpoint, T parameter) {
-    	BotClassLoaderContext botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
-    	try {        	
-        	if(hasEndPoint(botClassLoaderContext, endpoint)){
-        		return executeMainClass(botClassLoaderContext, parameter);        		
-        	}
+    public OutTextRecord callBot(String nameBot, String endpoint, T parameter) throws ExceptionBot {
+    	Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
+    	try {
+        	if(!endpoint.equals(botClassLoaderContext.get().getEndpoint()))
+        		throw new ExceptionBot(messageSource.getMessage("endPoint.notFound",new Object[]{endpoint},null));
+
+				return executeMainClass(botClassLoaderContext.get(), parameter);
+
         } catch (IOException | ClassNotFoundException |
                 IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             logger.error(" ServiceBot: ", e);
@@ -62,7 +66,7 @@ public class ServiceBot<T>  {
         return null;
     }
 
-    private OutTextRecord executeMainClass(BotClassLoaderContext botClassLoaderContext, T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    private OutTextRecord executeMainClass(BotClassLoaderContext botClassLoaderContext, T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ExceptionBot {
         Class cls = classLoaderRunner.loadClassLoader(botClassLoaderContext.getNameBot());
         Method execute = cls.getMethod(botClassLoaderContext.getMethod(), parameter.getClass());
         Object obj =  execute.invoke(cls.newInstance(), parameter);
@@ -70,12 +74,5 @@ public class ServiceBot<T>  {
         return new OutTextRecord(map);
     }
 
-    private Boolean hasEndPoint(BotClassLoaderContext botClassLoaderContext, String endpoint) {            	
-    	if (Strings.isNullOrEmpty(botClassLoaderContext.getEndpoint()) ||
-    			!endpoint.equals(botClassLoaderContext.getEndpoint()))
-    		return Boolean.FALSE;        	
-        
-        return Boolean.TRUE;	
-    }
 
 }

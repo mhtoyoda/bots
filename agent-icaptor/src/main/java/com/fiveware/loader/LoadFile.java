@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import com.fiveware.exception.ExceptionBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,28 +29,30 @@ public class LoadFile {
 
 	@Autowired
 	private FileUtil fileUtil;
-	
+
 	@Autowired
 	private ServiceBot<String> serviceBot;
-	
+
 	@Autowired
 	private Validate<String> validate;
-	
+
 	@Autowired
 	private ClassLoaderConfig classLoaderConfig;
-	
+
 	@Autowired
 	private ClassLoaderRunner classLoaderRunner;
-	
+
 	@SuppressWarnings("rawtypes")
-	public void executeLoad(String botName, File file) throws IOException, AttributeLoadException, ClassNotFoundException {
-		logger.info("Init Import File "+file.getName() + " - [BOT]: "+botName);		
-		BotClassLoaderContext botClassLoaderContext = classLoaderConfig.getPropertiesBot(botName);
-		InputDictionaryContext inputDictionary = botClassLoaderContext.getInputDictionary();
-		String separatorInput = inputDictionary.getSeparator(); 
+	public void executeLoad(String botName, File file) throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
+
+		logger.info("Init Import File {} - [BOT]: {}", file.getName(), botName);
+
+		Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(botName);
+		InputDictionaryContext inputDictionary = botClassLoaderContext.get().getInputDictionary();
+		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
-		String fileNameOut = botClassLoaderContext.getOutputDictionary().getNameFileOut();
-		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput );
+		String fileNameOut = botClassLoaderContext.get().getOutputDictionary().getNameFileOut();
+		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClassLoader(botName);
 		for (Record line : recordLines) {
 			String cep = (String) line.getValue("cep");
@@ -57,13 +61,13 @@ public class LoadFile {
 				OutTextRecord result = serviceBot.callBot(botName, cep);
 				fileUtil.writeFile(fileNameOut, separatorInput, result);
 			} catch (Exception e) {
-				logger.error("Unprocessed Record - Cause: "+e.getMessage());
+				logger.error("Unprocessed Record - Cause: " + e.getMessage());
 				Map<String, Object> map = new LinkedHashMap<>();
-		        map.put("cep", cep);
+				map.put("cep", cep);
 				fileUtil.writeFile(fileNameOut, separatorInput, new OutTextRecord(map));
 			}
 		}
-		
-		logger.info("End Import File "+file.getName() + " - [BOT]: "+botName);
+
+		logger.info("End Import File " + file.getName() + " - [BOT]: " + botName);
 	}
 }
