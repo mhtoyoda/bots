@@ -23,10 +23,7 @@ import com.google.common.base.Strings;
 @Service
 public class ServiceBot<T>  {
 
-	public static final String BOT_CLASS_MAIN = "bot.class.main";
-    public static final String METHOD_EXECUTE = "execute";
-    public static final String BOT_ENDPOINT = "bot.endpoint";
-    public static final String BOT_NAME = "consultaCEP";
+    public static final String METHOD_EXECUTE = "execute";    
 
     static Logger logger = LoggerFactory.getLogger(ServiceBot.class);
 
@@ -40,11 +37,24 @@ public class ServiceBot<T>  {
     private ClassLoaderRunner classLoaderRunner;
     
     public OutTextRecord callBot(String nameBot, T parameter) {
-        try {
-        	if(hasEndPoint(nameBot)){
-        		return executeMainClass(nameBot, parameter);        		
+    	BotClassLoaderContext botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
+    	try {        	
+        	if(botClassLoaderContext != null){
+        		return executeMainClass(botClassLoaderContext, parameter);        		
         	}
-
+        } catch (IOException | ClassNotFoundException |
+                IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+            logger.error(" ServiceBot: ", e);
+        }
+        return null;
+    }
+    
+    public OutTextRecord callBot(String nameBot, String endpoint, T parameter) {
+    	BotClassLoaderContext botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
+    	try {        	
+        	if(hasEndPoint(botClassLoaderContext, endpoint)){
+        		return executeMainClass(botClassLoaderContext, parameter);        		
+        	}
         } catch (IOException | ClassNotFoundException |
                 IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
             logger.error(" ServiceBot: ", e);
@@ -52,21 +62,19 @@ public class ServiceBot<T>  {
         return null;
     }
 
-    private OutTextRecord executeMainClass(String botName, T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        Class cls = classLoaderRunner.loadClassLoader(botName);
-        Method execute = cls.getMethod(METHOD_EXECUTE, parameter.getClass());
+    private OutTextRecord executeMainClass(BotClassLoaderContext botClassLoaderContext, T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+        Class cls = classLoaderRunner.loadClassLoader(botClassLoaderContext.getNameBot());
+        Method execute = cls.getMethod(botClassLoaderContext.getMethod(), parameter.getClass());
         Object obj =  execute.invoke(cls.newInstance(), parameter);
         Map map = (Map) objectMapper.convertValue(obj, Map.class);
         return new OutTextRecord(map);
     }
 
-    private Boolean hasEndPoint(String nameBot) {
-        BotClassLoaderContext botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
-        if( null != botClassLoaderContext ){
-        	if (Strings.isNullOrEmpty(botClassLoaderContext.getEndpoint()) ||
-        			!nameBot.equals(botClassLoaderContext.getEndpoint()))
-        		return Boolean.FALSE;        	
-        }
+    private Boolean hasEndPoint(BotClassLoaderContext botClassLoaderContext, String endpoint) {            	
+    	if (Strings.isNullOrEmpty(botClassLoaderContext.getEndpoint()) ||
+    			!endpoint.equals(botClassLoaderContext.getEndpoint()))
+    		return Boolean.FALSE;        	
+        
         return Boolean.TRUE;	
     }
 
