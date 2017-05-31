@@ -13,7 +13,8 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.file.FileUtil;
-import com.fiveware.metadata.IcaptorMetaInfo;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.InputDictionaryContext;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.Record;
 import com.fiveware.service.ServiceBot;
@@ -33,19 +34,27 @@ public class LoadFile {
 	@Autowired
 	private Validate<String> validate;
 	
+	@Autowired
+	private ClassLoaderConfig classLoaderConfig;
+	
+	@Autowired
+	private ClassLoaderRunner classLoaderRunner;
+	
 	@SuppressWarnings("rawtypes")
-	public void executeLoad(Class classLoader, File file) throws IOException, AttributeLoadException, ClassNotFoundException {
+	public void executeLoad(String botName, File file) throws IOException, AttributeLoadException, ClassNotFoundException {
 		logger.info("Init Import File "+file.getName());		
-		String separatorInput = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(classLoader, "InputDictionary");
-		String[] fieldsInput = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(classLoader, "InputDictionary");
-		String fileNameOut = (String) IcaptorMetaInfo.NAMEFILEOUT.getValueAtribute(classLoader, "OutputDictionary");
+		BotClassLoaderContext botClassLoaderContext = classLoaderConfig.getPropertiesBot("consultaCEP");
+		InputDictionaryContext inputDictionary = botClassLoaderContext.getInputDictionary();
+		String separatorInput = inputDictionary.getSeparator(); 
+		String[] fieldsInput = inputDictionary.getFields();
+		String fileNameOut = botClassLoaderContext.getOutputDictionary().getNameFileOut();
 		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput );
-		
+		Class classLoader = classLoaderRunner.loadClassLoader(botName);
 		for (Record line : recordLines) {
 			String cep = (String) line.getValue("cep");
 			try {
 				validate.validate(cep, classLoader);
-				OutTextRecord result = serviceBot.callBot(cep);
+				OutTextRecord result = serviceBot.callBot(botName, cep);
 				fileUtil.writeFile(fileNameOut, separatorInput, result);
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: "+e.getMessage());

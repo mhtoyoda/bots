@@ -20,7 +20,7 @@ public class WatchServiceRecursive {
 
 
     @Autowired
-    private BotJar botJar;
+    private LoadBot botJar;
 
 
     @Value("${worker.dir}")
@@ -57,7 +57,11 @@ public class WatchServiceRecursive {
     private void registerDir (Path path, WatchService watchService) throws IOException {
 
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
-            return;
+        	if (isValidFileType(path)) {
+                botJar.load(path.toFile());  
+                //TODO salvar dados do classloader
+            }
+        	return;
         }
 
         System.out.println("registering: " + path);
@@ -94,7 +98,7 @@ public class WatchServiceRecursive {
                     path = parentPath.resolve(path);
 
                     if (isValidFileType(path)) {
-                        botJar.loadFile(path.toFile());
+                        botJar.load(path.toFile());
                         registerDir(path, watchService);
                     }
                 }

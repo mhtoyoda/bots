@@ -4,7 +4,7 @@ import com.fiveware.model.BotClassLoaderContext;
 
 public interface ClassLoaderConfig {
 
-	BotClassLoaderContext getPropertiesBot(String classLoader);
+	BotClassLoaderContext getPropertiesBot(String nameBot);
 
-	void savePropertiesBot(BotClassLoaderContext icaptorClassLoader);
+	void savePropertiesBot(BotClassLoaderContext botClassLoaderContext);
 }

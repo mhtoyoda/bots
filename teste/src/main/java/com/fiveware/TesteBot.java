@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by valdisnei on 5/28/17.
  */
-@Icaptor(classloader = "com.fiveware.TesteBot", description = "Bot para consulta de ceps, serviço do Correio", value = "consultaCEP", version = "1.0.0")
+@Icaptor(value = "consultaCEP", classloader = "com.fiveware.TesteBot", description = "Bot para consulta de ceps, serviço do Correio", version = "1.0.0")
 public class TesteBot implements Automation<String, Endereco> {
 
     static Logger logger = LoggerFactory.getLogger(TesteBot.class);
@@ -31,10 +31,10 @@ public class TesteBot implements Automation<String, Endereco> {
     }
 
 
-    @IcaptorMethod(value = "execute")
+    @IcaptorMethod(value = "execute", endpoint = "correios-bot")
     @InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
     @OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, nameFileOut = "/home/fiveware/Documentos/saida.txt", separator = "|", typeFileOut = "csv")
-    public Endereco execute(@Field(length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
+    public Endereco execute(@Field(name= "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
         try {
             Endereco endereco = getEndereco(cep);
 
