@@ -42,8 +42,8 @@ public class LoadFile {
 	
 	@SuppressWarnings("rawtypes")
 	public void executeLoad(String botName, File file) throws IOException, AttributeLoadException, ClassNotFoundException {
-		logger.info("Init Import File "+file.getName());		
-		BotClassLoaderContext botClassLoaderContext = classLoaderConfig.getPropertiesBot("consultaCEP");
+		logger.info("Init Import File "+file.getName() + " - [BOT]: "+botName);		
+		BotClassLoaderContext botClassLoaderContext = classLoaderConfig.getPropertiesBot(botName);
 		InputDictionaryContext inputDictionary = botClassLoaderContext.getInputDictionary();
 		String separatorInput = inputDictionary.getSeparator(); 
 		String[] fieldsInput = inputDictionary.getFields();
@@ -64,6 +64,6 @@ public class LoadFile {
 			}
 		}
 		
-		logger.info("End Import File "+file.getName());
+		logger.info("End Import File "+file.getName() + " - [BOT]: "+botName);
 	}
 }
