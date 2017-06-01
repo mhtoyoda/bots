@@ -14,7 +14,7 @@ import com.fiveware.service.LoadBot;
 public class ClassLoaderRunner {
 	
 	@Autowired
-	private LoadBot botJar;
+	private LoadBot loadBot;
 	
 	@Autowired
 	private ClassLoaderConfig classLoaderConfig;
@@ -25,7 +25,7 @@ public class ClassLoaderRunner {
 		BotClassLoaderContext botClassLoaderContext = classLoaderConfig.getPropertiesBot(botName);
 		if( null != botClassLoaderContext){
 			String className = botClassLoaderContext.getClassLoader();
-			ClassLoader classLoader = new URLClassLoader(new URL[] { botJar.getFile().toURI().toURL() });
+			ClassLoader classLoader = new URLClassLoader(new URL[] { loadBot.getFile().toURI().toURL() });
 			clazz = classLoader.loadClass(className);			
 		}
 		return clazz;

@@ -16,6 +16,15 @@ public class BotClassLoaderContext implements Serializable {
 	private String nameJar;
 	private InputDictionaryContext inputDictionary;
 	private OutputDictionaryContext outputDictionary;
+	
+	public BotClassLoaderContext(String nameBot, String classLoader, String method, String endpoint, String nameJar) {
+		super();
+		this.nameBot = nameBot;
+		this.classLoader = classLoader;
+		this.method = method;
+		this.endpoint = endpoint;
+		this.nameJar = nameJar;
+	}
 
 	public BotClassLoaderContext(String nameBot, String classLoader, String method, String endpoint, String nameJar, InputDictionaryContext inputDictionary, OutputDictionaryContext outputDictionary) {
 		this.nameBot = nameBot;

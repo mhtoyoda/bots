@@ -1,0 +1,98 @@
+package com.fiveware.loader;
+
+import java.io.File;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Set;
+
+import org.apache.commons.lang3.StringUtils;
+import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import com.fiveware.Automation;
+import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.metadata.IcaptorMetaInfo;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.InputDictionaryContext;
+import com.fiveware.model.OutputDictionaryContext;
+
+@Component
+public class JarConfiguration {
+
+	@Autowired
+	private ClassLoaderConfig classLoaderConfig;
+	
+	@SuppressWarnings("rawtypes")
+	public void saveConfigurations(String pathJar) throws MalformedURLException{		
+		String nameBot = null, classLoaderInfo = null, nameJar = null;		
+		ClassLoader classLoader = getClassLoader(pathJar);
+		Set<Class<? extends Automation>> subTypesOf = getSubTypes(classLoader);
+		for (Class<? extends Automation> clazz : subTypesOf) {
+			try {
+				Class<?> automationClass = classLoader.loadClass(clazz.getCanonicalName());
+				Annotation[] annotations = automationClass.getAnnotations();
+				for (Annotation annotation : annotations) {
+					Class<? extends Annotation> annotationType = annotation.annotationType();					
+					if (annotationType.getSimpleName().equals("Icaptor")) {	
+						try {
+							nameBot = (String) getValue(annotation, annotationType, IcaptorMetaInfo.VALUE.getValue());
+							classLoaderInfo = (String) getValue(annotation, annotationType, IcaptorMetaInfo.CLASSLOADER.getValue());
+							nameJar = StringUtils.substringBeforeLast(pathJar, "/");														
+						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
+								| InvocationTargetException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+				
+				String method = (String) IcaptorMetaInfo.VALUE.getValueAtribute(automationClass, "IcaptorMethod");
+				String endpoint = (String) IcaptorMetaInfo.ENDPOINT.getValueAtribute(automationClass, "IcaptorMethod");
+				String typeFileIn = (String) IcaptorMetaInfo.TYPEFILEIN.getValueAtribute(automationClass, "InputDictionary");
+				String[] fields = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(automationClass, "InputDictionary");
+				String separator = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(automationClass, "InputDictionary");
+				
+				InputDictionaryContext inputDictionaryContext = new InputDictionaryContext(typeFileIn, fields, separator);
+				String typeFileOut = (String) IcaptorMetaInfo.TYPEFILEOUT.getValueAtribute(automationClass, "OutputDictionary");
+				String[] fieldsOut = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(automationClass, "OutputDictionary");
+				String separatorOut = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(automationClass, "OutputDictionary");
+				String nameFileOut = (String) IcaptorMetaInfo.NAMEFILEOUT.getValueAtribute(automationClass, "OutputDictionary");
+				OutputDictionaryContext outputDictionaryContext = new OutputDictionaryContext(typeFileOut, fieldsOut, separatorOut, nameFileOut);
+				
+				BotClassLoaderContext botClassLoaderContext = new BotClassLoaderContext(nameBot, classLoaderInfo, method, endpoint, nameJar,
+						inputDictionaryContext, outputDictionaryContext);
+				classLoaderConfig.savePropertiesBot(botClassLoaderContext);				
+			} catch (ClassNotFoundException | AttributeLoadException e) {				
+				e.printStackTrace();
+			}			
+		}
+	}
+
+	private Object getValue(Annotation annotation, Class<? extends Annotation> annotationType, String attribute)
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method methodTarget = annotationType.getMethod(attribute);
+		Object value = methodTarget.invoke(annotation);
+		return value;
+	}
+
+	private ClassLoader getClassLoader(String pathJar) throws MalformedURLException {
+		File fileJar = new File(pathJar);
+		ClassLoader classLoader = new URLClassLoader(new URL[] { fileJar.toURI().toURL() });
+		return classLoader;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private Set<Class<? extends Automation>> getSubTypes(ClassLoader classLoader) throws MalformedURLException{
+		ConfigurationBuilder config = new ConfigurationBuilder().setUrls(ClasspathHelper.forClassLoader(classLoader))
+				.addClassLoader(classLoader);
+		Reflections reflections = new Reflections(config);
+		Set<Class<? extends Automation>> subTypesOf = reflections.getSubTypesOf(Automation.class);
+		return subTypesOf;
+	}
+}

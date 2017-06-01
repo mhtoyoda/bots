@@ -15,33 +15,31 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoadBot {
 
-    public static final String APPLICATION_PROPERTIES = "application.properties";
+	public static final String APPLICATION_PROPERTIES = "application.properties";
 
-    private File file;
-    private InputStream input;
-    private Properties configProp;
+	private File file;
+	private InputStream input;
+	private Properties configProp;
 
-    public void load(File directory) throws IOException {
-        load(directory.getAbsoluteFile().getPath());
-    }
+	public void load(File directory) throws IOException {
+		load(directory.getAbsoluteFile().getPath());
+	}
 
-    public void load(String directory) throws IOException {
-        this.file = new File(directory);
-        JarFile jarFile = new JarFile(file);
-        JarEntry jarEntry = jarFile.getJarEntry(APPLICATION_PROPERTIES);
-        JarEntry fileEntry = jarFile.getJarEntry(jarEntry.getName());
-        this.input = jarFile.getInputStream(fileEntry);
-        this.configProp = new Properties();
-        this.configProp.load(this.input);
-    }
+	public void load(String directory) throws IOException {
+		this.file = new File(directory);
+		JarFile jarFile = new JarFile(file);
+		JarEntry jarEntry = jarFile.getJarEntry(APPLICATION_PROPERTIES);
+		JarEntry fileEntry = jarFile.getJarEntry(jarEntry.getName());
+		this.input = jarFile.getInputStream(fileEntry);
+		this.configProp = new Properties();
+		this.configProp.load(this.input);
+	}
 
+	public File getFile() {
+		return file;
+	}
 
-    public File getFile() {
-        return file;
-    }
-
-    public InputStream getInput() {
-        return input;
-    }
-    
+	public InputStream getInput() {
+		return input;
+	}
 }

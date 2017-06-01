@@ -23,8 +23,6 @@ import com.google.common.base.Strings;
 @Service
 public class ServiceBot<T>  {
 
-    public static final String METHOD_EXECUTE = "execute";    
-
     static Logger logger = LoggerFactory.getLogger(ServiceBot.class);
 
     @Autowired
