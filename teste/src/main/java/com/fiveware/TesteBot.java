@@ -14,7 +14,8 @@ import com.fiveware.file.PhantomJSHelper;
 /**
  * Created by valdisnei on 5/28/17.
  */
-@Icaptor(value = "consultaCEP", classloader = "com.fiveware.TesteBot", description = "Bot para consulta de ceps, serviço do Correio", version = "1.0.0")
+@Icaptor(value = "consultaCEP", classloader = "com.fiveware.TesteBot",
+		description = "Bot para consulta de ceps, serviço do Correio",version = "1.0.0")
 public class TesteBot implements Automation<String, Endereco> {
 
 	static Logger logger = LoggerFactory.getLogger(TesteBot.class);

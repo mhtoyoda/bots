@@ -53,6 +53,10 @@ public class AgentController {
         return getBot(botName,endPoint,parameter,request);
     }
 
+    @GetMapping("/")
+    public ResponseEntity<Object> get() {
+        return ResponseEntity.ok("Hello World");
+    }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<MessageBot> illegalArgumentExceptional(IllegalArgumentException e) {

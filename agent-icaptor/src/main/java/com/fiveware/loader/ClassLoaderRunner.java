@@ -18,7 +18,7 @@ import com.fiveware.service.LoadBot;
 public class ClassLoaderRunner {
 
 	static Logger logger = LoggerFactory.getLogger(ClassLoaderRunner.class);
-	
+
 	@Autowired
 	private LoadBot loadBot;
 	

@@ -22,13 +22,13 @@ public class MapClassLoaderConfig implements ClassLoaderConfig {
 
 	@Autowired
 	private MessageSource messageSource;
-	
+
 	@Override
 	public Optional<BotClassLoaderContext> getPropertiesBot(String nameBot) throws ExceptionBot {
 		BotClassLoaderContext botClassLoaderContext = map.get(nameBot);
 		Optional<BotClassLoaderContext> optional = Optional.ofNullable(botClassLoaderContext);
 
-		String message = messageSource.getMessage("bot.notFound",new Object[]{nameBot},null);
+		String message = messageSource.getMessage("bot.notFound", new Object[]{nameBot}, null);
 		return Optional.ofNullable(optional.orElseThrow(() -> new ExceptionBot(message)));
 	}
 
