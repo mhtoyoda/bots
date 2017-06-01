@@ -17,7 +17,11 @@ public enum IcaptorMetaInfo {
 	SEPARATOR("separator"),
 	TYPEFILEOUT("typeFileOut"),
 	NAMEFILEOUT("nameFileOut"),
-	ENDPOINT("endpoint");
+	ENDPOINT("endpoint"),
+	NAME("name"),
+	LENGTH("length"),
+	REGEXVALIDATE("regexValidate"),
+	POSITION("position");
 
 	private String value;
 

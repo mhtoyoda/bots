@@ -91,21 +91,21 @@ public class JarConfiguration {
 		return inputDictionaryContext;
 	}
 
-	private Object getValue(Annotation annotation, Class<? extends Annotation> annotationType, String attribute)
+	protected Object getValue(Annotation annotation, Class<? extends Annotation> annotationType, String attribute)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		Method methodTarget = annotationType.getMethod(attribute);
 		Object value = methodTarget.invoke(annotation);
 		return value;
 	}
 
-	private ClassLoader getClassLoader(String pathJar) throws MalformedURLException {
+	protected ClassLoader getClassLoader(String pathJar) throws MalformedURLException {
 		File fileJar = new File(pathJar);
 		ClassLoader classLoader = new URLClassLoader(new URL[] { fileJar.toURI().toURL() });
 		return classLoader;
 	}
 	
 	@SuppressWarnings("rawtypes")
-	private Set<Class<? extends Automation>> getSubTypes(ClassLoader classLoader) throws MalformedURLException{
+	protected Set<Class<? extends Automation>> getSubTypes(ClassLoader classLoader) throws MalformedURLException{
 		ConfigurationBuilder config = new ConfigurationBuilder().setUrls(ClasspathHelper.forClassLoader(classLoader))
 				.addClassLoader(classLoader);
 		Reflections reflections = new Reflections(config);
