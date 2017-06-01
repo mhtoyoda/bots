@@ -9,7 +9,7 @@ import com.fiveware.model.OutTextRecord;
  * Created by valdisnei on 5/31/17.
  */
 @Service
-public interface ServiceBot<T> {
-    OutTextRecord callBot(String nameBot, T parameter) throws ExceptionBot;
-    OutTextRecord callBot(String nameBot, String endpoint, T parameter) throws ExceptionBot;
+public interface ServiceBot {
+    <T> OutTextRecord callBot(String nameBot, T parameter) throws ExceptionBot;
+    <T> OutTextRecord callBot(String nameBot, String endpoint, T parameter) throws ExceptionBot;
 }

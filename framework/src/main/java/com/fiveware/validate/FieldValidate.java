@@ -13,11 +13,11 @@ import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ValidationFieldException;
 
 @Service
-public class FieldValidate implements Validate<String> {
+public class FieldValidate implements Validate {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public void validate(String value, Class clazz) throws ValidationFieldException, AttributeLoadException {
+	public <T> void validate(T value, Class clazz) throws ValidationFieldException, AttributeLoadException {
 		if( null != clazz ){			
 			for (Method method : clazz.getDeclaredMethods()) {
 				Annotation[][] parameterAnnotations = method.getParameterAnnotations();
@@ -33,7 +33,7 @@ public class FieldValidate implements Validate<String> {
 								String regex = regexValidate.toString();
 								if (StringUtils.isNotBlank(regex)) {
 									Pattern pattern = Pattern.compile(regex);
-									Matcher matcher = pattern.matcher(value);
+									Matcher matcher = pattern.matcher(String.valueOf(value));
 									if (!matcher.matches()) {
 										throw new ValidationFieldException(
 												"Value [" + value + "] does not match validation.");
@@ -42,7 +42,7 @@ public class FieldValidate implements Validate<String> {
 								methodTarget = type.getMethod("length");
 								Object lengthValue = methodTarget.invoke(annotation);
 								Integer length = Integer.parseInt(lengthValue.toString());
-								if (length != 0 && value.length() > length) {
+								if (length != 0 && String.valueOf(value).length() > length) {
 									throw new ValidationFieldException(
 											"Value [" + value + "] should be less than " + lengthValue);
 								}

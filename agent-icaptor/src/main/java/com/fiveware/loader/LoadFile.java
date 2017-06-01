@@ -2,9 +2,7 @@ package com.fiveware.loader;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -34,10 +32,10 @@ public class LoadFile {
 
 	@Autowired
 	@Qualifier("batch")
-	private ServiceBot<String> serviceBot;
+	private ServiceBot serviceBot;
 
 	@Autowired
-	private Validate<String> validate;
+	private Validate validate;
 
 	@Autowired
 	private ClassLoaderConfig classLoaderConfig;
@@ -61,16 +59,14 @@ public class LoadFile {
 		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClassLoader(botName);
 		for (Record line : recordLines) {
-			String cep = (String) line.getValue("cep");
 			try {
+				String cep = (String) line.getValue("cep");
 				validate.validate(cep, classLoader);
 				OutTextRecord result = serviceBot.callBot(botName, cep);
 				fileUtil.writeFile(workDir+ File.separator+fileNameOut, separatorInput, result);
 			} catch (Exception e) {
-				logger.error("Unprocessed Record - Cause: " + e.getMessage());
-				Map<String, Object> map = new LinkedHashMap<>();
-				map.put("cep", cep);
-				fileUtil.writeFile(workDir+ File.separator+fileNameOut, separatorInput, new OutTextRecord(map));
+				logger.error("Unprocessed Record - Cause: " + e.getMessage());				
+				fileUtil.writeFile(workDir+ File.separator+fileNameOut, separatorInput, new OutTextRecord(line.getRecordMap()));
 			}
 		}
 

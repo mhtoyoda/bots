@@ -1,20 +1,21 @@
 package com.fiveware.service;
 
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.model.OutTextRecord;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
+import com.fiveware.exception.ExceptionBot;
+import com.fiveware.model.OutTextRecord;
 
 /**
  * Created by valdisnei on 29/05/17.
  */
 @Service(value = "rest")
-public class ServiceBotRest<T> implements ServiceBot<T>{
+public class ServiceBotRest implements ServiceBot{
 
     static Logger logger = LoggerFactory.getLogger(ServiceBotRest.class);
 
@@ -22,7 +23,7 @@ public class ServiceBotRest<T> implements ServiceBot<T>{
     private ServiceBotClassLoader serviceBotClassLoader;
 
 
-    public OutTextRecord callBot(String nameBot, String endpoint, T parameter) throws ExceptionBot {
+    public <T> OutTextRecord callBot(String nameBot, String endpoint, T parameter) throws ExceptionBot {
     	try {
 
     	    return serviceBotClassLoader.executeMainClass(nameBot,endpoint, parameter);
@@ -34,7 +35,7 @@ public class ServiceBotRest<T> implements ServiceBot<T>{
     }
 
     @Override
-    public OutTextRecord callBot(String nameBot, T parameter) throws ExceptionBot {
+    public <T> OutTextRecord callBot(String nameBot, T parameter) throws ExceptionBot {
         throw new IllegalArgumentException("Metodo nao permitdo para esta classe!");
     }
 }

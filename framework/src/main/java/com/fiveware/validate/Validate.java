@@ -3,8 +3,8 @@ package com.fiveware.validate;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ValidationFieldException;
 
-public interface Validate<T> {
+public interface Validate {
 
 	@SuppressWarnings("rawtypes")
-	void validate(T value, Class clazz) throws ValidationFieldException, AttributeLoadException;
+	<T> void validate(T value, Class clazz) throws ValidationFieldException, AttributeLoadException;
 }
