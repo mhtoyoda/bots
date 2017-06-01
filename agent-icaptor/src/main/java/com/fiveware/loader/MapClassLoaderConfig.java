@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -14,6 +16,8 @@ import com.fiveware.model.BotClassLoaderContext;
 @Component("mapClassLoaderConfig")
 public class MapClassLoaderConfig implements ClassLoaderConfig {
 
+	private Logger log = LoggerFactory.getLogger(MapClassLoaderConfig.class);
+	
 	private static Map<String, BotClassLoaderContext> map = new ConcurrentHashMap<String, BotClassLoaderContext>();
 
 	@Autowired
@@ -30,6 +34,7 @@ public class MapClassLoaderConfig implements ClassLoaderConfig {
 
 	@Override
 	public void savePropertiesBot(BotClassLoaderContext botClassLoaderContext){
-		map.put(botClassLoaderContext.getClassLoader(), botClassLoaderContext);
+		map.put(botClassLoaderContext.getNameBot(), botClassLoaderContext);
+		log.info("Add [Bot]: {} - ClassLoader: {}", botClassLoaderContext.getNameBot(), botClassLoaderContext.getClassLoader());
 	}
 }

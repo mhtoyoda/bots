@@ -14,10 +14,10 @@ import com.fiveware.model.OutTextRecord;
 /**
  * Created by valdisnei on 29/05/17.
  */
-@Service
-public class ServiceBotImpl<T> implements ServiceBot<T> {
+@Service("batch")
+public class ServiceBatch<T> implements ServiceBot<T> {
 
-    static Logger logger = LoggerFactory.getLogger(ServiceBotImpl.class);
+    static Logger logger = LoggerFactory.getLogger(ServiceBatch.class);
 
     @Autowired
     private ServiceBotClassLoader serviceBotClassLoader;

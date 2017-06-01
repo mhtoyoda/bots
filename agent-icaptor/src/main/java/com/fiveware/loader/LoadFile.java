@@ -7,19 +7,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import com.fiveware.exception.ExceptionBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.exception.ExceptionBot;
 import com.fiveware.file.FileUtil;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.InputDictionaryContext;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.Record;
-import com.fiveware.service.ServiceBotImpl;
+import com.fiveware.service.ServiceBot;
 import com.fiveware.validate.Validate;
 
 @Component
@@ -31,7 +33,8 @@ public class LoadFile {
 	private FileUtil fileUtil;
 
 	@Autowired
-	private ServiceBotImpl<String> serviceBot;
+	@Qualifier("batch")
+	private ServiceBot<String> serviceBot;
 
 	@Autowired
 	private Validate<String> validate;
@@ -41,7 +44,10 @@ public class LoadFile {
 
 	@Autowired
 	private ClassLoaderRunner classLoaderRunner;
-
+	
+	@Value("${worker.file}")
+	private String workDir;
+	
 	@SuppressWarnings("rawtypes")
 	public void executeLoad(String botName, File file) throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
 
@@ -59,12 +65,12 @@ public class LoadFile {
 			try {
 				validate.validate(cep, classLoader);
 				OutTextRecord result = serviceBot.callBot(botName, cep);
-				fileUtil.writeFile(fileNameOut, separatorInput, result);
+				fileUtil.writeFile(workDir+ File.separator+fileNameOut, separatorInput, result);
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());
 				Map<String, Object> map = new LinkedHashMap<>();
 				map.put("cep", cep);
-				fileUtil.writeFile(fileNameOut, separatorInput, new OutTextRecord(map));
+				fileUtil.writeFile(workDir+ File.separator+fileNameOut, separatorInput, new OutTextRecord(map));
 			}
 		}
 

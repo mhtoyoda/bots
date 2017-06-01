@@ -26,7 +26,7 @@ public class TesteBot implements Automation<String, Endereco> {
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot")
 	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade",
-			"cep"}, nameFileOut = "/home/valdisnei/Documentos/saida.txt", separator = "|", typeFileOut = "csv")
+			"cep"}, nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
 	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
 		try {
 			Endereco endereco = getEndereco(cep);

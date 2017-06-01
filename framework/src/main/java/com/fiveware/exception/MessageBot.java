@@ -1,4 +1,4 @@
-package com.fiveware.service;
+package com.fiveware.exception;
 
 /**
  * Created by valdisnei on 30/05/17.
