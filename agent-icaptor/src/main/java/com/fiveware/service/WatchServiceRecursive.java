@@ -16,10 +16,13 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.loader.JarConfiguration;
 
 /**
@@ -28,6 +31,8 @@ import com.fiveware.loader.JarConfiguration;
 @Component
 public class WatchServiceRecursive {
     
+	private Logger log = LoggerFactory.getLogger(WatchServiceRecursive.class);
+	
 	private static final Map<WatchKey, Path> keyPathMap = new HashMap<>();
 
     @Autowired
@@ -59,7 +64,6 @@ public class WatchServiceRecursive {
             WatchService watchService = FileSystems.getDefault().newWatchService()) {
             registerDir(Paths.get(workerDir), watchService);
             startListening(watchService);
-
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {
@@ -67,8 +71,7 @@ public class WatchServiceRecursive {
         }
     }
 
-    private void registerDir (Path path, WatchService watchService) throws IOException {
-
+    private void registerDir (Path path, WatchService watchService) throws IOException, AttributeLoadException {
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
         	if (isValidFileType(path)) {
                 loadJar.load(path.toFile());  
@@ -77,14 +80,12 @@ public class WatchServiceRecursive {
         	return;
         }
 
-        System.out.println("registering: " + path);
-
+        log.info("registering: {}", path);
 
         WatchKey key = path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE,
                 StandardWatchEventKinds.ENTRY_MODIFY,
                 StandardWatchEventKinds.ENTRY_DELETE);
         keyPathMap.put(key, path);
-
 
         for (File f : path.toFile().listFiles()) {
             registerDir(f.toPath(), watchService);
@@ -99,8 +100,6 @@ public class WatchServiceRecursive {
                         watchEvent.kind(),
                         watchEvent.count(), watchEvent.context(), ((Path) watchEvent
                                 .context()).getClass());
-
-                //do something useful here
 
                 if (watchEvent.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
                     //this is not a complete path

@@ -68,6 +68,6 @@ public class LoadFile {
 			}
 		}
 
-		logger.info("End Import File " + file.getName() + " - [BOT]: " + botName);
+		logger.info("End Import File {} - [BOT]: {}", file.getName(), botName);
 	}
 }

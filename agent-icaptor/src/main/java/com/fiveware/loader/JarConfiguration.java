@@ -30,7 +30,7 @@ public class JarConfiguration {
 	private ClassLoaderConfig classLoaderConfig;
 	
 	@SuppressWarnings("rawtypes")
-	public void saveConfigurations(String pathJar) throws MalformedURLException{		
+	public void saveConfigurations(String pathJar) throws MalformedURLException, AttributeLoadException{		
 		String nameBot = null, classLoaderInfo = null, nameJar = null;		
 		ClassLoader classLoader = getClassLoader(pathJar);
 		Set<Class<? extends Automation>> subTypesOf = getSubTypes(classLoader);
@@ -54,24 +54,41 @@ public class JarConfiguration {
 				
 				String method = (String) IcaptorMetaInfo.VALUE.getValueAtribute(automationClass, "IcaptorMethod");
 				String endpoint = (String) IcaptorMetaInfo.ENDPOINT.getValueAtribute(automationClass, "IcaptorMethod");
-				String typeFileIn = (String) IcaptorMetaInfo.TYPEFILEIN.getValueAtribute(automationClass, "InputDictionary");
-				String[] fields = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(automationClass, "InputDictionary");
-				String separator = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(automationClass, "InputDictionary");
 				
-				InputDictionaryContext inputDictionaryContext = new InputDictionaryContext(typeFileIn, fields, separator);
-				String typeFileOut = (String) IcaptorMetaInfo.TYPEFILEOUT.getValueAtribute(automationClass, "OutputDictionary");
-				String[] fieldsOut = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(automationClass, "OutputDictionary");
-				String separatorOut = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(automationClass, "OutputDictionary");
-				String nameFileOut = (String) IcaptorMetaInfo.NAMEFILEOUT.getValueAtribute(automationClass, "OutputDictionary");
-				OutputDictionaryContext outputDictionaryContext = new OutputDictionaryContext(typeFileOut, fieldsOut, separatorOut, nameFileOut);
+				InputDictionaryContext inputDictionaryContext = getInputDictionaryAttributes(automationClass);				
+				OutputDictionaryContext outputDictionaryContext = getOutputDictionaryAttributes(automationClass);
 				
-				BotClassLoaderContext botClassLoaderContext = new BotClassLoaderContext(nameBot, classLoaderInfo, method, endpoint, nameJar,
-						inputDictionaryContext, outputDictionaryContext);
-				classLoaderConfig.savePropertiesBot(botClassLoaderContext);				
+				saveAttributesClassLoader(nameBot, classLoaderInfo, nameJar, method, endpoint, inputDictionaryContext, outputDictionaryContext);				
 			} catch (ClassNotFoundException | AttributeLoadException e) {				
-				e.printStackTrace();
+				throw new AttributeLoadException(e.getMessage());
 			}			
 		}
+	}
+
+	private void saveAttributesClassLoader(String nameBot, String classLoaderInfo, String nameJar, String method, String endpoint,
+			InputDictionaryContext inputDictionaryContext, OutputDictionaryContext outputDictionaryContext) {
+		BotClassLoaderContext botClassLoaderContext = new BotClassLoaderContext(nameBot, classLoaderInfo, method, endpoint, nameJar,
+				inputDictionaryContext, outputDictionaryContext);
+		classLoaderConfig.savePropertiesBot(botClassLoaderContext);
+	}
+
+	private OutputDictionaryContext getOutputDictionaryAttributes(Class<?> automationClass) throws AttributeLoadException {
+		String typeFileOut = (String) IcaptorMetaInfo.TYPEFILEOUT.getValueAtribute(automationClass, "OutputDictionary");
+		String[] fieldsOut = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(automationClass, "OutputDictionary");
+		String separatorOut = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(automationClass, "OutputDictionary");
+		String nameFileOut = (String) IcaptorMetaInfo.NAMEFILEOUT.getValueAtribute(automationClass, "OutputDictionary");
+		OutputDictionaryContext outputDictionaryContext = new OutputDictionaryContext(typeFileOut, fieldsOut, separatorOut, nameFileOut);
+		return outputDictionaryContext;
+	}
+
+	private InputDictionaryContext getInputDictionaryAttributes(Class<?> automationClass)
+			throws AttributeLoadException {
+		String typeFileIn = (String) IcaptorMetaInfo.TYPEFILEIN.getValueAtribute(automationClass, "InputDictionary");
+		String[] fields = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(automationClass, "InputDictionary");
+		String separator = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(automationClass, "InputDictionary");
+		
+		InputDictionaryContext inputDictionaryContext = new InputDictionaryContext(typeFileIn, fields, separator);
+		return inputDictionaryContext;
 	}
 
 	private Object getValue(Annotation annotation, Class<? extends Annotation> annotationType, String attribute)
