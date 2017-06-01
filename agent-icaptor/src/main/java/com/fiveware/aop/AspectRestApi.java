@@ -27,9 +27,9 @@ public class AspectRestApi {
 
         Object bot = joinPoint.getArgs()[0];
 
-        Object requestPayLoad = joinPoint.getArgs()[1];
+        Object requestPayLoad = joinPoint.getArgs()[2];
 
-        HttpServletRequest context = (HttpServletRequest) joinPoint.getArgs()[2];
+        HttpServletRequest context = (HttpServletRequest) joinPoint.getArgs()[3];
 
         String json = "{ Request:{}, " +
                 " url:{}, " +
