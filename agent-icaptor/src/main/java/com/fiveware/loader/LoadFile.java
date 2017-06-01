@@ -19,7 +19,7 @@ import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.InputDictionaryContext;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.Record;
-import com.fiveware.service.ServiceBot;
+import com.fiveware.service.ServiceBotImpl;
 import com.fiveware.validate.Validate;
 
 @Component
@@ -31,7 +31,7 @@ public class LoadFile {
 	private FileUtil fileUtil;
 
 	@Autowired
-	private ServiceBot<String> serviceBot;
+	private ServiceBotImpl<String> serviceBot;
 
 	@Autowired
 	private Validate<String> validate;
