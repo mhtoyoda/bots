@@ -37,4 +37,13 @@ public class MapClassLoaderConfig implements ClassLoaderConfig {
 		map.put(botClassLoaderContext.getNameBot(), botClassLoaderContext);
 		log.info("Add [Bot]: {} - ClassLoader: {}", botClassLoaderContext.getNameBot(), botClassLoaderContext.getClassLoader());
 	}
+
+	@Override
+	public void removeBot(String nameJar) {
+		map.entrySet().forEach(c -> {
+			if(c.getValue().getNameJar().equals(nameJar)){
+				map.remove(c.getKey());
+			}
+		});				
+	}
 }

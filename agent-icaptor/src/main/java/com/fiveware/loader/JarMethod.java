@@ -36,6 +36,8 @@ public class JarMethod {
 							for (Annotation annotation : annotations) {
 								Class<? extends Annotation> annotationType = annotation.annotationType();
 								if(annotationType.getSimpleName().equals("Field")){
+									System.out.println(parameter.getType().getName());
+									System.out.println(parameter.getClass().getName());
 									String name = (String) jarConfiguration.getValue(annotation, annotationType, IcaptorMetaInfo.NAME.getValue());
 									System.out.println(name);
 								}

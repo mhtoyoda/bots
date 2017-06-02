@@ -75,7 +75,7 @@ public class WatchServiceRecursive {
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
         	if (isValidFileType(path)) {
                 loadJar.load(path.toFile());  
-                jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());                
+                jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());             
             }
         	return;
         }
@@ -112,6 +112,12 @@ public class WatchServiceRecursive {
                     if (isValidFileType(path)) {
                         loadJar.load(path.toFile());
                         registerDir(path, watchService);
+                    }
+                }
+                if (watchEvent.kind() == StandardWatchEventKinds.ENTRY_DELETE) {
+                    Path path = (Path) watchEvent.context();                    
+                    if (isValidFileType(path)) {
+                       jarConfiguration.removeBot(path.toString());
                     }
                 }
             }

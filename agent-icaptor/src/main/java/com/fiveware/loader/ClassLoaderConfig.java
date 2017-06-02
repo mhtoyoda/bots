@@ -10,4 +10,6 @@ public interface ClassLoaderConfig {
 	Optional<BotClassLoaderContext> getPropertiesBot(String nameBot) throws ExceptionBot;
 
 	void savePropertiesBot(BotClassLoaderContext botClassLoaderContext);
+	
+	void removeBot(String nameBot);
 }
