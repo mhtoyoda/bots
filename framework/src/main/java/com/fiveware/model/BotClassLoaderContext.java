@@ -1,6 +1,7 @@
 package com.fiveware.model;
 
 import java.io.Serializable;
+import java.net.URL;
 
 public class BotClassLoaderContext implements Serializable {
 
@@ -16,8 +17,11 @@ public class BotClassLoaderContext implements Serializable {
 	private String nameJar;
 	private InputDictionaryContext inputDictionary;
 	private OutputDictionaryContext outputDictionary;
+	private URL url;
 	
-	public BotClassLoaderContext(String nameBot, String classLoader, String method, String endpoint, String nameJar, InputDictionaryContext inputDictionary, OutputDictionaryContext outputDictionary) {
+	public BotClassLoaderContext(String nameBot, String classLoader, String method, String endpoint, String nameJar,
+								 InputDictionaryContext inputDictionary, OutputDictionaryContext outputDictionary,
+								 URL url) {
 		this.nameBot = nameBot;
 		this.classLoader = classLoader;
 		this.method = method;
@@ -25,6 +29,7 @@ public class BotClassLoaderContext implements Serializable {
 		this.nameJar = nameJar;
 		this.inputDictionary = inputDictionary;
 		this.outputDictionary = outputDictionary;
+		this.url = url;
 	}
 
 	public String getNameBot() {
@@ -62,5 +67,8 @@ public class BotClassLoaderContext implements Serializable {
 	public void setOutputDictionary(OutputDictionaryContext outputDictionary) {
 		this.outputDictionary = outputDictionary;
 	}
-	
+
+	public URL getUrl() {
+		return url;
+	}
 }

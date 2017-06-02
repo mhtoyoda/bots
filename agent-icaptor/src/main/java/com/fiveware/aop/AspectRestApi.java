@@ -25,23 +25,23 @@ public class AspectRestApi {
     @AfterReturning(pointcut = "execution(public * com.fiveware.controller.AgentController.*(..))", returning = "returnValue")
     public void interceptarApiOy(JoinPoint joinPoint, ResponseEntity returnValue) throws JsonProcessingException {
 
-        Object bot = joinPoint.getArgs()[0];
-
-        Object requestPayLoad = joinPoint.getArgs()[2];
-
-        HttpServletRequest context = (HttpServletRequest) joinPoint.getArgs()[3];
-
-        String json = "{ Request:{}, " +
-                " url:{}, " +
-                " IP:{}, " +
-                " Status:{}, " +
-                " Response:{}, " +
-                " Servico:{}, " +
-                X_API_KEY + ":{}" + "}";
-
-        logger.info(json,requestPayLoad,context.getRequestURI(),context.getHeader(X_FORWARDED_FOR),
-                returnValue.getStatusCode(),
-                returnValue.getBody(),bot,context.getHeader(X_API_KEY));
+//        Object bot = joinPoint.getArgs()[0];
+//
+//        Object requestPayLoad = joinPoint.getArgs()[2];
+//
+//        HttpServletRequest context = (HttpServletRequest) joinPoint.getArgs()[3];
+//
+//        String json = "{ Request:{}, " +
+//                " url:{}, " +
+//                " IP:{}, " +
+//                " Status:{}, " +
+//                " Response:{}, " +
+//                " Servico:{}, " +
+//                X_API_KEY + ":{}" + "}";
+//
+//        logger.info(json,requestPayLoad,context.getRequestURI(),context.getHeader(X_FORWARDED_FOR),
+//                returnValue.getStatusCode(),
+//                returnValue.getBody(),bot,context.getHeader(X_API_KEY));
 
     }
 }

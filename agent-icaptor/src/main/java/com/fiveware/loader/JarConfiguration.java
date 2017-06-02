@@ -58,7 +58,7 @@ public class JarConfiguration {
 				InputDictionaryContext inputDictionaryContext = getInputDictionaryAttributes(automationClass);				
 				OutputDictionaryContext outputDictionaryContext = getOutputDictionaryAttributes(automationClass);
 				
-				saveAttributesClassLoader(nameBot, classLoaderInfo, nameJar, method, endpoint, inputDictionaryContext, outputDictionaryContext);				
+				saveAttributesClassLoader(nameBot, classLoaderInfo, nameJar, method, endpoint, inputDictionaryContext, outputDictionaryContext, getUrl(pathJar));
 			} catch (ClassNotFoundException | AttributeLoadException e) {				
 				throw new AttributeLoadException(e.getMessage());
 			}			
@@ -66,9 +66,9 @@ public class JarConfiguration {
 	}
 
 	private void saveAttributesClassLoader(String nameBot, String classLoaderInfo, String nameJar, String method, String endpoint,
-			InputDictionaryContext inputDictionaryContext, OutputDictionaryContext outputDictionaryContext) {
+			InputDictionaryContext inputDictionaryContext, OutputDictionaryContext outputDictionaryContext,URL url) {
 		BotClassLoaderContext botClassLoaderContext = new BotClassLoaderContext(nameBot, classLoaderInfo, method, endpoint, nameJar,
-				inputDictionaryContext, outputDictionaryContext);
+				inputDictionaryContext, outputDictionaryContext,url);
 		classLoaderConfig.savePropertiesBot(botClassLoaderContext);
 	}
 
@@ -99,11 +99,15 @@ public class JarConfiguration {
 	}
 
 	protected ClassLoader getClassLoader(String pathJar) throws MalformedURLException {
-		File fileJar = new File(pathJar);
-		ClassLoader classLoader = new URLClassLoader(new URL[] { fileJar.toURI().toURL() });
+		ClassLoader classLoader = new URLClassLoader(new URL[] { getUrl(pathJar) });
 		return classLoader;
 	}
-	
+
+	protected URL getUrl(String pathJar) throws MalformedURLException {
+		File fileJar = new File(pathJar);
+		return fileJar.toURI().toURL();
+	}
+
 	@SuppressWarnings("rawtypes")
 	protected Set<Class<? extends Automation>> getSubTypes(ClassLoader classLoader) throws MalformedURLException{
 		ConfigurationBuilder config = new ConfigurationBuilder().setUrls(ClasspathHelper.forClassLoader(classLoader))

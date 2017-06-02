@@ -3,9 +3,9 @@ package com.fiveware.service;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +61,10 @@ public  class ServiceBotClassLoader<T> {
         Class cls = classLoaderRunner.loadClassLoader(botClassLoaderContext.get().getNameBot());
         Method execute = cls.getMethod(botClassLoaderContext.get().getMethod(), parameter.getClass());
         Object obj =  execute.invoke(cls.newInstance(), parameter);
-        return (Map) objectMapper.convertValue(obj, Map.class);
+
+        if (obj instanceof List)
+            return objectMapper.convertValue(obj, Map[].class)[0];
+
+        return objectMapper.convertValue(obj, Map.class);
     }
 }
