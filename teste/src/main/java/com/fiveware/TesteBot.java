@@ -14,6 +14,7 @@ import com.fiveware.file.PhantomJSHelper;
 /**
  * Created by valdisnei on 5/28/17.
  */
+
 @Icaptor(value = "consultaCEP", classloader = "com.fiveware.TesteBot",
 		description = "Bot para consulta de ceps, serviço do Correio",version = "1.0.0")
 public class TesteBot implements Automation<String, Endereco> {
@@ -28,7 +29,8 @@ public class TesteBot implements Automation<String, Endereco> {
 	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade",
 			"cep"}, nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
+	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep
+			) {
 		try {
 			Endereco endereco = getEndereco(cep);
 

@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
+import com.fiveware.annotation.Field;
+
 /**
  * Created by valdisnei on 16/05/17.
  */
@@ -14,6 +16,7 @@ public class Endereco implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 4321879773490723975L;
+	@Field(name = "logradouro")	
 	private final String logradouro;
     private final String bairro;
     private final String localidade;
@@ -25,7 +28,7 @@ public class Endereco implements Serializable {
         this.localidade = localidade;
         this.cep = cep;
     }
-
+    
     public String getLogradouro() {
         return logradouro;
     }

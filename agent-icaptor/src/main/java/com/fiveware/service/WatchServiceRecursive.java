@@ -24,6 +24,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.loader.JarConfiguration;
+import com.fiveware.loader.JarMethod;
 
 /**
  * Created by valdisnei on 30/05/17.
@@ -46,6 +47,9 @@ public class WatchServiceRecursive {
     
     @Autowired
     private JarConfiguration jarConfiguration;
+    
+    @Autowired
+    private JarMethod jarMethod;
     
     @PostConstruct
     public void initialize () {
@@ -75,7 +79,8 @@ public class WatchServiceRecursive {
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)) {
         	if (isValidFileType(path)) {
                 loadJar.load(path.toFile());  
-                jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());             
+                jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());
+                jarMethod.readConfigurations(path.toFile().getAbsoluteFile().getPath());
             }
         	return;
         }

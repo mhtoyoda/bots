@@ -22,8 +22,6 @@ public class OutTextRecord {
 		return map;
 	}
 
-
-
 	@Bean
 	public ArrayMapDeserializer arrayMapDeserializer(){
 		return new ArrayMapDeserializer();
