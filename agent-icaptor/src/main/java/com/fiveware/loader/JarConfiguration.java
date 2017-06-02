@@ -44,7 +44,7 @@ public class JarConfiguration {
 						try {
 							nameBot = (String) getValue(annotation, annotationType, IcaptorMetaInfo.VALUE.getValue());
 							classLoaderInfo = (String) getValue(annotation, annotationType, IcaptorMetaInfo.CLASSLOADER.getValue());
-							nameJar = StringUtils.substringBeforeLast(pathJar, "/");														
+							nameJar = StringUtils.substringAfterLast(pathJar, "/");														
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
 								| InvocationTargetException e) {
 							e.printStackTrace();
@@ -111,5 +111,9 @@ public class JarConfiguration {
 		Reflections reflections = new Reflections(config);
 		Set<Class<? extends Automation>> subTypesOf = reflections.getSubTypesOf(Automation.class);
 		return subTypesOf;
+	}
+	
+	public void removeBot(String pathJar) {
+		classLoaderConfig.removeBot(pathJar);					
 	}
 }
