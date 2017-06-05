@@ -1,30 +1,29 @@
 package com.fiveware.config.directories;
 
-import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.loader.JarConfiguration;
-import com.fiveware.loader.JarMethod;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.*;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.loader.JarConfiguration;
+import com.fiveware.loader.JarMethod;
 
 /**
  * Created by valdisnei on 05/06/17.
  */
 
 @Service
-public class RunningWatcher {
+public class RunningWatchServiceRecursive {
 
-    private static Logger log = LoggerFactory.getLogger(WatchServiceRecursive.class);
+    private static Logger log = LoggerFactory.getLogger(InitializeWatchService.class);
 
     private static final Map<WatchKey, Path> keyPathMap = new HashMap<>();
 
@@ -51,8 +50,13 @@ public class RunningWatcher {
     }
 
     private void registerDir(Path path, WatchService watchService) throws IOException, AttributeLoadException {
-        if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS))
+        if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)){
+            if (isValidFileType(path)) {
+                jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());
+                jarMethod.readConfigurations(path.toFile().getAbsoluteFile().getPath());
+            }
             return;
+        }
 
         log.info("registering: {}", path);
 
@@ -84,10 +88,6 @@ public class RunningWatcher {
                     path = parentPath.resolve(path);
 
                     if (isValidFileType(path)) {
-                        if (isValidFileType(path)) {
-                            jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());
-                            jarMethod.readConfigurations(path.toFile().getAbsoluteFile().getPath());
-                        }
                         registerDir(path, watchService);
                     }
                 }

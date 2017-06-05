@@ -43,8 +43,7 @@ public  class ServiceBotClassLoader<T> {
     public OutTextRecord executeMainClass(String nameBot, T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ExceptionBot {
         Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
 
-        Map map = executeMainClass(parameter, botClassLoaderContext);
-        return new OutTextRecord(map);
+        return executeMainClass(parameter, botClassLoaderContext);
     }
     
     public OutTextRecord executeMainClass(String nameBot,String endpoint, T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ExceptionBot {
@@ -53,18 +52,16 @@ public  class ServiceBotClassLoader<T> {
         if(!endpoint.equals(botClassLoaderContext.get().getEndpoint()))
             throw new ExceptionBot(messageSource.getMessage("endPoint.notFound",new Object[]{endpoint},null));
 
-        Map map = executeMainClass(parameter, botClassLoaderContext);
-        return new OutTextRecord(map);
+        return executeMainClass(parameter, botClassLoaderContext);
     }
 
-    private Map executeMainClass(T parameter, Optional<BotClassLoaderContext> botClassLoaderContext) throws ClassNotFoundException, ExceptionBot, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, IOException {
+    private OutTextRecord executeMainClass(T parameter, Optional<BotClassLoaderContext> botClassLoaderContext) throws ClassNotFoundException, ExceptionBot, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, IOException {
         Class cls = classLoaderRunner.loadClassLoader(botClassLoaderContext.get().getNameBot());
         Method execute = cls.getMethod(botClassLoaderContext.get().getMethod(), parameter.getClass());
         Object obj =  execute.invoke(cls.newInstance(), parameter);
 
-        if (obj instanceof List)
-            return objectMapper.convertValue(obj, Map[].class)[0];
+        if (obj instanceof List) return new OutTextRecord(objectMapper.convertValue(obj, Map[].class)[0]);
 
-        return objectMapper.convertValue(obj, Map.class);
+        return new OutTextRecord(objectMapper.convertValue(obj, Map.class));
     }
 }

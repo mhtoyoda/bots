@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * Created by valdisnei on 30/05/17.
  */
 @Component
-public class WatchServiceRecursive {
+public class InitializeWatchService {
 
 
     @Value("${worker.dir}")
@@ -28,7 +28,7 @@ public class WatchServiceRecursive {
 
 
     @Autowired
-	private RunningWatcher runningWatcher;
+	private RunningWatchServiceRecursive runningWatcher;
 
 	@PostConstruct
 	public void initialize() {
