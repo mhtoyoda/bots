@@ -8,6 +8,8 @@ import java.lang.reflect.Parameter;
 import java.net.MalformedURLException;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,8 @@ import com.fiveware.metadata.IcaptorMetaInfo;
 
 @Component
 public class JarMethod {
+
+	static Logger logger = LoggerFactory.getLogger(JarMethod.class);
 
 	@Autowired
 	private JarConfiguration jarConfiguration;
@@ -32,22 +36,29 @@ public class JarMethod {
 				for (Method method : methods) {
 					if(method.getName().equals("execute")){
 						Parameter parameter = method.getParameters()[0];	
-						System.out.println(parameter.getType().isArray());
+
+						logger.debug("Method Execute: {}",parameter.getType().isArray());
+
 						Annotation[] annotations = parameter.getAnnotations();
 						for (Annotation annotation : annotations) {
 							Class<? extends Annotation> annotationType = annotation.annotationType();
 							if(annotationType.getSimpleName().equals("Field")){
-								System.out.println(parameter.getType().getName());
+
+								logger.debug("Field Type: {}",parameter.getType().getName());
+
 								Class<?> endereco = classLoader.loadClass(parameter.getType().getName());
 								Field[] fields = endereco.getDeclaredFields();
 								for (Field field : fields) {
-									System.out.println(field.getName());												
+
+									logger.debug("Field Name: {}",field.getName());
+
 									Annotation[] annotationsField = field.getAnnotations();
 									for (Annotation a : annotationsField) {
 										Class<? extends Annotation> ann = a.annotationType();
 										if(ann.getSimpleName().equals("Field")){
 											String name = (String) jarConfiguration.getValue(a, ann, IcaptorMetaInfo.NAME.getValue());
-											System.out.println(name);												
+											logger.debug("Annotation: {}",name);
+
 										}
 									}
 								}
