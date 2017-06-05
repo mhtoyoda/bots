@@ -13,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +27,8 @@ import com.fiveware.model.OutputDictionaryContext;
 
 @Component
 public class JarConfiguration {
+
+	static Logger logger= LoggerFactory.getLogger(JarConfiguration.class);
 
 	@Autowired
 	private ClassLoaderConfig classLoaderConfig;
@@ -47,7 +51,7 @@ public class JarConfiguration {
 							nameJar = StringUtils.substringAfterLast(pathJar, "/");														
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
 								| InvocationTargetException e) {
-							e.printStackTrace();
+							logger.error("Problema rotina saveconfiguration: ",e);
 						}
 					}
 				}

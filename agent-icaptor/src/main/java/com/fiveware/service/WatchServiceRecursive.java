@@ -32,7 +32,7 @@ import com.fiveware.loader.JarMethod;
 @Component
 public class WatchServiceRecursive {
     
-	private Logger log = LoggerFactory.getLogger(WatchServiceRecursive.class);
+	private static Logger log = LoggerFactory.getLogger(WatchServiceRecursive.class);
 	
 	private static final Map<WatchKey, Path> keyPathMap = new HashMap<>();
 
@@ -58,7 +58,7 @@ public class WatchServiceRecursive {
             public void run() {
                 upWathservice();
             }
-        });
+        },"Watcher : ["+workerDir+"]");
 
         thread.start();
     }
@@ -69,9 +69,9 @@ public class WatchServiceRecursive {
             registerDir(Paths.get(workerDir), watchService);
             startListening(watchService);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("problema Up WatchServe: ",e);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("problema Up WatchServe: ",e);
         }
     }
 
@@ -101,10 +101,11 @@ public class WatchServiceRecursive {
         while (true) {
             WatchKey queuedKey = watchService.take();
             for (WatchEvent<?> watchEvent : queuedKey.pollEvents()) {
-                System.out.printf("Event... kind=%s, count=%d, context=%s Context type=%s%n",
-                        watchEvent.kind(),
-                        watchEvent.count(), watchEvent.context(), ((Path) watchEvent
-                                .context()).getClass());
+
+                log.info("Event ({}) | count ({}) | context ({}) | Context type({}) ",
+                        watchEvent.kind(),watchEvent.count(),watchEvent.context(),
+                        ((Path) watchEvent.context()).getClass());
+
 
                 if (watchEvent.kind() == StandardWatchEventKinds.ENTRY_CREATE) {
                     //this is not a complete path
