@@ -34,7 +34,7 @@ public class JarMethod {
 				Class<?> automationClass = classLoader.loadClass(clazz.getCanonicalName());
 				Method[] methods = automationClass.getMethods();
 				for (Method method : methods) {
-					if(method.getName().equals("execute")){
+					if("execute".equals(method.getName())){
 						Parameter parameter = method.getParameters()[0];	
 
 						logger.debug("Method Execute: {}",parameter.getType().isArray());
@@ -42,7 +42,8 @@ public class JarMethod {
 						Annotation[] annotations = parameter.getAnnotations();
 						for (Annotation annotation : annotations) {
 							Class<? extends Annotation> annotationType = annotation.annotationType();
-							if(annotationType.getSimpleName().equals("Field")){
+
+							if("Field".equals(annotationType.getSimpleName())){
 
 								logger.debug("Field Type: {}",parameter.getType().getName());
 
@@ -55,7 +56,8 @@ public class JarMethod {
 									Annotation[] annotationsField = field.getAnnotations();
 									for (Annotation a : annotationsField) {
 										Class<? extends Annotation> ann = a.annotationType();
-										if(ann.getSimpleName().equals("Field")){
+
+										if("Field".equals(ann.getSimpleName())){
 											String name = (String) jarConfiguration.getValue(a, ann, IcaptorMetaInfo.NAME.getValue());
 											logger.debug("Annotation: {}",name);
 

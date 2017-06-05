@@ -43,7 +43,10 @@ public class MapClassLoaderConfig implements ClassLoaderConfig {
 		map.entrySet().forEach(c -> {
 			if(c.getValue().getNameJar().equals(nameJar)){
 				map.remove(c.getKey());
+				log.info("Removed [Bot]: {} - ClassLoader: {}", c.getValue().getNameJar(),c.getValue().getClassLoader());
+
 			}
-		});				
+		});
+
 	}
 }
