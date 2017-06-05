@@ -1,0 +1,7 @@
+
+server.port: 8081
+
+worker.dir: ${HOME}/.icaptor-agent
+worker.file: ${HOME}/.icaptor-out-file
+
+bot.extension.file: .jar
