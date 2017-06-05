@@ -42,20 +42,20 @@ public class LoadFile {
 
 	@Autowired
 	private ClassLoaderRunner classLoaderRunner;
-	
+
 	@Value("${worker.file}")
 	private String workDir;
-	
+
 	@SuppressWarnings("rawtypes")
-	public void executeLoad(String botName, File file) throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
+	public void executeLoad(String botName, File file)
+			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
 
 		logger.info("Init Import File {} - [BOT]: {}", file.getName(), botName);
 
-		Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(botName);
-		InputDictionaryContext inputDictionary = botClassLoaderContext.get().getInputDictionary();
+		Optional<BotClassLoaderContext> context = classLoaderConfig.getPropertiesBot(botName);
+		InputDictionaryContext inputDictionary = context.get().getInputDictionary();
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
-		String fileNameOut = botClassLoaderContext.get().getOutputDictionary().getNameFileOut();
 		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClassLoader(botName);
 		for (Record line : recordLines) {
@@ -63,10 +63,12 @@ public class LoadFile {
 				String cep = (String) line.getValue("cep");
 				validate.validate(cep, classLoader);
 				OutTextRecord result = serviceBot.callBot(botName, cep);
-				fileUtil.writeFile(workDir+ File.separator+fileNameOut, separatorInput, result);
+				fileUtil.writeFile(workDir + File.separator + context.get().getOutputDictionary().getNameFileOut(),
+						separatorInput, result);
 			} catch (Exception e) {
-				logger.error("Unprocessed Record - Cause: " + e.getMessage());				
-				fileUtil.writeFile(workDir+ File.separator+fileNameOut, separatorInput, new OutTextRecord(line.getRecordMap()));
+				logger.error("Unprocessed Record - Cause: " + e.getMessage());
+				fileUtil.writeFile(workDir + File.separator + context.get().getOutputDictionary().getNameFileOut(),
+						separatorInput, new OutTextRecord(line.getRecordMap()));
 			}
 		}
 

@@ -1,4 +1,4 @@
-package com.fiveware.config;
+package com.fiveware.config.agent;
 
 import java.lang.reflect.Parameter;
 

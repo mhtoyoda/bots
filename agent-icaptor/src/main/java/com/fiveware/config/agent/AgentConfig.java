@@ -1,4 +1,4 @@
-package com.fiveware.config;
+package com.fiveware.config.agent;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;

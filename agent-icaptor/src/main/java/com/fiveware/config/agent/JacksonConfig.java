@@ -1,4 +1,4 @@
-package com.fiveware.config;
+package com.fiveware.config.agent;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
