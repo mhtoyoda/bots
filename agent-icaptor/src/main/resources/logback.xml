@@ -10,9 +10,20 @@
     </appender>
 
 
-    <logger name="com.fiveware" level="fail" additivity="false">
-        <appender-ref ref="CONSOLE" />
-    </logger>
+    <if condition='"product".equals("${spring.profiles.active}")'>
+        <then>
+            <logger name="com.fiveware" level="INFO" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
+        </then>
+        <else>
+            <logger name="com.fiveware" level="fail" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
+        </else>
+    </if>
+
+
 
 
     <root level="INFO">
