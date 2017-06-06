@@ -5,3 +5,9 @@ worker.dir: ${HOME}/.icaptor-agent
 worker.file: ${HOME}/.icaptor-out-file
 
 bot.extension.file: .jar
+
+
+spring.http:
+    multipart:
+        max-file-size: 1024MB
+        max-request-size: 1024MB

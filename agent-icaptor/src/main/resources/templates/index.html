@@ -3,6 +3,17 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <!-- jQuery -->
+    <script th:src="@{/vendors/jquery/jquery-1.11.1.min.js}"></script>
+    <script th:src="@{/vendors/jquery/jquery_ui/jquery-ui.min.js}"></script>
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/skin/default_skin/css/theme.css}">
+
+    <!-- Theme CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/fonts/icomoon/icomoon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/fonts/octicons/octicons.css}">
+
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" th:href="@{/vendors/dropzone/dropzone.css}">
     <meta name="csrf-token" content="XYZ123">
@@ -16,49 +27,25 @@
     </header>
 
     <div>
-        <form id="upload-widget" method="post" action="/upload" class="dropzone">
+        <form id="upload-widget" method="post" action="/upload" class="dropzone" enctype="multipart/form-data">
+            <div class="dz-message needsclick previewsContainer dropzone-previews" id="formNovoDropzone">
+                <h1>
+                    <p class="text-center">
+                        <span class="fa fa-cloud-upload"></span>
+                        <br>Arraste seus arquivos aqui <br>ou <br>Clique
+                        <br>&nbsp;
+                    </p>
+                </h1>
+            </div>
             <div class="fallback">
-                <input name="file" type="file" />
+                <input name="file" type="file" multiple />
             </div>
         </form>
     </div>
-
-    <footer style="margin-top:500px;">
-        <p>This demo is designed to accompany <a href="http://www.sitepoint.com/file-upload-form-express-dropzone-js/">this article</a>.</p>
-    </footer>
 </div>
 
 <script type="text/javascript" th:src="@{/vendors/dropzone/dropzone.js}"></script>
-<script type="text/javascript">
-    Dropzone.options.uploadWidget = {
-        paramName: 'file',
-        maxFilesize: 2, // MB
-        maxFiles: 1,
-        dictDefaultMessage: 'Drag an image here to upload, or click to select one',
-        headers: {
-            'x-csrf-token': document.querySelectorAll('meta[name=csrf-token]')[0].getAttributeNode('content').value,
-        },
-        acceptedFiles: 'image/*',
-        init: function() {
-            this.on('success', function( file, resp ){
-                console.log( file );
-                console.log( resp );
-            });
-            this.on('thumbnail', function(file) {
-                if ( file.width < 640 || file.height < 480 ) {
-                    file.rejectDimensions();
-                } else {
-                    file.acceptDimensions();
-                }
-            });
-        },
-        accept: function(file, done) {
-            file.acceptDimensions = done;
-            file.rejectDimensions = function() {
-                done('The image must be at least 640 x 480px')
-            };
-        }
-    };
-</script>
+
+<script type="text/javascript" th:src="@{/app/UploadBot.js}"></script>
 </body>
 </html>
