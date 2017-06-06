@@ -3,13 +3,17 @@ package com.fiveware;
 import java.util.Iterator;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fiveware.annotation.*;
-import com.fiveware.file.PhantomJSHelper;
+import com.fiveware.annotation.Field;
+import com.fiveware.annotation.Icaptor;
+import com.fiveware.annotation.IcaptorMethod;
+import com.fiveware.annotation.InputDictionary;
+import com.fiveware.annotation.OutputDictionary;
+import com.fiveware.automate.BotJS;
+import com.fiveware.automate.BotWebBrowser;
+import com.fiveware.automate.BotWebDriver;
 
 /**
  * Created by valdisnei on 5/28/17.
@@ -20,17 +24,16 @@ import com.fiveware.file.PhantomJSHelper;
 public class TesteBot implements Automation<String, Endereco> {
 
 	static Logger logger = LoggerFactory.getLogger(TesteBot.class);
-
+	
 	public static void main(String[] args) {
 		logger.info("Resultado: {}", new TesteBot().getEndereco(args[0]));
 	}
 
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot")
 	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
-	@OutputDictionary(fields = {"logradouro", "bairro", "localidade",
-			"cep"}, nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep
-			) {
+	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},
+					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
+	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
 		try {
 			Endereco endereco = getEndereco(cep);
 
@@ -42,43 +45,43 @@ public class TesteBot implements Automation<String, Endereco> {
 	}
 
 	public Endereco getEndereco(String args) {
-
-		WebDriver driver = PhantomJSHelper.remotePhantomJS("34.206.50.158:8910");
+		BotWebDriver botWebDriver = new BotWebDriver();
+		botWebDriver.initialize(BotWebBrowser.PHANTOM);
+		
 		String baseUrl = "http://www.correios.com.br/";
 
-		driver.get(baseUrl + "/para-voce");
+		botWebDriver.openPageBrowser(baseUrl + "/para-voce");		
+		botWebDriver.manage().window().maximize();
+		botWebDriver.findElement(By.id("acesso-busca")).clear();
+		botWebDriver.findElement(By.id("acesso-busca")).sendKeys(args);
+		botWebDriver.findElement(By.cssSelector("input.acesso-busca-submit")).click();
 
-		driver.manage().window().maximize();// workaround
-		driver.findElement(By.id("acesso-busca")).clear();
-		driver.findElement(By.id("acesso-busca")).sendKeys(args);
-		driver.findElement(By.cssSelector("input.acesso-busca-submit")).click();
+		new BotJS(botWebDriver).waitForPageToBeReady();
 
-		waitForPageToBeReady(driver);
-
-		Iterator<String> windows = driver.getWindowHandles().iterator();
+		Iterator<String> windows = botWebDriver.getWindowHandles().iterator();
 		windows.next();
 
-		driver.switchTo().window(windows.next());
+		botWebDriver.switchTo().window(windows.next());
 
-		String resultado = driver
+		String resultado = botWebDriver
 				.findElement(By.xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/p")).getText();
 
 		if ("DADOS NAO ENCONTRADOS".equalsIgnoreCase(resultado))
 			return null;
 
-		String logradouro = driver
+		String logradouro = botWebDriver
 				.findElement(By
 						.xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[1]"))
 				.getText();
-		String bairro = driver
+		String bairro = botWebDriver
 				.findElement(By
 						.xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[2]"))
 				.getText();
-		String localidade = driver
+		String localidade = botWebDriver
 				.findElement(By
 						.xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[3]"))
 				.getText();
-		String cep = driver
+		String cep = botWebDriver
 				.findElement(By
 						.xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[4]"))
 				.getText();
@@ -86,23 +89,5 @@ public class TesteBot implements Automation<String, Endereco> {
 		logger.info(" Endereco: {} - {} - {} - {}", logradouro, bairro, localidade, cep);
 
 		return new Endereco(logradouro, bairro, localidade, cep);
-	}
-
-	private static void waitForPageToBeReady(WebDriver driver) {
-		JavascriptExecutor js = (JavascriptExecutor) driver;
-
-		// This loop will rotate for 100 times to check If page Is ready after
-		// every 1 second.
-		// You can replace your if you wants to Increase or decrease wait time.
-		for (int i = 0; i < 400; i++) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-			}
-
-			// To check page ready state.
-			if ("complete".equals(js.executeScript("return document.readyState").toString()))
-				break;
-		}
 	}
 }
