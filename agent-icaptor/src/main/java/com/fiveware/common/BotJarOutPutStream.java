@@ -1,4 +1,4 @@
-package com.fiveware.util;
+package com.fiveware.common;
 
 
 import org.slf4j.Logger;
@@ -23,16 +23,16 @@ public class BotJarOutPutStream {
     @Value("${worker.dir}")
     private String workDir;
 
-    public void writeFile(MultipartFile f) {
+    public void upLoad(MultipartFile bot) {
 
         FileOutputStream fop = null;
-        File file = new File(workDir + File.separator+ f.getOriginalFilename());
 
         try {
+            File file = new File(workDir + File.separator+ bot.getOriginalFilename());
             fop = new FileOutputStream(file);
 
             // get the content in bytes
-            byte[] contentInBytes = f.getBytes();
+            byte[] contentInBytes = bot.getBytes();
 
             fop.write(contentInBytes);
             fop.flush();

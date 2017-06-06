@@ -7,18 +7,11 @@ var Bot = Bot || {};
 Bot.Upload = (function () {
 
     function Upload() {
-        // this.uploader = new Dropzone("#upload-widget", options);
         this.submitButton = $("#upload-widget");
         inicializaDropzone();
     }
 
-    Upload.prototype.iniciar = function () {
-        // this.submitButton.on('click', onUpload.bind(this));
-    };
-
-
     function inicializaDropzone() {
-        // alert(10);
         Dropzone.autoDiscover = false;
 
         var drop = new Dropzone("#upload-widget", {
@@ -64,7 +57,6 @@ Bot.Upload = (function () {
 
 $(function () {
     var upload = new Bot.Upload();
-    upload.iniciar();
 });
 
 
