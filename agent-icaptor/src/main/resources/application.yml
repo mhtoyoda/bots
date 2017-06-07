@@ -12,5 +12,4 @@ spring.http:
         max-file-size: 1024MB
         max-request-size: 1024MB
 
-
 #host: localhost:8082
