@@ -8,7 +8,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.fiveware.messaging.Producer;
-import com.fiveware.messaging.Receiver;
 import com.fiveware.messaging.TypeMessage;
 
 @SpringBootApplication
@@ -19,9 +18,6 @@ public class AgentIcaptorApplication implements CommandLineRunner {
 	@Autowired
 	private Producer<String> producer;
 	
-	@Autowired
-	private Receiver<String> receiver;
-	
 	public static void main(String[] args) {
 		SpringApplication.run(AgentIcaptorApplication.class, args);		
 	}
@@ -29,12 +25,6 @@ public class AgentIcaptorApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		producer.send(TypeMessage.KEEP_ALIVE, "TESTE 12345");
-		log.info("SEND");
-		
-		Thread.sleep(5000);
-		String message = receiver.receive(TypeMessage.KEEP_ALIVE);
-		log.info("MESSAGE: {}", message);
+		log.info("SEND");		
 	}
-
-
 }

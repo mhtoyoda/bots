@@ -2,5 +2,5 @@ package com.fiveware.messaging;
 
 public interface ConsumerTypeMessage {
 
-	public void process();
+	public void process(String message);
 }
