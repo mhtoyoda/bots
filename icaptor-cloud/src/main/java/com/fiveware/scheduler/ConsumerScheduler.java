@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,18 +34,16 @@ public class ConsumerScheduler {
 	@Qualifier("stopAgentMessage")
 	private ConsumerTypeMessage stopAgentMessage;
 	
-	public void init(){
-		if( null == consumersMap ){
-			consumersMap = new ConcurrentHashMap<String, ConsumerTypeMessage>();
-			types = Lists.newArrayList(TypeMessage.values());
-			consumersMap.put(TypeMessage.KEEP_ALIVE.name(), keepAliveMessage);
-			consumersMap.put(TypeMessage.STOP_AGENT.name(), stopAgentMessage);
-		}
+	@PostConstruct
+	public void init(){		
+		consumersMap = new ConcurrentHashMap<String, ConsumerTypeMessage>();
+		types = Lists.newArrayList(TypeMessage.values());
+		consumersMap.put(TypeMessage.KEEP_ALIVE.name(), keepAliveMessage);
+		consumersMap.put(TypeMessage.STOP_AGENT.name(), stopAgentMessage);
 	}
 	
 	@Scheduled(fixedDelay = 5000)
 	public void execute(){
-		init();
 		types.forEach(typeMessage -> {
 //			Optional<String> optionalMessage = receiver.receive(typeMessage);
 //			optionalMessage.ifPresent( msg -> {
