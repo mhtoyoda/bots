@@ -1,7 +1,7 @@
 package com.fiveware.messaging;
 
-public interface Producer {
+public interface Producer<T> {
 
-	void send(String message);
+	void send(TypeMessage typeMessage, String message);
 
 }

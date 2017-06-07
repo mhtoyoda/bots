@@ -1,7 +1,7 @@
 package com.fiveware.messaging;
 
-public interface Receiver {
+public interface Receiver<T> {
 
-	void receive(String message);
+	void receive(TypeMessage typeMessage);
 
 }
