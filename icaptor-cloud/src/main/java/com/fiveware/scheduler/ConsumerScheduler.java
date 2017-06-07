@@ -37,7 +37,7 @@ public class ConsumerScheduler {
 			consumersMap = new ConcurrentHashMap<String, ConsumerTypeMessage>();
 			types = Lists.newArrayList(TypeMessage.values());
 			consumersMap.put(TypeMessage.KEEP_ALIVE.name(), keepAliveMessage);
-			consumersMap.put(TypeMessage.KEEP_ALIVE.name(), stopAgentMessage);
+			consumersMap.put(TypeMessage.STOP_AGENT.name(), stopAgentMessage);
 		}
 	}
 	
