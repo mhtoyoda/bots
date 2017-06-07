@@ -16,8 +16,9 @@ public class MessageReceiver implements Receiver<String> {
 	private RabbitTemplate rabbit;
 	
 	@Override
-	public void receive(TypeMessage typeMessage){		
+	public String receive(TypeMessage typeMessage){	
+		log.info("Receive message type {}",typeMessage.name());
 		Message text = rabbit.receive(typeMessage.name());
-		log.info("Message Receive: {}", new String(text.getBody()));
+		return new String(text.getBody());
 	}
 }

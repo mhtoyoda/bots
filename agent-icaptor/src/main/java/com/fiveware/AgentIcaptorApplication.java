@@ -32,7 +32,8 @@ public class AgentIcaptorApplication implements CommandLineRunner {
 		log.info("SEND");
 		
 		Thread.sleep(5000);
-		receiver.receive(TypeMessage.KEEP_ALIVE);
+		String message = receiver.receive(TypeMessage.KEEP_ALIVE);
+		log.info("MESSAGE: {}", message);
 	}
 
 
