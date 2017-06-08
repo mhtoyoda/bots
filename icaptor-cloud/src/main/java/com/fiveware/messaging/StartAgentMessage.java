@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.model.MessageAgent;
 
-@Component("startAgentMessage")
+@Component("START_AGENT")
 public class StartAgentMessage implements ConsumerTypeMessage {
 
 	private static Logger log = LoggerFactory.getLogger(StartAgentMessage.class);

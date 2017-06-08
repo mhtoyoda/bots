@@ -6,14 +6,14 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.model.MessageAgent;
 
-@Component("stopAgentMessage")
+@Component("STOP_AGENT")
 public class StopAgentMessage implements ConsumerTypeMessage {
 
 	private static Logger log = LoggerFactory.getLogger(StopAgentMessage.class);
 	
 	@Override
 	public void process(MessageAgent message) {
-		log.info("Message Receive Message {}",message.toString());
+		log.info("Message Receive {}",message.toString());
 	}
 
 }

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.model.MessageAgent;
 
-@Component("keepAliveMessage")
+@Component("KEEP_ALIVE")
 public class KeepAliveMessage implements ConsumerTypeMessage {
 
 	private static Logger log = LoggerFactory.getLogger(KeepAliveMessage.class);
