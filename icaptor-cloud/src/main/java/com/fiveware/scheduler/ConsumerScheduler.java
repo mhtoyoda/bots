@@ -43,7 +43,7 @@ public class ConsumerScheduler {
 	}
 	
 	@Scheduled(fixedDelay = 5000)
-	public void execute(){
+	public void processKeepAlive(){
 		types.forEach(typeMessage -> {
 //			Optional<String> optionalMessage = receiver.receive(typeMessage);
 //			optionalMessage.ifPresent( msg -> {
