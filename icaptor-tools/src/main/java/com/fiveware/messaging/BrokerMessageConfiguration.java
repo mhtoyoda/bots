@@ -25,7 +25,7 @@ public class BrokerMessageConfiguration {
 	private String brokerHost;
 	
 	@Bean
-	public ConnectionFactory connectionFactory() {
+	public ConnectionFactory connectionFactory() {		
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(brokerHost);
 		connectionFactory.setUsername(brokerUser);
 		connectionFactory.setPassword(brokerPass);
