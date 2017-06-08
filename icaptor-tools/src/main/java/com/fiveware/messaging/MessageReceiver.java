@@ -1,5 +1,7 @@
 package com.fiveware.messaging;
 
+import java.util.Objects;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Message;
@@ -17,8 +19,10 @@ public class MessageReceiver implements Receiver<String> {
 	
 	@Override
 	public String receive(TypeMessage typeMessage){	
-		log.info("Receive message type {}",typeMessage.name());
 		Message text = rabbit.receive(typeMessage.name());
-		return new String(text.getBody());
+		String message = Objects.isNull(text) ? "EMPTY QUEUE!" : new String(text.getBody());
+		log.info("Receive message type {}: {}",typeMessage.name(),message);
+
+		return message;
 	}
 }
