@@ -26,6 +26,10 @@ public class EventsConsumerScheduler {
 	private Receiver<MessageAgent> receiver;
 	
 	@Autowired
+	@Qualifier("startAgentMessage")
+	private ConsumerTypeMessage startAgentMessage;
+	
+	@Autowired
 	@Qualifier("keepAliveMessage")
 	private ConsumerTypeMessage keepAliveMessage;
 	
@@ -36,6 +40,7 @@ public class EventsConsumerScheduler {
 	@PostConstruct
 	public void init(){		
 		consumersMap = new ConcurrentHashMap<String, ConsumerTypeMessage>();
+		consumersMap.put(TypeMessage.START_AGENT.name(), startAgentMessage);
 		consumersMap.put(TypeMessage.KEEP_ALIVE.name(), keepAliveMessage);
 		consumersMap.put(TypeMessage.STOP_AGENT.name(), stopAgentMessage);
 	}

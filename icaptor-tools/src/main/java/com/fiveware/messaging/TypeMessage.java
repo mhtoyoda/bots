@@ -2,5 +2,5 @@ package com.fiveware.messaging;
 
 public enum TypeMessage {
 
-	KEEP_ALIVE, BOT, PING, STOP_AGENT
+	START_AGENT, KEEP_ALIVE, BOT, PING, STOP_AGENT
 }
