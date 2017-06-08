@@ -11,7 +11,7 @@ public class KeepAliveMessage implements ConsumerTypeMessage {
 	
 	@Override
 	public void process(String message) {
-		log.info("Message Receive Keep Alive {}",message);
+		log.info("Message Receive {}",message);
 	}
 
 }

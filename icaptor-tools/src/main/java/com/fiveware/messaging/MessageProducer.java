@@ -10,9 +10,9 @@ public class MessageProducer implements Producer<String> {
 
 	@Autowired
 	private RabbitTemplate rabbitTemplate;
-
+	
 	@Override
-	public void send(TypeMessage typeMessage, String message){
-		rabbitTemplate.convertAndSend(typeMessage.name(), message);
+	public void send(String queueName, String message){
+		rabbitTemplate.convertAndSend(queueName, message);
 	}
 }

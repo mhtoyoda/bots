@@ -1,18 +1,15 @@
 package com.fiveware.config.agent;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
-import com.fiveware.messaging.Producer;
-import com.fiveware.messaging.TypeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+
+import com.fiveware.messaging.Producer;
+import com.fiveware.messaging.QueueName;
+import com.fiveware.messaging.TypeMessage;
 
 /**
  * Created by valdisnei on 06/06/17.
@@ -26,11 +23,11 @@ public class PlatFormConfig {
 //    String host;
 
     @Autowired
-    private Producer producer;
+    private Producer<String> producer;
 
     @PostConstruct
     public void up(){
-        producer.send(TypeMessage.KEEP_ALIVE,"Im Alive!");
+        producer.send(QueueName.EVENTS.name(), TypeMessage.KEEP_ALIVE.name());
     }
 
 

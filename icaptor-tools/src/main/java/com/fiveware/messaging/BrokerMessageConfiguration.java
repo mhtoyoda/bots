@@ -15,9 +15,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableAutoConfiguration
 public class BrokerMessageConfiguration {
 
-	@Value("${queue.alive}")
-	private String messageQueue;
-	
 	@Value("${broker.user}")
 	private String brokerUser;
 	
@@ -37,17 +34,17 @@ public class BrokerMessageConfiguration {
 	
 	@Bean
 	public Queue queue() {
-		return new Queue(messageQueue, true);
+		return new Queue(QueueName.EVENTS.name(), true);
 	}
 
 	@Bean
 	public TopicExchange exchange() {
-		return new TopicExchange("spring-boot-exchange");
+		return new TopicExchange("event-exchange");
 	}
 
 	@Bean
 	public Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(messageQueue);
+		return BindingBuilder.bind(queue).to(exchange).with(QueueName.EVENTS.name());
 	}
 
 //	@Bean

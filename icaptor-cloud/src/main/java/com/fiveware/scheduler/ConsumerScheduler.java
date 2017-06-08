@@ -1,19 +1,18 @@
 package com.fiveware.scheduler;
 
-import java.util.Arrays;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.messaging.ConsumerTypeMessage;
+import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.messaging.TypeMessage;
 
@@ -40,13 +39,12 @@ public class ConsumerScheduler {
 		consumersMap.put(TypeMessage.STOP_AGENT.name(), stopAgentMessage);
 	}
 	
-	@Scheduled(fixedDelay = 5000)
+	@Scheduled(fixedDelay = 10000)
 	public void execute() {
-		Stream<TypeMessage> types = Arrays.stream(TypeMessage.values());
-		Optional<TypeMessage> any = types
-				.filter(TypeMessage.KEEP_ALIVE::equals)
-				.findAny();
-		receiver.receive(any.get());
+		String typeMessage = receiver.receive(QueueName.EVENTS);
+		if(StringUtils.isNotBlank(typeMessage)){
+			consumersMap.get(typeMessage).process(typeMessage);
+		}
 
 	}
 }
