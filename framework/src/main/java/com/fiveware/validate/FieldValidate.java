@@ -1,20 +1,20 @@
 package com.fiveware.validate;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ValidationFieldException;
 
-@Service
+@Component("fieldValidate")
 public class FieldValidate implements Validate {
 
+	@Autowired
+	private ValidateMethodField validateMethodField;
+	
 	@SuppressWarnings("rawtypes")
 	@Override
 	public <T> void validate(T value, Class clazz) throws ValidationFieldException, AttributeLoadException {
@@ -25,35 +25,10 @@ public class FieldValidate implements Validate {
 					for (Annotation annotation : annotations) {
 						Class<? extends Annotation> type = annotation.annotationType();
 						if (type.getSimpleName().equals("Field")) {
-							
-							Method methodTarget;
-							try {
-								methodTarget = type.getMethod("regexValidate");
-								Object regexValidate = methodTarget.invoke(annotation);
-								String regex = regexValidate.toString();
-								if (StringUtils.isNotBlank(regex)) {
-									Pattern pattern = Pattern.compile(regex);
-									Matcher matcher = pattern.matcher(String.valueOf(value));
-									if (!matcher.matches()) {
-										throw new ValidationFieldException(
-												"Value [" + value + "] does not match validation.");
-									}
-								}
-								methodTarget = type.getMethod("length");
-								Object lengthValue = methodTarget.invoke(annotation);
-								Integer length = Integer.parseInt(lengthValue.toString());
-								if (length != 0 && String.valueOf(value).length() > length) {
-									throw new ValidationFieldException(
-											"Value [" + value + "] should be less than " + lengthValue);
-								}
-							} catch (NoSuchMethodException | SecurityException | IllegalAccessException
-									| IllegalArgumentException | InvocationTargetException e) {
-								throw new AttributeLoadException(e.getMessage());
-							}
-						}
-						
+							validateMethodField.validateRegex(annotation, type, value);
+							validateMethodField.validateLength(annotation, type, value);
+						}						
 					}
-					
 				}
 			}
 		}

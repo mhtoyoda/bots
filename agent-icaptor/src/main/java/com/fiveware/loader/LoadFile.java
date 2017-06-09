@@ -35,6 +35,7 @@ public class LoadFile {
 	private ServiceBot serviceBot;
 
 	@Autowired
+	@Qualifier("fieldValidate")
 	private Validate validate;
 
 	@Autowired
