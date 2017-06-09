@@ -67,7 +67,7 @@ public class JarConfiguration {
 				OutputDictionaryContext outputDictionaryContext = getOutputDictionaryAttributes(automationClass);
 				BotClassLoaderContext botClassLoaderContext = getBotClassLoaderContext(nameBot, classLoaderInfo, nameJar, method, endpoint, inputDictionaryContext,
 										 outputDictionaryContext, getUrl(pathJar));
-;				saveAttributesClassLoader(botClassLoaderContext);
+				saveAttributesClassLoader(botClassLoaderContext);
 			} catch (ClassNotFoundException | AttributeLoadException e) {				
 				throw new AttributeLoadException(e.getMessage());
 			}			

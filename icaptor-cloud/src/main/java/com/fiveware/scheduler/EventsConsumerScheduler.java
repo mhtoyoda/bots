@@ -33,11 +33,7 @@ public class EventsConsumerScheduler {
 	
 	@PostConstruct
 	public void init(){		
-		try {
-			consumersMap = typeConsumerMessage.getConsumer("com.fiveware.messaging");
-		} catch (InstantiationException | IllegalAccessException e) {
-			logger.error("Error Exception Consumers {}", e.getMessage());
-		}
+		consumersMap = typeConsumerMessage.getConsumer("com.fiveware.messaging");
 	}
 	
 	@Scheduled(fixedDelay = 10000)
@@ -46,6 +42,5 @@ public class EventsConsumerScheduler {
 		if(!Objects.isNull(messageAgent)){
 			consumersMap.get(messageAgent.getTypeMessage().name()).process(messageAgent);
 		}
-
 	}
 }
