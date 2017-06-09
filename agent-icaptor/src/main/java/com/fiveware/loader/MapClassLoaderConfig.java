@@ -18,7 +18,7 @@ public class MapClassLoaderConfig implements ClassLoaderConfig {
 
 	private Logger log = LoggerFactory.getLogger(MapClassLoaderConfig.class);
 	
-	private Map<String, BotClassLoaderContext> map = new ConcurrentHashMap<String, BotClassLoaderContext>();
+	private static final Map<String, BotClassLoaderContext> map = new ConcurrentHashMap<String, BotClassLoaderContext>();
 
 	@Autowired
 	private MessageSource messageSource;

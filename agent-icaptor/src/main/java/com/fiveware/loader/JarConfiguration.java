@@ -19,6 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.Automation;
+import com.fiveware.builder.BotClassloaderContextBuilder;
+import com.fiveware.builder.FieldsDictionary;
+import com.fiveware.builder.InputDictionaryContextBuilder;
+import com.fiveware.builder.OutputDictionaryContextBuilder;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.metadata.IcaptorMetaInfo;
 import com.fiveware.model.BotClassLoaderContext;
@@ -61,28 +65,35 @@ public class JarConfiguration {
 				
 				InputDictionaryContext inputDictionaryContext = getInputDictionaryAttributes(automationClass);				
 				OutputDictionaryContext outputDictionaryContext = getOutputDictionaryAttributes(automationClass);
-				
-				saveAttributesClassLoader(nameBot, classLoaderInfo, nameJar, method, endpoint, inputDictionaryContext, outputDictionaryContext, getUrl(pathJar));
+				BotClassLoaderContext botClassLoaderContext = getBotClassLoaderContext(nameBot, classLoaderInfo, nameJar, method, endpoint, inputDictionaryContext,
+										 outputDictionaryContext, getUrl(pathJar));
+;				saveAttributesClassLoader(botClassLoaderContext);
 			} catch (ClassNotFoundException | AttributeLoadException e) {				
 				throw new AttributeLoadException(e.getMessage());
 			}			
 		}
 	}
 
-	private void saveAttributesClassLoader(String nameBot, String classLoaderInfo, String nameJar, String method, String endpoint,
-			InputDictionaryContext inputDictionaryContext, OutputDictionaryContext outputDictionaryContext,URL url) {
-		BotClassLoaderContext botClassLoaderContext = new BotClassLoaderContext(nameBot, classLoaderInfo, method, endpoint, nameJar,
-				inputDictionaryContext, outputDictionaryContext,url);
+	private void saveAttributesClassLoader(BotClassLoaderContext botClassLoaderContext) {
 		classLoaderConfig.savePropertiesBot(botClassLoaderContext);
 	}
-
+	
+	private BotClassLoaderContext getBotClassLoaderContext(String nameBot, String classLoaderInfo, String nameJar,
+			String method, String endpoint, InputDictionaryContext inputDictionaryContext, 
+			OutputDictionaryContext outputDictionaryContext,URL url) {
+		
+		BotClassloaderContextBuilder builder = new BotClassloaderContextBuilder(inputDictionaryContext, outputDictionaryContext);
+		return builder.nameBot(nameBot).classLoader(classLoaderInfo).nameJar(nameJar).method(method).endpoint(endpoint).url(url).build();
+	}
+	
 	private OutputDictionaryContext getOutputDictionaryAttributes(Class<?> automationClass) throws AttributeLoadException {
 		String typeFileOut = (String) IcaptorMetaInfo.TYPEFILEOUT.getValueAtribute(automationClass, "OutputDictionary");
 		String[] fieldsOut = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(automationClass, "OutputDictionary");
 		String separatorOut = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(automationClass, "OutputDictionary");
 		String nameFileOut = (String) IcaptorMetaInfo.NAMEFILEOUT.getValueAtribute(automationClass, "OutputDictionary");
-		OutputDictionaryContext outputDictionaryContext = new OutputDictionaryContext(typeFileOut, fieldsOut, separatorOut, nameFileOut);
-		return outputDictionaryContext;
+		
+		OutputDictionaryContextBuilder builder = new OutputDictionaryContextBuilder(new FieldsDictionary(fieldsOut));		
+		return builder.nameFileOut(nameFileOut).typeFileOut(typeFileOut).separator(separatorOut).build();
 	}
 
 	private InputDictionaryContext getInputDictionaryAttributes(Class<?> automationClass)
@@ -91,8 +102,9 @@ public class JarConfiguration {
 		String[] fields = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(automationClass, "InputDictionary");
 		String separator = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(automationClass, "InputDictionary");
 		
-		InputDictionaryContext inputDictionaryContext = new InputDictionaryContext(typeFileIn, fields, separator);
-		return inputDictionaryContext;
+		InputDictionaryContextBuilder builder = new InputDictionaryContextBuilder(new FieldsDictionary(fields));
+		builder.typeFileIn(typeFileIn).separator(separator).build();
+		return builder.typeFileIn(typeFileIn).separator(separator).build();
 	}
 
 	protected Object getValue(Annotation annotation, Class<? extends Annotation> annotationType, String attribute)
