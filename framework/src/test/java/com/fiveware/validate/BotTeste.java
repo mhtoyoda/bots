@@ -14,9 +14,9 @@ import com.fiveware.annotation.OutputDictionary;
 		 description = "Bot para Testes", version = "1.0.0")
 public class BotTeste implements Automation<String, com.fiveware.validate.Endereco> {
 
-	static Logger logger = LoggerFactory.getLogger(BotTeste.class);
+	static Logger logger = LoggerFactory.getLogger(String.class);
 
-	@IcaptorMethod(value = "execute", endpoint = "bot")
+	@IcaptorMethod(value = "execute", endpoint = "bot", type = String.class)
 	@InputDictionary(fields = { "cep" }, separator = ",", typeFileIn = "csv")
 	@OutputDictionary(fields = { "logradouro", "bairro", "localidade",
 			"cep" }, nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")

@@ -18,10 +18,11 @@ public class BotClassLoaderContext implements Serializable {
 	private InputDictionaryContext inputDictionary;
 	private OutputDictionaryContext outputDictionary;
 	private URL url;
+	private Class<?> typeParameter;
 	
 	public BotClassLoaderContext(String nameBot, String classLoader, String method, String endpoint, String nameJar,
 								 InputDictionaryContext inputDictionary, OutputDictionaryContext outputDictionary,
-								 URL url) {
+								 URL url, Class<?> typeParameter) {
 		this.nameBot = nameBot;
 		this.classLoader = classLoader;
 		this.method = method;
@@ -30,6 +31,7 @@ public class BotClassLoaderContext implements Serializable {
 		this.inputDictionary = inputDictionary;
 		this.outputDictionary = outputDictionary;
 		this.url = url;
+		this.typeParameter = typeParameter;
 	}
 
 	public String getNameBot() {
@@ -70,5 +72,9 @@ public class BotClassLoaderContext implements Serializable {
 
 	public URL getUrl() {
 		return url;
+	}
+	
+	public Class<?> getTypeParameter() {
+		return typeParameter;
 	}
 }

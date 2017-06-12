@@ -15,7 +15,7 @@ public class BotTesteEndereco implements Automation<Endereco, com.fiveware.valid
 
 	static Logger logger = LoggerFactory.getLogger(BotTesteEndereco.class);
 
-	@IcaptorMethod(value = "execute", endpoint = "bot")
+	@IcaptorMethod(value = "execute", endpoint = "bot", type = Endereco.class)
 	@InputDictionary(fields = { "cep" }, separator = ",", typeFileIn = "csv")
 	@OutputDictionary(fields = { "logradouro", "bairro", "localidade",
 			"cep" }, nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")

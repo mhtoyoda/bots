@@ -16,6 +16,7 @@ public class BotClassloaderContextBuilder {
 	private InputDictionaryContext inputDictionaryContext;
 	private OutputDictionaryContext outputDictionary;
 	private URL url;
+	private Class<?> typeParameter;
 	
 	public BotClassloaderContextBuilder(InputDictionaryContext inputDictionaryContext, OutputDictionaryContext outputDictionary){
 		this.inputDictionaryContext = inputDictionaryContext;
@@ -53,8 +54,13 @@ public class BotClassloaderContextBuilder {
 		return this;
 	}
 	
+	public BotClassloaderContextBuilder typeParameter(Class<?> typeParameter){
+		this.typeParameter = typeParameter;
+		return this;
+	}
+	
 	public BotClassLoaderContext build(){
 		return new BotClassLoaderContext(nameBot, classLoader, method, 
-				endpoint, nameJar, inputDictionaryContext, outputDictionary, url); 
+				endpoint, nameJar, inputDictionaryContext, outputDictionary, url, typeParameter); 
 	}
 }

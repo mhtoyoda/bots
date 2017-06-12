@@ -21,7 +21,8 @@ public enum IcaptorMetaInfo {
 	NAME("name"),
 	LENGTH("length"),
 	REGEXVALIDATE("regexValidate"),
-	POSITION("position");
+	POSITION("position"),
+	TYPEPARAMETER("type");
 
 	private String value;
 

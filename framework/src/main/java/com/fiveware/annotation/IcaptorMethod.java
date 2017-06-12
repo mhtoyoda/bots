@@ -16,4 +16,5 @@ public @interface IcaptorMethod {
 	
 	String value() default "execute";
 	String endpoint() default "execute";
+	Class<?> type();
 }

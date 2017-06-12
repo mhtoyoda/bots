@@ -32,14 +32,14 @@ import com.fiveware.model.OutputDictionaryContext;
 @Component
 public class JarConfiguration {
 
-	static Logger logger= LoggerFactory.getLogger(JarConfiguration.class);
+	static Logger logger = LoggerFactory.getLogger(JarConfiguration.class);
 
 	@Autowired
 	private ClassLoaderConfig classLoaderConfig;
-	
+
 	@SuppressWarnings("rawtypes")
-	public void saveConfigurations(String pathJar) throws MalformedURLException, AttributeLoadException{		
-		String nameBot = null, classLoaderInfo = null, nameJar = null;		
+	public void saveConfigurations(String pathJar) throws MalformedURLException, AttributeLoadException {
+		String nameBot = null, classLoaderInfo = null, nameJar = null;
 		ClassLoader classLoader = getClassLoader(pathJar);
 		Set<Class<? extends Automation>> subTypesOf = getSubTypes(classLoader);
 		for (Class<? extends Automation> clazz : subTypesOf) {
@@ -47,52 +47,58 @@ public class JarConfiguration {
 				Class<?> automationClass = classLoader.loadClass(clazz.getCanonicalName());
 				Annotation[] annotations = automationClass.getAnnotations();
 				for (Annotation annotation : annotations) {
-					Class<? extends Annotation> annotationType = annotation.annotationType();					
-					if (annotationType.getSimpleName().equals("Icaptor")) {	
+					Class<? extends Annotation> annotationType = annotation.annotationType();
+					if (annotationType.getSimpleName().equals("Icaptor")) {
 						try {
 							nameBot = (String) getValue(annotation, annotationType, IcaptorMetaInfo.VALUE.getValue());
-							classLoaderInfo = (String) getValue(annotation, annotationType, IcaptorMetaInfo.CLASSLOADER.getValue());
-							nameJar = StringUtils.substringAfterLast(pathJar, "/");														
+							classLoaderInfo = (String) getValue(annotation, annotationType,
+									IcaptorMetaInfo.CLASSLOADER.getValue());
+							nameJar = StringUtils.substringAfterLast(pathJar, "/");
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
 								| InvocationTargetException e) {
-							logger.error("Problema rotina saveconfiguration: ",e);
+							logger.error("Problema rotina saveconfiguration: ", e);
 						}
 					}
 				}
-				
+
 				String method = (String) IcaptorMetaInfo.VALUE.getValueAtribute(automationClass, "IcaptorMethod");
 				String endpoint = (String) IcaptorMetaInfo.ENDPOINT.getValueAtribute(automationClass, "IcaptorMethod");
-				
-				InputDictionaryContext inputDictionaryContext = getInputDictionaryAttributes(automationClass);				
+				Class<?> typeParameter = (Class<?>) IcaptorMetaInfo.TYPEPARAMETER.getValueAtribute(automationClass,
+						"IcaptorMethod");
+				InputDictionaryContext inputDictionaryContext = getInputDictionaryAttributes(automationClass);
 				OutputDictionaryContext outputDictionaryContext = getOutputDictionaryAttributes(automationClass);
-				BotClassLoaderContext botClassLoaderContext = getBotClassLoaderContext(nameBot, classLoaderInfo, nameJar, method, endpoint, inputDictionaryContext,
-										 outputDictionaryContext, getUrl(pathJar));
+				BotClassLoaderContext botClassLoaderContext = getBotClassLoaderContext(nameBot, classLoaderInfo,
+						nameJar, method, endpoint, inputDictionaryContext, outputDictionaryContext, getUrl(pathJar),
+						typeParameter);
 				saveAttributesClassLoader(botClassLoaderContext);
-			} catch (ClassNotFoundException | AttributeLoadException e) {				
+			} catch (ClassNotFoundException | AttributeLoadException e) {
 				throw new AttributeLoadException(e.getMessage());
-			}			
+			}
 		}
 	}
 
 	private void saveAttributesClassLoader(BotClassLoaderContext botClassLoaderContext) {
 		classLoaderConfig.savePropertiesBot(botClassLoaderContext);
 	}
-	
+
 	private BotClassLoaderContext getBotClassLoaderContext(String nameBot, String classLoaderInfo, String nameJar,
-			String method, String endpoint, InputDictionaryContext inputDictionaryContext, 
-			OutputDictionaryContext outputDictionaryContext,URL url) {
-		
-		BotClassloaderContextBuilder builder = new BotClassloaderContextBuilder(inputDictionaryContext, outputDictionaryContext);
-		return builder.nameBot(nameBot).classLoader(classLoaderInfo).nameJar(nameJar).method(method).endpoint(endpoint).url(url).build();
+			String method, String endpoint, InputDictionaryContext inputDictionaryContext,
+			OutputDictionaryContext outputDictionaryContext, URL url, Class<?> typeParameter) {
+
+		BotClassloaderContextBuilder builder = new BotClassloaderContextBuilder(inputDictionaryContext,
+				outputDictionaryContext);
+		return builder.nameBot(nameBot).classLoader(classLoaderInfo).nameJar(nameJar).method(method).endpoint(endpoint)
+				.url(url).typeParameter(typeParameter).build();
 	}
-	
-	private OutputDictionaryContext getOutputDictionaryAttributes(Class<?> automationClass) throws AttributeLoadException {
+
+	private OutputDictionaryContext getOutputDictionaryAttributes(Class<?> automationClass)
+			throws AttributeLoadException {
 		String typeFileOut = (String) IcaptorMetaInfo.TYPEFILEOUT.getValueAtribute(automationClass, "OutputDictionary");
 		String[] fieldsOut = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(automationClass, "OutputDictionary");
 		String separatorOut = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(automationClass, "OutputDictionary");
 		String nameFileOut = (String) IcaptorMetaInfo.NAMEFILEOUT.getValueAtribute(automationClass, "OutputDictionary");
-		
-		OutputDictionaryContextBuilder builder = new OutputDictionaryContextBuilder(new FieldsDictionary(fieldsOut));		
+
+		OutputDictionaryContextBuilder builder = new OutputDictionaryContextBuilder(new FieldsDictionary(fieldsOut));
 		return builder.nameFileOut(nameFileOut).typeFileOut(typeFileOut).separator(separatorOut).build();
 	}
 
@@ -101,7 +107,7 @@ public class JarConfiguration {
 		String typeFileIn = (String) IcaptorMetaInfo.TYPEFILEIN.getValueAtribute(automationClass, "InputDictionary");
 		String[] fields = (String[]) IcaptorMetaInfo.FIELDS.getValueAtribute(automationClass, "InputDictionary");
 		String separator = (String) IcaptorMetaInfo.SEPARATOR.getValueAtribute(automationClass, "InputDictionary");
-		
+
 		InputDictionaryContextBuilder builder = new InputDictionaryContextBuilder(new FieldsDictionary(fields));
 		builder.typeFileIn(typeFileIn).separator(separator).build();
 		return builder.typeFileIn(typeFileIn).separator(separator).build();
@@ -125,15 +131,15 @@ public class JarConfiguration {
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected Set<Class<? extends Automation>> getSubTypes(ClassLoader classLoader) throws MalformedURLException{
+	protected Set<Class<? extends Automation>> getSubTypes(ClassLoader classLoader) throws MalformedURLException {
 		ConfigurationBuilder config = new ConfigurationBuilder().setUrls(ClasspathHelper.forClassLoader(classLoader))
 				.addClassLoader(classLoader);
 		Reflections reflections = new Reflections(config);
 		Set<Class<? extends Automation>> subTypesOf = reflections.getSubTypesOf(Automation.class);
 		return subTypesOf;
 	}
-	
+
 	public void removeBot(String pathJar) {
-		classLoaderConfig.removeBot(pathJar);					
+		classLoaderConfig.removeBot(pathJar);
 	}
 }

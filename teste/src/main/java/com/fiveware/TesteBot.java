@@ -29,7 +29,7 @@ public class TesteBot implements Automation<String, Endereco> {
 		logger.info("Resultado: {}", new TesteBot().getEndereco(args[0]));
 	}
 
-	@IcaptorMethod(value = "execute", endpoint = "correios-bot")
+	@IcaptorMethod(value = "execute", endpoint = "correios-bot",type = String.class)
 	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
