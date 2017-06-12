@@ -58,7 +58,7 @@ public class LoadFile {
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
 		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput);
-		Class classLoader = classLoaderRunner.loadClassLoader(botName);
+		Class classLoader = classLoaderRunner.loadClass(botName);
 		for (Record line : recordLines) {
 			try {
 				String cep = (String) line.getValue("cep");

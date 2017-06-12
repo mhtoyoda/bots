@@ -22,11 +22,17 @@ public class ClassLoaderRunner {
 	private ClassLoaderConfig classLoaderConfig;
 
 	@SuppressWarnings({ "rawtypes", "resource" })
-	public Class loadClassLoader(String botName) throws ClassNotFoundException, ExceptionBot, IOException {
+	public Class loadClass(String botName) throws ClassNotFoundException, ExceptionBot, IOException {
 		Optional<BotClassLoaderContext> context = classLoaderConfig.getPropertiesBot(botName);
 		String className = context.get().getClassLoader();
 		ClassLoader classLoader = new URLClassLoader(new URL[] { context.get().getUrl() });
 		Class clazz = classLoader.loadClass(className);
 		return clazz;
+	}
+
+	public ClassLoader loadClassLoader(String botName) throws ClassNotFoundException, ExceptionBot, IOException {
+		Optional<BotClassLoaderContext> context = classLoaderConfig.getPropertiesBot(botName);
+		ClassLoader classLoader = new URLClassLoader(new URL[] { context.get().getUrl() });
+		return classLoader;
 	}
 }

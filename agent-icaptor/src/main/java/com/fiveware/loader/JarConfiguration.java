@@ -41,7 +41,9 @@ public class JarConfiguration {
 	public void saveConfigurations(String pathJar) throws MalformedURLException, AttributeLoadException {
 		String nameBot = null, classLoaderInfo = null, nameJar = null;
 		ClassLoader classLoader = getClassLoader(pathJar);
+
 		Set<Class<? extends Automation>> subTypesOf = getSubTypes(classLoader);
+
 		for (Class<? extends Automation> clazz : subTypesOf) {
 			try {
 				Class<?> automationClass = classLoader.loadClass(clazz.getCanonicalName());

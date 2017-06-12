@@ -20,7 +20,7 @@ import com.fiveware.model.MessageAgent;
  * Created by valdisnei on 06/06/17.
  */
 @Component
-@PropertySource(ignoreResourceNotFound=true,value="classpath:icaptor-platform.properties")
+//@PropertySource(ignoreResourceNotFound=true,value="classpath:icaptor-platform.properties")
 public class PlatFormConfig implements Lifecycle {
     
 	static Logger logger= LoggerFactory.getLogger(PlatFormConfig.class);
