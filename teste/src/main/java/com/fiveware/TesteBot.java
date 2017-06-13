@@ -2,6 +2,7 @@ package com.fiveware;
 
 import java.util.Iterator;
 
+import com.fiveware.exception.ExceptionBot;
 import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,15 +34,10 @@ public class TesteBot implements Automation<String, Endereco> {
 	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
-		try {
+	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws ExceptionBot{
 			Endereco endereco = getEndereco(cep);
 
 			return endereco;
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-		}
-		return null;
 	}
 
 	public Endereco getEndereco(String args) {
