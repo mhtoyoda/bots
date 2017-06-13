@@ -3,9 +3,9 @@ package com.fiveware.dao;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import com.fiveware.model.ServerAgent;
+import com.fiveware.model.Server;
 
 @Repository
-public interface ServerAgentDAO extends CrudRepository<ServerAgent, Long>{
+public interface ServerDAO extends CrudRepository<Server, Long>{
 
 }
