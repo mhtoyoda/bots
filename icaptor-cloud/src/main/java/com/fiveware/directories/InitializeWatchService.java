@@ -16,11 +16,8 @@ import org.springframework.stereotype.Component;
 public class InitializeWatchService {
 
 
-    @Value("${worker.dir}")
-    private String workerDir;
-
-    @Value("${worker.file}")
-    private String workDirFileOut;
+    @Value("${worker.in.file}")
+    private String workerInFile;
 
 
     @Autowired
@@ -32,23 +29,23 @@ public class InitializeWatchService {
 
 	@PostConstruct
 	public void initialize() {
-		if (!new File(workerDir).exists()) {
-			if (!new File(workerDir).mkdirs())
-				throw new RuntimeException(messageSource.getMessage("create.workerDir", new Object[]{workerDir}, null));
+		if (!new File(workerInFile).exists()) {
+			if (!new File(workerInFile).mkdirs())
+				throw new RuntimeException(messageSource.getMessage("create.workerDir", new Object[]{workerInFile}, null));
 		}
 
-		if (!new File(workDirFileOut).exists()) {
-			if (!new File(workDirFileOut).mkdirs())
-				throw new RuntimeException(
-						messageSource.getMessage("create.workerDirFileOut", new Object[]{workDirFileOut}, null));
-		}
+//		if (!new File(workDirFileOut).exists()) {
+//			if (!new File(workDirFileOut).mkdirs())
+//				throw new RuntimeException(
+//						messageSource.getMessage("create.workerDirFileOut", new Object[]{workDirFileOut}, null));
+//		}
 
 		Thread thread = new Thread(new Runnable() {
 			@Override
 			public void run() {
-                runningWatcher.run(workerDir);
+                runningWatcher.run(workerInFile);
 			}
-		}, "Watcher : "+ workerDir );
+		}, "READ INPUT FILE: "+ workerInFile);
 
 		thread.start();
 	}

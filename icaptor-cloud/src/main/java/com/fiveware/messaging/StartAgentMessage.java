@@ -9,7 +9,7 @@ import com.fiveware.integration.ServerAgentIntegration;
 import com.fiveware.model.MessageAgent;
 
 @Component("START_AGENT")
-public class StartAgentMessage implements ConsumerTypeMessage {
+public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 
 	private static Logger log = LoggerFactory.getLogger(StartAgentMessage.class);
 	

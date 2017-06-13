@@ -5,9 +5,8 @@ import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 
-import com.fiveware.messaging.ConsumerTypeMessage;
-import com.fiveware.messaging.Receiver;
-import com.fiveware.messaging.TypeConsumerMessage;
+import com.fiveware.messaging.*;
+import com.fiveware.model.MessageInputDictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +19,18 @@ import com.fiveware.model.MessageAgent;
 @Component
 public class EventsConsumerScheduler {
 
-	static Logger logger = LoggerFactory.getLogger(EventsConsumerScheduler.class);
-	
 	private Map<String, ConsumerTypeMessage> consumersMap;
 	
 	@Autowired
 	@Qualifier("eventMessageReceiver")
 	private Receiver<MessageAgent> receiver;
-	
+
+
+	@Autowired
+	@Qualifier("eventInputDictionaryReceiver")
+	private Receiver<MessageInputDictionary> receiver2;
+
+
 	@Autowired
 	private TypeConsumerMessage typeConsumerMessage;
 	
@@ -42,5 +45,9 @@ public class EventsConsumerScheduler {
 		if(!Objects.isNull(messageAgent)){
 			consumersMap.get(messageAgent.getTypeMessage().name()).process(messageAgent);
 		}
+
+		MessageInputDictionary dictionaryMessage = receiver2.receive();
+		if(!Objects.isNull(dictionaryMessage))
+			consumersMap.get(TypeMessage.INPUT_DICTIONARY.name()).process(dictionaryMessage);
 	}
 }

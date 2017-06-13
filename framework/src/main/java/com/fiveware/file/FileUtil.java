@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.google.common.base.Splitter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,13 +65,16 @@ public class FileUtil {
 		bw.write(joiner.toString());
 		bw.newLine();
 
+
+
 		return null;
 	}
 
 	private List<Record> getLines(List<String> lines, String[] fields, String separator) {
 		List<Record> recordsLines = Lists.newArrayList();
+
 		lines.forEach(record -> {
-			String[] recordArray = record.split(separator);
+			String[] recordArray = StringUtils.split(record, separator);//record.split(separator);
 			if (recordArray.length == fields.length) {
 				Record recordLines = new Record();
 				for (int i = 0; i < fields.length; i++) {
