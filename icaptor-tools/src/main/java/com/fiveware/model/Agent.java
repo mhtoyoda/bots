@@ -28,6 +28,9 @@ public class Agent {
 	@JoinColumn(name ="serverId")
 	private Server server;
 	
+	@Column(name ="ipAgent")
+	private String ip;
+	
 	@ManyToMany
     @JoinTable(name="agent_bot", joinColumns=
     {@JoinColumn(name="idAgent")}, inverseJoinColumns=
