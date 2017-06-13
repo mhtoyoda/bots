@@ -27,8 +27,10 @@ public class ServiceBotRest implements ServiceBot{
     	try {
 
     	    return serviceBotClassLoader.executeMainClass(nameBot,endpoint, parameter);
-        } catch (IOException | ClassNotFoundException |
-                IllegalAccessException | InstantiationException | NoSuchMethodException | InvocationTargetException e) {
+        } catch (ExceptionBot e){
+    	    throw e;
+    	} catch (IOException | ClassNotFoundException |
+                IllegalAccessException | InstantiationException | NoSuchMethodException e) {
             logger.error(" ServiceBotRest: ", e);
         }
         return null;

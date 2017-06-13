@@ -54,7 +54,8 @@ public  class ServiceBotClassLoader<T> {
         return executeMainClass(parameter, botClassLoaderContext);
     }
     
-    public OutTextRecord executeMainClass(String nameBot,String endpoint, T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ExceptionBot {
+    public OutTextRecord executeMainClass(String nameBot,String endpoint, T parameter) throws IOException,
+            ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, ExceptionBot {
         Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
 
         if(!endpoint.equals(botClassLoaderContext.get().getEndpoint()))
@@ -63,7 +64,10 @@ public  class ServiceBotClassLoader<T> {
         return executeMainClass(parameter, botClassLoaderContext);
     }
 
-    private OutTextRecord executeMainClass(T parameter, Optional<BotClassLoaderContext> botClassLoaderContext) throws ClassNotFoundException, ExceptionBot, NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, IOException {
+    private OutTextRecord executeMainClass(T parameter, Optional<BotClassLoaderContext> botClassLoaderContext)
+            throws ClassNotFoundException, ExceptionBot, NoSuchMethodException, IllegalAccessException,
+            InstantiationException, IOException {
+
         ClassLoader classLoader = classLoaderRunner.loadClassLoader(botClassLoaderContext.get().getNameBot());
         Class clazz = classLoader.loadClass(botClassLoaderContext.get().getClassLoader());
         Class o = classLoader.loadClass(botClassLoaderContext.get().getTypeParameter().getName());
@@ -73,11 +77,20 @@ public  class ServiceBotClassLoader<T> {
 
         Object o1 = objectMapper.convertValue(parameter, aClass);
 
-        Object obj =  execute.invoke(clazz.newInstance(), o1);
+        Object obj = null;
+        try{
+            obj =  execute.invoke(clazz.newInstance(), o1);
+        }catch (InvocationTargetException e){
+            throw new ExceptionBot(e.getTargetException().getMessage());
+        }
 
-        if (obj instanceof List) return new OutTextRecord(objectMapper.convertValue(obj, Map[].class)[0]);
+        if (obj instanceof List)
+            return new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
 
-        return new OutTextRecord(objectMapper.convertValue(obj, Map.class));
+        Map map = objectMapper.convertValue(obj, Map.class);
+        HashMap[] hashMaps = {(HashMap) map};
+
+        return new OutTextRecord(hashMaps);
     }
 
     protected ClassLoader getClassLoader(String pathJar) throws MalformedURLException {

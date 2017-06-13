@@ -2,7 +2,9 @@ package com.fiveware.loader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -68,8 +70,9 @@ public class LoadFile {
 						separatorInput, result);
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());
+				HashMap[] hashMaps = {(HashMap) line.getRecordMap()};
 				fileUtil.writeFile(workDir + File.separator + context.get().getOutputDictionary().getNameFileOut(),
-						separatorInput, new OutTextRecord(line.getRecordMap()));
+						separatorInput, new OutTextRecord(hashMaps));
 			}
 		}
 

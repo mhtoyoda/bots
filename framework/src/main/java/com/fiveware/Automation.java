@@ -1,5 +1,6 @@
 package com.fiveware;
 
+import com.fiveware.exception.ExceptionBot;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -10,7 +11,7 @@ import java.io.Serializable;
 @Service
 public interface Automation<T extends Serializable, R extends Serializable> {
 
-	R execute(T recordLine);
+	R execute(T recordLine) throws ExceptionBot;
 
 }
 

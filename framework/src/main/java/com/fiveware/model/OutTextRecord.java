@@ -10,15 +10,15 @@ import com.fiveware.converter.ArrayMapDeserializer;
 
 public class OutTextRecord {
 
-	@JsonProperty("bot")
+	@JsonProperty("result")
 	@JsonDeserialize(using = ArrayMapDeserializer.class)
-	private final Map<String, Object> map;
+		private final Map<String, Object> map[];
 	
-	public OutTextRecord(final Map<String, Object> map) {
+	public OutTextRecord(final Map<String, Object> map[]) {
 		this.map = map;
 	}
 
-	public Map<String, Object> getMap() {
+	public  Map<String, Object>[] getMap() {
 		return map;
 	}
 
