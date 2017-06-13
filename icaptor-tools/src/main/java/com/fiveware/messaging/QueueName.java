@@ -2,5 +2,5 @@ package com.fiveware.messaging;
 
 public enum QueueName {
 
-	EVENTS
+	EVENTS,INPUT_LINE
 }
