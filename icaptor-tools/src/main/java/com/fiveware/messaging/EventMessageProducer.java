@@ -14,7 +14,7 @@ public class EventMessageProducer implements Producer<MessageAgent> {
 	private RabbitTemplate rabbitTemplate;
 	
 	@Override
-	public void send(MessageAgent message){
-		rabbitTemplate.convertAndSend(QueueName.EVENTS.name(), message);
+	public void send(String queue, MessageAgent message){
+		rabbitTemplate.convertAndSend(queue, message);
 	}
 }

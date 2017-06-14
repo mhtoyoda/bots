@@ -15,7 +15,7 @@ public class EventInputDictionaryProducer implements Producer<MessageInputDictio
     private RabbitTemplate rabbitTemplate;
 
     @Override
-    public void send(MessageInputDictionary message) {
-        rabbitTemplate.convertAndSend("BOT", message);
+    public void send(String queue, MessageInputDictionary message) {
+        rabbitTemplate.convertAndSend(queue, message);
     }
 }

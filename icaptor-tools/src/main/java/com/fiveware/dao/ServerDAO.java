@@ -10,5 +10,5 @@ import com.fiveware.model.Server;
 @Repository
 public interface ServerDAO extends CrudRepository<Server, Long>{
 
-	Optional<Server> findByHost(String host);
+	Optional<Server> findByName(String name);
 }

@@ -51,7 +51,7 @@ public class ReadInputFile {
                     TypeMessage.INPUT_DICTIONARY,
                     "branch:icaptor-58");
 
-            producer.send(dictionary);
+            producer.send("BOT", dictionary);
         };
     }
 

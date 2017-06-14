@@ -11,8 +11,8 @@ import org.springframework.context.Lifecycle;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.messaging.Producer;
+import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.MessageAgent;
 
@@ -20,7 +20,6 @@ import com.fiveware.model.MessageAgent;
  * Created by valdisnei on 06/06/17.
  */
 @Component
-//@PropertySource(ignoreResourceNotFound=true,value="classpath:icaptor-platform.properties")
 public class PlatFormConfig implements Lifecycle {
     
 	static Logger logger= LoggerFactory.getLogger(PlatFormConfig.class);
@@ -36,21 +35,17 @@ public class PlatFormConfig implements Lifecycle {
 
     @Autowired
     @Qualifier("eventMessageProducer")
-    private Producer<MessageAgent> producer;
-    
-    @Autowired
-    @Qualifier("mapClassLoaderConfig")
-    private ClassLoaderConfig classLoaderConfig;
+    private Producer<MessageAgent> producer;   
 
     private void sendMessage(TypeMessage typeMessage, String description) throws Exception {
     	MessageAgent message = new MessageAgent(host, agent, ip, typeMessage, description);
-    	producer.send(message);		
+    	producer.send(QueueName.EVENTS.name(), message);		
     }
 
     @PostConstruct
     public void up(){    	    	  
     	MessageAgent message = new MessageAgent(host, agent, ip, TypeMessage.START_AGENT, "Start Agent!");    
-        producer.send(message);
+        producer.send(QueueName.EVENTS.name(), message);
     }
 
 	@Override

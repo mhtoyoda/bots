@@ -24,13 +24,13 @@ public class Agent {
 	@Column(name = "nameAgent")
 	private String nameAgent;
 
+	@Column(name = "ipAgent")
+	private String ip;
+	
 	@ManyToOne
 	@JoinColumn(name = "serverId")
 	private Server server;
-
-	@Column(name = "ipAgent")
-	private String ip;
-
+	
 	@ManyToMany
 	@JoinTable(name = "agent_bot", joinColumns = { @JoinColumn(name = "idAgent") }, inverseJoinColumns = {
 			@JoinColumn(name = "idBot") })
@@ -60,14 +60,6 @@ public class Agent {
 		this.bots = bots;
 	}
 
-	public Server getServer() {
-		return server;
-	}
-
-	public void setServer(Server server) {
-		this.server = server;
-	}
-
 	public String getIp() {
 		return ip;
 	}
@@ -76,4 +68,11 @@ public class Agent {
 		this.ip = ip;
 	}
 
+	public Server getServer() {
+		return server;
+	}
+
+	public void setServer(Server server) {
+		this.server = server;
+	}
 }

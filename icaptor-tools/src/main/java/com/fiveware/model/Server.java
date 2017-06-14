@@ -19,6 +19,9 @@ public class Server {
 	private Long id;
 
 	@Column(name = "name")
+	private String name;
+
+	@Column(name = "host")
 	private String host;
 
 	@OneToMany
@@ -30,6 +33,14 @@ public class Server {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getHost() {
@@ -47,4 +58,5 @@ public class Server {
 	public void setAgents(List<Agent> agents) {
 		this.agents = agents;
 	}
+
 }

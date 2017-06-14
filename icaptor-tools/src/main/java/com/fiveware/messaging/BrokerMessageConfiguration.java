@@ -6,6 +6,7 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -46,24 +47,10 @@ public class BrokerMessageConfiguration {
 	public Binding binding(Queue queue, TopicExchange exchange) {
 		return BindingBuilder.bind(queue).to(exchange).with(QueueName.EVENTS.name());
 	}
+	
+	@Bean
+	public RabbitAdmin rabbitAdmin(){
+		return new RabbitAdmin(connectionFactory());
+	}
 
-//	@Bean
-//	public SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
-//	MessageListenerAdapter listenerAdapter) {
-//		SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
-//		container.setConnectionFactory(connectionFactory);
-//		container.setQueueNames(messageQueue);
-//		container.setMessageListener(listenerAdapter);
-//		return container;
-//	}
-//	
-//	@Bean
-//	public MessageReceiver MessageReceiver(){
-//		return new MessageReceiver();
-//	}
-//	
-//	@Bean
-//	public MessageListenerAdapter listenerAdapter(MessageReceiver messageReceiver) {
-//		return new MessageListenerAdapter(messageReceiver, "receive");
-//	}
 }

@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.fiveware.config.agent.AgentConfig;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.loader.JarConfiguration;
 
@@ -39,7 +40,10 @@ public class RunningWatchServiceRecursive {
 
     @Autowired
     private JarConfiguration jarConfiguration;
-
+    
+    @Autowired
+    private AgentConfig agentConfig;       
+    
     public void run(String directory) {
         try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
             registerDir(Paths.get(directory), watchService);
@@ -54,7 +58,8 @@ public class RunningWatchServiceRecursive {
     private void registerDir(Path path, WatchService watchService) throws IOException, AttributeLoadException {
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)){
             if (isValidFileType(path)) {
-                jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());            
+                jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());  
+                agentConfig.saveAgentBot();
             }
             return;
         }
