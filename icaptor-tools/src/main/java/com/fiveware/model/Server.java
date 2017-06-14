@@ -17,10 +17,10 @@ public class Server {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(name ="name")
-	private String name;
-	
+
+	@Column(name = "name")
+	private String host;
+
 	@OneToMany
 	private List<Agent> agents;
 
@@ -32,12 +32,12 @@ public class Server {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getHost() {
+		return host;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setHost(String host) {
+		this.host = host;
 	}
 
 	public List<Agent> getAgents() {

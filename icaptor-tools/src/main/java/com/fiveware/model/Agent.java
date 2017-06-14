@@ -20,21 +20,20 @@ public class Agent {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(name ="nameAgent")
+
+	@Column(name = "nameAgent")
 	private String nameAgent;
-	
+
 	@ManyToOne
-	@JoinColumn(name ="serverId")
+	@JoinColumn(name = "serverId")
 	private Server server;
-	
-	@Column(name ="ipAgent")
+
+	@Column(name = "ipAgent")
 	private String ip;
-	
+
 	@ManyToMany
-    @JoinTable(name="agent_bot", joinColumns=
-    {@JoinColumn(name="idAgent")}, inverseJoinColumns=
-      {@JoinColumn(name="idBot")})
+	@JoinTable(name = "agent_bot", joinColumns = { @JoinColumn(name = "idAgent") }, inverseJoinColumns = {
+			@JoinColumn(name = "idBot") })
 	private List<Bot> bots;
 
 	public Long getId() {
@@ -59,6 +58,22 @@ public class Agent {
 
 	public void setBots(List<Bot> bots) {
 		this.bots = bots;
+	}
+
+	public Server getServer() {
+		return server;
+	}
+
+	public void setServer(Server server) {
+		this.server = server;
+	}
+
+	public String getIp() {
+		return ip;
+	}
+
+	public void setIp(String ip) {
+		this.ip = ip;
 	}
 
 }
