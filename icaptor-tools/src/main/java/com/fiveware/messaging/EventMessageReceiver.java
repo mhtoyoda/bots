@@ -19,8 +19,8 @@ public class EventMessageReceiver implements Receiver<MessageAgent> {
 	private RabbitTemplate rabbit;
 	
 	@Override
-	public MessageAgent receive(){	
-		Message message = rabbit.receive(QueueName.EVENTS.name());
+	public MessageAgent receive(String queueName){	
+		Message message = rabbit.receive(queueName);
 		return Objects.isNull(message) ? null : convert(message.getBody());		
 	}
 	

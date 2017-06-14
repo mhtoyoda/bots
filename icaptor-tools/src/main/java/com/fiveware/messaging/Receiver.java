@@ -2,6 +2,6 @@ package com.fiveware.messaging;
 
 public interface Receiver<T> {
 
-	T receive();
+	T receive(String queueName);
 
 }

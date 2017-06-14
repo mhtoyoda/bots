@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.messaging.ConsumerTypeMessage;
+import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.messaging.TypeConsumerMessage;
 import com.fiveware.messaging.TypeMessage;
@@ -42,12 +43,12 @@ public class EventsConsumerScheduler {
 	
 	@Scheduled(fixedDelay = 10000)
 	public void execute() {
-		MessageAgent messageAgent = receiver.receive();
+		MessageAgent messageAgent = receiver.receive(QueueName.EVENTS.name());
 		if(!Objects.isNull(messageAgent)){
 			consumersMap.get(messageAgent.getTypeMessage().name()).process(messageAgent);
 		}
 
-		MessageInputDictionary dictionaryMessage = receiver2.receive();
+		MessageInputDictionary dictionaryMessage = receiver2.receive("BOT");
 		if(!Objects.isNull(dictionaryMessage))
 			consumersMap.get(TypeMessage.INPUT_DICTIONARY.name()).process(dictionaryMessage);
 	}

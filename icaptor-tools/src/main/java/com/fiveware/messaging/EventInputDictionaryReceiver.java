@@ -4,9 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Objects;
-import java.util.Queue;
 
-import com.fiveware.model.MessageAgent;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +19,8 @@ public class EventInputDictionaryReceiver implements Receiver<MessageInputDictio
 	private RabbitTemplate rabbit;
 	
 	@Override
-	public MessageInputDictionary receive(){
-		Message message = rabbit.receive("BOT");
+	public MessageInputDictionary receive(String queue){
+		Message message = rabbit.receive(queue);
 		return  Objects.isNull(message) ? null : convert(message.getBody());
 	}
 	
