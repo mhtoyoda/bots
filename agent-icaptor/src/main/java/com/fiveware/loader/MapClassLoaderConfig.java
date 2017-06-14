@@ -1,5 +1,6 @@
 package com.fiveware.loader;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.ExceptionBot;
 import com.fiveware.model.BotClassLoaderContext;
+import com.google.common.collect.Lists;
 
 @Component("mapClassLoaderConfig")
 public class MapClassLoaderConfig implements ClassLoaderConfig {
@@ -48,5 +50,14 @@ public class MapClassLoaderConfig implements ClassLoaderConfig {
 			}
 		});
 
+	}
+
+	@Override
+	public List<BotClassLoaderContext> getAll() {
+		List<BotClassLoaderContext> list = Lists.newArrayList();
+		map.entrySet().forEach(bot -> {
+			list.add(bot.getValue());
+		});
+		return list;
 	}
 }

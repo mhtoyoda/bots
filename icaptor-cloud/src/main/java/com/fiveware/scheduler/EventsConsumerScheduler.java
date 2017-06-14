@@ -1,4 +1,4 @@
-package com.fiveware.scheduller;
+package com.fiveware.scheduler;
 
 import java.util.Map;
 import java.util.Objects;
