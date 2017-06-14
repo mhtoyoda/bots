@@ -14,7 +14,7 @@ public class InputDictionaryMessage implements ConsumerTypeMessage<MessageInputD
 
 	@Override
 	public void process(MessageInputDictionary message) {
-		log.info("{}",message.toString());
+		log.debug("{}",message.toString());
 	}
 
 }

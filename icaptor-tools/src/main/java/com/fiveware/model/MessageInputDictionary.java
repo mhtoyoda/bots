@@ -11,38 +11,22 @@ import org.pojomatic.annotations.AutoProperty;
 @AutoProperty
 public class MessageInputDictionary implements Serializable {
 
-	private String line;
-	private TypeMessage typeMessage;
-	private String description;
+	private final String line;
+	private final TypeMessage typeMessage;
+	private final String description;
 
 
-	public MessageInputDictionary() {
-	}
-
-	public String getLine() {
-		return line;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public TypeMessage getTypeMessage() {
-		return typeMessage;
-	}
-
-	public void setDescription(String description) {
+	public MessageInputDictionary(String line, TypeMessage typeMessage, String description) {
+		this.line = line;
+		this.typeMessage = typeMessage;
 		this.description = description;
 	}
 
-	public void setLine(String line) {
-		this.line = line;
-	}
+	public TypeMessage getTypeMessage() {return typeMessage;}
 
-	public void setTypeMessage(TypeMessage typeMessage) {
-		this.typeMessage = typeMessage;
-	}
+	public String getDescription() {return description;}
 
+	public String getLine() {return line;}
 
 	@Override
 	public String toString() {

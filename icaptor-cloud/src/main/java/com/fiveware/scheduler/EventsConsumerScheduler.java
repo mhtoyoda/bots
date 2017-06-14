@@ -5,16 +5,17 @@ import java.util.Objects;
 
 import javax.annotation.PostConstruct;
 
-import com.fiveware.messaging.*;
-import com.fiveware.model.MessageInputDictionary;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.messaging.ConsumerTypeMessage;
+import com.fiveware.messaging.Receiver;
+import com.fiveware.messaging.TypeConsumerMessage;
+import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.MessageAgent;
+import com.fiveware.model.MessageInputDictionary;
 
 @Component
 public class EventsConsumerScheduler {

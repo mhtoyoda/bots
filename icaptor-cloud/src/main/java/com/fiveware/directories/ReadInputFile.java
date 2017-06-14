@@ -47,10 +47,9 @@ public class ReadInputFile {
             StringJoiner joiner = new StringJoiner("|");
             v.forEach((valor) -> joiner.add((CharSequence) valor));
 
-            MessageInputDictionary dictionary = new MessageInputDictionary();
-            dictionary.setLine(joiner.toString());
-            dictionary.setTypeMessage(TypeMessage.INPUT_DICTIONARY);
-            dictionary.setDescription("branch:icaptor-58");
+            MessageInputDictionary dictionary = new MessageInputDictionary(joiner.toString(),
+                    TypeMessage.INPUT_DICTIONARY,
+                    "branch:icaptor-58");
 
             producer.send(dictionary);
         };

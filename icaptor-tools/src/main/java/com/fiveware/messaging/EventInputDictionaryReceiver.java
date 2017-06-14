@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Objects;
+import java.util.Queue;
 
 import com.fiveware.model.MessageAgent;
 import org.springframework.amqp.core.Message;

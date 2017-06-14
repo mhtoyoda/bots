@@ -46,6 +46,13 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 		</dependency>
+
+		<!-- Suporte para LogBack -->
+		<dependency>
+			<groupId>org.codehaus.janino</groupId>
+			<artifactId>janino</artifactId>
+			<version>3.0.6</version>
+		</dependency>
 		<dependency>
 			<groupId>icaptor-tools</groupId>
 			<artifactId>icaptor-tools</artifactId>

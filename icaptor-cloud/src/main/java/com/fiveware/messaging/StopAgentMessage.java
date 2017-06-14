@@ -13,7 +13,7 @@ public class StopAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 	
 	@Override
 	public void process(MessageAgent message) {
-		log.info("Message Receive {}",message.toString());
+		log.debug("Message Receive {}",message.toString());
 	}
 
 }
