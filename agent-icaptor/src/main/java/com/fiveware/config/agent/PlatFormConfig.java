@@ -1,11 +1,7 @@
 package com.fiveware.config.agent;
 
-import java.util.List;
-
 import javax.annotation.PostConstruct;
 
-import com.google.common.collect.Lists;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +14,7 @@ import org.springframework.stereotype.Component;
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.TypeMessage;
-import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.MessageAgent;
-import com.fiveware.model.MessageAgentBot;
 
 /**
  * Created by valdisnei on 06/06/17.
@@ -31,10 +25,10 @@ public class PlatFormConfig implements Lifecycle {
     
 	static Logger logger= LoggerFactory.getLogger(PlatFormConfig.class);
 	
-	@Value("${agent:agentTeste}")
+	@Value("${agent}")
 	String agent;
 	
-	@Value("${ip:127.0.0.1}")
+	@Value("${ip}")
 	String ip;
 	
     @Value("${host}")
@@ -54,21 +48,8 @@ public class PlatFormConfig implements Lifecycle {
     }
 
     @PostConstruct
-    public void up(){
-    	List<MessageAgentBot> list = Lists.newArrayList();
-    	List<BotClassLoaderContext> bots = classLoaderConfig.getAll();
-    	if(CollectionUtils.isNotEmpty(bots)){
-    		bots.forEach(bot -> {
-    			MessageAgentBot messageAgentBot = new MessageAgentBot();
-    			messageAgentBot.setEndpoint(bot.getEndpoint());
-    			messageAgentBot.setNameBot(bot.getNameBot());
-    			messageAgentBot.setNameMethod(bot.getMethod());
-    			list.add(messageAgentBot);
-    		});
-    	}
-    	  
-    	MessageAgent message = new MessageAgent(host, agent, ip, TypeMessage.START_AGENT, "Start Agent!");
-    	message.setMessageAgentBots(list);
+    public void up(){    	    	  
+    	MessageAgent message = new MessageAgent(host, agent, ip, TypeMessage.START_AGENT, "Start Agent!");    
         producer.send(message);
     }
 

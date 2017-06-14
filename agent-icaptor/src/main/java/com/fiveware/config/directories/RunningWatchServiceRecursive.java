@@ -2,7 +2,15 @@ package com.fiveware.config.directories;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.loader.JarConfiguration;
-import com.fiveware.loader.JarMethod;
 
 /**
  * Created by valdisnei on 05/06/17.
@@ -30,13 +37,8 @@ public class RunningWatchServiceRecursive {
     @Value("${bot.extension.file}")
     private String extensionFile;
 
-
     @Autowired
     private JarConfiguration jarConfiguration;
-
-    @Autowired
-    private JarMethod jarMethod;
-
 
     public void run(String directory) {
         try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
@@ -52,8 +54,7 @@ public class RunningWatchServiceRecursive {
     private void registerDir(Path path, WatchService watchService) throws IOException, AttributeLoadException {
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)){
             if (isValidFileType(path)) {
-                jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());
-                jarMethod.readConfigurations(path.toFile().getAbsoluteFile().getPath());
+                jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());            
             }
             return;
         }

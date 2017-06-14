@@ -6,3 +6,4 @@ worker.in.file: ${HOME}/.icaptor-in-file
 worker.read.file: ${HOME}/.icaptor-read-file
 
 extension.input.file: .csv
+
