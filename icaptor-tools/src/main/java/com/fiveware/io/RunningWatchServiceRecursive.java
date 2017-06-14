@@ -1,4 +1,4 @@
-package com.fiveware.directories;
+package com.fiveware.io;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,29 +8,25 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import com.fiveware.exception.AttributeLoadException;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by valdisnei on 05/06/17.
  */
-
 @Service
-public class RunningWatchServiceRecursive {
+public abstract class RunningWatchServiceRecursive {
 
-    private static Logger log = LoggerFactory.getLogger(InitializeWatchService.class);
+    private static Logger log = LoggerFactory.getLogger(RunningWatchServiceRecursive.class);
 
     private static final Map<WatchKey, Path> keyPathMap = new HashMap<>();
 
-    @Value("${extension.input.file}")
-    private String extensionFile;
 
 
-    @Autowired
-    private ReadInputFile readInputFile;
+    public abstract void postRegister(Path path) throws IOException;
+    public abstract boolean isValidFileType(Path file);
 
 
     public void run(String directory) {
@@ -47,9 +43,7 @@ public class RunningWatchServiceRecursive {
 
     private void registerDir(Path path, WatchService watchService) throws IOException, AttributeLoadException {
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)){
-            if (isValidFileType(path)) {
-                readInputFile.readFile(path.toFile().getAbsoluteFile().getPath());
-            }
+            postRegister(path);
             return;
         }
 
@@ -103,7 +97,4 @@ public class RunningWatchServiceRecursive {
         }
     }
 
-    private boolean isValidFileType(Path file) {
-        return (file.toString().endsWith(extensionFile));
-    }
 }

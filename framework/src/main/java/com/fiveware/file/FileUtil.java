@@ -48,26 +48,19 @@ public class FileUtil {
 					.ofNullable(Arrays.stream(result.getMap()).collect(Collectors.toList()))
 					.orElse(Collections.emptyList());
 
-			collect.stream().map(Map::values).forEach(v -> {
-				try {
-					consumer3(v, separator, bw);
-				} catch (IOException e) {
-					logger.error("{}", e);
-				}
-			});
+			collect.stream().map(Map::values).forEach(v ->consumer(v, separator, bw));
 		}
 	}
 
-	private Consumer<? super Collection<Object>> consumer3(Collection<Object> list, String separator, BufferedWriter bw)
-			throws IOException {
+	private void consumer(Collection<Object> list, String separator, BufferedWriter bw) {
 		StringJoiner joiner = new StringJoiner(separator);
 		list.forEach((v) -> joiner.add((CharSequence) v));
-		bw.write(joiner.toString());
-		bw.newLine();
-
-
-
-		return null;
+		try {
+			bw.write(joiner.toString());
+			bw.newLine();
+		} catch (IOException e) {
+			logger.error("{}",e);
+		}
 	}
 
 	private List<Record> getLines(List<String> lines, String[] fields, String separator) {

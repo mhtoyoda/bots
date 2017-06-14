@@ -2,13 +2,11 @@ package com.fiveware.directories;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +22,7 @@ import com.fiveware.model.Record;
 @Component
 public class ReadInputFile {
 
+    public static final int N_LINES = 3;
     @Autowired
     private FileUtil fileUtil;
 
@@ -34,25 +33,34 @@ public class ReadInputFile {
         String[] fields = {"campo1","campo2"};
         List<Record> records = fileUtil.linesFrom(new File(path), fields, "|");
 
-        records
-                .stream()
-                .map(Record::getRecordMap)
-                .collect(Collectors.toList())
-                .stream().map(Map::values).forEach(consumerCollection());
+        //TODO Change constant N_LINES to implementation of IcaptorAgent's Instance Number
+        List<List<Record>> partition = Lists.partition(records, N_LINES);
+
+        partition.stream().forEach((r)-> sendListToQueue(r));
 
     }
 
-    private Consumer<Collection<Object>> consumerCollection() {
-        return v -> {
-            StringJoiner joiner = new StringJoiner("|");
-            v.forEach((valor) -> joiner.add((CharSequence) valor));
+    private void sendListToQueue(List<Record> _listPart) {
+        final List<String> lines = Lists.newArrayList();
 
-            MessageInputDictionary dictionary = new MessageInputDictionary(joiner.toString(),
-                    TypeMessage.INPUT_DICTIONARY,
-                    "branch:icaptor-58");
+        Consumer<List<Record>> listPart = records ->
+                records
+                        .stream()
+                        .map(Record::getRecordMap)
+                        .collect(Collectors.toList())
+                        .stream().map(Map::values).forEach(addLines(lines));
+        listPart.accept(_listPart);
 
-            producer.send("BOT", dictionary);
+        MessageInputDictionary dictionary = new MessageInputDictionary(lines,TypeMessage.INPUT_DICTIONARY,"branch:icaptor-58");
+        producer.send("BOT",dictionary);
+
+    }
+
+    private Consumer<Collection<Object>> addLines(List<String> lines) {
+        return  line -> {
+            final StringJoiner joiner = new StringJoiner("|");
+            line.forEach((column) -> joiner.add((CharSequence) column));
+            lines.add(joiner.toString());
         };
     }
-
 }
