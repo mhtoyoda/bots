@@ -10,10 +10,10 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fiveware.model.MessageInputDictionary;
+import com.fiveware.model.MessageBot;
 
 @Service("eventInputDictionaryReceiver")
-public class EventInputDictionaryReceiver implements Receiver<MessageInputDictionary> {
+public class EventInputDictionaryReceiver implements Receiver<MessageBot> {
 	
 	@Autowired
 	private RabbitTemplate rabbit;
@@ -24,11 +24,11 @@ public class EventInputDictionaryReceiver implements Receiver<MessageInputDictio
 		return  Objects.isNull(message) ? null : convert(message.getBody());
 	}
 	
-	private MessageInputDictionary convert(byte[] body) {
+	private MessageBot convert(byte[] body) {
 		ByteArrayInputStream in = new ByteArrayInputStream(body);
 		try {
 			ObjectInputStream is = new ObjectInputStream(in);
-			MessageInputDictionary readObject = (MessageInputDictionary) is.readObject();
+			MessageBot readObject = (MessageBot) is.readObject();
 			return readObject;
 		} catch (IOException | ClassNotFoundException e) {
 			return null;

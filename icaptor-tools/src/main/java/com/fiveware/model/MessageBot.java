@@ -8,17 +8,20 @@ import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
 @AutoProperty
-public class MessageInputDictionary implements Serializable {
+public class MessageBot implements Serializable {
 
 	private final List<String> line;
 	private final TypeMessage typeMessage;
 	private final String description;
+	private final MessageHeader messageHeader;
 
 
-	public MessageInputDictionary(List<String> line, TypeMessage typeMessage, String description) {
+
+	public MessageBot(List<String> line, TypeMessage typeMessage, String description, MessageHeader messageHeader) {
 		this.line = line;
 		this.typeMessage = typeMessage;
 		this.description = description;
+		this.messageHeader = messageHeader;
 	}
 
 	public TypeMessage getTypeMessage() {return typeMessage;}

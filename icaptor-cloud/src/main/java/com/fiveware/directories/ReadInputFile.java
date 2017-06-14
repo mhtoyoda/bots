@@ -2,19 +2,25 @@ package com.fiveware.directories;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+import com.fiveware.model.MessageHeader;
 import com.google.common.collect.Lists;
+import org.aspectj.weaver.tools.cache.SimpleCacheFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.file.FileUtil;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.TypeMessage;
-import com.fiveware.model.MessageInputDictionary;
+import com.fiveware.model.MessageBot;
 import com.fiveware.model.Record;
+
+import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 
 /**
  * Created by valdisnei on 13/06/17.
@@ -27,7 +33,7 @@ public class ReadInputFile {
     private FileUtil fileUtil;
 
     @Autowired
-    private Producer<MessageInputDictionary> producer;
+    private Producer<MessageBot> producer;
 
     public void readFile(final String path) throws IOException {
         String[] fields = {"campo1","campo2"};
@@ -36,11 +42,12 @@ public class ReadInputFile {
         //TODO Change constant N_LINES to implementation of IcaptorAgent's Instance Number
         List<List<Record>> partition = Lists.partition(records, N_LINES);
 
-        partition.stream().forEach((r)-> sendListToQueue(r));
+        partition.stream().forEach((r)-> sendListToQueue(r,
+                new MessageHeader(path,records.size(),0,0, 10L)));
 
     }
 
-    private void sendListToQueue(List<Record> _listPart) {
+    private void sendListToQueue(List<Record> _listPart, MessageHeader messageHeader) {
         final List<String> lines = Lists.newArrayList();
 
         Consumer<List<Record>> listPart = records ->
