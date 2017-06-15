@@ -14,9 +14,8 @@ public class MessageBot implements Serializable {
 	private final TypeMessage typeMessage;
 	private final String description;
 	private final MessageHeader messageHeader;
-
-
-
+	private List<String> lineResult;
+	
 	public MessageBot(List<String> line, TypeMessage typeMessage, String description, MessageHeader messageHeader) {
 		this.line = line;
 		this.typeMessage = typeMessage;
@@ -29,6 +28,10 @@ public class MessageBot implements Serializable {
 	public String getDescription() {return description;}
 
 	public List<String> getLine() {return line;}
+	
+	public List<String> getLineResult() {return lineResult;}
+
+	public void setLineResult(List<String> lineResult) {this.lineResult = lineResult;}
 
 	@Override
 	public String toString() {

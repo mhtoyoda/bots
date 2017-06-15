@@ -3,7 +3,6 @@ package com.fiveware.scheduler;
 import java.util.List;
 import java.util.Optional;
 
-import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,16 +14,16 @@ import com.fiveware.dao.ServerDAO;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
-import com.fiveware.model.MessageInputDictionary;
+import com.fiveware.model.MessageBot;
 import com.fiveware.pulling.BrokerPulling;
 
 @Component
-public class ServerProcessorScheduler extends BrokerPulling<MessageInputDictionary>{
+public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 
 	private static Logger log = LoggerFactory.getLogger(ServerProcessorScheduler.class);
 	
 	@Autowired
-	private Receiver<MessageInputDictionary> receiver;
+	private Receiver<MessageBot> receiver;
 	
 	@Autowired
 	private ServerDAO serverDAO;
@@ -59,16 +58,14 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageInputDictiona
 	 * Processa mensagem recebida do Broker
 	 */
 	@Override
-	public void processMessage(String botName, MessageInputDictionary obj) {
-		//DADOS FAKE
-		//FIXME substituir pelo (obj.getResult), contendo linhas do resultado do Bot
-		List<String> linesResult = Lists.newArrayList("Avenida Paulista, Centro, São Paulo, 03510-000");
+	public void processMessage(String botName, MessageBot obj) {
+		List<String> linesResult = obj.getLineResult();
 		log.debug("Total de Linhas resultado: {}", linesResult.size());
 		//FIXME Consolidar linhas de resultado para gerar o arquivo final
 	}
 
 	@Override
-	public Optional<MessageInputDictionary> receiveMessage(String queueName) {
+	public Optional<MessageBot> receiveMessage(String queueName) {
 		return Optional.ofNullable(receiver.receive(queueName));
 	}
 }

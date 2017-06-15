@@ -17,12 +17,11 @@ import com.fiveware.exception.ExceptionBot;
 import com.fiveware.loader.LoadFile;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Bot;
-import com.fiveware.model.MessageInputDictionary;
+import com.fiveware.model.MessageBot;
 import com.fiveware.pulling.BrokerPulling;
-import com.google.common.collect.Lists;
 
 @Component
-public class AgentBotProcessorScheduler extends BrokerPulling<MessageInputDictionary>{
+public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 
 	private static Logger log = LoggerFactory.getLogger(AgentBotProcessorScheduler.class);
 	
@@ -30,7 +29,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageInputDictio
 	private String nameAgent;
 	
 	@Autowired
-	private Receiver<MessageInputDictionary> receiver;
+	private Receiver<MessageBot> receiver;
 	
 	@Autowired
 	private AgentDAO agentDAO;
@@ -61,8 +60,8 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageInputDictio
 	 * Processa mensagem recebida do Broker
 	 */
 	@Override
-	public void processMessage(String botName, MessageInputDictionary obj) {
-		List<String> lines = Lists.newArrayList(obj.getLine());
+	public void processMessage(String botName, MessageBot obj) {
+		List<String> lines = obj.getLine();
 		try {
 			loadFile.executeLoad(botName, lines);
 			log.debug("[BOT]: {}", botName);
@@ -72,7 +71,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageInputDictio
 	}
 
 	@Override
-	public Optional<MessageInputDictionary> receiveMessage(String queueName) {
+	public Optional<MessageBot> receiveMessage(String queueName) {
 		return Optional.ofNullable(receiver.receive(queueName));
 	}
 }
