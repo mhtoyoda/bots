@@ -16,7 +16,7 @@ import com.fiveware.messaging.Receiver;
 import com.fiveware.messaging.TypeConsumerMessage;
 import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.MessageAgent;
-import com.fiveware.model.MessageInputDictionary;
+import com.fiveware.model.MessageBot;
 
 @Component
 public class EventsConsumerScheduler {
@@ -30,7 +30,7 @@ public class EventsConsumerScheduler {
 
 	@Autowired
 	@Qualifier("eventInputDictionaryReceiver")
-	private Receiver<MessageInputDictionary> receiver2;
+	private Receiver<MessageBot> receiver2;
 
 
 	@Autowired
@@ -48,7 +48,7 @@ public class EventsConsumerScheduler {
 			consumersMap.get(messageAgent.getTypeMessage().name()).process(messageAgent);
 		}
 
-		MessageInputDictionary dictionaryMessage = receiver2.receive("BOT");
+		MessageBot dictionaryMessage = receiver2.receive("BOT");
 		if(!Objects.isNull(dictionaryMessage))
 			consumersMap.get(TypeMessage.INPUT_DICTIONARY.name()).process(dictionaryMessage);
 	}

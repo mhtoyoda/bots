@@ -57,7 +57,6 @@
 			<groupId>icaptor-tools</groupId>
 			<artifactId>icaptor-tools</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-			<scope>runtime</scope>		
 		</dependency>
 	</dependencies>
 

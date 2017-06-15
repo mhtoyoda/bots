@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.exception.MessageBot;
+import com.fiveware.exception.MessageStatusBot;
 import com.fiveware.service.ServiceBot;
 
 /**
@@ -39,7 +39,7 @@ public class AgentController {
             obj = serviceBot.callBot(botName,endPoint,parameter);
         } catch (ExceptionBot e) {
             return ResponseEntity.badRequest().
-                    body(new MessageBot(HttpStatus.BAD_REQUEST.value(),e.getMessage()));
+                    body(new MessageStatusBot(HttpStatus.BAD_REQUEST.value(),e.getMessage()));
         }
 
         return ResponseEntity.ok(obj);
@@ -59,9 +59,9 @@ public class AgentController {
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<MessageBot> illegalArgumentExceptional(IllegalArgumentException e) {
+    public ResponseEntity<MessageStatusBot> illegalArgumentExceptional(IllegalArgumentException e) {
         return ResponseEntity.badRequest().
-                body(new MessageBot(HttpStatus.BAD_REQUEST.value(),e.getMessage()));
+                body(new MessageStatusBot(HttpStatus.BAD_REQUEST.value(),e.getMessage()));
     }
 }
 

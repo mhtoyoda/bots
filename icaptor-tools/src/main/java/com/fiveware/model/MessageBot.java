@@ -1,32 +1,34 @@
 package com.fiveware.model;
 
 import java.io.Serializable;
-import java.util.StringJoiner;
+import java.util.List;
 
 import com.fiveware.messaging.TypeMessage;
-import com.google.common.base.Joiner;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
 @AutoProperty
-public class MessageInputDictionary implements Serializable {
+public class MessageBot implements Serializable {
 
-	private final String line;
+	private final List<String> line;
 	private final TypeMessage typeMessage;
 	private final String description;
+	private final MessageHeader messageHeader;
 
 
-	public MessageInputDictionary(String line, TypeMessage typeMessage, String description) {
+
+	public MessageBot(List<String> line, TypeMessage typeMessage, String description, MessageHeader messageHeader) {
 		this.line = line;
 		this.typeMessage = typeMessage;
 		this.description = description;
+		this.messageHeader = messageHeader;
 	}
 
 	public TypeMessage getTypeMessage() {return typeMessage;}
 
 	public String getDescription() {return description;}
 
-	public String getLine() {return line;}
+	public List<String> getLine() {return line;}
 
 	@Override
 	public String toString() {
