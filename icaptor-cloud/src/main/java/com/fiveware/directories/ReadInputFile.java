@@ -58,7 +58,7 @@ public class ReadInputFile {
                         .stream().map(Map::values).forEach(addLines(lines));
         listPart.accept(_listPart);
 
-        MessageInputDictionary dictionary = new MessageInputDictionary(lines,TypeMessage.INPUT_DICTIONARY,"branch:icaptor-58");
+        MessageBot dictionary = new MessageBot(lines,TypeMessage.INPUT_DICTIONARY,"branch:icaptor-58",messageHeader);
         producer.send("BOT",dictionary);
 
     }

@@ -19,7 +19,7 @@ public class EventInputDictionaryReceiver implements Receiver<MessageBot> {
 	private RabbitTemplate rabbit;
 	
 	@Override
-	public MessageInputDictionary receive(String queue){
+	public MessageBot receive(String queue){
 		Message message = rabbit.receive(queue);
 		return  Objects.isNull(message) ? null : convert(message.getBody());
 	}
