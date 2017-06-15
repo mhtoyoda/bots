@@ -42,11 +42,14 @@ public class ReadInputFile {
         //TODO Change constant N_LINES to implementation of IcaptorAgent's Instance Number
         List<List<Record>> partition = Lists.partition(records, N_LINES);
 
+        AtomicInteger rangeChuncks = new AtomicInteger(0);
 
         partition
                 .stream()
-                .forEach((splitList)-> sendListToQueue(splitList,
-                                                       path,records.size(),new AtomicInteger(0)));
+                .forEach((splitList) -> {
+                    sendListToQueue(splitList,
+                            path, records.size(), rangeChuncks);
+                });
 
     }
 

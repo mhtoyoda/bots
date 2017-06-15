@@ -7,6 +7,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.dao.AgentDAO;
@@ -21,6 +22,7 @@ import com.fiveware.model.Server;
 import com.google.common.collect.Lists;
 
 @Component
+@PropertySource(ignoreResourceNotFound=true,value="classpath:icaptor-platform.properties")
 public class AgentConfig {
 
 	@Value("${agent}")

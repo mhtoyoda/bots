@@ -1,6 +1,9 @@
-package com.fiveware.directories;
+package com.fiveware.config.directories;
 
+import com.fiveware.config.agent.AgentConfig;
+import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.io.RunningWatchServiceRecursive;
+import com.fiveware.loader.JarConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,17 +18,20 @@ import java.nio.file.Path;
 @Service
 public class RunningReadFiles extends RunningWatchServiceRecursive {
 
-    @Value("${extension.input.file}")
+    @Value("${bot.extension.file}")
     private String extensionFile;
 
+    @Autowired
+    private JarConfiguration jarConfiguration;
 
     @Autowired
-    private ReadInputFile readInputFile;
+    private AgentConfig agentConfig;
 
     @Override
-    public void action(Path path) throws IOException {
+    public void action(Path path) throws IOException, AttributeLoadException {
         if (isValidTypeFile(path)) {
-            readInputFile.readFile(path.toFile().getAbsoluteFile().getPath());
+            jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());
+            agentConfig.saveAgentBot();
         }
     }
 

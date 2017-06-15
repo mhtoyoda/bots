@@ -16,6 +16,7 @@ public abstract class InitializeWatchService {
     @Autowired
     private MessageSource messageSource;
 
+
 	@Autowired
 	private RunningWatchServiceRecursive runningWatcher;
 
@@ -28,7 +29,7 @@ public abstract class InitializeWatchService {
 			public void run() {
 				runningWatcher.run(getWorkerDir());
 			}
-		}, "READ INPUT FILE: "+ getWorkerDir());
+		}, "FILES WATCHER: "+ getWorkerDir().toUpperCase());
 
 		thread.start();
 	}
