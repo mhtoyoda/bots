@@ -2,11 +2,16 @@ package com.fiveware.directories;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.fiveware.model.MessageHeader;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,7 +28,7 @@ import com.fiveware.model.Record;
 @Component
 public class ReadInputFile {
 
-    public static final int N_LINES = 3;
+    public static final int N_LINES = 2;
     @Autowired
     private FileUtil fileUtil;
 
@@ -38,29 +43,35 @@ public class ReadInputFile {
         List<List<Record>> partition = Lists.partition(records, N_LINES);
 
 
-        MessageHeader messageHeader = new MessageHeader.MessageHeaderBuilder(path, records.size())
-                .chuncksInitial(0)
-                .chuncksEnd(10)
-                .timeStamp(20000L).build();
-
-
-        partition.stream().forEach((r)-> sendListToQueue(r,messageHeader));
+        partition
+                .stream()
+                .forEach((splitList)-> sendListToQueue(splitList,
+                                                       path,records.size(),new AtomicInteger(0)));
 
     }
 
-    private void sendListToQueue(List<Record> _listPart, MessageHeader messageHeader) {
+    private void sendListToQueue(List<Record> recordList, String path, Integer size, AtomicInteger rangeChuncks) {
         final List<String> lines = Lists.newArrayList();
 
-        Consumer<List<Record>> listPart = records ->
+        Consumer<List<Record>> consumer = records ->
                 records
                         .stream()
                         .map(Record::getRecordMap)
                         .collect(Collectors.toList())
                         .stream().map(Map::values).forEach(convertMapToCSVLine(lines));
-        listPart.accept(_listPart);
+        consumer.accept(recordList);
 
-        MessageBot dictionary = new MessageBot(lines,TypeMessage.INPUT_DICTIONARY,"branch:icaptor-58",messageHeader);
-        producer.send("BOT",dictionary);
+        MessageHeader messageHeader = new MessageHeader
+                .MessageHeaderBuilder(path, size)
+                .chuncksInitial(rangeChuncks.get()+1)
+                .chuncksEnd(rangeChuncks.addAndGet(recordList.size()))
+                .timeStamp(System.currentTimeMillis())
+                .build();
+
+        MessageBot messageBot = new MessageBot(lines,TypeMessage.INPUT_DICTIONARY,
+                "branch:icaptor-58",messageHeader);
+
+        producer.send("BOT",messageBot);
 
     }
 
