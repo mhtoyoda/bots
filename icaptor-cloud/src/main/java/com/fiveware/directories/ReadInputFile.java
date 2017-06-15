@@ -2,15 +2,12 @@ package com.fiveware.directories;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalTime;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import com.fiveware.model.MessageHeader;
 import com.google.common.collect.Lists;
-import org.aspectj.weaver.tools.cache.SimpleCacheFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +16,6 @@ import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.MessageBot;
 import com.fiveware.model.Record;
-
-import static org.aspectj.weaver.tools.cache.SimpleCacheFactory.path;
 
 /**
  * Created by valdisnei on 13/06/17.
@@ -42,8 +37,14 @@ public class ReadInputFile {
         //TODO Change constant N_LINES to implementation of IcaptorAgent's Instance Number
         List<List<Record>> partition = Lists.partition(records, N_LINES);
 
-        partition.stream().forEach((r)-> sendListToQueue(r,
-                new MessageHeader(path,records.size(),0,0, 10L)));
+
+        MessageHeader messageHeader = new MessageHeader.MessageHeaderBuilder(path, records.size())
+                .chuncksInitial(0)
+                .chuncksEnd(10)
+                .timeStamp(20000L).build();
+
+
+        partition.stream().forEach((r)-> sendListToQueue(r,messageHeader));
 
     }
 
@@ -55,7 +56,7 @@ public class ReadInputFile {
                         .stream()
                         .map(Record::getRecordMap)
                         .collect(Collectors.toList())
-                        .stream().map(Map::values).forEach(addLines(lines));
+                        .stream().map(Map::values).forEach(convertMapToCSVLine(lines));
         listPart.accept(_listPart);
 
         MessageBot dictionary = new MessageBot(lines,TypeMessage.INPUT_DICTIONARY,"branch:icaptor-58",messageHeader);
@@ -63,7 +64,7 @@ public class ReadInputFile {
 
     }
 
-    private Consumer<Collection<Object>> addLines(List<String> lines) {
+    private Consumer<Collection<Object>> convertMapToCSVLine(List<String> lines) {
         return  line -> {
             final StringJoiner joiner = new StringJoiner("|");
             line.forEach((column) -> joiner.add((CharSequence) column));

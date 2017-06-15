@@ -1,10 +1,14 @@
 package com.fiveware.model;
 
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
+
 import java.io.Serializable;
 
 /**
  * Created by valdisnei on 14/06/17.
  */
+@AutoProperty
 public class MessageHeader implements Serializable{
     private final String pathFile;
     private final Integer totalLines;
@@ -12,7 +16,7 @@ public class MessageHeader implements Serializable{
     private final Integer chuncksEnd;
     private final Long timeStamp;
 
-    public MessageHeader(String pathFile, Integer totalLines, Integer chuncksInit, Integer chuncksEnd, Long timeStamp) {
+    private MessageHeader(String pathFile, Integer totalLines, Integer chuncksInit, Integer chuncksEnd, Long timeStamp) {
         this.pathFile = pathFile;
         this.totalLines = totalLines;
         this.chuncksInit = chuncksInit;
@@ -39,4 +43,45 @@ public class MessageHeader implements Serializable{
     public Long getTimeStamp() {
         return timeStamp;
     }
+
+    @Override
+    public String toString() {
+        return Pojomatic.toString(this);
+    }
+
+    public static class MessageHeaderBuilder implements Serializable{
+        private final String pathFile;
+        private final Integer totalLines;
+        private Integer chuncksInit;
+        private Integer chuncksEnd;
+        private  Long timeStamp;
+
+        public MessageHeaderBuilder(String pathFile, Integer totalLines) {
+            this.pathFile = pathFile;
+            this.totalLines = totalLines;
+        }
+
+
+        public MessageHeaderBuilder chuncksInitial(Integer chuncksInit){
+           this.chuncksInit=chuncksInit;
+           return this;
+        }
+
+        public MessageHeaderBuilder chuncksEnd(Integer chuncksEnd){
+            this.chuncksEnd=chuncksEnd;
+            return this;
+        }
+
+        public MessageHeaderBuilder timeStamp(Long timeStamp){
+            this.timeStamp=timeStamp;
+            return this;
+        }
+
+
+        public MessageHeader build(){
+            return new MessageHeader(pathFile,totalLines,chuncksInit,chuncksEnd,timeStamp);
+        }
+
+    }
+
 }
