@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -50,16 +49,16 @@ public class LoadFile {
 	private String workDir;
 
 	@SuppressWarnings("rawtypes")
-	public void executeLoad(String botName, File file)
+	public void executeLoad(String botName, List<String> lines)
 			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
 
-		logger.info("Init Import File {} - [BOT]: {}", file.getName(), botName);
+		logger.info("Init Import File - [BOT]: {}", botName);
 
 		Optional<BotClassLoaderContext> context = classLoaderConfig.getPropertiesBot(botName);
 		InputDictionaryContext inputDictionary = context.get().getInputDictionary();
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
-		List<Record> recordLines = fileUtil.linesFrom(file, fieldsInput, separatorInput);
+		List<Record> recordLines = fileUtil.linesFrom(lines, fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
 		for (Record line : recordLines) {
 			try {
@@ -76,6 +75,6 @@ public class LoadFile {
 			}
 		}
 
-		logger.info("End Import File {} - [BOT]: {}", file.getName(), botName);
+		logger.info("End Import File - [BOT]: {}", botName);
 	}
 }

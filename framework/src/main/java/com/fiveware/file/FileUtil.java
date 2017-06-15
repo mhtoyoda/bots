@@ -4,12 +4,17 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Scanner;
+import java.util.StringJoiner;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import com.google.common.base.Splitter;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +41,11 @@ public class FileUtil {
 			throw exception;
 		}
 
+		List<Record> lines = getLines(linhas, fields, separator);
+		return lines;
+	}
+	
+	public List<Record> linesFrom(List<String> linhas, String[] fields, String separator) throws IOException {
 		List<Record> lines = getLines(linhas, fields, separator);
 		return lines;
 	}
