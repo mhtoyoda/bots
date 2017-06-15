@@ -8,7 +8,6 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 
 import com.fiveware.exception.AttributeLoadException;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,8 @@ public abstract class RunningWatchServiceRecursive {
 
 
 
-    public abstract void postRegister(Path path) throws IOException;
-    public abstract boolean isValidFileType(Path file);
+    public abstract void action(Path path) throws IOException, AttributeLoadException;
+    public abstract boolean isValidTypeFile(Path file);
 
 
     public void run(String directory) {
@@ -43,7 +42,7 @@ public abstract class RunningWatchServiceRecursive {
 
     private void registerDir(Path path, WatchService watchService) throws IOException, AttributeLoadException {
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)){
-            postRegister(path);
+            action(path);
             return;
         }
 
@@ -76,7 +75,7 @@ public abstract class RunningWatchServiceRecursive {
                     // get complete path
                     path = parentPath.resolve(path);
 
-                    if (isValidFileType(path)) {
+                    if (isValidTypeFile(path)) {
                         registerDir(path, watchService);
                     }
                 }
@@ -84,7 +83,7 @@ public abstract class RunningWatchServiceRecursive {
                 if (watchEvent.kind() == StandardWatchEventKinds.ENTRY_DELETE) {
                     Path path = (Path) watchEvent.context();
                     // need to get parent path
-//                    if (isValidFileType(path))
+//                    if (isValidTypeFile(path))
 //                        jarConfiguration.removeBot(path.toString());
                 }
             }
