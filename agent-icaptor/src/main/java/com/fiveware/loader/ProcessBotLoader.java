@@ -1,8 +1,6 @@
 package com.fiveware.loader;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,23 +8,26 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
 import com.fiveware.file.FileUtil;
+import com.fiveware.messaging.Producer;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.InputDictionaryContext;
+import com.fiveware.model.MessageBot;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.Record;
 import com.fiveware.service.ServiceBot;
+import com.fiveware.util.ListJoinUtil;
 import com.fiveware.validate.Validate;
+import com.google.common.collect.Lists;
 
 @Component
-public class LoadFile {
+public class ProcessBotLoader {
 
-	Logger logger = LoggerFactory.getLogger(LoadFile.class);
+	Logger logger = LoggerFactory.getLogger(ProcessBotLoader.class);
 
 	@Autowired
 	private FileUtil fileUtil;
@@ -45,11 +46,14 @@ public class LoadFile {
 	@Autowired
 	private ClassLoaderRunner classLoaderRunner;
 
-	@Value("${worker.file}")
-	private String workDir;
-
+	@Autowired
+	private Producer<MessageBot> producer;
+	
+	@Autowired
+	private ListJoinUtil listJoin;
+	
 	@SuppressWarnings("rawtypes")
-	public void executeLoad(String botName, List<String> lines)
+	public void executeLoad(String botName, MessageBot obj)
 			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
 
 		logger.info("Init Import File - [BOT]: {}", botName);
@@ -58,23 +62,22 @@ public class LoadFile {
 		InputDictionaryContext inputDictionary = context.get().getInputDictionary();
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
-		List<Record> recordLines = fileUtil.linesFrom(lines, fieldsInput, separatorInput);
+		
+		List<Record> recordLines = fileUtil.linesFrom(obj.getLine(), fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
+		List<String> results = Lists.newArrayList();
 		for (Record line : recordLines) {
 			try {
 				String cep = (String) line.getValue("cep");
 				validate.validate(cep, classLoader);
 				OutTextRecord result = serviceBot.callBot(botName, cep);
-				fileUtil.writeFile(workDir + File.separator + context.get().getOutputDictionary().getNameFileOut(),
-						separatorInput, result);
+				listJoin.joinRecord(separatorInput, result, results);				
 			} catch (Exception e) {
-				logger.error("Unprocessed Record - Cause: " + e.getMessage());
-				HashMap[] hashMaps = {(HashMap) line.getRecordMap()};
-				fileUtil.writeFile(workDir + File.separator + context.get().getOutputDictionary().getNameFileOut(),
-						separatorInput, new OutTextRecord(hashMaps));
+				logger.error("Unprocessed Record - Cause: " + e.getMessage());				
 			}
 		}
-
+		obj.setLineResult(results);
+		producer.send(botName+"_OUT", obj);		
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
 }

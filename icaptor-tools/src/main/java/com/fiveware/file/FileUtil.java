@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.StringJoiner;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;

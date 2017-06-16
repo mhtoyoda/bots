@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import com.fiveware.dao.AgentDAO;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.loader.LoadFile;
+import com.fiveware.loader.ProcessBotLoader;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Bot;
 import com.fiveware.model.MessageBot;
@@ -35,7 +35,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	private AgentDAO agentDAO;
 	
 	@Autowired
-	private LoadFile loadFile;
+	private ProcessBotLoader loadFile;
 	
 	@Scheduled(fixedDelay = 60000)
 	public void process(){
@@ -60,10 +60,9 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	 * Processa mensagem recebida do Broker
 	 */
 	@Override
-	public void processMessage(String botName, MessageBot obj) {
-		List<String> lines = obj.getLine();
+	public void processMessage(String botName, MessageBot obj) {		
 		try {
-			loadFile.executeLoad(botName, lines);
+			loadFile.executeLoad(botName, obj);
 			log.debug("[BOT]: {}", botName);
 		} catch (ClassNotFoundException | IOException | AttributeLoadException | ExceptionBot e) {
 			log.error("Error - {}", e.getMessage());

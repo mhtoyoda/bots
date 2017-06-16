@@ -15,7 +15,7 @@ public class QueueCreator {
 	
 	public void createQueue(String queueName){
 		Queue queueIn = declareQueue(queueName+"_IN");
-		Queue queueOut = declareQueue(queueName+"_Out");
+		Queue queueOut = declareQueue(queueName+"_OUT");
 		
 		TopicExchange exchange = new TopicExchange("file-exchange", true, false);
 		rabbitAdmin.declareExchange(exchange);
