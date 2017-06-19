@@ -10,7 +10,7 @@
     </appender>
 
 
-    <if condition='"product".equals("${spring.profiles.active}")'>
+    <if condition='"production".equals("${spring.profiles.active}")'>
         <then>
             <logger name="com.fiveware" level="INFO" additivity="false">
                 <appender-ref ref="CONSOLE" />

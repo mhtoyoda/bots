@@ -119,7 +119,7 @@ public class FileUtil {
 
     public void writeFile(List<String> linesResult, MessageBot obj) {
 
-        String path = obj.getPathFile().replace(workDir,workerFileRead);
+        String path = workerFileRead + File.separator + obj.getPathFile();
 
         File fileOut = new File( path);
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut, true))) {
@@ -127,6 +127,8 @@ public class FileUtil {
             linesResult.forEach((line)->{
                 try {
                     bw.write(line);
+                    bw.newLine();
+
                 } catch (IOException e) {
                     logger.error("{}", e);
                 }

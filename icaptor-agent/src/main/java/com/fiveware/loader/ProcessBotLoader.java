@@ -72,7 +72,7 @@ public class ProcessBotLoader {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());				
 			}
 		}
-		obj.setLineResult(results);
+		obj.getLineResult().addAll(results);
 		producer.send(botName+"_OUT", obj);		
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
