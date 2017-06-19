@@ -3,9 +3,13 @@ server:
   host: localhost
   port: 8082
 
-worker.in.file: ${HOME}/.icaptor-in-file
+broker:
+  user: guest
+  pass: guest
+  host: 54.224.242.0
 
-worker.read.file: ${HOME}/.icaptor-read-file
-
-extension.input.file: .csv
+io:
+  worker.dir: ${HOME}/.icaptor-agent
+  worker.file: ${HOME}/.icaptor-out-file
+  file-read: ${HOME}/.icaptor-read-file
 

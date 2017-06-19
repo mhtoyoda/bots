@@ -15,10 +15,10 @@ import java.io.File;
 public class StartReadFiles extends InitializeWatchService {
 
 
-	@Value("${worker.dir}")
+	@Value("${io.worker.dir}")
 	private String workerDir;
 
-	@Value("${worker.file}")
+	@Value("${io.worker.file}")
 	private String workDirFileOut;
 
 

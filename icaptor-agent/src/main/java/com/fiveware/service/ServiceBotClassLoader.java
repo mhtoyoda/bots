@@ -44,9 +44,6 @@ public  class ServiceBotClassLoader<T> {
     @Autowired
     private MessageSource messageSource;
 
-    @Value("${worker.dir}")
-    private String workdir;
-
 
     public OutTextRecord executeMainClass(String nameBot, T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ExceptionBot {
         Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);

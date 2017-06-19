@@ -10,7 +10,7 @@ public abstract class BrokerPulling<T> {
 	
 	public abstract Optional<T> receiveMessage(String queueName);
 	
-	public void pullMessage(String botName, String queue){
+	protected void pullMessage(String botName, String queue){
 		if(canPullingMessage(queue)){
 			Optional<T> obj = receiveMessage(queue);
 			obj.ifPresent(message -> {

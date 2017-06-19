@@ -1,8 +1,7 @@
 package com.fiveware.directories;
 
+import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.io.RunningWatchServiceRecursive;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -15,22 +14,14 @@ import java.nio.file.Path;
 @Service
 public class RunningReadFiles extends RunningWatchServiceRecursive {
 
-    @Value("${extension.input.file}")
-    private String extensionFile;
 
-
-    @Autowired
-    private ReadInputFile readInputFile;
 
     @Override
-    public void action(Path path) throws IOException {
-        if (isValidTypeFile(path)) {
-            readInputFile.readFile(path.toFile().getAbsoluteFile().getPath());
-        }
+    public void action(Path path) throws IOException, AttributeLoadException {
     }
 
     @Override
     public boolean isValidTypeFile(Path file) {
-        return (file.toString().endsWith(extensionFile));
+        return false;
     }
 }

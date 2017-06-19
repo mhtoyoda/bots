@@ -4,6 +4,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+import com.fiveware.io.ReadInputFile;
+import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.messaging.Producer;
+import com.fiveware.messaging.TypeMessage;
+import com.fiveware.model.BotClassLoaderContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +24,8 @@ import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Bot;
 import com.fiveware.model.MessageBot;
 import com.fiveware.pulling.BrokerPulling;
+
+import static java.util.Collections.EMPTY_LIST;
 
 @Component
 public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{

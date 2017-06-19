@@ -16,7 +16,8 @@ public class MessageHeader implements Serializable{
     private final Integer chuncksEnd;
     private final Long timeStamp;
 
-    private MessageHeader(String pathFile, Integer totalLines, Integer chuncksInit, Integer chuncksEnd, Long timeStamp) {
+    private MessageHeader(String pathFile, Integer totalLines, Integer chuncksInit, Integer chuncksEnd,
+                          Long timeStamp) {
         this.pathFile = pathFile;
         this.totalLines = totalLines;
         this.chuncksInit = chuncksInit;
@@ -79,7 +80,8 @@ public class MessageHeader implements Serializable{
 
 
         public MessageHeader build(){
-            return new MessageHeader(pathFile,totalLines,chuncksInit,chuncksEnd,timeStamp);
+            return new MessageHeader(pathFile,totalLines,chuncksInit,chuncksEnd,
+                    timeStamp);
         }
 
     }

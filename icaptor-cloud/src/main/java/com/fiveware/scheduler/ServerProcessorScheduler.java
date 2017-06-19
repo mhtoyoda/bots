@@ -3,9 +3,11 @@ package com.fiveware.scheduler;
 import java.util.List;
 import java.util.Optional;
 
+import com.fiveware.io.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -22,19 +24,19 @@ import com.fiveware.pulling.BrokerPulling;
 public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 
 	private static Logger log = LoggerFactory.getLogger(ServerProcessorScheduler.class);
-	
+
 	@Autowired
 	private Receiver<MessageBot> receiver;
-	
+
 	@Autowired
 	private ServerDAO serverDAO;
-	
+
 	@Autowired
 	private AgentDAO agentDAO;
-	
+
 	@Autowired
 	private ServerConfig serverConfig;
-	
+
 	@Scheduled(fixedDelay = 60000)
 	public void process(){
 		List<Agent> agents = serverDAO.getAllAgents(serverConfig.getServer().getName());
@@ -43,15 +45,15 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 			List<Bot> bots = agentDAO.findBotsByAgent(agent.getNameAgent());
 			bots.forEach(bot -> {
 				String botName = bot.getNameBot();
-				String nameQueue = botName+"_OUT";			 
+				String nameQueue = botName+"_OUT";
 				pullMessage(botName, nameQueue);
 			});
-		});		
+		});
 	}
-	
+
 	/**
 	 * Validar regras de bloqueio para pulling de fila
-	 * 
+	 *
 	 */
 	@Override
 	public boolean canPullingMessage(String queue) {
@@ -72,4 +74,5 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	public Optional<MessageBot> receiveMessage(String queueName) {
 		return Optional.ofNullable(receiver.receive(queueName));
 	}
+
 }

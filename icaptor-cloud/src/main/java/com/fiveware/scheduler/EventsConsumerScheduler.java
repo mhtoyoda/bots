@@ -48,8 +48,8 @@ public class EventsConsumerScheduler {
 			consumersMap.get(messageAgent.getTypeMessage().name()).process(messageAgent);
 		}
 
-		MessageBot dictionaryMessage = receiver2.receive("BOT");
-		if(!Objects.isNull(dictionaryMessage))
-			consumersMap.get(TypeMessage.INPUT_DICTIONARY.name()).process(dictionaryMessage);
+//		MessageBot dictionaryMessage = receiver2.receive("BOT");
+//		if(!Objects.isNull(dictionaryMessage))
+//			consumersMap.get(TypeMessage.INPUT_DICTIONARY.name()).process(dictionaryMessage);
 	}
 }

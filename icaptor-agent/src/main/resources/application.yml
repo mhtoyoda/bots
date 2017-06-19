@@ -1,15 +1,22 @@
-
-server.port: 8081
-
-worker.dir: ${HOME}/.icaptor-agent
-worker.file: ${HOME}/.icaptor-out-file
-
-bot.extension.file: .jar
-
+server.port: ${PORT:${SERVER_PORT:0}}
 
 spring.http:
     multipart:
         max-file-size: 1024MB
         max-request-size: 1024MB
 
+server-icaptor: serverTeste
 host: localhost:8082
+agent: agentTeste-1
+ip: 127.0.0.1
+
+
+broker:
+  user: guest
+  pass: guest
+  host: 54.224.242.0
+
+io:
+  worker.dir: ${HOME}/.icaptor-agent
+  worker.file: ${HOME}/.icaptor-out-file
+  file-read: ${HOME}/.icaptor-read-file

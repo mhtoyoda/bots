@@ -34,9 +34,9 @@ public abstract class InitializeWatchService {
 		thread.start();
 	}
 
-	public abstract String getWorkerDir();
+	protected abstract String getWorkerDir();
 
-	public abstract void readFiles();
+	protected abstract void readFiles();
 
 
 

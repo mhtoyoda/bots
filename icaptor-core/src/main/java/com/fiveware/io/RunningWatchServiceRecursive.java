@@ -22,10 +22,8 @@ public abstract class RunningWatchServiceRecursive {
 
     private static final Map<WatchKey, Path> keyPathMap = new HashMap<>();
 
-
-
-    public abstract void action(Path path) throws IOException, AttributeLoadException;
-    public abstract boolean isValidTypeFile(Path file);
+    protected abstract void action(Path path) throws IOException, AttributeLoadException;
+    protected abstract boolean isValidTypeFile(Path file);
 
 
     public void run(String directory) {

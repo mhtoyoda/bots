@@ -18,7 +18,7 @@ import java.nio.file.Path;
 @Service
 public class RunningReadFiles extends RunningWatchServiceRecursive {
 
-    @Value("${bot.extension.file}")
+    @Value("${io.bot.extension.file}")
     private String extensionFile;
 
     @Autowired

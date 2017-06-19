@@ -20,7 +20,7 @@ public class BotJarOutPutStream {
     Logger logger = LoggerFactory.getLogger(BotJarOutPutStream.class);
 
 
-    @Value("${worker.dir}")
+    @Value("${io.worker.dir}")
     private String workDir;
 
     public void upLoad(MultipartFile bot) {

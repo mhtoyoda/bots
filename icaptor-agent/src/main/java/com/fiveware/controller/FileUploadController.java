@@ -22,8 +22,6 @@ public class FileUploadController {
 	@Autowired
 	private BotJarOutPutStream botJarOutPutStream;
 
-
-
 	@RequestMapping(method = RequestMethod.POST, produces = {MediaType.APPLICATION_JSON_VALUE})
 	public String upload(@RequestParam("file") MultipartFile[] file) {
 

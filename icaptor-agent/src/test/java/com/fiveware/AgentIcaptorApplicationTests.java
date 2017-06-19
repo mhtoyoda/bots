@@ -30,7 +30,7 @@ public class AgentIcaptorApplicationTests {
 	@LocalServerPort
 	private int port;
 
-	@Value("${worker.dir}")
+	@Value("${io.worker.dir}")
 	private String workDir;
 
 	RequestSpecification consultaCEP = null;

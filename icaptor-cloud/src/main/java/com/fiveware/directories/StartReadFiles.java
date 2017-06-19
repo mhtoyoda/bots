@@ -1,13 +1,12 @@
 package com.fiveware.directories;
 
-import java.io.File;
-
+import com.fiveware.io.InitializeWatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.io.InitializeWatchService;
+import java.io.File;
 
 /**
  * Created by valdisnei on 30/05/17.
@@ -16,22 +15,36 @@ import com.fiveware.io.InitializeWatchService;
 public class StartReadFiles extends InitializeWatchService {
 
 
-    @Value("${worker.in.file}")
-    private String workerInFile;
+
+	@Value("${io.worker.file}")
+	private String workerDir;
+
+	@Value("${io.file-read}")
+	private String workerFileRead;
+
 
 	@Autowired
 	private MessageSource messageSource;
 
 	@Override
 	public String getWorkerDir() {
-		return this.workerInFile;
+		return this.workerDir;
 	}
 
 	@Override
 	public void readFiles() {
-		if (!new File(workerInFile).exists()) {
-			if (!new File(workerInFile).mkdirs())
-				throw new RuntimeException(messageSource.getMessage("create.workerDir", new Object[]{workerInFile}, null));
+		if (!new File(workerDir).exists()) {
+			if (!new File(workerDir).mkdirs())
+				throw new RuntimeException(
+						messageSource.getMessage("create.workerDir",
+								new Object[]{workerDir}, null));
+		}
+
+		if (!new File(workerFileRead).exists()) {
+			if (!new File(workerFileRead).mkdirs())
+				throw new RuntimeException(
+						messageSource.getMessage("create.workerDirFileOut",
+								new Object[]{workerFileRead}, null));
 		}
 	}
 }
