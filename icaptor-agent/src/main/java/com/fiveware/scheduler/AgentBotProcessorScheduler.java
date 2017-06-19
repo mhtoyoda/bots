@@ -44,7 +44,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Autowired
 	private ProcessBotLoader processBotLoader;
 	
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process(){
 		List<Bot> bots = agentDAO.findBotsByAgent(nameAgent);
 		bots.forEach(bot -> {

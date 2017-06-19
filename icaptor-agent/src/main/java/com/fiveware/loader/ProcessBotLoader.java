@@ -1,9 +1,14 @@
 package com.fiveware.loader;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Maps;
+import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,10 +49,10 @@ public class ProcessBotLoader {
 
 	@Autowired
 	private Producer<MessageBot> producer;
-	
+
 	@Autowired
 	private ListJoinUtil listJoin;
-	
+
 	@SuppressWarnings("rawtypes")
 	public void executeLoad(String botName, MessageBot obj)
 			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
@@ -58,22 +63,27 @@ public class ProcessBotLoader {
 		InputDictionaryContext inputDictionary = context.get().getInputDictionary();
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
-		
+
 		List<Record> recordLines = fileUtil.linesFrom(obj.getLine(), fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
 		List<String> results = Lists.newArrayList();
 		for (Record line : recordLines) {
+
+			OutTextRecord result = null;
 			try {
 				String cep = (String) line.getValue("cep");
 				validate.validate(cep, classLoader);
-				OutTextRecord result = serviceBot.callBot(botName, cep);
-				listJoin.joinRecord(separatorInput, result, results);				
+				result = serviceBot.callBot(botName, cep);
 			} catch (Exception e) {
-				logger.error("Unprocessed Record - Cause: " + e.getMessage());				
+				logger.error("Unprocessed Record - Cause: " + e.getMessage());
+			} finally {
+				System.out.println("OutTextRecord.EMPTY_RECORD = " + OutTextRecord.EMPTY_RECORD);
+				listJoin.joinRecord(separatorInput, Objects.isNull(result)?OutTextRecord.EMPTY_RECORD:result,
+						results);
 			}
 		}
 		obj.getLineResult().addAll(results);
-		producer.send(botName+"_OUT", obj);		
+		producer.send(botName + "_OUT", obj);
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
 
