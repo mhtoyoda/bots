@@ -1,4 +1,6 @@
 server:
+  name: icaptor-server
+  host: localhost
   port: 8082
 
 worker.in.file: ${HOME}/.icaptor-in-file
