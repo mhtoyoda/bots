@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 public class AgentIcaptorApplication {
 	
 	public static void main(String[] args) {
-		SpringApplication.run(AgentIcaptorApplication.class, args);		
+		SpringApplication.run(AgentIcaptorApplication.class, args);	
 	}
 
 }

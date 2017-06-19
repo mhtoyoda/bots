@@ -35,7 +35,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	private AgentDAO agentDAO;
 	
 	@Autowired
-	private ProcessBotLoader loadFile;
+	private ProcessBotLoader processBotLoader;
 	
 	@Scheduled(fixedDelay = 60000)
 	public void process(){
@@ -62,7 +62,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Override
 	public void processMessage(String botName, MessageBot obj) {		
 		try {
-			loadFile.executeLoad(botName, obj);
+			processBotLoader.executeLoad(botName, obj);
 			log.debug("[BOT]: {}", botName);
 		} catch (ClassNotFoundException | IOException | AttributeLoadException | ExceptionBot e) {
 			log.error("Error - {}", e.getMessage());

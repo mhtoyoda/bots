@@ -18,4 +18,8 @@ public interface ServerDAO extends CrudRepository<Server, Long>{
 	
 	@Query("SELECT a FROM Server s JOIN s.agents a WHERE s.name = :name")
 	List<Agent> getAllAgents(@Param("name") String name);
+	
+	@Query("SELECT a FROM Server s JOIN s.agents a JOIN a.bots b WHERE s.name = :name AND b.nameBot = :nameBot AND b.endpoint = :endpoint")
+	Optional<List<Agent>> getAllAgentsByBotName(@Param("name") String name, @Param("nameBot") String nameBot,
+												@Param("endpoint") String endpoint);
 }

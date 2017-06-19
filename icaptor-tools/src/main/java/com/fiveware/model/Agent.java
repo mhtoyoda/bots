@@ -27,6 +27,9 @@ public class Agent {
 	@Column(name = "ipAgent")
 	private String ip;
 	
+	@Column(name = "portAgent")
+	private int port;
+	
 	@ManyToOne
 	@JoinColumn(name = "serverId")
 	private Server server;
@@ -66,6 +69,14 @@ public class Agent {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+	
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 
 	public Server getServer() {

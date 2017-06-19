@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.ServerConfig;
 import com.fiveware.dao.AgentDAO;
 import com.fiveware.dao.ServerDAO;
 import com.fiveware.messaging.Receiver;
@@ -31,9 +32,12 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Autowired
 	private AgentDAO agentDAO;
 	
+	@Autowired
+	private ServerConfig serverConfig;
+	
 	@Scheduled(fixedDelay = 60000)
 	public void process(){
-		List<Agent> agents = serverDAO.getAllAgents("serverTeste");
+		List<Agent> agents = serverDAO.getAllAgents(serverConfig.getServer().getName());
 		agents.forEach(agent -> {
 			log.info("Pulling Message [Agent]: {}", agent.getNameAgent());
 			List<Bot> bots = agentDAO.findBotsByAgent(agent.getNameAgent());

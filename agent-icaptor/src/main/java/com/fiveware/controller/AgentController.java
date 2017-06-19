@@ -30,7 +30,6 @@ public class AgentController {
     @Qualifier("rest")
     public ServiceBot serviceBot;
 
-
     @GetMapping("/{botName}/{endPoint}/{parameter}")
     public ResponseEntity<Object> getBot(@PathVariable String botName,@PathVariable String endPoint,
                                          @PathVariable Object parameter,HttpServletRequest request) {

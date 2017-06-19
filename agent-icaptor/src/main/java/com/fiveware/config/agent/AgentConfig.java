@@ -36,6 +36,9 @@ public class AgentConfig {
 
 	@Value("${host}")
 	String host;
+	
+	@Value("${port}")
+	int port;
 
 	@Autowired
 	@Qualifier("mapClassLoaderConfig")
@@ -98,6 +101,7 @@ public class AgentConfig {
 		Agent agent = new Agent();
 		agent.setIp(ip);
 		agent.setNameAgent(agentName);
+		agent.setPort(port);
 		agent.setServer(server);
 		return agentDAO.save(agent);
 	}
