@@ -1,6 +1,7 @@
 package com.fiveware.io;
 
 import com.fiveware.dao.AgentDAO;
+import com.fiveware.util.FileUtil;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.MessageBot;
@@ -8,7 +9,6 @@ import com.fiveware.model.MessageHeader;
 import com.fiveware.model.Record;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -80,8 +80,8 @@ public class ReadInputFile {
                 .timeStamp(System.currentTimeMillis())
                 .build();
 
-        MessageBot messageBot = new MessageBot(lines, Lists.newArrayList(), TypeMessage.INPUT_DICTIONARY,
-                "branch:icaptor-58", messageHeader, path);
+        MessageBot messageBot = new MessageBot(lines, Lists.newArrayList(),
+                TypeMessage.INPUT_DICTIONARY,"", messageHeader, path);
 
         producer.send(queueName, messageBot);
 

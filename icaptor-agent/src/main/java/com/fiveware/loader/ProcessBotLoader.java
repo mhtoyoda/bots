@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.file.FileUtil;
+import com.fiveware.util.FileUtil;
 import com.fiveware.messaging.Producer;
 import com.fiveware.model.*;
 import com.fiveware.service.ServiceBot;

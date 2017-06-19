@@ -30,4 +30,7 @@ public class ListJoinUtil {
 		list.forEach((v) -> joiner.add((CharSequence) v));
 		results.add(joiner.toString());
 	}
+
+
+
 }

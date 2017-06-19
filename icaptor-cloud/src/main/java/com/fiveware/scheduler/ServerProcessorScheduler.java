@@ -3,11 +3,11 @@ package com.fiveware.scheduler;
 import java.util.List;
 import java.util.Optional;
 
-import com.fiveware.io.FileUtil;
+import com.fiveware.util.FileUtil;
+import com.fiveware.util.ListJoinUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +36,10 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 
 	@Autowired
 	private ServerConfig serverConfig;
+
+
+	@Autowired
+	private FileUtil fileUtil;
 
 	@Scheduled(fixedDelay = 60000)
 	public void process(){
@@ -68,6 +72,8 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 		List<String> linesResult = obj.getLineResult();
 		log.debug("Total de Linhas resultado: {}", linesResult.size());
 		//FIXME Consolidar linhas de resultado para gerar o arquivo final
+
+		fileUtil.writeFile(linesResult,obj);
 	}
 
 	@Override
