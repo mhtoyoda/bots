@@ -1,10 +1,8 @@
 package com.fiveware.loader;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Supplier;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Maps;
@@ -13,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
@@ -52,6 +51,11 @@ public class ProcessBotLoader {
 
 	@Autowired
 	private ListJoinUtil listJoin;
+	
+	
+	@Autowired
+	private MessageSource messageSource;
+	private Supplier<? extends Map<String, Object>[]> notFound;
 
 	@SuppressWarnings("rawtypes")
 	public void executeLoad(String botName, MessageBot obj)
@@ -66,25 +70,42 @@ public class ProcessBotLoader {
 
 		List<Record> recordLines = fileUtil.linesFrom(obj.getLine(), fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
-		List<String> results = Lists.newArrayList();
+
+		List<String> listResults = Lists.newArrayList();
 		for (Record line : recordLines) {
 
 			OutTextRecord result = null;
+
+			Object cep = line.getValue("cep");
+
 			try {
-				String cep = (String) line.getValue("cep");
 				validate.validate(cep, classLoader);
-				result = serviceBot.callBot(botName, cep);
+
+				OutTextRecord outTextRecord = serviceBot.callBot(botName, cep);
+
+				result =  Arrays.asList(outTextRecord.getMap()).get(0)==null?getNotFound(cep).get():outTextRecord;
+
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());
 			} finally {
-				System.out.println("OutTextRecord.EMPTY_RECORD = " + OutTextRecord.EMPTY_RECORD);
-				listJoin.joinRecord(separatorInput, Objects.isNull(result)?OutTextRecord.EMPTY_RECORD:result,
-						results);
+				listJoin.joinRecord(separatorInput, result, listResults);
 			}
 		}
-		obj.getLineResult().addAll(results);
+		obj.getLineResult().addAll(listResults);
 		producer.send(botName + "_OUT", obj);
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
 
+	public Supplier<OutTextRecord> getNotFound(Object parameter) {
+		Supplier<OutTextRecord> supplier = new Supplier<OutTextRecord>() {
+			@Override
+			public OutTextRecord get() {
+				String message = messageSource.getMessage("result.bot.notFound", new Object[]{parameter}, null);
+				HashMap<String, Object> notFound = new HashMap<>();
+				notFound.put("registro", message);
+				return new OutTextRecord(new HashMap[]{notFound});
+			}
+		};
+		return supplier;
+	}
 }
