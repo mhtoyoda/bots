@@ -6,10 +6,10 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
 @PropertySource(ignoreResourceNotFound=true,value="classpath:icaptor-platform.properties")
-public class AgentIcaptorApplication {
+public class IcaptorAgentApplication {
 	
 	public static void main(String[] args) {
-		SpringApplication.run(AgentIcaptorApplication.class, args);	
+		SpringApplication.run(IcaptorAgentApplication.class, args);	
 	}
 
 }

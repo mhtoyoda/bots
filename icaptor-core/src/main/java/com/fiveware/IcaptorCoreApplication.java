@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class IcaptorToolsApplication {
+public class IcaptorCoreApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(IcaptorToolsApplication.class, args);
+		SpringApplication.run(IcaptorCoreApplication.class, args);
 	}
 }
