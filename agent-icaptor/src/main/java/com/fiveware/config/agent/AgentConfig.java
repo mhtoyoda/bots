@@ -6,8 +6,6 @@ import java.util.Optional;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.dao.AgentDAO;
@@ -22,23 +20,10 @@ import com.fiveware.model.Server;
 import com.google.common.collect.Lists;
 
 @Component
-@PropertySource(ignoreResourceNotFound=true,value="classpath:icaptor-platform.properties")
 public class AgentConfig {
 
-	@Value("${agent}")
-	String agentName;
-
-	@Value("${ip}")
-	String ip;
-
-	@Value("${server}")
-	String server;
-
-	@Value("${host}")
-	String host;
-	
-	@Value("${port}")
-	int port;
+	@Autowired
+	private AgentConfigProperties data;
 
 	@Autowired
 	@Qualifier("mapClassLoaderConfig")
@@ -94,26 +79,26 @@ public class AgentConfig {
 	}
 
 	private Agent getAgent(Server server) {
-		Optional<Agent> optional = agentDAO.findByNameAgent(agentName);
+		Optional<Agent> optional = agentDAO.findByNameAgent(data.getAgentName());
 		if (optional.isPresent()) {
 			return optional.get();
 		}
 		Agent agent = new Agent();
-		agent.setIp(ip);
-		agent.setNameAgent(agentName);
-		agent.setPort(port);
+		agent.setIp(data.getIp());
+		agent.setNameAgent(data.getAgentName());
+		agent.setPort(data.getPort());
 		agent.setServer(server);
 		return agentDAO.save(agent);
 	}
 
 	private Server getServer() {
-		Optional<Server> optional = serverDAO.findByName(server);
+		Optional<Server> optional = serverDAO.findByName(data.getServer());
 		if (optional.isPresent()) {
 			return optional.get();
 		}
 		Server serverInfo = new Server();
-		serverInfo.setName(server);
-		serverInfo.setHost(host);
+		serverInfo.setName(data.getServer());
+		serverInfo.setHost(data.getHost());
 		return serverDAO.save(serverInfo);
 	}
 }
