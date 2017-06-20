@@ -72,8 +72,8 @@
 		</dependency>
 
 		<dependency>
-			<groupId>icaptor-tools</groupId>
-			<artifactId>icaptor-tools</artifactId>
+			<groupId>icaptor-core</groupId>
+			<artifactId>icaptor-core</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 			<scope>compile</scope>
 		</dependency>
