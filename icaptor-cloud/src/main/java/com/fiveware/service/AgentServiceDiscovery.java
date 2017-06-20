@@ -19,7 +19,8 @@ public class AgentServiceDiscovery implements ServiceDiscovery {
 	@Override
 	public String getUrlService(String serverName, String nameBot, String endpoint) throws AgentBotNotFoundException {
 		Optional<List<Agent>> agents = serverDAO.getAllAgentsByBotName(serverName, nameBot, endpoint);
-		if(agents.isPresent()){
+		Integer size = agents.map(List::size).orElse(0);
+		if(size > 0){
 			Agent agent = getAgent(agents.get());
 			String pattern = "http://%s:%d/api/%s/%s";			
 			return String.format(pattern, agent.getIp(), agent.getPort(), nameBot, endpoint);
