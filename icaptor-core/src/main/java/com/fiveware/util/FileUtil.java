@@ -44,6 +44,12 @@ public class FileUtil {
 		return lines;
 	}
 
+
+	public List<Record> linesFrom(List<String> linhas, String[] fields, String separator) throws IOException {
+		List<Record> lines = getLines(linhas, fields, separator);
+		return lines;
+	}
+
 	private void buildScanner(InputStream file, List<String> linhas) {
 
 		Scanner scanner = new Scanner(file);
@@ -55,31 +61,6 @@ public class FileUtil {
 		scanner.close();
 	}
 
-	public List<Record> linesFrom(List<String> linhas, String[] fields, String separator) throws IOException {
-		List<Record> lines = getLines(linhas, fields, separator);
-		return lines;
-	}
-
-	public void writeFile(String fileNameOut, String separator, OutTextRecord result) throws IOException {
-		File fileOut = new File(fileNameOut);
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut, true))) {
-
-			List<Map<String, Object>> collect = getMaps(result);
-
-			collect.stream().map(Map::values).forEach(v -> consumer(v, separator, bw));
-		}
-	}
-
-
-	private void consumer(Collection<Object> list, String separator, BufferedWriter bw) {
-		StringJoiner joiner = addJoiner(separator, list);
-		try {
-			bw.write(joiner.toString());
-			bw.newLine();
-		} catch (IOException e) {
-			logger.error("{}", e);
-		}
-	}
 
 	private List<Record> getLines(List<String> lines, String[] fields, String separator) {
 		List<Record> recordsLines = Lists.newArrayList();
@@ -97,34 +78,6 @@ public class FileUtil {
 		return recordsLines;
 	}
 
-	private List<Map<String, Object>> getMaps(OutTextRecord result) {
-		return Optional
-				.ofNullable(Arrays.stream(result.getMap()).collect(Collectors.toList()))
-				.orElse(Collections.emptyList());
-	}
-
-
-	private StringJoiner addJoiner(String separator, Collection<Object> v) {
-		StringJoiner joiner = new StringJoiner(separator);
-		v.forEach(valor -> joiner.add((CharSequence) valor));
-		return joiner;
-	}
-
-
-	public void addResult(MessageBot messageBot, OutTextRecord result, String separatorInput) {
-
-		List<Map<String, Object>> collect = getMaps(result);
-
-		List<String> lines = Lists.newArrayList();
-
-		collect.stream().map(Map::values).forEach(v -> {
-			StringJoiner joiner = addJoiner(separatorInput, v);
-			lines.add(joiner.toString());
-		});
-
-		messageBot.getLineResult().addAll(lines);
-
-	}
 
 	public void writeFile(List<String> linesResult, MessageBot obj) {
 

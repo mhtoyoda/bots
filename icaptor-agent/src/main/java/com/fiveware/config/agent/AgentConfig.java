@@ -86,7 +86,7 @@ public class AgentConfig {
 		Agent agent = new Agent();
 		agent.setIp(data.getIp());
 		agent.setNameAgent(data.getAgentName());
-		agent.setPort(data.getPort());
+		agent.setPort(0);
 		agent.setServer(server);
 		return agentDAO.save(agent);
 	}

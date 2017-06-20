@@ -18,9 +18,6 @@ public class AgentConfigProperties {
 	@Value("${host}")
 	public String host;
 	
-	@Value("${port}")
-	public int port;
-	
 	public String getAgentName() {
 		return agentName;
 	}
@@ -44,12 +41,6 @@ public class AgentConfigProperties {
 	}
 	public void setHost(String host) {
 		this.host = host;
-	}
-	public int getPort() {
-		return port;
-	}
-	public void setPort(int port) {
-		this.port = port;
 	}
 
 }
