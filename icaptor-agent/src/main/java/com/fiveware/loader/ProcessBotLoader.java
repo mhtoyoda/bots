@@ -1,12 +1,13 @@
 package com.fiveware.loader;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Supplier;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.Maps;
-import org.apache.commons.collections.map.HashedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +17,14 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.util.FileUtil;
 import com.fiveware.messaging.Producer;
-import com.fiveware.model.*;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.InputDictionaryContext;
+import com.fiveware.model.MessageBot;
+import com.fiveware.model.OutTextRecord;
+import com.fiveware.model.Record;
 import com.fiveware.service.ServiceBot;
+import com.fiveware.util.LineUtil;
 import com.fiveware.util.ListJoinUtil;
 import com.fiveware.validate.Validate;
 import com.google.common.collect.Lists;
@@ -30,7 +35,7 @@ public class ProcessBotLoader {
 	Logger logger = LoggerFactory.getLogger(ProcessBotLoader.class);
 
 	@Autowired
-	private FileUtil fileUtil;
+	private LineUtil lineUtil;
 
 	@Autowired
 	@Qualifier("batch")
@@ -51,8 +56,7 @@ public class ProcessBotLoader {
 
 	@Autowired
 	private ListJoinUtil listJoin;
-	
-	
+		
 	@Autowired
 	private MessageSource messageSource;
 	private Supplier<? extends Map<String, Object>[]> notFound;
@@ -68,7 +72,7 @@ public class ProcessBotLoader {
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
 
-		List<Record> recordLines = fileUtil.linesFrom(obj.getLine(), fieldsInput, separatorInput);
+		List<Record> recordLines = lineUtil.linesFrom(obj.getLine(), fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
 
 		List<String> listResults = Lists.newArrayList();

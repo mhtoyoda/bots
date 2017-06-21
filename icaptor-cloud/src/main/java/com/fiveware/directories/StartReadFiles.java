@@ -14,14 +14,11 @@ import java.io.File;
 @Component
 public class StartReadFiles extends InitializeWatchService {
 
-
-
 	@Value("${io.worker.file}")
 	private String workerDir;
 
 	@Value("${io.file-read}")
 	private String workerFileRead;
-
 
 	@Autowired
 	private MessageSource messageSource;

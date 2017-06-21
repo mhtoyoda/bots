@@ -3,7 +3,6 @@ package com.fiveware.io;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +14,6 @@ public abstract class InitializeWatchService {
 
     @Autowired
     private MessageSource messageSource;
-
 
 	@Autowired
 	private RunningWatchServiceRecursive runningWatcher;
@@ -37,8 +35,4 @@ public abstract class InitializeWatchService {
 	protected abstract String getWorkerDir();
 
 	protected abstract void readFiles();
-
-
-
-
 }

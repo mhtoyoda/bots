@@ -14,8 +14,6 @@ import java.nio.file.Path;
 @Service
 public class RunningReadFiles extends RunningWatchServiceRecursive {
 
-
-
     @Override
     public void action(Path path) throws IOException, AttributeLoadException {
     }

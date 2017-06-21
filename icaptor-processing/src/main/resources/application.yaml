@@ -1,0 +1,3 @@
+io:
+  extension.input.file: .csv
+  bot.extension.file: .jar

@@ -1,10 +1,7 @@
 package com.fiveware.model;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.springframework.context.annotation.Bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;

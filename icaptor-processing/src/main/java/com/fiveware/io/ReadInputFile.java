@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 public class ReadInputFile {
 
     public static final int N_LINES = 2;
+    
     @Autowired
     private FileUtil fileUtil;
 
@@ -36,7 +37,6 @@ public class ReadInputFile {
 
     @Autowired
     private AgentDAO agentDAO;
-
 
     public void readFile(final String queueName, final String path, InputStream file) throws IOException {
         String[] fields = {"campo1"};
@@ -55,7 +55,8 @@ public class ReadInputFile {
     }
 
     private Long getLinesRecord(List<Record> records) {
-        Long totalAgent = agentDAO.count() > 0 ? agentDAO.count() : N_LINES;
+        Long agentCount = agentDAO.count();
+		Long totalAgent = agentCount > 0 ? agentCount : N_LINES;
         int size = records.size();
         long linesRecord = Math.floorDiv(size, totalAgent);
         return linesRecord;

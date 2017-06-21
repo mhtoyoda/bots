@@ -14,15 +14,3 @@ io:
   worker.dir: ${HOME}/.icaptor-agent
   worker.file: ${HOME}/.icaptor-out-file
   file-read: ${HOME}/.icaptor-read-file
-
-
-spring:
-  datasource:
-    url: jdbc:h2:~/test;AUTO_SERVER=TRUE
-    driverClassName: org.h2.Driver
-    username: sa
-    password: sa
-  jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate.ddl-auto: update
-  h2.console.enabled: true
