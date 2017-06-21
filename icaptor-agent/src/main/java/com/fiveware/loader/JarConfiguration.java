@@ -19,10 +19,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.Automation;
-import com.fiveware.builder.BotClassloaderContextBuilder;
-import com.fiveware.builder.FieldsDictionary;
-import com.fiveware.builder.InputDictionaryContextBuilder;
-import com.fiveware.builder.OutputDictionaryContextBuilder;
+import com.fiveware.helpers.BotClassloaderContextBuilder;
+import com.fiveware.helpers.FieldsDictionary;
+import com.fiveware.helpers.InputDictionaryContextBuilder;
+import com.fiveware.helpers.OutputDictionaryContextBuilder;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.metadata.IcaptorMetaInfo;
 import com.fiveware.model.BotClassLoaderContext;
