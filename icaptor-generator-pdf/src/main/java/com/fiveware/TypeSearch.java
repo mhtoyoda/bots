@@ -4,13 +4,15 @@ package com.fiveware;
  * Created by valdisnei on 23/06/17.
  */
 public enum TypeSearch {
-    VENCIMENTO("[0-9]{2}/[0-9]{2}/[0-9]{4}"),
-    MONETARY("(R\\$ ?\\d{1,3}(\\.\\d{3})*,\\d{2})"),
-    MONETARY_WITHOUT_$("(\\d{1,3}(\\.\\d{3})*,\\d{2})"),
-    MONETARY_WITHOUT_$_NEGATIVE("(\\-\\d{1,3}(\\.\\d{3})*,\\d{2})"),
+    DATE("[0-9]{2}/[0-9]{2}/[0-9]{4}"),
+    MONEY("(R\\$ ?\\d{1,3}(\\.\\d{3})*,\\d{2})"),
+    NEGATIVE_MONEY("(-R\\$ ?\\d{1,3}(\\.\\d{3})*,\\d{2})"),
     PERCENT("(\\d{1,3}(\\.\\d{3})*,\\d{2}%)"),
     CNPJ("([0-9]{2}.[0-9]{3}.[0-9]{3}/[0-9]{4}-[0-9]{2})"),
-    CFOP("(\\d\\.\\d{3})");
+    INSCR("[0-9]{3}.[0-9]{3}.[0-9]{7}-[0-9]"),
+    CFOP("(\\d\\.\\d{3})"),
+    NUMBER("([0-9]{12})"),
+    CEP("[0-9]{5}\\-?[0-9]{3}");
 
     private String regex;
 

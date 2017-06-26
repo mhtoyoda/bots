@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,19 +21,21 @@ import java.util.regex.Pattern;
  * Created by valdisnei on 23/06/17.
  */
 public class ExtractPDF {
-
     static Logger logger= LoggerFactory.getLogger(ExtractPDF.class);
 
     private final static ExtractPDF builderPDF = new ExtractPDF();
 
     private Page page;
-
     private Pattern compile;
-
     private String search;
+    private StringBuilder builder = new StringBuilder();
 
     public ExtractPDF() {
     }
+
+    public static void main(String[] args) {
+    }
+
 
     public ExtractPDF(String pathFIle) {
         try {
@@ -95,7 +95,8 @@ public class ExtractPDF {
     }
 
     private void main(Object ... pathFile) throws IOException {
-        page = UtilsPages.getPage(pathFile[0].toString(), Integer.valueOf((Integer) pathFile[1]).intValue());
+        page = UtilsPages.getPage(pathFile[0].toString(),
+                Integer.valueOf((Integer) pathFile[1]).intValue());
     }
 
     public ExtractPDF search(String search, TypeSearch typeSearch){
@@ -115,79 +116,79 @@ public class ExtractPDF {
         return this;
     }
 
-
     public String build(){
-        return search(page, this.search,compile);
-    }
-
-    private String search(Page page,String search,Pattern pattern) {
-        return  searchField(page, search,pattern);
+        return  searchField(page, this.search,compile);
     }
 
 
-    private String searchField(Page page, String search, Pattern compile) {
+    private String searchField(Page page, String search, Pattern pattern) {
+        builder(page,search);
+
+        String searchRegex = search+pattern.pattern();
+
+        Pattern compile = Pattern.compile(searchRegex);
+
+        Matcher matcher = compile.matcher(builder.toString());
+        if (matcher.find()) {
+            return matcher.group().replace(search, "");
+        }else{
+            return builder(page,search,compile);
+        }
+    }
+
+    private void builder(Page page,String searc) {
         BasicExtractionAlgorithm bea = new BasicExtractionAlgorithm();
+        bea.extract(page).forEach((table)->{
+            table.getRows().forEach((row)->{
+                row.forEach((col)->builder.append(col.getText()));
+            });
+        });
+    }
 
+    private String builder(Page page,String search,Pattern pattern) {
+        BasicExtractionAlgorithm bea = new BasicExtractionAlgorithm();
         List<Table> extract = bea.extract(page);
-
-        for (int iTable = 0; iTable < extract.size(); iTable++) {
-            Table table = extract.get(iTable);
-
+        for (int i = 0; i <extract.size(); i++) {
+            Table table = extract.get(i);
             List<List<RectangularTextContainer>> rows = table.getRows();
+            for (int j = 0; j < rows.size(); j++) {
 
-            for (int i = 0; i < rows.size(); i++) {
-                for (int j = 0; j < rows.get(i).size(); j++) {
-                    String text = table.getCell(i, j).getText();
-                    boolean contains = text.contains(search);
-                    Predicate<String> predicate = getStringPredicate();
-                    if (contains)
-                        return searchPattern(table,text,compile,i);
+                List<RectangularTextContainer> rectangularTextContainers = rows.get(j);
+                for (int k = 0; k < rectangularTextContainers.size(); k++) {
+
+                    String text = table.getCell(j, k).getText();
+
+                    boolean contain=text.contains(search);
+                    if(contain)
+                        return builder(rows,table,pattern,j);
                 }
-
             }
         }
+
         return null;
     }
 
-    private Predicate<String> getStringPredicate() {
-        return new Predicate<String>() {
-                            @Override
-                            public boolean test(String s) {
-                                return s.contains(search);
-                            }
-                        };
-    }
+    private String builder(List<List<RectangularTextContainer>> rows,Table table, Pattern pattern, int j) {
 
-    private String searchPattern(Table table,String texto,Pattern pattern, int i) {
-        List<List<RectangularTextContainer>> rows = table.getRows();
+        String compile = pattern.pattern().replace(search, "");
 
-        for (; i < rows.size(); i++) {
-            for (int j = 0; j < rows.get(i).size(); j++) {
-                String text = table.getCell(i, j).getText();
-                Matcher matcher = pattern.matcher(text);
-                if (matcher.find() && getStringPredicate().test(texto))
+
+//        Table table = extract.get(i);
+//        List<List<RectangularTextContainer>> rows = table.getRows();
+        for (; j < rows.size(); j++) {
+            List<RectangularTextContainer> cols = rows.get(j);
+
+            for (int k = 0; k < cols.size(); k++) {
+                String text = table.getCell(j, k).getText();
+                Matcher matcher = Pattern.compile(compile).matcher(text);
+                if (matcher.find())
                     return matcher.group();
+
             }
         }
+
         return null;
     }
 
-
-    private String search2(Page page,String search) {
-        BasicExtractionAlgorithm bea = new BasicExtractionAlgorithm();
-
-        for (Table table : bea.extract(page)) {
-            List<List<RectangularTextContainer>> rows = table.getRows();
-
-            for (List<RectangularTextContainer> row:rows) {
-                Optional<RectangularTextContainer> any = row.stream()
-                        .filter((text) -> text.getText().contains(search)).findAny();
-
-                if (any.isPresent() && !any.get().isEmpty())
-                    return any.get().getText();
-            }
-        }
-        return null;
-    }
 
 }

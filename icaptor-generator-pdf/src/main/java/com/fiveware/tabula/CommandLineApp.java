@@ -12,6 +12,8 @@ import org.apache.commons.cli.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -138,6 +140,11 @@ public class CommandLineApp {
     private void extractFile(File pdfFile, Appendable outFile) throws ParseException {
         PDDocument pdfDocument = null;
         try {
+            String path="/Users/valdisnei/dev/VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
+
+//		String path="/home/valdisnei/dev/00009133362-0000-FIXO_022017.pdf";
+            Path folder = Paths.get(path);
+
             pdfDocument = PDDocument.load(pdfFile);
             PageIterator pageIterator = getPageIterator(pdfDocument);
             List<Table> tables = new ArrayList<Table>();

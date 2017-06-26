@@ -170,6 +170,9 @@ public class TestBasicExtractor {
                 "src/test/resources/technology/tabula/m27.pdf", 79.2f,
                 28.28f, 103.04f, 732.6f);
         BasicExtractionAlgorithm bea = new BasicExtractionAlgorithm();
+
+        System.out.println("bea.toString() = " + bea.toString());
+
         Table table = bea.extract(page).get(0);
         List<RectangularTextContainer> firstRow = table.getRows().get(0);
 
