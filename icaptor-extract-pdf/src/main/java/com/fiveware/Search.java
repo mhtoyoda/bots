@@ -1,5 +1,6 @@
 package com.fiveware;
 
+import com.google.common.base.MoreObjects;
 import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +14,7 @@ import java.util.function.BiConsumer;
 /**
  * Created by valdisnei on 26/06/17.
  */
-class Search {
+public class Search {
 
     static Logger logger = LoggerFactory.getLogger(Search.class);
 
@@ -74,7 +75,7 @@ class Search {
                             search = this.extractPDF.search(fieldPDF.toString().toUpperCase(), typeSearch);
                         }
 
-                        setter.invoke(myObject, search.build().trim());
+                        setter.invoke(myObject, MoreObjects.firstNonNull(search.build(),"").trim());
 
 
                     } catch (NoSuchFieldException | NoSuchMethodException | IllegalAccessException |

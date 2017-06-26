@@ -40,6 +40,16 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>icaptor-extract-pdf</groupId>
+			<artifactId>icaptor-extract-pdf</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+
+
 	</dependencies>
 
 	<build>

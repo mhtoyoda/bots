@@ -95,11 +95,11 @@ public class Extract {
         Pattern compile = Pattern.compile(searchRegex);
 
         Matcher matcher = compile.matcher(builder.toString());
-        if (matcher.find()) {
+        if (matcher.find())
             return matcher.group().replace(search, "");
-        }else{
+        else
             return getResult(pages,search,compile);
-        }
+
     }
 
 
