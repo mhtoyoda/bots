@@ -27,7 +27,7 @@ public class Exemplo1 {
 
 Exemplo - 2 
 ---
-* Extrair texto de um arquivo PDF
+* Extrai texto de um arquivo PDF
 
 ```java
 import static com.fiveware.dsl.Extract.extract;
@@ -44,7 +44,7 @@ public class Exemplo2 {
 
 Exemplo - 3 
 ---
-* Extrair texto de um arquivo PDF e popular os resultados em um Objeto
+* Extrai texto de um arquivo PDF e popular os resultados em um Objeto
 
 ```java
 import static com.fiveware.dsl.Extract.extract;
