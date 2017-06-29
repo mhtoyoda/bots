@@ -34,25 +34,7 @@ public class UtilsPages {
         }
     }
 
-//    public static PageIterator getPage(byte[] file) throws IOException {
-//        ObjectExtractor oe = null;
-//
-//        try {
-//            PDDocument document = new PDDocument();
-//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-//            byteArrayOutputStream.write(file);
-//            document.save(byteArrayOutputStream);
-//
-//            oe = new ObjectExtractor(document);
-//            PageIterator pages = oe.extract();
-//            return pages;
-//        } finally {
-//            if (oe != null)
-//                oe.close();
-//        }
-//    }
-
-    public static PageIterator forEach(String path) throws IOException {
+    public static PageIterator pages(String path) throws IOException {
         ObjectExtractor oe = null;
             PDDocument document = PDDocument
                     .load(new File(path));

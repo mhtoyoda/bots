@@ -40,7 +40,7 @@ public class Pdf {
 
     private void main(String pathFile) throws IOException {
         this.pathFile=pathFile;
-        pageIterator = UtilsPages.forEach(pathFile);
+        pageIterator = UtilsPages.pages(pathFile);
     }
 
     private void main(Object ... pathFile) throws IOException {

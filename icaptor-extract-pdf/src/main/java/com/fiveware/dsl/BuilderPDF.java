@@ -1,5 +1,7 @@
 package com.fiveware.dsl;
 
+import com.google.common.base.Strings;
+
 import java.util.regex.Pattern;
 
 /**
@@ -50,5 +52,16 @@ public class BuilderPDF {
 
     protected Pdf getPdf() {
         return pdf;
+    }
+
+    protected boolean isEmptyText(){
+        return  Strings.isNullOrEmpty(getPdf().getBuilder().toString());
+    }
+    protected String getText(){
+        return  getPdf().getBuilder().toString();
+    }
+
+    protected void append(String text){
+        getPdf().getBuilder().append(text);
     }
 }

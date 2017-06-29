@@ -74,7 +74,7 @@ class ConvertHtmlToPdf {
     private PageIterator writerBytes(ResponseEntity<byte[]> response) {
         try {
             Files.write(Paths.get(this.outPut), response.getBody());
-            return UtilsPages.forEach(this.outPut);
+            return UtilsPages.pages(this.outPut);
 
         } catch (IOException e) {
             logger.error("{}",e);

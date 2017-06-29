@@ -6,11 +6,13 @@ import com.fiveware.core.PageIterator;
 import com.fiveware.core.RectangularTextContainer;
 import com.fiveware.core.Table;
 import com.fiveware.core.extractors.BasicExtractionAlgorithm;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,6 +21,7 @@ import java.util.regex.Pattern;
  */
 class Search {
 
+    static Logger logger = LoggerFactory.getLogger(Search.class);
     private final String search;
     private final Pattern compile;
     private final BuilderPDF builderPDF;
@@ -30,64 +33,49 @@ class Search {
         this.builderPDF = builderPDF;
     }
 
-
     public String build() {
+        Page page = builderPDF.getPdf().getPage();
+        PageIterator pageIterator = builderPDF.getPdf().getPageIterator();
+        Object somePageObject = MoreObjects.firstNonNull(page, pageIterator);
 
-            Page page = builderPDF.getPdf().getPage();
-            PageIterator pageIterator = builderPDF.getPdf().getPageIterator();
-            return Objects.isNull(page)?searchField(pageIterator, this.search, compile):
-                    searchField(page, this.search, compile);
-
-
-
+        return searchField(somePageObject, this.search, compile);
     }
 
-
-    private String searchField(PageIterator pages, String search, Pattern pattern) {
-        if(Strings.isNullOrEmpty(this.builderPDF.getPdf().getBuilder().toString()))
-            builder(pages);
-        String searchRegex = search+pattern.pattern();
-
-        Pattern compile = Pattern.compile(searchRegex);
-
-        Matcher matcher = compile.matcher(this.builderPDF.getPdf().getBuilder().toString());
-        if (matcher.find())
-            return matcher.group().replace(search, "");
-        else
-            return getResult(pages,search,compile);
-
-    }
-
-
-    private String searchField(Page page, String search, Pattern pattern) {
-        if(Strings.isNullOrEmpty(this.builderPDF.getPdf().getBuilder().toString()))
-            builder(page);
+    private String searchField(Object somePageObject, String search, Pattern pattern) {
+        if(this.builderPDF.isEmptyText())
+            builder(somePageObject);
 
         String searchRegex = search+pattern.pattern();
 
         Pattern compile = Pattern.compile(searchRegex);
 
-        Matcher matcher = compile.matcher(this.builderPDF.getPdf().getBuilder().toString());
+        Matcher matcher = compile.matcher(this.builderPDF.getText());
         if (matcher.find()) {
             return matcher.group().replace(search, "").trim();
-        }else{
-            return getResult(page,search,compile);
+        }else {
+            if (somePageObject instanceof Page)
+                return getResult((Page) somePageObject, search, compile);
+            else
+                return getResult((PageIterator) somePageObject, search, compile);
         }
     }
 
-    private void builder(PageIterator pages) {
-        while (pages.hasNext()){
-            Page page =pages.next();
-            builder(page);
+    private void builder(Object somePageObject) {
+        if (somePageObject instanceof PageIterator) {
+            while (((PageIterator) somePageObject).hasNext()) {
+                Page page = ((PageIterator) somePageObject).next();
+                addPage(page);
+            }
+        }else {
+            addPage((Page) somePageObject);
         }
     }
 
-
-    private void builder(Page page) {
+    private void addPage(Page page) {
         BasicExtractionAlgorithm bea = new BasicExtractionAlgorithm();
-        bea.extract(page).forEach((table)->{
-            table.getRows().forEach((row)->{
-                row.forEach((col)->this.builderPDF.getPdf().getBuilder().append(col.getText().toUpperCase()));
+        bea.extract(page).forEach((table) -> {
+            table.getRows().forEach((row) -> {
+                row.forEach((col) -> this.builderPDF.append(col.getText().toUpperCase()));
             });
         });
     }
@@ -100,13 +88,15 @@ class Search {
     private String getResult(PageIterator pages, String search, Pattern pattern) {
         if(!pages.hasNext())
             try {
-                pages = UtilsPages.forEach(builderPDF.getPdf().getPathFile());
+                pages = UtilsPages.pages(builderPDF.getPdf().getPathFile());
                 while (pages.hasNext()) {
                     Page page = pages.next();
-                    return processPage(search, pattern, page);
+                    String s = processPage(search, pattern, page);
+                    if (!Strings.isNullOrEmpty(s))
+                        return s;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.error("{}",e);
             }
         return null;
     }
@@ -144,11 +134,10 @@ class Search {
                 String text = table.getCell(j, k).getText();
                 Matcher matcher = Pattern.compile(compile).matcher(text);
                 if (matcher.find())
-                    return matcher.group();
+                    return matcher.group().trim();
 
             }
         }
-
         return null;
     }
 
