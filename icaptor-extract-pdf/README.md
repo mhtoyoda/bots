@@ -1,7 +1,17 @@
-# icaptor-automation
+# icaptor-automation - FrameWork
 
-Converter Html em PDF
+Converte Html em PDF
 
-String url="http://www.globo.com.br";
-		extract().html().open(url).outPutFile(outPathFile).buildToFile();
+Uso
+---
+```java
+import static com.fiveware.dsl.Extract.extract;
+public class Exemplo {
 
+    public static void main(String[] args){
+       String url="http://www.globo.com.br";
+       String outPathFile = "/out.pdf";
+        extract().html().open(url).outPutFile(outPathFile).buildToFile();
+    }        
+}
+```
