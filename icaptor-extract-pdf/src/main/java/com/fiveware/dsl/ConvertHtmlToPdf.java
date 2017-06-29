@@ -56,7 +56,7 @@ class ConvertHtmlToPdf {
         HttpEntity<String> entity = new HttpEntity<String>(headers);
 
 
-        final String downloadUrl="http://localhost:8080/convert?auth=arachnys-weaver&url="+url;
+        final String downloadUrl="http://34.206.50.158:8080/convert?auth=arachnys-weaver&url="+url;
 
 
         return restTemplate.exchange(downloadUrl, HttpMethod.GET, entity,
@@ -85,7 +85,11 @@ class ConvertHtmlToPdf {
     }
 
 
-    public void setOutPut(String outPut) {
+    protected void setOutPut(String outPut) {
         this.outPut = outPut;
+    }
+
+    protected String getOutPut() {
+        return outPut;
     }
 }

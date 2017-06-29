@@ -10,7 +10,7 @@ public class Extract {
     }
 
     public BuilderHtml html(){
-        BuilderHtml builderHtml = new BuilderHtml();
+        BuilderHtml builderHtml = new BuilderHtml(this.pdf());
         return builderHtml;
     }
 

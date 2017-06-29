@@ -8,6 +8,11 @@ import com.fiveware.core.PageIterator;
 public class BuilderHtml {
 
     private ConvertHtmlToPdf convertHtmlToPdf;
+    private final BuilderPDF builderPDF;
+
+    public BuilderHtml(BuilderPDF builderPDF) {
+        this.builderPDF = builderPDF;
+    }
 
     public BuilderHtml open(String url) {
         convertHtmlToPdf = new ConvertHtmlToPdf(url);
@@ -19,10 +24,12 @@ public class BuilderHtml {
         return this;
     }
 
-//    public BuilderSearch search(String search,TypeSearch typeSearch) {
-//        BuilderSearch builderSearch = new BuilderSearch(builderPDF);
-//        return builderSearch.search(search,typeSearch);
-//    }
+    public BuilderSearch search(String search,TypeSearch typeSearch) {
+        convertHtmlToPdf.buildToFile();
+        builderPDF.open(convertHtmlToPdf.getOutPut());
+        BuilderSearch builderSearch = new BuilderSearch(builderPDF);
+        return builderSearch.search(search,typeSearch);
+    }
 
     public void buildToFile() {
         convertHtmlToPdf.buildToFile();
