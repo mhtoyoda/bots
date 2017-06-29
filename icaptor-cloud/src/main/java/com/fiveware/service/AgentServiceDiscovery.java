@@ -6,19 +6,19 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.dao.ServerDAO;
 import com.fiveware.exception.AgentBotNotFoundException;
 import com.fiveware.model.Agent;
+import com.fiveware.repository.ServerRepository;
 
 @Component
 public class AgentServiceDiscovery implements ServiceDiscovery {
 	
 	@Autowired
-	private ServerDAO serverDAO;
+	private ServerRepository serverRepository;
 	
 	@Override
 	public String getUrlService(String serverName, String nameBot, String endpoint) throws AgentBotNotFoundException {
-		Optional<List<Agent>> agents = serverDAO.getAllAgentsByBotName(serverName, nameBot, endpoint);
+		Optional<List<Agent>> agents = serverRepository.getAllAgentsByBotName(serverName, nameBot, endpoint);
 		Integer size = agents.map(List::size).orElse(0);
 		if(size > 0){
 			Agent agent = getAgent(agents.get());

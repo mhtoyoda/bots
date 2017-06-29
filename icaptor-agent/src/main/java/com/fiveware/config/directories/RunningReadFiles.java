@@ -28,7 +28,7 @@ public class RunningReadFiles extends RunningWatchServiceRecursive {
     private AgentConfig agentConfig;
 
     @Override
-    public void action(Path path) throws IOException, AttributeLoadException {
+    public void includeAction(Path path) throws IOException, AttributeLoadException {
         if (isValidTypeFile(path)) {
             jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());
             agentConfig.saveAgentBot();
@@ -39,4 +39,12 @@ public class RunningReadFiles extends RunningWatchServiceRecursive {
     public boolean isValidTypeFile(Path file) {
         return (file.toString().endsWith(extensionFile));
     }
+
+	@Override
+	protected void excludeAction(Path path) throws IOException, AttributeLoadException {
+		if (isValidTypeFile(path)) {
+			jarConfiguration.removeBot(path.toString());
+        }
+		
+	}
 }

@@ -22,3 +22,13 @@ io:
   worker.dir: ${HOME}/.icaptor-agent
   worker.file: ${HOME}/.icaptor-out-file
   file-read: ${HOME}/.icaptor-read-file
+  
+spring:
+  datasource:
+    url: jdbc:mysql://172.17.0.2/icaptor
+    driverClassName: com.mysql.jdbc.Driver
+    username: root
+    password: icaptor
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate.ddl-auto: update    

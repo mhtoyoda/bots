@@ -2,15 +2,23 @@ package com.fiveware.io;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardWatchEventKinds;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import com.fiveware.exception.AttributeLoadException;
-import org.springframework.stereotype.Service;
 
 /**
  * Created by valdisnei on 05/06/17.
@@ -22,9 +30,10 @@ public abstract class RunningWatchServiceRecursive {
 
     private static final Map<WatchKey, Path> keyPathMap = new HashMap<>();
 
-    protected abstract void action(Path path) throws IOException, AttributeLoadException;
+    protected abstract void includeAction(Path path) throws IOException, AttributeLoadException;
+    protected abstract void excludeAction(Path path) throws IOException, AttributeLoadException;
     protected abstract boolean isValidTypeFile(Path file);
-
+    
 
     public void run(String directory) {
         try (WatchService watchService = FileSystems.getDefault().newWatchService()) {
@@ -40,7 +49,7 @@ public abstract class RunningWatchServiceRecursive {
 
     private void registerDir(Path path, WatchService watchService) throws IOException, AttributeLoadException {
         if (!Files.isDirectory(path, LinkOption.NOFOLLOW_LINKS)){
-            action(path);
+            includeAction(path);
             return;
         }
 
@@ -81,8 +90,7 @@ public abstract class RunningWatchServiceRecursive {
                 if (watchEvent.kind() == StandardWatchEventKinds.ENTRY_DELETE) {
                     Path path = (Path) watchEvent.context();
                     // need to get parent path
-//                    if (isValidTypeFile(path))
-//                        jarConfiguration.removeBot(path.toString());
+                    excludeAction(path);
                 }
             }
             if (!queuedKey.reset()) {

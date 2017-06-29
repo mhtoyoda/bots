@@ -1,4 +1,4 @@
-package com.fiveware.dao;
+package com.fiveware.repository;
 
 import java.util.Optional;
 
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.fiveware.model.Bot;
 
 @Repository
-public interface BotDAO extends CrudRepository<Bot, Long>{
+public interface BotRepository extends CrudRepository<Bot, Long>{
 
 	Optional<Bot> findByNameBot(String nameBot);
 }

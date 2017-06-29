@@ -1,4 +1,4 @@
-package com.fiveware.dao;
+package com.fiveware.repository;
 
 import java.util.List;
 import java.util.Optional;
@@ -12,7 +12,7 @@ import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
 
 @Repository
-public interface AgentDAO extends CrudRepository<Agent, Long>{
+public interface AgentRepository extends CrudRepository<Agent, Long>{
 
 	Optional<Agent> findByNameAgent(String agent);
 
