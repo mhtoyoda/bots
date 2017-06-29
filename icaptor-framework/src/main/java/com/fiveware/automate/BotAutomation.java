@@ -13,12 +13,12 @@ public class BotAutomation {
 	public Element elementBy() {
 		return new Element(webDriver);
 	}
-
+	
 	public Elements elementsBy() {
 		return new Elements(webDriver);
 	}
-
-	public DropDownElement dropdown(BotElement botElement) {
+	
+	public DropDownElement dropdown(BotElement botElement){
 		return new DropDownElement(botElement);
-	}
+	}	
 }

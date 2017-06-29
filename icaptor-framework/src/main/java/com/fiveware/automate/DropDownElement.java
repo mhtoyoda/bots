@@ -10,8 +10,8 @@ import com.google.common.collect.Lists;
 public class DropDownElement {
 
 	private Select select;
-
-	protected DropDownElement(BotElement botElement) {
+	
+	protected DropDownElement(BotElement botElement) {		
 		this.select = new Select(botElement.geWebElement());
 	}
 
@@ -56,15 +56,15 @@ public class DropDownElement {
 		return select.isMultiple();
 	}
 
-	public void selectByIndex(int arg0) {
-		select.selectByIndex(arg0);
+	public void selectByIndex(int index) {
+		select.selectByIndex(index);
 	}
 
-	public void selectByValue(String arg0) {
-		select.selectByValue(arg0);
+	public void selectByValue(String value) {
+		select.selectByValue(value);
 	}
 
-	public void selectByVisibleText(String arg0) {
-		select.selectByVisibleText(arg0);
+	public void selectByVisibleText(String visibleText) {
+		select.selectByVisibleText(visibleText);
 	}
 }

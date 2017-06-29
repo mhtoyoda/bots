@@ -31,24 +31,27 @@ public class Elements {
 		elements.forEach(element -> {
 			list.add(new BotElement(element));
 		});
+
 		return list;
 	}
 
 	public List<BotElement> cssSelector(String cssSelector) {
-		List<BotElement> list = Lists.newArrayList();
+		List<BotElement> list = Lists.newArrayList();		
 		List<WebElement> elements = webDriver.findElements(By.cssSelector(cssSelector));
 		elements.forEach(element -> {
 			list.add(new BotElement(element));
 		});
+		
 		return list;
 	}
-
+	
 	public List<BotElement> linkText(String linkText) {
 		List<BotElement> list = Lists.newArrayList();
 		List<WebElement> elements = webDriver.findElements(By.linkText(linkText));
 		elements.forEach(element -> {
 			list.add(new BotElement(element));
 		});
+
 		return list;
 	}
 
@@ -58,6 +61,7 @@ public class Elements {
 		elements.forEach(element -> {
 			list.add(new BotElement(element));
 		});
+
 		return list;
 	}
 
@@ -67,6 +71,7 @@ public class Elements {
 		elements.forEach(element -> {
 			list.add(new BotElement(element));
 		});
+
 		return list;
 	}
 
@@ -76,7 +81,7 @@ public class Elements {
 		elements.forEach(element -> {
 			list.add(new BotElement(element));
 		});
+
 		return list;
 	}
-
 }

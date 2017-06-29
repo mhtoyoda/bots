@@ -61,6 +61,7 @@ public class BotElement {
 	}
 
 	public void sendKeys(CharSequence... args) {
+		webElement.clear();
 		webElement.sendKeys(args);
 	}
 

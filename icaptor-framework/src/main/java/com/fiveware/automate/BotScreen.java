@@ -77,12 +77,12 @@ public class BotScreen {
 		switchTo().window(next);
 		return this;
 	}
-
-	public BotAutomation find() {
+	
+	public BotAutomation find(){
 		return new BotAutomation(webDriver);
 	}
-
-	public BotScreen waitForPageToLoadFor(int time) {
+	
+	public BotScreen waitForPageToLoadFor(int time){
 		new BotJS(webDriver).waitForPageToLoadFor(time);
 		return this;
 	}
