@@ -31,6 +31,7 @@ Exemplo - 2
 
 ```java
 import static com.fiveware.dsl.Extract.extract;
+import com.fiveware.dsl.TypeSearch;
 public class Exemplo2 {
 
     public static void main(String[] args){
@@ -44,10 +45,17 @@ public class Exemplo2 {
 
 Exemplo - 3 
 ---
-* Extrai texto de um arquivo PDF e popular os resultados em um Objeto
+* Extrai texto de um arquivo PDF e popula os resultados em um Objeto
 
 ```java
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.fiveware.dsl.Extract.FromTo;
 import static com.fiveware.dsl.Extract.extract;
+import com.fiveware.dsl.TypeSearch;
+
 public class Exemplo3 {
 
     public static void main(String[] args){
