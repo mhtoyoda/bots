@@ -7,12 +7,12 @@ Start Server (cloud)
 start client (agent)
 - ```java -Dspring.config.location=file:$HOME/.icaptor-out-file/icaptor-platform.properties -jar target/icaptor-agent-0.0.1-SNAPSHOT.jar```
 
-# FrameWork
+## FrameWork
 
-Converte Html em PDF
-
-Como usar
+Exemplo - 1
 ---
+* Converte Html em PDF
+
 ```java
 import static com.fiveware.dsl.Extract.extract;
 public class Exemplo1 {
@@ -25,10 +25,10 @@ public class Exemplo1 {
 }
 ```
 
-Extrair texto de um arquivo PDF
-
-Como usar
+Exemplo - 2 
 ---
+* Extrair texto de um arquivo PDF
+
 ```java
 import static com.fiveware.dsl.Extract.extract;
 public class Exemplo2 {
