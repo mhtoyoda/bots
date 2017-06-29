@@ -1,6 +1,6 @@
 package com.fiveware;
 
-import com.fiveware.extractPDF.*;
+import com.fiveware.core.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
@@ -33,6 +33,24 @@ public class UtilsPages {
                 oe.close();
         }
     }
+
+//    public static PageIterator getPage(byte[] file) throws IOException {
+//        ObjectExtractor oe = null;
+//
+//        try {
+//            PDDocument document = new PDDocument();
+//            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+//            byteArrayOutputStream.write(file);
+//            document.save(byteArrayOutputStream);
+//
+//            oe = new ObjectExtractor(document);
+//            PageIterator pages = oe.extract();
+//            return pages;
+//        } finally {
+//            if (oe != null)
+//                oe.close();
+//        }
+//    }
 
     public static PageIterator forEach(String path) throws IOException {
         ObjectExtractor oe = null;

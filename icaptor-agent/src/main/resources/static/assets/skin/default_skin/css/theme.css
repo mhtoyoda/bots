@@ -3720,7 +3720,7 @@ table.dataTable tfoot th {
 .dataTables_filter label {
   margin: 0;
 }
-/* DataTable Search bar */
+/* DataTable ConvertToPojo bar */
 table.dataTable .form-control {
   width: 100%;
 }
@@ -17901,7 +17901,7 @@ body.sb-top #toggle_sidemenu_t {
   margin: 0 15px 0 0;
 }
 /*==========================================================
-  Navbar Forms - Specifically Search Form
+  Navbar Forms - Specifically ConvertToPojo Form
 =========================================================== */
 .navbar-form {
   margin-top: 17px;
@@ -20606,7 +20606,7 @@ body.sb-l-m #content-footer.affix {
     K. Profile.html
     L. Error Pages
     M. Ecommerce Pages // Added update v1.3
-    N. Search Result Page // Added update v1.4
+    N. ConvertToPojo Result Page // Added update v1.4
 
  * This file is reserved for changes done on
  * a per-page basis. To create independent
@@ -21426,7 +21426,7 @@ body.error-page .error-text {
   background-color: #FAFAFA;
 }
 /*===============================================
-  N. Search Results Page - Added update v1.4
+  N. ConvertToPojo Results Page - Added update v1.4
 ================================================= */
 .search-results-page .search-result + .search-result {
   margin-top: 31px;

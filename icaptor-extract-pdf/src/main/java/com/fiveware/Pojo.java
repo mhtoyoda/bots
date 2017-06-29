@@ -1,36 +1,13 @@
 package com.fiveware;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
-
 
 /**
  * Created by valdisnei on 26/06/17.
  */
 @AutoProperty
-public class App {
-
-    @JsonIgnore
-    public static void main(String[] args) {
-        String path = "/home/valdisnei/dev/VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
-
-
-//        Map map = new HashMap();
-//        map.put(FromTo("cnpj:","cnpj"),TypeSearch.CNPJ);
-//        map.put("icms",  TypeSearch.MONEY);
-//        map.put(FromTo("Total a Pagar - ","valorpagar"),TypeSearch.MONEY);
-//        map.put("vencimento",  TypeSearch.DATE);
-//        map.put(FromTo("Data de emissão: ","dataemissao"),TypeSearch.DATE);
-//        map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
-//
-//        Object buildToFile = new Pdf(path).search(map, App.class).buildToFile();
-//
-//
-//
-//        System.out.println("buildToFile = " + buildToFile);
-    }
-
+public class Pojo {
     private String cnpj;
     private String icms;
     private String valorpagar;

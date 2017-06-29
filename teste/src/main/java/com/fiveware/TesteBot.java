@@ -1,20 +1,15 @@
 package com.fiveware;
 
-import java.util.Iterator;
-
+import com.fiveware.annotation.*;
+import com.fiveware.automate.BotJS;
+import com.fiveware.automate.BotWebBrowser;
+import com.fiveware.automate.BotWebDriver;
 import com.fiveware.exception.ExceptionBot;
 import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fiveware.annotation.Field;
-import com.fiveware.annotation.Icaptor;
-import com.fiveware.annotation.IcaptorMethod;
-import com.fiveware.annotation.InputDictionary;
-import com.fiveware.annotation.OutputDictionary;
-import com.fiveware.automate.BotJS;
-import com.fiveware.automate.BotWebBrowser;
-import com.fiveware.automate.BotWebDriver;
+import java.util.Iterator;
 
 /**
  * Created by valdisnei on 5/28/17.
@@ -37,7 +32,7 @@ public class TesteBot implements Automation<String, Endereco> {
 	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws ExceptionBot{
 			Endereco endereco = getEndereco(cep);
 
-			return endereco;
+		return endereco;
 	}
 
 	public Endereco getEndereco(String args) {
