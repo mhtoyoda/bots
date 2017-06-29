@@ -25,6 +25,7 @@ public class BuilderHtml {
     }
 
     public BuilderSearch search(String search,TypeSearch typeSearch) {
+        convertHtmlToPdf.buildToFile();
         builderPDF.open(convertHtmlToPdf.getOutPut());
         BuilderSearch builderSearch = new BuilderSearch(builderPDF);
         return builderSearch.search(search,typeSearch);
