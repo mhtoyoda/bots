@@ -36,14 +36,31 @@ public class Exemplo1 {
 }
 ```
 
-Exemplo - 2 
+Exemplo - 2
+---
+* Extrai texto do arquivo Html
+
+```java
+import static com.fiveware.dsl.Extract.extract;
+public class Exemplo2 {
+
+    public static void main(String[] args){
+       String url="http://www.globo.com.br";
+       String dolar = extract().html().open(url).outPutFile(outPathFile)
+     	 			  .search("dólar", TypeSearch.MONEY)
+     				  .build();
+    }        
+}
+```
+
+Exemplo - 3 
 ---
 * Extrai texto de um arquivo PDF
 
 ```java
 import static com.fiveware.dsl.Extract.extract;
 import com.fiveware.dsl.TypeSearch;
-public class Exemplo2 {
+public class Exemplo3 {
 
     public static void main(String[] args){
        String outPathFile = "/out.pdf";
@@ -54,7 +71,7 @@ public class Exemplo2 {
 }
 ```
 
-Exemplo - 3 
+Exemplo - 4 
 ---
 * Extrai texto de um arquivo PDF e popula os resultados em um Objeto
 
@@ -67,7 +84,7 @@ import static com.fiveware.dsl.Extract.FromTo;
 import static com.fiveware.dsl.Extract.extract;
 import com.fiveware.dsl.TypeSearch;
 
-public class Exemplo3 {
+public class Exemplo4 {
 
     public static void main(String[] args){
        String outPathFile = "/out.pdf";

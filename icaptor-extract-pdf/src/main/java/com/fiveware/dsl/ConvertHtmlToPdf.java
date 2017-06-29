@@ -85,7 +85,11 @@ class ConvertHtmlToPdf {
     }
 
 
-    public void setOutPut(String outPut) {
+    protected void setOutPut(String outPut) {
         this.outPut = outPut;
+    }
+
+    protected String getOutPut() {
+        return outPut;
     }
 }

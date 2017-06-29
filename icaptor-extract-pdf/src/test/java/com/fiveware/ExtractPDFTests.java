@@ -18,27 +18,29 @@ public class ExtractPDFTests {
 
 	String path;
 	String outPathFile;
+	String url;
 	@Before
 	public void setup(){
 		String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
 		path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
 		outPathFile = rootDir + File.separator +"out.pdf";
-
+		url="http://www.globo.com.br";
 	}
 
 	@Test
-	public void athenapdf(){
-
-		String url="http://www.globo.com.br";
+	public void converteHtmlToPdf(){
 		extract().html().open(url).outPutFile(outPathFile).buildToFile();
+	}
 
-		String pdf = extract().pdf().open(outPathFile)
+	@Test
+	public void extractHtml(){
+
+		String dolar = extract().html().open(url).outPutFile(outPathFile)
 				.search("dólar", TypeSearch.MONEY)
 				.build();
 
-
 		//TODO fixe-me little bit workaround
-		String replaceCifrao = pdf.replaceFirst("R\\$","");
+		String replaceCifrao = dolar.replaceFirst("R\\$","");
 		replaceCifrao = replaceCifrao.replaceFirst(",",".");
 
 		assertTrue(Double.valueOf("3.291") <= Double.valueOf(replaceCifrao));
