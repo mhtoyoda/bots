@@ -17,10 +17,10 @@ io:
   
 spring:
   datasource:
-    url: jdbc:mysql://172.17.0.2/icaptor
+    url: jdbc:mysql://34.206.50.158:3306/icaptor
     driverClassName: com.mysql.jdbc.Driver
     username: root
-    password: icaptor
+    password: ic@ptor123
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate.ddl-auto: update  
