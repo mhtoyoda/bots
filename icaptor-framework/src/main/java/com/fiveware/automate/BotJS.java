@@ -1,18 +1,19 @@
 package com.fiveware.automate;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 
 public class BotJS {
 	
-	private BotWebDriver driver;
+	private WebDriver driver;
 	
-	public BotJS(BotWebDriver driver) {
+	protected BotJS(WebDriver driver) {
 		this.driver = driver;
 	}
 
-	public void waitForPageToBeReady() {
-		JavascriptExecutor js = (JavascriptExecutor) driver.getWebDriver();
-		for (int i = 0; i < 400; i++) {
+	protected void waitForPageToLoadFor(int time) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		for (int i = 0; i < time; i++) {
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

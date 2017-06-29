@@ -6,7 +6,7 @@ public class BotElement {
 
 	private WebElement webElement;
 	
-	public BotElement(WebElement webElement) {
+	protected BotElement(WebElement webElement) {
 		this.webElement = webElement;
 	}
 
@@ -14,12 +14,14 @@ public class BotElement {
 		return webElement;
 	}
 	
-	public void clear() {
+	public BotElement clear() {
 		webElement.clear();
+		return this;
 	}
 
-	public void click() {
+	public BotElement click() {
 		webElement.click();
+		return this;
 	}
 
 	public String getAttribute(String argument) {
@@ -59,6 +61,7 @@ public class BotElement {
 	}
 
 	public void sendKeys(CharSequence... args) {
+		webElement.clear();
 		webElement.sendKeys(args);
 	}
 
