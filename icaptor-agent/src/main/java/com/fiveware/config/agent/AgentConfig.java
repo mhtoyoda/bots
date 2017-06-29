@@ -8,15 +8,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.dao.AgentDAO;
-import com.fiveware.dao.BotDAO;
-import com.fiveware.dao.ServerDAO;
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.messaging.QueueCreator;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.Server;
+import com.fiveware.repository.AgentRepository;
+import com.fiveware.repository.BotRepository;
+import com.fiveware.repository.ServerRepository;
 import com.google.common.collect.Lists;
 
 @Component
@@ -30,17 +30,20 @@ public class AgentConfig {
 	private ClassLoaderConfig classLoaderConfig;
 
 	@Autowired
-	private AgentDAO agentDAO;
+	private AgentRepository agentRepository;
 
 	@Autowired
-	private BotDAO botDAO;
+	private BotRepository botRepository;
 
 	@Autowired
-	private ServerDAO serverDAO;
+	private ServerRepository serverRepository;
 
 	@Autowired
 	private QueueCreator queueCreator;
-
+	
+	@Autowired
+	private AgentListener agentListener;
+	
 	public void saveAgentBot() {
 		List<Bot> botList = Lists.newArrayList();
 		List<BotClassLoaderContext> bots = classLoaderConfig.getAll();
@@ -54,8 +57,8 @@ public class AgentConfig {
 		}
 		agent.setBots(botList);
 		server.setAgents(Lists.newArrayList(agent));
-		serverDAO.save(server);
-		agentDAO.save(agent);
+		serverRepository.save(server);
+		agentRepository.save(agent);
 		createQueueBots(botList);
 	}
 	
@@ -66,7 +69,7 @@ public class AgentConfig {
 	}
 
 	private Bot getBot(BotClassLoaderContext botClassLoaderContext) {
-		Optional<Bot> optional = botDAO.findByNameBot(botClassLoaderContext.getNameBot());
+		Optional<Bot> optional = botRepository.findByNameBot(botClassLoaderContext.getNameBot());
 		if (optional.isPresent()) {
 			return optional.get();
 		}
@@ -75,30 +78,33 @@ public class AgentConfig {
 		bot.setEndpoint(botClassLoaderContext.getEndpoint());
 		bot.setNameBot(botClassLoaderContext.getNameBot());
 		bot.setMethod(botClassLoaderContext.getMethod());
-		return botDAO.save(bot);
+		return botRepository.save(bot);
 	}
 
 	private Agent getAgent(Server server) {
-		Optional<Agent> optional = agentDAO.findByNameAgent(data.getAgentName());
+		Optional<Agent> optional = agentRepository.findByNameAgent(data.getAgentName());
 		if (optional.isPresent()) {
-			return optional.get();
+			Agent agent = agentRepository.findOne(optional.get().getId());
+			agent.setPort(agentListener.getAgentPort());
+			agent = agentRepository.save(agent);
+			return agent;
 		}
 		Agent agent = new Agent();
 		agent.setIp(data.getIp());
 		agent.setNameAgent(data.getAgentName());
-		agent.setPort(0);
+		agent.setPort(agentListener.getAgentPort());
 		agent.setServer(server);
-		return agentDAO.save(agent);
+		return agentRepository.save(agent);
 	}
 
 	private Server getServer() {
-		Optional<Server> optional = serverDAO.findByName(data.getServer());
+		Optional<Server> optional = serverRepository.findByName(data.getServer());
 		if (optional.isPresent()) {
 			return optional.get();
 		}
 		Server serverInfo = new Server();
 		serverInfo.setName(data.getServer());
 		serverInfo.setHost(data.getHost());
-		return serverDAO.save(serverInfo);
+		return serverRepository.save(serverInfo);
 	}
 }

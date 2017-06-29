@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.ServerConfig;
 import com.fiveware.ServerConfig.ServerInfo;
-import com.fiveware.dao.ServerDAO;
 import com.fiveware.model.Server;
+import com.fiveware.repository.ServerRepository;
 
 @Component
 public class ServerRegister {
@@ -21,7 +21,7 @@ public class ServerRegister {
 	private ServerConfig serverConfig;
 
 	@Autowired
-	private ServerDAO serverDAO;
+	private ServerRepository serverRepository;
 
 	public void register() {
 		ServerInfo server = serverConfig.getServer();
@@ -31,13 +31,13 @@ public class ServerRegister {
 
 	private void registerServer() {
 		ServerInfo serverInfo = serverConfig.getServer();
-		Optional<Server> optional = serverDAO.findByName(serverInfo.getName());
+		Optional<Server> optional = serverRepository.findByName(serverInfo.getName());
 		if (!optional.isPresent()) {
 			Server server = new Server();
 			server.setName(serverInfo.getName());
 			String host = serverInfo.getHost() + ":" + serverInfo.getPort();
 			server.setHost(host);
-			serverDAO.save(server);
+			serverRepository.save(server);
 			log.info("Register Server Host: {}", host);
 		}
 	}
