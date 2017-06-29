@@ -1,6 +1,5 @@
 package com.fiveware.automate;
 
-
 import java.util.List;
 
 import org.openqa.selenium.WebElement;
@@ -8,11 +7,11 @@ import org.openqa.selenium.support.ui.Select;
 
 import com.google.common.collect.Lists;
 
-public class DropDownBotElement {
-	
+public class DropDownElement {
+
 	private Select select;
-	
-	public DropDownBotElement(BotElement botElement) {		
+
+	protected DropDownElement(BotElement botElement) {
 		this.select = new Select(botElement.geWebElement());
 	}
 
@@ -20,16 +19,16 @@ public class DropDownBotElement {
 		select.deselectAll();
 	}
 
-	public void deselectByIndex(int arg0) {
-		select.deselectByIndex(arg0);
+	public void deselectByIndex(int index) {
+		select.deselectByIndex(index);
 	}
 
-	public void deselectByValue(String arg0) {
-		select.deselectByValue(arg0);
+	public void deselectByValue(String value) {
+		select.deselectByValue(value);
 	}
 
-	public void deselectByVisibleText(String arg0) {
-		select.deselectByVisibleText(arg0);
+	public void deselectByVisibleText(String visibleText) {
+		select.deselectByVisibleText(visibleText);
 	}
 
 	public List<BotElement> getAllSelectedOptions() {
@@ -67,5 +66,5 @@ public class DropDownBotElement {
 
 	public void selectByVisibleText(String arg0) {
 		select.selectByVisibleText(arg0);
-	}	
+	}
 }
