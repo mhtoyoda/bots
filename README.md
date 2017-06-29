@@ -9,6 +9,19 @@ start client (agent)
 
 ## FrameWork
 
+* Pré-Requisito 
+
+    * dependência:
+
+```xml
+        
+<dependency>
+    <groupId>icaptor-framework</groupId>
+    <artifactId>icaptor-framework</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```
+
 Exemplo - 1
 ---
 * Converte Html em PDF
