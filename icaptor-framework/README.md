@@ -39,9 +39,10 @@ public class Exemplo2 {
     public static void main(String[] args){
        String url="http://www.globo.com.br";
        String outPathFile = "/out.pdf";
-       String dolar = extract().html().open(url).outPutFile(outPathFile)
-     	 			  .search("dólar", TypeSearch.MONEY)
-     				  .build();
+       String dolar = helpers().html().open(url)
+       				.outPutFile(outPathFile)
+				.search("dólar", TypeSearch.MONEY)
+				.build();
     }        
 }
 ```
