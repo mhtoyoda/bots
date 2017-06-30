@@ -203,7 +203,6 @@ Exemplo - 6
 * Uso do BotAutomation
 
 ```java
-import static com.fiveware.dsl.Helpers.helpers;
 import static com.fiveware.automate.BotAutomationBuilder.Web;
 import static com.fiveware.automate.BotWebBrowser.PHANTOM;
 
