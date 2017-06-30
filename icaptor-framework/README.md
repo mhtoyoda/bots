@@ -40,9 +40,9 @@ public class Exemplo2 {
        String url="http://www.globo.com.br";
        String outPathFile = "/out.pdf";
        String dolar = helpers().html().open(url)
-				                   .outPutFile(outPathFile)
-				                   .search("dólar", TypeSearch.MONEY)
-				                   .build();
+       				.outPutFile(outPathFile)
+				.search("dólar", TypeSearch.MONEY)
+				.build();
     }        
 }
 ```
