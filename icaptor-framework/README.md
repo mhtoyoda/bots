@@ -76,7 +76,7 @@ Exemplo - 4
 ```java
 import static com.fiveware.dsl.Helpers.helpers;
 import com.fiveware.dsl.TypeSearch;
-public class Exemplo3 {
+public class Exemplo4 {
 
     public static void main(String[] args){
        String path = "/out.pdf";
@@ -119,7 +119,7 @@ import static com.fiveware.dsl.Helpers.FromTo;
 import static helpers;
 import com.fiveware.dsl.TypeSearch;
 
-public class Exemplo4 {
+public class Exemplo5 {
 
     public static void main(String[] args){
        String outPathFile = "/out.pdf";
@@ -207,7 +207,7 @@ import static com.fiveware.dsl.Helpers.helpers;
 import static com.fiveware.automate.BotAutomationBuilder.Web;
 import static com.fiveware.automate.BotWebBrowser.PHANTOM;
 
-public class Exemplo3 {
+public class Exemplo6 {
 
     public static void main(String[] args){
         String baseUrl = "http://www.correios.com.br/";
