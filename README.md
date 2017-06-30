@@ -31,8 +31,8 @@ public class Exemplo1 {
        String url="http://www.globo.com.br";
        String outPathFile = "/out.pdf";
         helpers().html().open(url)
-        				.outPutFile(outPathFile)
-        				.buildToFile();
+                        .outPutFile(outPathFile)
+                        .buildToFile();
     }        
 }
 ```
@@ -71,9 +71,9 @@ public class Exemplo3 {
                                  .selectElement("div");
         
          String textoDoElemento =  helpers().html()
-                              				.file(fileHtml)
-                              				.selectElement("div")
-                              				.text(5); //numero do elemento
+                                            .file(fileHtml)
+                                            .selectElement("div")
+                                            .text(5); //numero do elemento
                               				
     }        
 }
