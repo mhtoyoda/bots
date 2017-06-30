@@ -21,6 +21,8 @@ public class ExtractPDFTests {
 	String outPathFile;
 	String url;
 	String fileHtml;
+	String fileExcel;
+	String outFileHtml;
 	@Before
 	public void setup(){
 		String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
@@ -28,7 +30,17 @@ public class ExtractPDFTests {
 		outPathFile = rootDir + File.separator +"out.pdf";
 		url="http://www.globo.com.br";
 		fileHtml=rootDir + File.separator + "cartaExemplo.html";
+		fileExcel=rootDir + File.separator + "sal.xls";
+		outFileHtml =rootDir + File.separator + "out.html";
 	}
+
+	@Test
+	public void converteExcelToHtml() throws IOException {
+		helpers().excel()
+				 .convert(fileExcel,outFileHtml)
+				 .buildToFile();
+	}
+
 
 	@Test
 	public void converteHtmlToPdf(){

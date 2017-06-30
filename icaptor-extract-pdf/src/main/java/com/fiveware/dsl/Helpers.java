@@ -1,5 +1,9 @@
 package com.fiveware.dsl;
 
+import com.fiveware.dsl.excel.BuilderExcel;
+
+import java.io.IOException;
+
 /**
  * Created by valdisnei on 23/06/17.
  */
@@ -12,6 +16,11 @@ public class Helpers {
     public BuilderHtml html(){
         BuilderHtml builderHtml = new BuilderHtml(this.pdf());
         return builderHtml;
+    }
+
+    public BuilderExcel excel() throws IOException {
+        BuilderExcel builderExcel = new BuilderExcel();
+        return builderExcel;
     }
 
     public BuilderPDF pdf(){

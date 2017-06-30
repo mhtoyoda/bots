@@ -34,12 +34,12 @@ class ExtractTextFromHtml {
     }
 
 
-    public ExtractTextFromHtml selecElement(String element){
+    protected ExtractTextFromHtml selecElement(String element){
         elements = document.select(element); // a with href
         return this;
     }
 
-    public String text(int numberElement){
+    protected String text(int numberElement){
         Element element = elements.get(numberElement);
         return element.text();
     }
