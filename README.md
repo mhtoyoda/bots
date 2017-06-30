@@ -24,23 +24,26 @@ Exemplo - 1
 * Converte Html em PDF
 
 ```java
-import static helpers;
+import static com.fiveware.dsl.Helpers.helpers;
 public class Exemplo1 {
 
     public static void main(String[] args){
        String url="http://www.globo.com.br";
        String outPathFile = "/out.pdf";
-        extract().html().open(url).outPutFile(outPathFile).buildToFile();
+        helpers().html()
+        				.open(url)
+        				.outPutFile(outPathFile)
+        				.buildToFile();
     }        
 }
 ```
 
 Exemplo - 2
 ---
-* Extrai texto do arquivo Html
+* Converte de HTML para PDF e extrai texto  
 
 ```java
-import static helpers;
+import static com.fiveware.dsl.Helpers.helpers;
 public class Exemplo2 {
 
     public static void main(String[] args){
@@ -53,25 +56,68 @@ public class Exemplo2 {
 }
 ```
 
-Exemplo - 3 
+Exemplo - 3
 ---
-* Extrai texto de um arquivo PDF
+* Extrai texto de um elemento HTML  
 
 ```java
-import static helpers;
-import com.fiveware.dsl.TypeSearch;
+import static com.fiveware.dsl.Helpers.helpers;
 public class Exemplo3 {
 
     public static void main(String[] args){
-       String outPathFile = "/out.pdf";
-       String dolar = extract().pdf().open(outPathFile)
-       				.search("dólar", TypeSearch.MONEY)
-       				.build();
+       String fileHtml="/Arquivo.html";
+      
+        String texto =  helpers().html()
+                      				.file(fileHtml)
+                      				.selectElement("div");
+        
+         String textoDoElemento =  helpers().html()
+                              				.file(fileHtml)
+                              				.selectElement("div")
+                              				.text(5); //numero do elemento
+                              				
     }        
 }
 ```
 
 Exemplo - 4 
+---
+* Extrai texto de um arquivo PDF
+
+```java
+import static com.fiveware.dsl.Helpers.helpers;
+import com.fiveware.dsl.TypeSearch;
+public class Exemplo3 {
+
+    public static void main(String[] args){
+       String path = "/out.pdf";
+       String vencimento = helpers().pdf()
+       				.open(path,1) 
+       				.search("Vencimento", TypeSearch.DATE)
+       				.build();
+       
+       String icms = helpers().pdf()
+       				.open(path, 2)
+       				.search("ICMS ",  TypeSearch.MONEY)
+       				.build();
+       
+       String telefone = helpers().pdf()
+       				.open(path, 6)
+       				.search("Número",  "[0-9]{2}-[0-9]{5}-[0-9]{4}")
+       				.build();
+       
+       Pattern pattern = Pattern.compile("\\s?([0-9]{2}.[0-9]{3}.[0-9]{3}\\/[0-9]{4}-[0-9]{2})");
+       String cnpj = helpers().pdf()
+       				.open(path,2)
+       				.search("CNPJ: ", pattern)
+       				.build();
+       
+       
+    }        
+}
+```
+
+Exemplo - 5 
 ---
 * Extrai texto de um arquivo PDF e popula os resultados em um Objeto
 
@@ -96,10 +142,10 @@ public class Exemplo4 {
       		map.put(FromTo("Data de emissão: ","dataemissao"),TypeSearch.DATE);
       		map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
       
-      		Pojo pojo = (Pojo) extract()
-      				.pdf()
-      				.open(path)
-      				.converter().map(map, Pojo.class).build();
+      		Pojo pojo = (Pojo) helpers()
+            				.pdf()
+            				.open(path)
+            				.converter().map(map, Pojo.class).build();
     }        
 }
 
