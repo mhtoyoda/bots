@@ -69,7 +69,6 @@ public class Exemplo3 {
     }        
 }
 ```
-
 Exemplo - 4 
 ---
 * Extrai texto de um arquivo PDF
@@ -197,4 +196,56 @@ public class Pojo {
 
 }
 
+```
+
+Exemplo - 6
+---
+* Uso do BotAutomation
+
+```java
+import static com.fiveware.dsl.Helpers.helpers;
+import static com.fiveware.automate.BotAutomationBuilder.Web;
+import static com.fiveware.automate.BotWebBrowser.PHANTOM;
+
+public class Exemplo3 {
+
+    public static void main(String[] args){
+        String baseUrl = "http://www.correios.com.br/";
+
+        BotScreen telaConsultaCep = Web().driver(PHANTOM).openPage(baseUrl + "/para-voce");
+        telaConsultaCep.windowMaximize();
+        telaConsultaCep.find().elementBy().id("acesso-busca").sendKeys(args);		
+        telaConsultaCep.find().elementBy().cssSelector("input.acesso-busca-submit").click();
+        
+        telaConsultaCep.waitForPageToLoadFor(400);
+        
+        		Iterator<String> windows = telaConsultaCep.iteratorWindowHandles();
+        		windows.next();
+        
+        		telaConsultaCep.window(windows.next());
+        
+        		String resultado = telaConsultaCep.find()
+        				.elementBy().xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/p").getText();
+        
+        		if ("DADOS NAO ENCONTRADOS".equalsIgnoreCase(resultado)){
+        			return null;			
+        		}
+        
+        		String logradouro = telaConsultaCep.find()
+        				.elementBy().xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[1]")
+        				.getText();
+        		String bairro = telaConsultaCep.find()
+        				.elementBy().xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[2]")
+        				.getText();
+        		String localidade = telaConsultaCep.find()
+        				.elementBy().xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[3]")
+        				.getText();
+        		String cep = telaConsultaCep.find()
+        				.elementBy().xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[4]")
+        				.getText();
+        
+        		logger.info(" Endereco: {} - {} - {} - {}", logradouro, bairro, localidade, cep);
+                              				
+    }        
+}
 ```

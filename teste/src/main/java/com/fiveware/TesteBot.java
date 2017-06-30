@@ -1,20 +1,17 @@
 package com.fiveware;
 
-import static com.fiveware.automate.BotAutomationBuilder.Web;
-
-import java.util.Iterator;
-
+import com.fiveware.annotation.*;
+import com.fiveware.automate.BotScreen;
+import com.fiveware.dsl.TypeSearch;
+import com.fiveware.exception.ExceptionBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fiveware.annotation.Field;
-import com.fiveware.annotation.Icaptor;
-import com.fiveware.annotation.IcaptorMethod;
-import com.fiveware.annotation.InputDictionary;
-import com.fiveware.annotation.OutputDictionary;
-import com.fiveware.automate.BotScreen;
-import static com.fiveware.automate.BotWebBrowser.*;
-import com.fiveware.exception.ExceptionBot;
+import java.util.Iterator;
+
+import static com.fiveware.automate.BotAutomationBuilder.Web;
+import static com.fiveware.automate.BotWebBrowser.PHANTOM;
+import static com.fiveware.dsl.Helpers.helpers;
 
 /**
  * Created by valdisnei on 5/28/17.
@@ -36,6 +33,12 @@ public class TesteBot implements Automation<String, Endereco> {
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
 	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws ExceptionBot{
 			Endereco endereco = getEndereco(cep);
+
+		String build = helpers().pdf()
+				.open("",2)
+				.search("CNPJ: ", TypeSearch.CNPJ)
+				.build();
+
 
 		return endereco;
 	}
