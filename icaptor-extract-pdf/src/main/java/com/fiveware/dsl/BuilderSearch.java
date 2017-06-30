@@ -30,6 +30,11 @@ public class BuilderSearch {
         return this;
     }
 
+    public BuilderSearch next(){
+        this.search.next(true);
+        return this;
+    }
+
     public String build(){
         return this.search.build();
     }

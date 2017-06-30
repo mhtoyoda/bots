@@ -25,12 +25,17 @@ class Search {
     private final String search;
     private final Pattern compile;
     private final BuilderPDF builderPDF;
+    private boolean isNext;
 
 
     Search(String search, Pattern compile, BuilderPDF builderPDF) {
         this.search = search;
         this.compile = compile;
         this.builderPDF = builderPDF;
+    }
+
+    protected void next(boolean isNext) {
+        this.isNext = isNext;
     }
 
     public String build() {
@@ -42,17 +47,17 @@ class Search {
     }
 
     private String searchField(Object somePageObject, String search, Pattern pattern) {
-        if(this.builderPDF.isEmptyText())
+        if (this.builderPDF.isEmptyText())
             builder(somePageObject);
 
-        String searchRegex = search+pattern.pattern();
+        String searchRegex = search + pattern.pattern();
 
         Pattern compile = Pattern.compile(searchRegex);
 
         Matcher matcher = compile.matcher(this.builderPDF.getText());
         if (matcher.find()) {
             return matcher.group().replace(search, "").trim();
-        }else {
+        } else {
             if (somePageObject instanceof Page)
                 return getResult((Page) somePageObject, search, compile);
             else
@@ -66,7 +71,7 @@ class Search {
                 Page page = ((PageIterator) somePageObject).next();
                 addPage(page);
             }
-        }else {
+        } else {
             addPage((Page) somePageObject);
         }
     }
@@ -86,7 +91,7 @@ class Search {
     }
 
     private String getResult(PageIterator pages, String search, Pattern pattern) {
-        if(!pages.hasNext())
+        if (!pages.hasNext())
             try {
                 pages = UtilsPages.pages(builderPDF.getPdf().getPathFile());
                 while (pages.hasNext()) {
@@ -96,7 +101,7 @@ class Search {
                         return s;
                 }
             } catch (IOException e) {
-                logger.error("{}",e);
+                logger.error("{}", e);
             }
         return null;
     }
@@ -124,17 +129,26 @@ class Search {
         return null;
     }
 
-    private String builder(List<List<RectangularTextContainer>> rows,Table table, Pattern pattern, int j) {
-
+    private String builder(List<List<RectangularTextContainer>> rows, Table table, Pattern pattern, int j) {
+        boolean controleNext = false;
         String compile = pattern.pattern().replace(search, "");
+
+        int k1 = 0;
+
         for (; j < rows.size(); j++) {
             List<RectangularTextContainer> cols = rows.get(j);
 
-            for (int k = 0; k < cols.size(); k++) {
+            next:
+            for (int k = k1; k < cols.size(); k++) {
                 String text = table.getCell(j, k).getText();
                 Matcher matcher = Pattern.compile(compile).matcher(text);
-                if (matcher.find())
+                if (matcher.find()) {
+                    if (isNext && !controleNext) {
+                        if (matcher.find())
+                            return matcher.group().trim();
+                    }
                     return matcher.group().trim();
+                }
 
             }
         }

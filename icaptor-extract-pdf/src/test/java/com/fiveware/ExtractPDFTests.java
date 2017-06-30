@@ -37,6 +37,7 @@ public class ExtractPDFTests {
 
 		String dolar = extract().html().open(url).outPutFile(outPathFile)
 				.search("dólar", TypeSearch.MONEY)
+				.next()
 				.build();
 
 		//TODO fixe-me little bit workaround
