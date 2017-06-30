@@ -30,8 +30,7 @@ public class Exemplo1 {
     public static void main(String[] args){
        String url="http://www.globo.com.br";
        String outPathFile = "/out.pdf";
-        helpers().html()
-        				.open(url)
+        helpers().html().open(url)
         				.outPutFile(outPathFile)
         				.buildToFile();
     }        
@@ -68,8 +67,8 @@ public class Exemplo3 {
        String fileHtml="/Arquivo.html";
       
         String texto =  helpers().html()
-                      				.file(fileHtml)
-                      				.selectElement("div");
+                                 .file(fileHtml)
+                                 .selectElement("div");
         
          String textoDoElemento =  helpers().html()
                               				.file(fileHtml)
