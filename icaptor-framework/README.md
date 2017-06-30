@@ -116,7 +116,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.fiveware.dsl.Helpers.FromTo;
-import static helpers;
+import static com.fiveware.dsl.Helpers.helpers;
 import com.fiveware.dsl.TypeSearch;
 
 public class Exemplo5 {
