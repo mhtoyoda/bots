@@ -56,8 +56,8 @@ class ConvertToPojo {
                     try {
                         String key;
                         Object fieldPDF;
-                        if (k instanceof Extract.FromTo){
-                            key=((Extract.FromTo) k).getValue().toString();
+                        if (k instanceof Helpers.FromTo){
+                            key=((Helpers.FromTo) k).getValue().toString();
                             fieldPDF = k;
                         }else{
                             key=k.toString();

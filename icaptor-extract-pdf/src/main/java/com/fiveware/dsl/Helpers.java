@@ -3,10 +3,10 @@ package com.fiveware.dsl;
 /**
  * Created by valdisnei on 23/06/17.
  */
-public class Extract {
+public class Helpers {
 
-    public static Extract extract(){
-        return new Extract();
+    public static Helpers helpers(){
+        return new Helpers();
     }
 
     public BuilderHtml html(){

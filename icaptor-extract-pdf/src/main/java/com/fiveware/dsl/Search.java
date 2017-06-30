@@ -144,8 +144,12 @@ class Search {
                 Matcher matcher = Pattern.compile(compile).matcher(text);
                 if (matcher.find()) {
                     if (isNext && !controleNext) {
-                        if (matcher.find())
-                            return matcher.group().trim();
+                        String retorno="";
+                        for (int i = 0; i < 2; i++) {
+                            if (matcher.find())
+                                retorno= matcher.group().trim();
+                        }
+                        return retorno;
                     }
                     return matcher.group().trim();
                 }

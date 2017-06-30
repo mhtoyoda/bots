@@ -5,12 +5,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.fiveware.dsl.Extract.FromTo;
-import static com.fiveware.dsl.Extract.extract;
+import static com.fiveware.dsl.Helpers.FromTo;
+import static com.fiveware.dsl.Helpers.helpers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -19,25 +20,31 @@ public class ExtractPDFTests {
 	String path;
 	String outPathFile;
 	String url;
+	String fileHtml;
 	@Before
 	public void setup(){
 		String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
 		path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
 		outPathFile = rootDir + File.separator +"out.pdf";
 		url="http://www.globo.com.br";
+		fileHtml=rootDir + File.separator + "cartaExemplo.html";
 	}
 
 	@Test
 	public void converteHtmlToPdf(){
-		extract().html().open(url).outPutFile(outPathFile).buildToFile();
+		helpers().html()
+				.open(url)
+				.outPutFile(outPathFile)
+				.buildToFile();
 	}
 
 	@Test
-	public void extractHtml(){
+	public void convertHtmlToPdf(){
 
-		String dolar = extract().html().open(url).outPutFile(outPathFile)
+		String dolar = helpers().html()
+				.open(url)
+				.outPutFile(outPathFile)
 				.search("dólar", TypeSearch.MONEY)
-				.next()
 				.build();
 
 		//TODO fixe-me little bit workaround
@@ -45,12 +52,23 @@ public class ExtractPDFTests {
 		replaceCifrao = replaceCifrao.replaceFirst(",",".");
 
 		assertTrue(Double.valueOf("3.291") <= Double.valueOf(replaceCifrao));
+	}
+
+	@Test
+	public void extractHtml() throws IOException {
+		String texto = helpers().html()
+				.file(fileHtml)
+				.selectElement("div")
+				.text(5); //numero do elemento
+
+		System.out.println("texto = " + texto);
 
 	}
 
 	@Test
 	public void vencimento(){
-		String vencimento = extract().pdf().open(path,1)
+		String vencimento = helpers().pdf()
+				.open(path,1)
 				.search("Vencimento", TypeSearch.DATE)
 				.build();
 
@@ -60,7 +78,8 @@ public class ExtractPDFTests {
 	@Test
 	public void dataEmissao(){
 
-		String dataEmissao = extract().pdf().open(path,1)
+		String dataEmissao = helpers().pdf()
+				.open(path,1)
 				.search("Data de emissão: ", TypeSearch.DATE)
 				.build();
 
@@ -69,7 +88,8 @@ public class ExtractPDFTests {
 
 	@Test
 	public void icms(){
-		String icms = extract().pdf().open(path, 2)
+		String icms = helpers().pdf()
+				.open(path, 2)
 				.search("ICMS ",  TypeSearch.MONEY)
 				.build();
 
@@ -77,8 +97,29 @@ public class ExtractPDFTests {
 	}
 
 	@Test
+	public void pis(){
+		String pis = helpers().pdf()
+				.open(path, 2)
+				.search("pis",  TypeSearch.MONEY)
+				.build();
+
+		assertEquals("R$ 0,11",pis);
+	}
+
+	@Test
+	public void telefone(){
+		String telefone = helpers().pdf()
+				.open(path, 6)
+				.search("Número",  "[0-9]{2}-[0-9]{5}-[0-9]{4}")
+				.build();
+
+		assertEquals("14-99656-6187",telefone);
+	}
+
+	@Test
 	public void valorPagar(){
-		String valorPagar = extract().pdf().open(path)
+		String valorPagar = helpers().pdf()
+				.open(path)
 				.search("- ", TypeSearch.MONEY)
 				.build();
 
@@ -87,7 +128,7 @@ public class ExtractPDFTests {
 
 	@Test
 	public void cnpj(){
-		String build = extract().pdf()
+		String build = helpers().pdf()
 				.open(path,2)
 				.search("CNPJ: ", TypeSearch.CNPJ)
 				.build();
@@ -107,7 +148,7 @@ public class ExtractPDFTests {
 		map.put(FromTo("Data de emissão: ","dataemissao"),TypeSearch.DATE);
 		map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
 
-		Pojo pojo = (Pojo) extract()
+		Pojo pojo = (Pojo) helpers()
 				.pdf()
 				.open(path)
 				.converter().map(map, Pojo.class).build();

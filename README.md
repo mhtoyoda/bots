@@ -24,7 +24,7 @@ Exemplo - 1
 * Converte Html em PDF
 
 ```java
-import static com.fiveware.dsl.Extract.extract;
+import static helpers;
 public class Exemplo1 {
 
     public static void main(String[] args){
@@ -40,7 +40,7 @@ Exemplo - 2
 * Extrai texto do arquivo Html
 
 ```java
-import static com.fiveware.dsl.Extract.extract;
+import static helpers;
 public class Exemplo2 {
 
     public static void main(String[] args){
@@ -58,7 +58,7 @@ Exemplo - 3
 * Extrai texto de um arquivo PDF
 
 ```java
-import static com.fiveware.dsl.Extract.extract;
+import static helpers;
 import com.fiveware.dsl.TypeSearch;
 public class Exemplo3 {
 
@@ -80,8 +80,8 @@ Exemplo - 4
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.fiveware.dsl.Extract.FromTo;
-import static com.fiveware.dsl.Extract.extract;
+import static com.fiveware.dsl.Helpers.FromTo;
+import static helpers;
 import com.fiveware.dsl.TypeSearch;
 
 public class Exemplo4 {

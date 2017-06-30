@@ -12,9 +12,9 @@ public class BuilderPDF {
     private Pdf pdf;
     private ConvertToPojo convertToPojo;
 
-    private Extract extract;
+    private Helpers extract;
 
-    protected BuilderPDF(Extract extract) {
+    protected BuilderPDF(Helpers extract) {
         this.extract =extract;
     }
 

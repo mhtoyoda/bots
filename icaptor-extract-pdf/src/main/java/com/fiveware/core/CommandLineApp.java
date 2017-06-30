@@ -22,7 +22,7 @@ public class CommandLineApp {
 
     private static String VERSION = "1.0.0";
     private static String VERSION_STRING = String.format("tabula %s (c) 2012-2017 Manuel Aristarán", VERSION);
-    private static String BANNER = "\nTabula helps you extract tables from PDFs\n\n";
+    private static String BANNER = "\nTabula helps you helpers tables from PDFs\n\n";
 
     private Appendable defaultOutput;
     private Rectangle pageArea;
@@ -267,10 +267,10 @@ public class CommandLineApp {
         o.addOption("h", "help", false, "Print this help text.");
         o.addOption("g", "guess", false, "Guess the portion of the page to analyze per page.");
         o.addOption("d", "debug", false, "Print detected table areas instead of processing");
-        o.addOption("r", "spreadsheet", false, "[Deprecated in favor of -l/--lattice] Force extract to be extracted using spreadsheet-style extraction (if there are ruling lines separating each cell, as in a extract of an Excel spreadsheet)");
-        o.addOption("n", "no-spreadsheet", false, "[Deprecated in favor of -t/--stream] Force extract not to be extracted using spreadsheet-style extraction (if there are no ruling lines separating each cell)");
-        o.addOption("l", "lattice", false, "Force extract to be extracted using lattice-mode extraction (if there are ruling lines separating each cell, as in a extract of an Excel spreadsheet)");
-        o.addOption("t", "stream", false, "Force extract to be extracted using stream-mode extraction (if there are no ruling lines separating each cell)");
+        o.addOption("r", "spreadsheet", false, "[Deprecated in favor of -l/--lattice] Force helpers to be extracted using spreadsheet-style extraction (if there are ruling lines separating each cell, as in a helpers of an Excel spreadsheet)");
+        o.addOption("n", "no-spreadsheet", false, "[Deprecated in favor of -t/--stream] Force helpers not to be extracted using spreadsheet-style extraction (if there are no ruling lines separating each cell)");
+        o.addOption("l", "lattice", false, "Force helpers to be extracted using lattice-mode extraction (if there are ruling lines separating each cell, as in a helpers of an Excel spreadsheet)");
+        o.addOption("t", "stream", false, "Force helpers to be extracted using stream-mode extraction (if there are no ruling lines separating each cell)");
         o.addOption("i", "silent", false, "Suppress all stderr output.");
         o.addOption("u", "use-line-returns", false, "Use embedded line returns in cells. (Only in spreadsheet mode.)");
         o.addOption("d", "debug", false, "Print detected table areas instead of processing.");
@@ -366,7 +366,7 @@ public class CommandLineApp {
 
         public List<Table> extractTablesBasic(Page page) {
             if (guess) {
-                // guess the page areas to extract using a detection algorithm
+                // guess the page areas to helpers using a detection algorithm
                 // currently we only have a detector that uses spreadsheets to find table areas
                 DetectionAlgorithm detector = new NurminenDetectionAlgorithm();
                 List<Rectangle> guesses = detector.detect(page);

@@ -86,7 +86,7 @@ public class NurminenDetectionAlgorithm implements DetectionAlgorithm {
     public List<Rectangle> detect(Page page) {
 
         // get horizontal & vertical lines
-        // we get these from an image of the extract and not the extract itself because sometimes there are invisible extract
+        // we get these from an image of the helpers and not the helpers itself because sometimes there are invisible helpers
         // instructions that are interpreted incorrectly as visible elements - we really want to capture what a
         // person sees when they look at the extract
         BufferedImage image;

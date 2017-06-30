@@ -2,10 +2,14 @@ package com.fiveware.dsl;
 
 import com.fiveware.core.PageIterator;
 
+import java.io.IOException;
+
 /**
  * Created by valdisnei on 23/06/17.
  */
 public class BuilderHtml {
+
+    private BuilderExtractHtml builderExtractHtml;
 
     private ConvertHtmlToPdf convertHtmlToPdf;
     private final BuilderPDF builderPDF;
@@ -17,6 +21,11 @@ public class BuilderHtml {
     public BuilderHtml open(String url) {
         convertHtmlToPdf = new ConvertHtmlToPdf(url);
         return this;
+    }
+
+    public BuilderExtractHtml file(String fileHtml) throws IOException {
+        builderExtractHtml = new BuilderExtractHtml();
+        return builderExtractHtml.file(fileHtml);
     }
 
     public BuilderHtml outPutFile(String file) {
