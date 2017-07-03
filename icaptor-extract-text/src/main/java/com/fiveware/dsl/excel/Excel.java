@@ -18,9 +18,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 
 /**
@@ -30,35 +32,39 @@ class Excel implements IExcel{
 
     private String fileExcel;
 
-    private HSSFWorkbook my_xls_workbook;
-    private HSSFSheet my_worksheet;
+    private HSSFWorkbook workbook;
+    private HSSFSheet worksheet;
     private Cell cell;
+    private Map mapCell;
 
     protected Excel(){
+        mapCell = new HashMap();
     }
 
     public IExcel open(String fileExcel) throws IOException {
         this.fileExcel = fileExcel;
         FileInputStream input_document = new FileInputStream(new File(fileExcel));
-        my_xls_workbook = new HSSFWorkbook(input_document);
+        workbook = new HSSFWorkbook(input_document);
         return this;
     }
 
     public Integer totalSheets(){
-        return my_xls_workbook.getNumberOfSheets();
+        return workbook.getNumberOfSheets();
     }
 
 
 
     public IExcel sheet(int sheet){
-        my_worksheet = my_xls_workbook.getSheetAt(sheet);
+        worksheet = workbook.getSheetAt(sheet);
         return this;
     }
 
     public IExcel cell(String referenceCell){
         buildCell(referenceCell);
+        mapCell.put(referenceCell,getValue(cell));
         return this;
     }
+
 
     @Override
     public String text() {
@@ -75,6 +81,7 @@ class Excel implements IExcel{
         buildCell(referenceCell);
         cell.setCellFormula(formula);
         cell.setCellType(CellType.FORMULA);
+        mapCell.put(referenceCell,formula);
         return this;
     }
 
@@ -82,6 +89,7 @@ class Excel implements IExcel{
     public IExcel cell(String referenceCell, String value) {
         buildCell(referenceCell);
         cellValue(value);
+        mapCell.put(referenceCell,value);
         return this;
     }
 
@@ -89,6 +97,7 @@ class Excel implements IExcel{
     public IExcel cell(String referenceCell, Double value) {
         buildCell(referenceCell);
         cellValue(value);
+        mapCell.put(referenceCell,value);
         return this;
     }
 
@@ -97,6 +106,17 @@ class Excel implements IExcel{
         buildCell(referenceCell);
         cellValue(value);
         return this;
+    }
+
+    @Override
+    public IExcelConvert convert(String referenceCell, String attribute, Class aClass){
+        ExcelConvert excelConvert = new ExcelConvert(this);
+        return excelConvert.convert(referenceCell,attribute,aClass);
+    }
+    @Override
+    public IExcelCreaterList readObject(String referenceCell, Object aClass) throws InstantiationException, IllegalAccessException {
+        IExcelCreaterList excelConvert = new ExcelCreaterList(this);
+        return excelConvert.readObject(referenceCell,aClass);
     }
 
     private void cellValue(Object value) {
@@ -113,19 +133,17 @@ class Excel implements IExcel{
         }
     }
 
-    private void buildCell(String referenceCell) {
+    public void buildCell(String referenceCell) {
         CellReference cellReference = new CellReference(referenceCell);
-        Row row = my_worksheet.getRow(cellReference.getRow());
+        Row row = worksheet.getRow(cellReference.getRow());
         cell = row.getCell(cellReference.getCol());
     }
 
-    @Override
-    public Object build() throws IOException {
-        try (FileOutputStream outputStream = new FileOutputStream(this.fileExcel)) {
-            my_xls_workbook.write(outputStream);
-            my_xls_workbook.close();
-        }
-        switch (cell.getCellType()) {
+    public Object getValue(Cell cell) {
+
+        if(Objects.isNull(cell)) return null;
+
+        switch (cell.getCellTypeEnum().getCode()) {
             case Cell.CELL_TYPE_STRING:
                 return cell.getStringCellValue();
             case Cell.CELL_TYPE_BOOLEAN:
@@ -139,6 +157,31 @@ class Excel implements IExcel{
         return null;
     }
 
+
+    @Override
+    public Object build() throws IOException {
+        try (FileOutputStream outputStream = new FileOutputStream(this.fileExcel)) {
+            workbook.write(outputStream);
+            workbook.close();
+        }
+        return getValue(this.cell);
+    }
+
+    protected HSSFSheet getWorksheet() {
+        return worksheet;
+    }
+
+    protected HSSFWorkbook getWorkbook() {
+        return workbook;
+    }
+
+    protected Cell getCell() {
+        return cell;
+    }
+
+    protected Map getMapCell() {
+        return mapCell;
+    }
 
     public static void main(String[] args) throws Exception{
         String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();

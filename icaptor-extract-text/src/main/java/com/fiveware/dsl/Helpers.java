@@ -7,7 +7,6 @@ import com.fiveware.dsl.pdf.BuilderPDF;
 
 import java.io.IOException;
 
-import static org.apache.commons.csv.CSVFormat.Predefined.Excel;
 
 /**
  * Created by valdisnei on 23/06/17.
@@ -57,7 +56,7 @@ public class Helpers {
 
         @Override
         public String toString() {
-            return key.toString();
+            return this.key;
         }
     }
 }
