@@ -12,8 +12,7 @@ import com.fiveware.register.ServerRegister;
 public class IcaptorPlatformApplication {
 
 	public static void main(String[] args) {
-		ConfigurableApplicationContext applicationContext = SpringApplication.run(IcaptorPlatformApplication.class, args);
-		applicationContext.getBean(ServerRegister.class).register();
+		SpringApplication.run(IcaptorPlatformApplication.class, args);
 	}
 	
 	@Bean
