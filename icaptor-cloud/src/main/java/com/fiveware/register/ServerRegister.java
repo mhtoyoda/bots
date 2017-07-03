@@ -12,6 +12,8 @@ import com.fiveware.ServerConfig.ServerInfo;
 import com.fiveware.model.Server;
 import com.fiveware.repository.ServerRepository;
 
+import javax.annotation.PostConstruct;
+
 @Component
 public class ServerRegister {
 
@@ -23,6 +25,7 @@ public class ServerRegister {
 	@Autowired
 	private ServerRepository serverRepository;
 
+	@PostConstruct
 	public void register() {
 		ServerInfo server = serverConfig.getServer();
 		log.info("Init Server Host: {} - Port: {}", server.getHost(), server.getPort());

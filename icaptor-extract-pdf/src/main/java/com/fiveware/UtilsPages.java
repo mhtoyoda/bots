@@ -1,6 +1,6 @@
 package com.fiveware;
 
-import com.fiveware.core.*;
+import com.fiveware.dsl.pdf.core.*;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;

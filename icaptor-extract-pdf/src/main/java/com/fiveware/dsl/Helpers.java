@@ -1,8 +1,13 @@
 package com.fiveware.dsl;
 
 import com.fiveware.dsl.excel.BuilderExcel;
+import com.fiveware.dsl.excel.IExcel;
+import com.fiveware.dsl.html.BuilderHtml;
+import com.fiveware.dsl.pdf.BuilderPDF;
 
 import java.io.IOException;
+
+import static org.apache.commons.csv.CSVFormat.Predefined.Excel;
 
 /**
  * Created by valdisnei on 23/06/17.
@@ -18,9 +23,9 @@ public class Helpers {
         return builderHtml;
     }
 
-    public BuilderExcel excel() throws IOException {
+    public IExcel excel() throws IOException {
         BuilderExcel builderExcel = new BuilderExcel();
-        return builderExcel;
+        return builderExcel.getExcel();
     }
 
     public BuilderPDF pdf(){

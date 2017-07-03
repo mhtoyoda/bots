@@ -2,11 +2,13 @@ package com.fiveware;
 
 import com.fiveware.dsl.TypeSearch;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,6 +17,7 @@ import static com.fiveware.dsl.Helpers.helpers;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@Ignore
 public class ExtractPDFTests {
 
 	String path;
@@ -25,7 +28,7 @@ public class ExtractPDFTests {
 	String outFileHtml;
 	@Before
 	public void setup(){
-		String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
+			String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
 		path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
 		outPathFile = rootDir + File.separator +"out.pdf";
 		url="http://www.globo.com.br";
@@ -36,13 +39,22 @@ public class ExtractPDFTests {
 
 	@Test
 	public void converteExcelToHtml() throws IOException {
-		helpers().excel()
-				 .convert(fileExcel,outFileHtml)
-				 .buildToFile();
-	}
+		Object cell = helpers().excel()
+				.open(fileExcel)
+				.sheet(0)
+				.cell("A1", 10.00)
+				.cell("A2", 20.00)
+				.formula("A3", "SUM(A1:A2)")
+				.cell("A4", LocalDate.now())
+				.build();
+
+
+		System.out.println("integer = " + cell);
+    }
 
 
 	@Test
+	@Ignore
 	public void converteHtmlToPdf(){
 		helpers().html()
 				.open(url)
@@ -51,6 +63,7 @@ public class ExtractPDFTests {
 	}
 
 	@Test
+	@Ignore
 	public void convertHtmlToPdf(){
 
 		String dolar = helpers().html()
@@ -73,7 +86,7 @@ public class ExtractPDFTests {
 				.selectElement("div")
 				.text(5); //numero do elemento
 
-		System.out.println("texto = " + texto);
+//		System.out.println("texto = " + texto);
 
 	}
 

@@ -10,8 +10,6 @@ host: localhost:8082
 agent: agentTeste-1
 ip: 127.0.0.1
 
-
-
 broker:
   user: guest
   pass: guest
@@ -23,12 +21,12 @@ io:
   worker.file: ${HOME}/.icaptor-out-file
   file-read: ${HOME}/.icaptor-read-file
   
-spring:
-  datasource:
-    url: jdbc:mysql://34.206.50.158:3306/icaptor
-    driverClassName: com.mysql.jdbc.Driver
-    username: root
-    password: ic@ptor123
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    hibernate.ddl-auto: update    
+#spring:
+#  datasource:
+#    url: jdbc:mysql://34.206.50.158:3306/icaptor
+#    driverClassName: com.mysql.jdbc.Driver
+#    username: root
+#    password: ic@ptor123
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+#    hibernate.ddl-auto: update
