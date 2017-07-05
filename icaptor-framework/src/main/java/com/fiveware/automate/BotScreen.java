@@ -2,9 +2,13 @@ package com.fiveware.automate;
 
 import java.util.Iterator;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.Options;
 import org.openqa.selenium.WebDriver.TargetLocator;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class BotScreen {
 
@@ -85,5 +89,16 @@ public class BotScreen {
 	public BotScreen waitForPageToLoadFor(int time){
 		new BotJS(webDriver).waitForPageToLoadFor(time);
 		return this;
+	}	
+
+	public boolean waitUntil(int time, String xpathExpression) {
+		Wait<WebDriver> wait = new WebDriverWait(webDriver, time);
+		wait.until(new ExpectedCondition<Boolean>() {
+			@Override
+			public Boolean apply(WebDriver driver) {				
+				return driver.findElement(By.xpath(xpathExpression)) != null;
+			}
+		});
+		return false;
 	}
 }
