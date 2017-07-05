@@ -4,6 +4,8 @@ import com.fiveware.Pojo;
 import com.fiveware.dsl.TypeSearch;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,11 +22,10 @@ import static org.junit.Assert.assertEquals;
  */
 public class PdfXExcelTests {
 
+    static Logger logger = LoggerFactory.getLogger(PdfXExcelTests.class);
+
     String path;
-    String outPathFile;
-    String url;
     String fileExcel;
-    String outFileHtml;
     Pojo pojo;
     @Before
     public void setup(){
@@ -60,11 +61,13 @@ public class PdfXExcelTests {
             helpers().excel()
                     .open(fileExcel)
                     .sheet(0)
-                    .readObject("H1",pojo)
+                    .readObject("A1",pojo)
                     .build();
         } catch (IOException | InstantiationException | IllegalAccessException e) {
-            e.printStackTrace();
+            logger.error("{}",e);
         }
+
+
 
 
     }
