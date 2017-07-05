@@ -24,7 +24,7 @@ public class App {
 //        map.put(FromTo("Data de emissão: ","dataemissao"),TypeSearch.DATE);
 //        map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
 //
-//        Object buildToFile = new Pdf(path).search(map, App.class).buildToFile();
+//        Object buildToFile = new PdfImpl(path).seek(map, App.class).buildToFile();
 //
 //
 //

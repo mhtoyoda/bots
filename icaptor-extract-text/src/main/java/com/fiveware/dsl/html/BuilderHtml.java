@@ -1,9 +1,9 @@
 package com.fiveware.dsl.html;
 
-import com.fiveware.dsl.pdf.core.PageIterator;
-import com.fiveware.dsl.pdf.BuilderPDF;
-import com.fiveware.dsl.pdf.BuilderSearch;
 import com.fiveware.dsl.TypeSearch;
+import com.fiveware.dsl.pdf.Pdf;
+import com.fiveware.dsl.pdf.Search;
+import com.fiveware.dsl.pdf.core.PageIterator;
 
 import java.io.IOException;
 
@@ -15,10 +15,10 @@ public class BuilderHtml {
     private BuilderExtractHtml builderExtractHtml;
 
     private ConvertHtmlToPdf convertHtmlToPdf;
-    private final BuilderPDF builderPDF;
+    private final Pdf pdf;
 
-    public BuilderHtml(BuilderPDF builderPDF) {
-        this.builderPDF = builderPDF;
+    public BuilderHtml(Pdf builderPDF) {
+        this.pdf = builderPDF;
     }
 
     public BuilderHtml open(String url) {
@@ -36,11 +36,15 @@ public class BuilderHtml {
         return this;
     }
 
-    public BuilderSearch search(String search, TypeSearch typeSearch) {
+
+
+
+
+    public Search search(String textSearch, TypeSearch typeSearch) {
         convertHtmlToPdf.buildToFile();
-        builderPDF.open(convertHtmlToPdf.getOutPut());
-        BuilderSearch builderSearch = new BuilderSearch(builderPDF);
-        return builderSearch.search(search,typeSearch);
+        pdf.open(convertHtmlToPdf.getOutPut());
+        Search search = pdf.getSearch();
+        return search.seek(textSearch,typeSearch);
     }
 
     public void buildToFile() {

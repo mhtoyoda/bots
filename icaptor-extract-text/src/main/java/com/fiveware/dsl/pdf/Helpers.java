@@ -1,9 +1,8 @@
-package com.fiveware.dsl;
+package com.fiveware.dsl.pdf;
 
 import com.fiveware.dsl.excel.BuilderExcel;
 import com.fiveware.dsl.excel.IExcel;
-import com.fiveware.dsl.html.BuilderHtml;
-import com.fiveware.dsl.pdf.BuilderPDF;
+import com.fiveware.dsl.html.Html;
 
 import java.io.IOException;
 
@@ -17,8 +16,8 @@ public class Helpers {
         return new Helpers();
     }
 
-    public BuilderHtml html(){
-        BuilderHtml builderHtml = new BuilderHtml(this.pdf());
+    public Html html(){
+        Html builderHtml = Html.getInstance();
         return builderHtml;
     }
 
@@ -27,11 +26,10 @@ public class Helpers {
         return builderExcel.getExcel();
     }
 
-    public BuilderPDF pdf(){
-        BuilderPDF builderPDF = new BuilderPDF(this);
+    public Pdf pdf(){
+        Pdf builderPDF = PdfImpl.getPdf();
         return builderPDF;
     }
-
 
     public static FromTo FromTo(String key, Object obj){
         return new FromTo(key,obj);

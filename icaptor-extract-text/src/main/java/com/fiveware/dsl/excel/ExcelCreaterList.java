@@ -58,7 +58,12 @@ class ExcelCreaterList implements IExcelCreaterList{
                     cell.setCellValue((Double) value);
 
                 if (value instanceof String){
-                    cell.setCellValue((String) value);
+                    if (value.toString().startsWith("=")) {
+                        value = ((String) value).substring(1, ((String) value).length());
+                        cell.setCellFormula((String) value);
+                    }else {
+                        cell.setCellValue((String) value);
+                    }
                 }
 
 
@@ -74,6 +79,11 @@ class ExcelCreaterList implements IExcelCreaterList{
 
     private Row createHeader(String reference, Field[] fields){
         CellReference cellReference = new CellReference(reference);
+
+//        this.excel.buildCell(reference);
+//
+//        Cell cell1 = this.excel.getCell();
+
 
         CellRangeAddress cellRangeAddress = new CellRangeAddress(cellReference.getRow(),cellReference.getCol(),
                 cellReference.getRow(),cellReference.getCol()+fields.length);
@@ -91,8 +101,9 @@ class ExcelCreaterList implements IExcelCreaterList{
 
 
     @Override
-    public void build() throws IOException {
+    public IExcel build() throws IOException {
         this.excel.build();
+        return this.excel;
     }
 
     private Object getValue(Field field) throws IllegalAccessException, InstantiationException {

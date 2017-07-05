@@ -9,5 +9,5 @@ public interface IExcelCreaterList {
 
     IExcelCreaterList readObject(String reference, Object object) throws IllegalAccessException, InstantiationException;
 
-    void build() throws IOException;
+    IExcel build() throws IOException;
 }

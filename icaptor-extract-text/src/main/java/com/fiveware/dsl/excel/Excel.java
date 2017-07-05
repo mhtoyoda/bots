@@ -11,6 +11,8 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -29,6 +31,8 @@ import java.util.Objects;
  * Created by valdisnei on 6/30/17.
  */
 class Excel implements IExcel{
+
+    static Logger logger= LoggerFactory.getLogger(Excel.class);
 
     private String fileExcel;
 
@@ -52,15 +56,41 @@ class Excel implements IExcel{
         return workbook.getNumberOfSheets();
     }
 
+    @Override
+    public IExcel createSheet(String sheet){
+        worksheet = workbook.createSheet(sheet);
+        return this;
+    }
 
+    @Override
+    public IExcel deleteSheet(){
+            int sheetIndex = workbook.getSheetIndex(worksheet);
+            workbook.removeSheetAt(sheetIndex);
+            return this;
+    }
 
+    @Override
     public IExcel sheet(int sheet){
         worksheet = workbook.getSheetAt(sheet);
         return this;
     }
 
+    @Override
+    public IExcel sheet(String sheet){
+        worksheet = workbook.getSheet(sheet);
+        return this;
+    }
+
     public IExcel cell(String referenceCell){
         buildCell(referenceCell);
+        mapCell.put(referenceCell,getValue(cell));
+        return this;
+    }
+
+    @Override
+    public IExcel cell(Formula referenceCell){
+        buildCell(referenceCell);
+        cellValue(referenceCell);
         mapCell.put(referenceCell,getValue(cell));
         return this;
     }
@@ -130,13 +160,36 @@ class Excel implements IExcel{
             LocalDate value1 = (LocalDate) value;
             Date date = Date.valueOf(value1);
             cell.setCellValue(date);
+        }else if (value instanceof Formula){
+            cell.setCellFormula((String) ((Formula) value).getFormula());
+            cell.setCellType(CellType.FORMULA);
         }
     }
 
     public void buildCell(String referenceCell) {
         CellReference cellReference = new CellReference(referenceCell);
         Row row = worksheet.getRow(cellReference.getRow());
-        cell = row.getCell(cellReference.getCol());
+
+        if (Objects.isNull(row)){
+            row = worksheet.createRow(cellReference.getRow());
+            cell = row.createCell(cellReference.getCol());
+        }else{
+            cell = row.getCell(cellReference.getCol());
+        }
+
+    }
+
+    public void buildCell(Formula referenceCell) {
+        CellReference cellReference = new CellReference(referenceCell.getReference());
+        Row row = worksheet.getRow(cellReference.getRow());
+
+        if (Objects.isNull(row)){
+            row = worksheet.createRow(cellReference.getRow());
+            cell = row.createCell(cellReference.getCol());
+        }else{
+            cell = row.getCell(cellReference.getCol());
+        }
+
     }
 
     public Object getValue(Cell cell) {
@@ -162,7 +215,7 @@ class Excel implements IExcel{
     public Object build() throws IOException {
         try (FileOutputStream outputStream = new FileOutputStream(this.fileExcel)) {
             workbook.write(outputStream);
-            workbook.close();
+            outputStream.close();
         }
         return getValue(this.cell);
     }
@@ -237,5 +290,8 @@ class Excel implements IExcel{
         //we created our pdf file..
         input_document.close(); //close xls
     }
+
+
+
 
 }

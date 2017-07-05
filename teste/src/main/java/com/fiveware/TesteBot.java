@@ -11,7 +11,7 @@ import java.util.Iterator;
 
 import static com.fiveware.automate.BotAutomationBuilder.Web;
 import static com.fiveware.automate.BotWebBrowser.PHANTOM;
-import static com.fiveware.dsl.Helpers.helpers;
+import static com.fiveware.dsl.pdf.Helpers.helpers;
 
 /**
  * Created by valdisnei on 5/28/17.

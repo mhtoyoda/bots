@@ -68,7 +68,7 @@ class ToHtml {
     }
 
     /**
-     * Creates a new converter to HTML for the given workbook.
+     * Creates a new writeObject to HTML for the given workbook.
      *
      * @param wb     The workbook.
      * @param output Where the HTML output will be written.
@@ -80,7 +80,7 @@ class ToHtml {
     }
 
     /**
-     * Creates a new converter to HTML for the given workbook.  If the path ends
+     * Creates a new writeObject to HTML for the given workbook.  If the path ends
      * with "<tt>.xlsx</tt>" an {@link XSSFWorkbook} will be used; otherwise
      * this will use an {@link HSSFWorkbook}.
      *
@@ -95,7 +95,7 @@ class ToHtml {
     }
 
     /**
-     * Creates a new converter to HTML for the given workbook.  This attempts to
+     * Creates a new writeObject to HTML for the given workbook.  This attempts to
      * detect whether the input is XML (so it should create an {@link
      * XSSFWorkbook} or not (so it should create an {@link HSSFWorkbook}).
      *
@@ -380,7 +380,7 @@ class ToHtml {
                     if (cell != null) {
                         style = cell.getCellStyle();
                         attrs = tagStyle(cell, style);
-                        //Set the value that is rendered for the cell
+                        //Set the formula that is rendered for the cell
                         //also applies the format
                         CellFormat cf = CellFormat.getInstance(
                                 style.getDataFormatString());

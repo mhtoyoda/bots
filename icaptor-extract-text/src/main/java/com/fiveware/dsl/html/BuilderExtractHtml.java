@@ -19,7 +19,7 @@ public class BuilderExtractHtml {
     }
 
     public BuilderExtractHtml selectElement(String element){
-        this.extractTextFromHtml.selecElement(element);
+        this.extractTextFromHtml.selectElement(element);
         return this;
     }
 
