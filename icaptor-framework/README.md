@@ -249,3 +249,32 @@ public class Exemplo6 {
     }        
 }
 ```
+Exemplo - 7
+---
+* Uso do PDF com Excel
+
+```java
+import static com.fiveware.automate.BotAutomationBuilder.Web;
+import static com.fiveware.automate.BotWebBrowser.PHANTOM;
+
+public class Exemplo7 {
+
+    public static void main(String[] args){
+        
+        Map map = new HashMap();
+        map.put(FromTo("cnpj: ","cnpj"), TypeSearch.CNPJ);
+        map.put("icms",  TypeSearch.MONEY);
+        map.put(FromTo("- ","valorpagar"),TypeSearch.MONEY);
+        map.put("vencimento",  TypeSearch.DATE);
+        map.put(FromTo("Data de emissão: ","dataemissao"),TypeSearch.DATE);
+        map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
+
+        pojo= (Pojo) helpers()
+                .pdf()
+                .open(path)
+                .converter().map(map, Pojo.class).build();
+
+                              				
+    }        
+}
+```
