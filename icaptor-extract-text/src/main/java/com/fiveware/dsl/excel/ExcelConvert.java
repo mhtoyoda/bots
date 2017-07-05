@@ -1,5 +1,6 @@
 package com.fiveware.dsl.excel;
 
+import com.fiveware.dsl.excel.IExcel.Formula;
 import org.apache.commons.lang3.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +28,6 @@ class ExcelConvert implements IExcelConvert {
     @Override
     public IExcelConvert convert(String reference, String attributeClass, Class _aClass) {
         try {
-
             this.excel.cell(reference);
 
             if (obj==null) obj = _aClass.newInstance();
@@ -44,6 +44,11 @@ class ExcelConvert implements IExcelConvert {
             logger.error("{}",e);
         }
         return this;
+    }
+
+    @Override
+    public IExcelConvert convert(Formula formula, String attributeClass, Class _aClass) {
+        return convert(formula.getReference(),attributeClass,_aClass);
     }
 
 

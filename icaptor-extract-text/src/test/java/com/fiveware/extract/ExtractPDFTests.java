@@ -6,12 +6,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.fiveware.dsl.Helpers.FromTo;
-import static com.fiveware.dsl.Helpers.helpers;
+import static com.fiveware.dsl.pdf.Helpers.FromTo;
+import static com.fiveware.dsl.pdf.Helpers.helpers;
 import static org.junit.Assert.assertEquals;
 
 public class ExtractPDFTests {
@@ -43,11 +44,12 @@ public class ExtractPDFTests {
 
 	}
 	@Test
-	public void dataEmissao(){
+	public void dataEmissao() throws UnsupportedEncodingException {
 
+		String s = "Data de emissão: ";
 		String dataEmissao = helpers().pdf()
 				.open(path,1)
-				.search("Data de emissão: ", TypeSearch.DATE)
+				.search(new String(s.getBytes("ISO8859_1"),"ISO8859_1"), TypeSearch.DATE)
 				.build();
 
 		assertEquals("07/03/2017",dataEmissao);
@@ -130,7 +132,7 @@ public class ExtractPDFTests {
 		return (Pojo) helpers()
 				.pdf()
 				.open(path)
-				.converter().map(map, Pojo.class).build();
+				.writeObject().map(map, Pojo.class).build();
 	}
 
 }

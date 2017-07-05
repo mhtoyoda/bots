@@ -4835,7 +4835,7 @@ previous button's border...
   margin-left: -20px;
   margin-right: 0;
 }
-/* item search bar */
+/* item seek bar */
 .multiselect-container.dropdown-menu > li.multiselect-item.filter {
   min-width: 175px;
 }

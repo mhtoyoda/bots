@@ -1,93 +1,39 @@
 package com.fiveware.dsl.pdf;
 
-
-import com.fiveware.UtilsPages;
+import com.fiveware.dsl.TypeSearch;
 import com.fiveware.dsl.pdf.core.Page;
 import com.fiveware.dsl.pdf.core.PageIterator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
-
+import java.util.regex.Pattern;
 
 /**
- * Created by valdisnei on 23/06/17.
+ * Created by valdisnei on 05/07/17.
  */
-public class Pdf {
-    static Logger logger= LoggerFactory.getLogger(Pdf.class);
+public interface Pdf {
 
-    private PageIterator pageIterator;
-    private Page page;
-    private StringBuilder builder = new StringBuilder();
-    private String pathFile;
+    Pdf open(String pathFIle);
 
+    Pdf open(String pathFIle, int numberPage);
 
-    protected Pdf(String pathFIle) {
-        try {
-            main(pathFIle);
-        } catch (IOException e) {
-            logger.error("{}",e);
-        }
-    }
+    Write writeObject();
 
-    protected Pdf(String pathFIle, int numberPage) {
-        try {
-            main(pathFIle,Integer.valueOf(numberPage));
-        } catch (IOException e) {
-            logger.error("{}",e);
-        }
-    }
+    Search search(String search, TypeSearch typeSearch);
 
-    private void main(String pathFile) throws IOException {
-        this.pathFile=pathFile;
-        pageIterator = UtilsPages.pages(pathFile);
-    }
+    Search search(String search, String regex);
 
-    private void main(Object ... pathFile) throws IOException {
-        this.pathFile=pathFile[0].toString();
-        page = UtilsPages.getPage(pathFile[0].toString(),
-                Integer.valueOf((Integer) pathFile[1]).intValue());
-    }
+    Search search(String search, Pattern pattern);
 
-    protected Page getPage() {
-        return page;
-    }
+    Search getSearch();
 
-    protected PageIterator getPageIterator() {
-        return pageIterator;
-    }
+    Page getPage();
 
-//    public static FromTo FromTo(String key, Object obj){
-//        return new FromTo(key,obj);
-//    }
+    PageIterator getPageIterator();
 
-    protected StringBuilder getBuilder() {
-        return builder;
-    }
+    String getPathFile();
 
+    String getText();
 
-    protected String getPathFile() {
-        return pathFile;
-    }
+    void append(String text);
 
-//    public static class FromTo {
-//        String key;
-//        Object value;
-//
-//        public FromTo(String key, Object value) {
-//            this.key = key;
-//            this.value = value;
-//        }
-//
-//        public String getKey() {
-//            return key;
-//        }
-//
-//        public Object getValue() {
-//            return value;
-//        }
-//
-//    }
-
-
+    boolean isEmptyText();
 }

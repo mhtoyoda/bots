@@ -7,5 +7,7 @@ public interface IExcelConvert {
 
     IExcelConvert convert(String reference, String attributeClass, Class _aClass);
 
+    IExcelConvert convert(IExcel.Formula reference, String attributeClass, Class _aClass);
+
     Object toObject();
 }

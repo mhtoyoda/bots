@@ -71,7 +71,7 @@ public class SpreadsheetExtractionAlgorithm implements ExtractionAlgorithm {
     }
     
     /**
-     * Pdf a list of Table from page using rulings as separators
+     * PdfImpl a list of Table from page using rulings as separators
      */
     public List<? extends Table> extract(Page page, List<Ruling> rulings) {
         // split rulings into horizontal and vertical

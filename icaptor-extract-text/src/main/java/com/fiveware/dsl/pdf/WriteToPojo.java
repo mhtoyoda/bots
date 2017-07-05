@@ -1,6 +1,5 @@
 package com.fiveware.dsl.pdf;
 
-import com.fiveware.dsl.Helpers;
 import com.fiveware.dsl.TypeSearch;
 import com.google.common.base.MoreObjects;
 import org.apache.commons.lang3.text.WordUtils;
@@ -16,24 +15,27 @@ import java.util.function.BiConsumer;
 /**
  * Created by valdisnei on 26/06/17.
  */
-class ConvertToPojo {
+class WriteToPojo implements Write{
 
-    static Logger logger = LoggerFactory.getLogger(ConvertToPojo.class);
+    static Logger logger = LoggerFactory.getLogger(WriteToPojo.class);
 
 
     private Map searchmap;
     private Class className;
-    private BuilderSearch builderSearch;
+    private Search builderSearch;
 
-    protected ConvertToPojo(BuilderSearch pdf) {
+    protected WriteToPojo(Search pdf) {
         this.builderSearch =pdf;
     }
 
-    protected void converter(Map map, Class className) {
+    @Override
+    public Write map(Map map, Class className) {
         this.searchmap = map;
         this.className = className;
+        return this;
     }
 
+    @Override
     public Object build(){
         try {
             Object myObject = this.className.newInstance();
@@ -70,14 +72,14 @@ class ConvertToPojo {
                         Method setter=aClass.getMethod("set"+ WordUtils.capitalizeFully(key),field.getType());
 
 
-                        BuilderSearch extract = null;
+                        Search extract = null;
                         if (this.searchmap.get(fieldPDF) instanceof TypeSearch) {
                             Object typeSearch =  (TypeSearch) this.searchmap.get(fieldPDF);
-                            extract = this.builderSearch.search(fieldPDF.toString().toUpperCase(), (TypeSearch) typeSearch);
+                            extract = this.builderSearch.seek(fieldPDF.toString().toUpperCase(), (TypeSearch) typeSearch);
 
                         }else if(this.searchmap.get(fieldPDF) instanceof String){
                             String typeSearch = (String) this.searchmap.get(fieldPDF);
-                            extract = this.builderSearch.search(fieldPDF.toString().toUpperCase(), typeSearch);
+                            extract = this.builderSearch.seek(fieldPDF.toString().toUpperCase(), typeSearch);
                         }
 
                         setter.invoke(myObject, MoreObjects.firstNonNull(extract.build(),"").trim());

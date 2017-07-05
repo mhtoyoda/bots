@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * Created by valdisnei on 27/06/17.
  */
-class ExtractTextFromHtml {
+class ExtractTextFromHtml implements ExtractHtml{
 
     static Logger logger = LoggerFactory.getLogger(ExtractTextFromHtml.class);
     private String fileInput;
@@ -25,8 +26,11 @@ class ExtractTextFromHtml {
     private StringBuilder htmlString;
     private boolean controlFirst;
 
+    protected ExtractTextFromHtml() {
+    }
 
-    protected ExtractTextFromHtml file(String fileInput) throws IOException {
+    @Override
+    public ExtractHtml file(String fileInput) throws IOException {
         this.fileInput= fileInput;
         StringBuilder br = getBufferedReader(fileInput);
         document = Jsoup.parse(br.toString(), "UTF-8");
@@ -34,12 +38,14 @@ class ExtractTextFromHtml {
     }
 
 
-    protected ExtractTextFromHtml selecElement(String element){
+    @Override
+    public ExtractHtml selectElement(String element){
         elements = document.select(element); // a with href
         return this;
     }
 
-    protected String text(int numberElement){
+    @Override
+    public String text(int numberElement){
         Element element = elements.get(numberElement);
         return element.text();
     }
@@ -52,7 +58,7 @@ class ExtractTextFromHtml {
 
         StringBuilder list = new StringBuilder();
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(fileInput))) {
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(fileInput), Charset.forName("ISO8859_1"))) {
 
             br.lines().collect(Collectors.toList())
                     .forEach((s)->list.append(s));

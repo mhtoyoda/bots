@@ -1,60 +1,53 @@
 package com.fiveware.extract;
 
-import com.fiveware.dsl.TypeSearch;
+import org.apache.tika.exception.TikaException;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Paths;
+import java.security.InvalidParameterException;
 
-import static com.fiveware.dsl.Helpers.helpers;
+import static com.fiveware.dsl.pdf.Helpers.helpers;
 import static org.junit.Assert.assertTrue;
 
 public class ExtractHtmlTests {
 
 	String path;
 	String outPathFile;
-	String url;
+	String urlString;
 	String fileHtml;
 	String fileExcel;
 	String outFileHtml;
+	URL url;
 	@Before
-	public void setup(){
+	public void setup() throws MalformedURLException {
 		String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
 		outPathFile = rootDir + File.separator +"out.pdf";
-		url="http://www.globo.com.br";
+		urlString ="http://www.globo.com.br";
 		fileHtml=rootDir + File.separator + "cartaExemplo.html";
 		fileExcel=rootDir + File.separator + "sal.xls";
 		outFileHtml =rootDir + File.separator + "out.html";
+		url = new URL("https://www.uol.com.br");
 	}
 
 
 	@Test
-	@Ignore
-	public void converteHtmlToPdf(){
-		helpers().html()
-				.open(url)
-				.outPutFile(outPathFile)
-				.buildToFile();
-	}
+	public void doConversion() throws InvalidParameterException, MalformedURLException, IOException, TikaException, SAXException {
+		File file = helpers().html()
+				.fromFile(fileHtml)
+				.toPdf()
+				.buildToFile(outPathFile);
 
-	@Test
-	@Ignore
-	public void convertHtmlToPdf(){
+		InputStream in = new FileInputStream(file);
 
-		String dolar = helpers().html()
-				.open(url)
-				.outPutFile(outPathFile)
-				.search("dólar", TypeSearch.MONEY)
-				.build();
-
-		//TODO fixe-me little bit workaround
-		String replaceCifrao = dolar.replaceFirst("R\\$","");
-		replaceCifrao = replaceCifrao.replaceFirst(",",".");
-
-		assertTrue(Double.valueOf("3.291") <= Double.valueOf(replaceCifrao));
+		assertTrue(in.available()>-1);
 	}
 
 	@Test

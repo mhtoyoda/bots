@@ -1,7 +1,8 @@
-package com.fiveware.merge;
+package com.fiveware.extract;
 
 import com.fiveware.Pojo;
 import com.fiveware.dsl.TypeSearch;
+import com.fiveware.dsl.excel.IExcel;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -13,8 +14,8 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.fiveware.dsl.Helpers.FromTo;
-import static com.fiveware.dsl.Helpers.helpers;
+import static com.fiveware.dsl.pdf.Helpers.FromTo;
+import static com.fiveware.dsl.pdf.Helpers.helpers;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -33,18 +34,22 @@ public class PdfXExcelTests {
         fileExcel=rootDir + File.separator + "sal.xls";
         path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
 
+
+        String dataEmissao = "Data de emissão: ";
+
         Map map = new HashMap();
         map.put(FromTo("cnpj: ","cnpj"), TypeSearch.CNPJ);
         map.put("icms",  TypeSearch.MONEY);
         map.put(FromTo("- ","valorpagar"),TypeSearch.MONEY);
         map.put("vencimento",  TypeSearch.DATE);
-        map.put(FromTo("Data de emissão: ","dataemissao"),TypeSearch.DATE);
+        map.put(FromTo(dataEmissao,"dataemissao"),TypeSearch.DATE);
         map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
 
         pojo= (Pojo) helpers()
                 .pdf()
                 .open(path)
-                .converter().map(map, Pojo.class).build();
+                .writeObject().map(map, Pojo.class)
+                .build();
 
 
         assertEquals("02.558.157/0001-62",pojo.getCnpj());
@@ -58,11 +63,22 @@ public class PdfXExcelTests {
     @Test
     public void populateSheet(){
         try {
-            helpers().excel()
+            IExcel excel = helpers().excel()
                     .open(fileExcel)
-                    .sheet(0)
-                    .readObject("A1",pojo)
+                    .createSheet("importPDF")
+                    .readObject("A1", pojo)
                     .build();
+
+            String a1 = (String) excel.cell("A1").build();
+            String a2 = (String) excel.cell("A2").build();
+
+            excel.deleteSheet().build();
+
+            assertEquals("cnpj",a1);
+            assertEquals("02.558.157/0001-62",a2);
+
+
+
         } catch (IOException | InstantiationException | IllegalAccessException e) {
             logger.error("{}",e);
         }
