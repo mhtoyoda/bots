@@ -274,11 +274,6 @@ import static com.fiveware.dsl.pdf.Helpers.helpers;
 
 public class Exemplo7 {
 
-
-    
-    
-    
-
     public static void main(String[] args){
     	Pojo pojo,pojo2 = null;
 	
