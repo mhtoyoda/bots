@@ -105,11 +105,11 @@
             // Prep admin panel/container prior to menu creation
             methods.createControls(options);
 
-            // Create Mobile Menus
-            methods.createMobileControls(options);
-
             // Loop through settings key and apply options to panels
             methods.applySettings();
+
+            // Create Mobile Menus
+            methods.createMobileControls(options);
 
             if (dragSetting === true) {
                // Activate jQuery sortable on declared grids/panels

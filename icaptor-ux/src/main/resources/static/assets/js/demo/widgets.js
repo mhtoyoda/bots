@@ -9,7 +9,7 @@
 var demoHighCharts = function () {
 
         // Define chart color patterns
-        var highColors = [bgWarning, bgPrimary, bgInfo, bgAlert,
+        var highColors = [bgInfo, bgPrimary, bgSuccess, bgWarning,
             bgDanger, bgSuccess, bgSystem, bgDark
         ];
 

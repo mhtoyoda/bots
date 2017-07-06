@@ -6,8 +6,8 @@
 //
 @root-path:		     "../../../../"; // Root/assets/skin/default-skin/less/ *here*
 @assets-path:	     "../../../";
-@img-path:	         "../../../img";
-@fonts-path:         "../../../fonts";
+@img-path:	       "../../../img";
+@fonts-path:       "../../../fonts";
 
 
 //== Colors
@@ -27,11 +27,11 @@
 
 // default contextual colors
 @brand-default:         #f0f0f0; 
-@brand-primary:         #4a89dc; // blue
+@brand-primary:         #3498db; // blue
 @brand-success:         #70ca63; // green
 @brand-info:            #3bafda; // light blue
 @brand-warning:         #f6bb42; // yellow
-@brand-danger:          #e9573f; // red
+@brand-danger:          #df5640; // red
 @brand-alert:           #967adc; // purple 
 @brand-system:          #37bc9b; // teal
 @brand-dark:            #3b3f4f; // dark/black
@@ -59,6 +59,7 @@
 //## Font, line-height, and color for body text, headings, and more.
 
 @font-family-sans-serif:  "Open Sans", Helvetica, Arial, sans-serif;
+// @font-family-sans-serif:  "Source Sans Pro", Helvetica, Arial, sans-serif;
 @font-family-serif:       Georgia, "Times New Roman", Times, serif;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 @font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace;
@@ -129,9 +130,9 @@
 @line-height-large:         1.33;
 @line-height-small:         1.5;
 
-@border-radius-base:        1px;
+@border-radius-base:        4px;
 @border-radius-large:       3px;
-@border-radius-small:       0px;
+@border-radius-small:       2px;
 
 
 //** Global color for active items (e.g., navs or dropdowns).
@@ -225,7 +226,7 @@
 //** `<input>` border color
 @input-border:                   #ddd;
 //** `<input>` border radius
-@input-border-radius:            @border-radius-small;
+@input-border-radius:            @border-radius-base;
 //** Border color for inputs on focus
 @input-border-focus:             lighten(@brand-primary, 10%);
 
@@ -824,9 +825,9 @@
 
 // Panel Header
 @panel-heading-padding:        0 8px;
-@panel-heading-font-color:     #666;
-@panel-heading-font-size:      13px;
-@panel-heading-font-weight:    600;
+@panel-heading-font-color:     #999;
+@panel-heading-font-size:      15px;
+@panel-heading-font-weight:    400;
 @panel-heading-bg:             #fafafa;
 @panel-heading-border-color:   #eee;
 
@@ -838,8 +839,8 @@
 @panel-footer-padding:        10px 15px;
 
 // Panel Border Settings
-@panel-border-color:          #e5e5e5; // Contextual classes apply colored borders. ie: ".panel-info"
-@panel-border-radius:         2px;
+@panel-border-color:          #e2e2e2; // Contextual classes apply colored borders. ie: ".panel-info"
+@panel-border-radius:         3px;
 @panel-inner-border:          #eee;
 
 // Panel Contextuals

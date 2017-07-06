@@ -57,13 +57,14 @@ body.ui-drag-active .preserve-grid {
   position: relative;
   display: none;
   text-align: center;
-  background: #f1f1f1;
   padding: 9px;
   color: #AAA;
-  background-color: #f1f1f1;
+  background-color: #f9f9f9;
   border-left: 2px dashed #d9d9d9;
   border-right: 2px dashed #d9d9d9;
   border-bottom: 1px solid #ddd;
+
+  border-color: #e8e8e8;
 }
 /* titlebox */
 .panel-editbox {
@@ -83,13 +84,14 @@ body.ui-drag-active .preserve-grid {
 }
 /* colorbox */
 .panel-colorbox {
-  padding: 12px 9px;
+  text-align: right;
+  padding: 8px 9px;
 }
 .panel-colorbox > span {
   cursor: pointer;
   display: inline-block;
-  width: 23px;
-  height: 23px;
+  width: 27px;
+  height: 25px;
   margin: 4px 5px 0;
   border: 2px solid rgba(0, 0, 0, 0.2);
 }
@@ -149,16 +151,22 @@ body.panel-fullscreen-active #content_wrapper {
 /* controls */
 .panel-controls {
   float: right;
+  position: relative;
   display: block;
   cursor: pointer;
+  padding-left: 5px;
+  padding-right: 7px;
+  margin-right: -8px;
+  background: rgba(0,0,0,0.028);
+  border-left: 1px solid rgba(0,0,0,0.06);
 }
 .panel-controls > a {
   padding-top: 1px;
   display: inline-block;
   opacity: 0.7;
-  width: 30px;
+  width: 26px;
   color: #999;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: normal;
   text-align: center;
 }
@@ -241,6 +249,9 @@ body.panel-fullscreen-active #content_wrapper {
 .panel-controls > a.panel-control-loader {
   opacity: 1;
   display: none;
+  position: absolute;
+  top: 1px;
+  left: -35px;
 }
 .panel-loader-active .panel-controls > a.panel-control-loader {
   display: inline-block !important;
@@ -286,11 +297,6 @@ body.panel-fullscreen-active #content_wrapper {
   background: #F4F4F4;
   border-radius: 2px;
   border: 1px solid #EEE;
-}
-.panel.mobile-controls .panel-heading > .panel-controls:hover,
-.panel.mobile-controls .panel-heading > .panel-controls.panel-controls-open {
-  background: #F0F0F0;
-  border-color: #E6E6E6;
 }
 .panel.mobile-controls .panel-heading > .panel-controls:after {
   position: absolute;
@@ -380,4 +386,109 @@ body.panel-fullscreen-active #content_wrapper {
 }
 .panel.mobile-controls.panel-fullscreen .popover {
   display: none !important;
+}
+
+
+
+
+
+
+// NEW SKIN PANEL CONTROL MODS added via updates
+// Update v1.41 (New Skin Introduced)
+//
+
+/* Fix panel nav tab bg on color/editbox open */
+.panel-editbox-open .panel-tabs > li.active > a,
+.panel-editbox-open .panel-tabs > li.active > a:hover,
+.panel-editbox-open .panel-tabs > li.active > a:focus,
+.panel-colorbox-open .panel-tabs > li.active > a,
+.panel-colorbox-open .panel-tabs > li.active > a:hover,
+.panel-colorbox-open .panel-tabs > li.active > a:focus {
+  background: #f9f9f9;
+}
+
+.panel.panel-primary .panel-tabs > li > a,
+.panel.panel-info .panel-tabs > li > a,
+.panel.panel-success .panel-tabs > li > a,
+.panel.panel-info .panel-tabs > li > a,
+.panel.panel-warning .panel-tabs > li > a,
+.panel.panel-danger .panel-tabs > li > a,
+.panel.panel-alert .panel-tabs > li > a,
+.panel.panel-system .panel-tabs > li > a,
+.panel.panel-dark .panel-tabs > li > a {
+  left: 7px;
+  padding: 6px 20px 10px; 
+  color: #FFF !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  border-left-color: transparent !important;
+  border-right-color: transparent !important;
+}
+.panel.panel-primary .panel-tabs > li > a:hover,
+.panel.panel-info .panel-tabs > li > a:hover,
+.panel.panel-success .panel-tabs > li > a:hover,
+.panel.panel-info .panel-tabs > li > a:hover,
+.panel.panel-warning .panel-tabs > li > a:hover,
+.panel.panel-danger .panel-tabs > li > a:hover,
+.panel.panel-alert .panel-tabs > li > a:hover,
+.panel.panel-system .panel-tabs > li > a:hover,
+.panel.panel-dark .panel-tabs > li > a:hover {
+  color: #FFF !important;
+  color: rgba(255, 255, 255, 1) !important;
+}
+.panel.panel-primary .panel-tabs > li > a:focus,
+.panel.panel-info .panel-tabs > li > a:focus,
+.panel.panel-success .panel-tabs > li > a:focus,
+.panel.panel-info .panel-tabs > li > a:focus,
+.panel.panel-warning .panel-tabs > li > a:focus,
+.panel.panel-danger .panel-tabs > li > a:focus,
+.panel.panel-alert .panel-tabs > li > a:focus,
+.panel.panel-system .panel-tabs > li > a:focus,
+.panel.panel-dark .panel-tabs > li > a:focus {
+  color: #FFF !important;
+  color: rgba(255, 255, 255, 1) !important;
+  background: rgba(0,0,0, 0.1) !important;
+}
+.panel.panel-primary .panel-tabs > li.active > a:focus,
+.panel.panel-info .panel-tabs > li.active > a:focus,
+.panel.panel-success .panel-tabs > li.active > a:focus,
+.panel.panel-info .panel-tabs > li.active > a:focus,
+.panel.panel-warning .panel-tabs > li.active > a:focus,
+.panel.panel-danger .panel-tabs > li.active > a:focus,
+.panel.panel-alert .panel-tabs > li.active > a:focus,
+.panel.panel-system .panel-tabs > li.active > a:focus,
+.panel.panel-dark .panel-tabs > li.active > a:focus {
+  color: #666 !important;
+  background: #FFF !important;
+}
+
+.panel .panel-tabs > li.active > a,
+.panel .panel-tabs > li.active > a:hover,
+.panel .panel-tabs > li.active > a:focus {
+  color: #666 !important;
+  -webkit-border-radius: 2px 2px 0 0;
+  border-radius: 2px 2px 0 0;
+}
+
+
+
+// MOBILE MENU MODS
+.panel.mobile-controls .panel-heading > .panel-controls {
+  width: 32px;
+  height: 30px;
+  margin-top: 10px;
+  margin-right: 2px;
+  background: #f0f0f0;
+  border-color: #DDD;
+}
+.panel.mobile-controls .panel-heading > .panel-controls:after {
+  top: 0;
+  left: 8px;
+  font-size: 17px;
+}
+.panel.mobile-controls .panel-controls + .popover > .popover-content {
+  padding: 0 5px;
+}
+.panel.mobile-controls .panel-controls + .popover .panel-controls {
+  background: transparent !important;
+  border-color: transparent !important;
 }

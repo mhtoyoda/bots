@@ -31,8 +31,8 @@
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
-	-webkit-border-radius:0px;
-	border-radius: 0px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
 }
 
 .admin-form input[type="search"]::-webkit-search-decoration,
@@ -92,11 +92,11 @@
 	-ms-transition:all 0.5s ease-in-out;
 	-o-transition:all 0.5s ease-in-out;
 	transition:all 0.5s ease-in-out;
-	-webkit-border-radius: 0;
-	-moz-border-radius: 0;
-	-ms-border-radius: 0;
-	-o-border-radius: 0;
-	border-radius: 0;
+	// -webkit-border-radius: 0;
+	// -moz-border-radius: 0;
+	// -ms-border-radius: 0;
+	// -o-border-radius: 0;
+	// border-radius: 0;
 	outline:none;
 }
 .admin-form .input-link,
@@ -333,7 +333,9 @@
 	height: 34px;
 	line-height: 34px;
 	padding: 0 16px;
-	z-index:10;
+	z-index: 10;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
 }
 
 /* File Button - Left Style */
@@ -416,10 +418,12 @@
 	margin-right:5px;
 	background: #fff;
 	display: inline-block;
-    border: 3px solid #DDD;	
+  border: 3px solid #DDD;	
 	height: 21px;
 	width: 21px;
 	top:4px;	
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
 }
 
 .admin-form .checkbox:before, 
@@ -491,32 +495,39 @@
 	cursor:pointer; 
 	position: relative; 
 	padding-right:10px;
-    display: inline-block;
+  display: inline-block;
 	margin-bottom:5px;
 	height: 26px;
 }
 .admin-form .switch > label {
 	cursor:pointer;
-    display: inline-block;
-    position: relative;
-    height: 25px;
+  display: inline-block;
+  position: relative;
+  height: 25px;
 	width: 58px;
-	color: #fff;
-    font-size: 10px;
-    font-weight: bold;
-	line-height: 20px;
-    text-align: center;
-    background: #D7D7D7;
-    border: 2px solid #D7D7D7;
-	text-transform: uppercase;
-	font-family:Helvetica, Arial, sans-serif;
-    -webkit-transition: 0.3s ease-out;
-    -moz-transition: 0.3s ease-out;
-    -o-transition: 0.3s ease-out;
-    transition: 0.3s ease-out;
-	
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  line-height: 20px;
+  text-align: center;
+  background: #D7D7D7;
+  border: 2px solid #D7D7D7;
+  text-transform: uppercase;
+  font-family:Helvetica, Arial, sans-serif;
+  -webkit-transition: 0.3s ease-out;
+  -moz-transition: 0.3s ease-out;
+  -o-transition: 0.3s ease-out;
+  transition: 0.3s ease-out;
+
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
-.admin-form .switch > label + span{ display:inline-block; padding-left:5px; position:relative; top:-7px; }
+.admin-form .switch > label + span { 
+	display:inline-block; 
+	padding-left:5px;
+	position:relative; 
+	top:-7px; 
+}
 .admin-form .switch > label:before {
     content: attr(data-off);
     position: absolute;
@@ -526,12 +537,14 @@
 }
 
 .admin-form .switch > label:after {
-	content:"";	
+	  content:"";	
     margin: 1px;
     width: 19px;
     height: 19px;
-	display: block;
+  	display: block;
     background: #fff;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
 }
 
 .admin-form .switch > input {
@@ -741,12 +754,15 @@
 	top:auto;
 	font-size: 11px;
 	font-weight:normal;
-	background: #333333;
+	background: #666;
 	-webkit-transition: margin 0.6s, opacity 0.6s;
 	-moz-transition: margin 0.6s, opacity 0.6s;
 	-ms-transition: margin 0.6s, opacity 0.6s;
 	-o-transition: margin 0.6s, opacity 0.6s;
 	transition: margin 0.6s, opacity 0.6s;
+
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 
 .admin-form .tooltip > em{ padding:12px; font-style:normal; display:block; position:static; }
@@ -761,7 +777,7 @@
 .admin-form .tip-left:after {
 	top:12px;
 	left: 100%;
-	border-left: 8px solid #333333;
+	border-left: 8px solid #666;
 	border-top: 8px solid transparent;
 	border-bottom: 8px solid transparent;
 }
@@ -780,7 +796,7 @@
 .admin-form .tip-right:after {
 	top:12px;
 	right: 100%;
-	border-right: 8px solid #333333;
+	border-right: 8px solid #666;
 	border-top: 8px solid transparent;
 	border-bottom: 8px solid transparent;	
 }
@@ -795,7 +811,7 @@
 .admin-form .tip-right-top:after {
 	top: 100%;
 	right: 12px;
-	border-top: 8px solid #333333;
+	border-top: 8px solid #666;
 	border-right: 8px solid transparent;
 	border-left: 8px solid transparent;
 }
@@ -814,7 +830,7 @@
 .admin-form .tip-left-top:after {
 	top: 100%;
 	left: 12px;
-	border-top: 8px solid #333333;
+	border-top: 8px solid #666;
 	border-right: 8px solid transparent;
 	border-left: 8px solid transparent;
 }
@@ -833,7 +849,7 @@
 .admin-form .tip-right-bottom:after {
 	right: 12px;
 	bottom: 100%;
-	border-bottom: 8px solid #333333;
+	border-bottom: 8px solid #666;
 	border-right: 8px solid transparent;
 	border-left: 8px solid transparent;
 }
@@ -852,7 +868,7 @@
 .admin-form .tip-left-bottom:after {
 	left: 12px;
 	bottom: 100%;
-	border-bottom: 8px solid #333333;
+	border-bottom: 8px solid #666;
 	border-right: 8px solid transparent;
 	border-left: 8px solid transparent;
 }
@@ -958,20 +974,36 @@
 .admin-form .append-picker-icon, 
 .admin-form .prepend-picker-icon { position: relative; display:block; }
 .admin-form .smart-widget .field input, 
+
 .admin-form .append-picker-icon input, 
-.admin-form .prepend-picker-icon input { width: 100%; }
+.admin-form .prepend-picker-icon input { 
+	width: 100%; 
+}
+
+.admin-form .sm-left input,
+.admin-form .prepend-picker-icon input { 
+	-webkit-border-radius: 0 3px 3px 0;
+	border-radius: 0 3px 3px 0;
+}
+.admin-form .sm-right input,
+.admin-form .append-picker-icon input { 
+	-webkit-border-radius: 3px 0 0 3px;
+	border-radius: 3px 0 0 3px;
+}
 
 .admin-form .append-picker-icon button, 
 .admin-form .prepend-picker-icon button,
 .admin-form .smart-widget .button { 
-	border:1px solid #DDD;
-	background: #F5F5F5;
-    position: absolute;
 	cursor: pointer;
+  position: absolute;
+  top: 0;
 	color: #626262;
 	height: 42px;
 	line-height: 40px;
-    top: 0;
+	border:1px solid #DDD;
+	background: #F5F5F5;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
 }
 
 /* Disabled Prepended Icon State */
@@ -981,14 +1013,22 @@
 }
 
 .admin-form .sm-right .button, 
-.admin-form .append-picker-icon button{ border-left:0; }
+.admin-form .append-picker-icon button { 
+	border-left: 0; 
+	-webkit-border-radius: 0 3px 3px 0;
+	border-radius: 0 3px 3px 0;
+}
 .admin-form .sm-left .button, 
-.admin-form .prepend-picker-icon button{ border-right:0; }
+.admin-form .prepend-picker-icon button { 
+	border-right:0; 
+	-webkit-border-radius: 3px 0 0 3px;
+	border-radius: 3px 0 0 3px;
+}
 
 .admin-form .sm-left .button, 
-.admin-form .prepend-picker-icon button { left:0; }
+.admin-form .prepend-picker-icon button { left: 0; }
 .admin-form .sm-right .button, 
-.admin-form .append-picker-icon button {  right:0; }
+.admin-form .append-picker-icon button { right: 0; }
 
 /*==================================================================
   Smart Widget Button - Left 
@@ -1048,18 +1088,20 @@
 -===================================================================*/
 .admin-form .button {
 	color: #243140;
-    border: 0;
+  border: 0;
 	height: 42px;
 	line-height: 42px;
 	font-size:15px; 
-    cursor: pointer;
+  cursor: pointer;
 	padding: 0 18px;
 	text-align: center;
 	vertical-align: top;
-    background: #DBDBDB;
+  background: #DBDBDB;
 	display: inline-block;
 	-webkit-user-drag: none;
 	text-shadow: 0 1px rgba(255, 255, 255, 0.2);
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
 }
 
 /*==================================================================
@@ -1323,4 +1365,24 @@
 	.admin-form .bdl { border-left:0;  }
 	.admin-form .border-right { border-right:0; }
 	.admin-form .align-right{ text-align: left; }
+}
+
+
+
+/*==================================================================
+  TEMP NEW INPUT FOCUS TRANSITION - REMOVE OR IMPLEMENT
+===================================================================*/
+.admin-form.theme-primary .gui-input,
+.admin-form.theme-primary .select > select, 
+.admin-form.theme-primary .select-multiple select {
+	outline: 1px solid transparent;
+	-webkit-transition: outline-color 0.5s ease;
+	transition: outline-color ease 0.5s ease;
+}
+
+.admin-form.theme-primary .gui-input:focus,
+.admin-form.theme-primary .select > select:focus, 
+.admin-form.theme-primary .select-multiple select:focus {
+	border-radius: 0;
+	outline-color: #5d9cec;
 }
