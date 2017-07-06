@@ -24,17 +24,23 @@
 	    border-top-color: @color;
 	}
 
+// /* tabs justified */
+// .tab-block .tab-content + .tabs-border.nav-justified > li.active > a {
+//     border-bottom: 2px solid #666;
+// }
+
 }
 
 // Nav Pill Contextuals
 .pills-variant(@state; @color) {
 
 	.nav-pills.nav-@{state} > li.active > a {
-    &,
-    &:hover,
-    &:focus {
-      background-color: @color;
-    }
+	      &,
+	      &:hover,
+	      &:focus {
+	        background-color: @color;
+	      }
+	    }
 	}
 
 }

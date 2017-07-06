@@ -31,8 +31,8 @@
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  -webkit-border-radius: 0px;
-  border-radius: 0px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .admin-form input[type="search"]::-webkit-search-decoration,
 .admin-form input[type="search"]::-webkit-search-cancel-button,
@@ -88,11 +88,6 @@
   -ms-transition: all 0.5s ease-in-out;
   -o-transition: all 0.5s ease-in-out;
   transition: all 0.5s ease-in-out;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  -ms-border-radius: 0;
-  -o-border-radius: 0;
-  border-radius: 0;
   outline: none;
 }
 .admin-form .input-link,
@@ -121,7 +116,7 @@
 ===================================================================*/
 /* Themed Link */
 .admin-form .theme-link {
-  color: #4a89dc;
+  color: #3498db;
   text-decoration: none;
 }
 .admin-form .theme-link:hover {
@@ -342,6 +337,8 @@
   line-height: 34px;
   padding: 0 16px;
   z-index: 10;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 /* File Button - Left Style */
 .admin-form .file.append-button .button {
@@ -432,6 +429,8 @@
   height: 21px;
   width: 21px;
   top: 4px;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
 }
 .admin-form .checkbox:before,
 .admin-form .radio:before {
@@ -526,6 +525,8 @@
   -moz-transition: 0.3s ease-out;
   -o-transition: 0.3s ease-out;
   transition: 0.3s ease-out;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .admin-form .switch > label + span {
   display: inline-block;
@@ -547,6 +548,8 @@
   height: 19px;
   display: block;
   background: #fff;
+  -webkit-border-radius: 2px;
+  border-radius: 2px;
 }
 .admin-form .switch > input {
   -webkit-appearance: none;
@@ -763,12 +766,14 @@
   top: auto;
   font-size: 11px;
   font-weight: normal;
-  background: #333333;
+  background: #666;
   -webkit-transition: margin 0.6s, opacity 0.6s;
   -moz-transition: margin 0.6s, opacity 0.6s;
   -ms-transition: margin 0.6s, opacity 0.6s;
   -o-transition: margin 0.6s, opacity 0.6s;
   transition: margin 0.6s, opacity 0.6s;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .admin-form .tooltip > em {
   padding: 12px;
@@ -795,7 +800,7 @@
 .admin-form .tip-left:after {
   top: 12px;
   left: 100%;
-  border-left: 8px solid #333333;
+  border-left: 8px solid #666;
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
 }
@@ -815,7 +820,7 @@
 .admin-form .tip-right:after {
   top: 12px;
   right: 100%;
-  border-right: 8px solid #333333;
+  border-right: 8px solid #666;
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
 }
@@ -834,7 +839,7 @@
 .admin-form .tip-right-top:after {
   top: 100%;
   right: 12px;
-  border-top: 8px solid #333333;
+  border-top: 8px solid #666;
   border-right: 8px solid transparent;
   border-left: 8px solid transparent;
 }
@@ -854,7 +859,7 @@
 .admin-form .tip-left-top:after {
   top: 100%;
   left: 12px;
-  border-top: 8px solid #333333;
+  border-top: 8px solid #666;
   border-right: 8px solid transparent;
   border-left: 8px solid transparent;
 }
@@ -874,7 +879,7 @@
 .admin-form .tip-right-bottom:after {
   right: 12px;
   bottom: 100%;
-  border-bottom: 8px solid #333333;
+  border-bottom: 8px solid #666;
   border-right: 8px solid transparent;
   border-left: 8px solid transparent;
 }
@@ -894,7 +899,7 @@
 .admin-form .tip-left-bottom:after {
   left: 12px;
   bottom: 100%;
-  border-bottom: 8px solid #333333;
+  border-bottom: 8px solid #666;
   border-right: 8px solid transparent;
   border-left: 8px solid transparent;
 }
@@ -1012,17 +1017,29 @@
 .admin-form .prepend-picker-icon input {
   width: 100%;
 }
+.admin-form .sm-left input,
+.admin-form .prepend-picker-icon input {
+  -webkit-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
+}
+.admin-form .sm-right input,
+.admin-form .append-picker-icon input {
+  -webkit-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+}
 .admin-form .append-picker-icon button,
 .admin-form .prepend-picker-icon button,
 .admin-form .smart-widget .button {
-  border: 1px solid #DDD;
-  background: #F5F5F5;
-  position: absolute;
   cursor: pointer;
+  position: absolute;
+  top: 0;
   color: #626262;
   height: 42px;
   line-height: 40px;
-  top: 0;
+  border: 1px solid #DDD;
+  background: #F5F5F5;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 /* Disabled Prepended Icon State */
 .admin-form .prepend-picker-icon button:disabled {
@@ -1032,10 +1049,14 @@
 .admin-form .sm-right .button,
 .admin-form .append-picker-icon button {
   border-left: 0;
+  -webkit-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
 }
 .admin-form .sm-left .button,
 .admin-form .prepend-picker-icon button {
   border-right: 0;
+  -webkit-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
 }
 .admin-form .sm-left .button,
 .admin-form .prepend-picker-icon button {
@@ -1168,6 +1189,8 @@
   display: inline-block;
   -webkit-user-drag: none;
   text-shadow: 0 1px rgba(255, 255, 255, 0.2);
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 /*==================================================================
   Button States
@@ -1503,6 +1526,22 @@
   }
 }
 /*==================================================================
+  TEMP NEW INPUT FOCUS TRANSITION - REMOVE OR IMPLEMENT
+===================================================================*/
+.admin-form.theme-primary .gui-input,
+.admin-form.theme-primary .select > select,
+.admin-form.theme-primary .select-multiple select {
+  outline: 1px solid transparent;
+  -webkit-transition: outline-color 0.5s ease;
+  transition: outline-color ease 0.5s ease;
+}
+.admin-form.theme-primary .gui-input:focus,
+.admin-form.theme-primary .select > select:focus,
+.admin-form.theme-primary .select-multiple select:focus {
+  border-radius: 0;
+  outline-color: #5d9cec;
+}
+/*==================================================================
   Stepper - jQuery UI
 ===================================================================*/
 .stepper-wrap {
@@ -1577,17 +1616,19 @@
   Datepicker - jQuery UI
 ===================================================================*/
 .ui-datepicker {
+  z-index: 1025 !important;
+  display: none;
+  position: relative;
   width: 18em;
   margin-top: 8px;
-  display: none;
   background: #fff;
-  position: relative;
   -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
   -o-box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
   border: 1px solid #DDD;
-  z-index: 1025 !important;
   text-align: center;
   color: #666;
 }
@@ -1601,7 +1642,7 @@
 .ui-datepicker .ui-datepicker-header {
   position: relative;
   background: #F5F5F5;
-  border-bottom: 1px solid #CFCFCF;
+  border-bottom: 1px solid #E5E5E5;
   line-height: 27px;
   font-size: 15px;
   padding: 10px;
@@ -1666,10 +1707,11 @@
 .ui-datepicker td span,
 .ui-datepicker td a {
   color: #AAA;
-  padding: .25em;
+  padding: .35em .25em;
   display: block;
   text-align: center;
   text-decoration: none;
+  border-radius: 3px;
 }
 .ui-datepicker td span:hover,
 .ui-datepicker td a:hover {
@@ -1711,15 +1753,18 @@
   cursor: pointer;
   color: #333;
   border: 1px solid #ddd;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 /* jQuery UI Button States */
 .ui-datepicker-buttonpane button:hover {
   color: #243140;
-  background: #E8E8E8;
+  background: #f2f2f2;
 }
 .ui-datepicker-buttonpane button:active {
   color: #1d2938;
-  background: #C4C4C4;
+  background: #f0f0f0;
+  border-color: #CCC;
 }
 .ui-monthpicker .ui-datepicker-header {
   margin-bottom: 3px;
@@ -1791,11 +1836,10 @@
   line-height: 27px;
   font-size: 15px;
   padding: 10px;
+  border-bottom: 1px solid #E5E5E5;
 }
 .ui-timepicker-div dl {
   text-align: left;
-  border: 1px solid #EEE;
-  border-width: 1px 0 0 0;
   padding: 15px 10px;
   margin: 0;
 }
@@ -2353,8 +2397,8 @@
 }
 .sp-replacer:hover,
 .sp-replacer.sp-active {
-  border-color: #aaa;
   color: #111;
+  border-color: #CCC;
 }
 .sp-replacer.sp-disabled {
   cursor: default;
@@ -2393,12 +2437,14 @@
 }
 .sp-container {
   padding-bottom: 0;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
 }
 .sp-container button {
   cursor: pointer;
   background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 2px;
+  border-radius: 3px;
   color: #666;
   font-size: 13px;
   line-height: 1;
@@ -2463,8 +2509,14 @@
 .sfcolor {
   padding-right: 63px;
 }
+.sfcolor .gui-input {
+  -webkit-border-radius: 3px 0 0 3px;
+  border-radius: 3px 0 0 3px;
+}
 .sfcolor .gui-input + .sp-replacer {
   width: 63px;
+  -webkit-border-radius: 0 3px 3px 0;
+  border-radius: 0 3px 3px 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   -o-box-sizing: border-box;
@@ -2619,13 +2671,13 @@
   font-size: 15px;
   text-align: center;
   padding: 12px 18px;
-  background-color: #649ae1;
+  background-color: #4ea5e0;
   text-decoration: none;
   -webkit-user-drag: none;
 }
 /* Nav item states */
 .wizard .steps li.current a {
-  background-color: #2e76d6;
+  background-color: #2489cc;
 }
 .wizard .steps li.disabled a {
   background-color: #BBBBBB !important;
@@ -2674,7 +2726,7 @@
   display: inline-block;
   color: #FFF;
   padding: 9px 18px;
-  background-color: #4a89dc;
+  background-color: #3498db;
   text-decoration: none;
   -webkit-user-drag: none;
 }
@@ -2858,69 +2910,69 @@
  * all of skins or for enabling true multi-skin support. 
  */
 .admin-form .panel-primary > .panel-heading {
-  border-top-color: #5d9cec;
+  border-top-color: #4ea5e0;
 }
 .admin-form .panel-primary > .panel-heading:before {
-  background-color: #4a89dc;
+  background-color: #3498db;
 }
 .admin-form .panel-primary.heading-border:before,
 .admin-form .panel-primary .heading-border:before {
-  background-color: #4a89dc;
+  background-color: #3498db;
 }
 .admin-form .bg-primary {
-  background-color: #4a89dc;
+  background-color: #3498db;
 }
 .admin-form .bg-primary.light {
-  background-color: #5d9cec;
+  background-color: #4ea5e0;
 }
 .admin-form .bg-primary.lighter {
   background-color: #83aee7;
 }
 .admin-form .bg-primary.dark {
-  background-color: #2e76d6;
+  background-color: #2489cc;
 }
 .admin-form .bg-primary.darker {
   background-color: #2567bd;
 }
 .admin-form .option-primary input:hover + .checkbox,
 .admin-form .option-primary input:hover + .radio {
-  border-color: #5d9cec;
+  border-color: #4ea5e0;
 }
 .admin-form .option-primary input:checked + .checkbox,
 .admin-form .option-primary input:focus + .checkbox,
 .admin-form .option-primary input:checked + .radio,
 .admin-form .option-primary input:focus + .radio {
-  border-color: #4a89dc;
+  border-color: #3498db;
 }
 .admin-form .option-primary input:checked + .radio:before,
 .admin-form .option-primary input:focus + .radio:before {
-  background: #4a89dc;
+  background: #3498db;
 }
 .admin-form .option-primary input:checked + .checkbox:before,
 .admin-form .option-primary input:focus + .checkbox:before {
-  border-color: #4a89dc;
+  border-color: #3498db;
 }
 .admin-form .switch-primary > input:checked + label {
-  background: #4a89dc;
-  border-color: #4a89dc;
+  background: #3498db;
+  border-color: #3498db;
 }
 .admin-form .switch-primary > input:checked + label:after {
-  color: #4a89dc;
+  color: #3498db;
 }
 .admin-form .switch-primary > input:checked:focus + label {
-  background: #2e76d6;
-  border-color: #2e76d6;
+  background: #2489cc;
+  border-color: #2489cc;
 }
 .admin-form .btn-primary {
-  background-color: #4a89dc;
+  background-color: #3498db;
 }
 .admin-form .btn-primary:hover,
 .admin-form .btn-primary:focus {
-  background-color: #5d9cec;
-  border-color: #5d9cec;
+  background-color: #4ea5e0;
+  border-color: #4ea5e0;
 }
 .admin-form .btn-primary:active {
-  background-color: #2e76d6;
+  background-color: #2489cc;
 }
 .admin-form .btn-primary,
 .admin-form .btn-primary:hover,
@@ -2930,22 +2982,22 @@
   text-shadow: 0 1px rgba(0, 0, 0, 0.08);
 }
 .admin-form .slider-wrapper.slider-primary .ui-slider .ui-slider-range {
-  background-color: #4a89dc;
+  background-color: #3498db;
 }
 .admin-form .slider-wrapper.slider-primary .ui-slider .ui-slider-handle {
-  border-color: #4a89dc;
+  border-color: #3498db;
 }
 .admin-form .slider-wrapper.slider-primary .ui-slider .ui-slider-handle:before {
-  background-color: #4a89dc;
+  background-color: #3498db;
 }
 .admin-form.theme-primary .section-divider span {
-  color: #4a89dc;
+  color: #3498db;
 }
 .admin-form.theme-primary .tagline span {
-  color: #4a89dc;
+  color: #3498db;
 }
 .admin-form.theme-primary .theme-link {
-  color: #4a89dc;
+  color: #3498db;
 }
 .admin-form.theme-primary .gui-input:hover,
 .admin-form.theme-primary .gui-textarea:hover,
@@ -2954,13 +3006,13 @@
 .admin-form.theme-primary .gui-input:hover ~ .input-footer,
 .admin-form.theme-primary .file .gui-file:hover + .gui-input,
 .admin-form.theme-primary .gui-textarea:hover ~ .input-footer {
-  border-color: #5d9cec;
+  border-color: #4ea5e0;
 }
 .admin-form.theme-primary .gui-input:focus,
 .admin-form.theme-primary .gui-textarea:focus,
 .admin-form.theme-primary .select > select:focus,
 .admin-form.theme-primary .select-multiple select:focus {
-  border-color: #5d9cec;
+  border-color: #4ea5e0;
   color: #3C3C3C;
 }
 .admin-form.theme-primary .gui-textarea:focus {
@@ -2972,21 +3024,21 @@
 }
 .admin-form.theme-primary .gui-input:focus ~ .field-icon i,
 .admin-form.theme-primary .gui-textarea:focus ~ .field-icon i {
-  color: #4a89dc;
+  color: #3498db;
 }
 .admin-form.theme-primary .select-multiple select:focus,
 .admin-form.theme-primary .gui-input:focus ~ .input-footer,
 .admin-form.theme-primary .gui-textarea:focus ~ .input-footer,
 .admin-form.theme-primary .file .gui-file:focus + .gui-input {
-  border-color: #5d9cec;
+  border-color: #4ea5e0;
 }
 .admin-form.theme-primary .select > select:focus + .arrow {
-  color: #4a89dc;
+  color: #3498db;
 }
 .admin-form.theme-primary .rating:hover .rating-star:hover,
 .admin-form.theme-primary .rating:hover .rating-star:hover ~ .rating-star,
 .admin-form.theme-primary .rating-input:checked ~ .rating-star {
-  color: #4a89dc;
+  color: #3498db;
 }
 .admin-form.theme-primary .rating-star,
 .admin-form.theme-primary .rating:hover .rating-star {
@@ -2995,31 +3047,31 @@
 .admin-form.theme-primary .ui-datepicker .ui-datepicker-prev,
 .admin-form.theme-primary .ui-datepicker .ui-datepicker-next,
 .admin-form.theme-primary .ui-datepicker .ui-datepicker-title {
-  color: #4a89dc;
+  color: #3498db;
 }
 .admin-form.theme-primary .ui-datepicker-today a,
 .admin-form.theme-primary .ui-datepicker-today a:hover,
 .admin-form.theme-primary .ui-datepicker .ui-state-highlight {
-  background: #9fc1ed !important;
+  background: #8bc4ea !important;
 }
 .admin-form.theme-primary .ui-datepicker .ui-state-active {
-  background: #4a89dc !important;
+  background: #3498db !important;
 }
 .admin-form.theme-primary .ui-datepicker .ui-timepicker-div .ui-slider .ui-slider-handle.ui-state-active {
   background: #FFF !important;
 }
 .admin-form.theme-primary .ui-datepicker .ui-timepicker-div .ui-slider .ui-slider-handle {
-  border-color: #4a89dc;
+  border-color: #3498db;
 }
 .admin-form.theme-primary .ui-datepicker .ui-timepicker-div .ui-slider .ui-slider-handle:before {
-  background-color: #4a89dc;
+  background-color: #3498db;
 }
 .admin-form.theme-primary .wizard .steps li a,
 .admin-form.theme-primary .wizard .actions li a {
-  background-color: #4a89dc;
+  background-color: #3498db;
 }
 .admin-form.theme-primary .wizard .steps li.current a {
-  background-color: #2e76d6;
+  background-color: #2489cc;
 }
 .admin-form .panel-info > .panel-heading {
   border-top-color: #4fc1e9;
