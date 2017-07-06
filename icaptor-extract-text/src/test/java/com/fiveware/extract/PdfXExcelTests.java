@@ -30,8 +30,10 @@ public class PdfXExcelTests {
     String path,pathFile2;
     String fileExcel;
     Pojo pojo,pojo2;
+
     @Before
     public void setup(){
+
         String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
         fileExcel=rootDir + File.separator + "sal.xls";
         path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
@@ -54,7 +56,6 @@ public class PdfXExcelTests {
                 .writeObject().map(map, Pojo.class)
                 .build();
 
-
         assertEquals("02.558.157/0001-62",pojo.getCnpj());
         assertEquals("R$18,32",pojo.getValorpagar());
         assertEquals("R$ 4,25",pojo.getIcms());
@@ -69,8 +70,6 @@ public class PdfXExcelTests {
                 .open(pathFile2)
                 .writeObject().map(map, Pojo.class)
                 .build();
-
-
     }
 
     @Test
