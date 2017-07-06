@@ -1,23 +1,18 @@
 package com.fiveware.scheduler;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.fiveware.ServerConfig;
+import com.fiveware.messaging.Receiver;
+import com.fiveware.model.MessageBot;
+import com.fiveware.pulling.BrokerPulling;
+import com.fiveware.repository.AgentRepository;
+import com.fiveware.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.ServerConfig;
-import com.fiveware.messaging.Receiver;
-import com.fiveware.model.Agent;
-import com.fiveware.model.Bot;
-import com.fiveware.model.MessageBot;
-import com.fiveware.pulling.BrokerPulling;
-import com.fiveware.repository.AgentRepository;
-import com.fiveware.repository.ServerRepository;
-import com.fiveware.util.FileUtil;
+import java.util.Optional;
 
 @Component
 public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
@@ -68,11 +63,10 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	 */
 	@Override
 	public void processMessage(String botName, MessageBot obj) {
-		List<String> linesResult = obj.getLineResult();
-		log.debug("Total de Linhas resultado: {}", linesResult.size());
+		log.debug("Total de Linhas resultado: {}", obj.getLineResult());
 		//FIXME Consolidar linhas de resultado para gerar o arquivo final
 
-		fileUtil.writeFile(linesResult,obj);
+		fileUtil.writeFile(obj);
 	}
 
 	@Override
