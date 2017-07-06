@@ -1,12 +1,11 @@
 package com.fiveware.model;
 
-import java.util.Map;
-
-import org.springframework.context.annotation.Bean;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fiveware.converter.ArrayMapDeserializer;
+import org.springframework.context.annotation.Bean;
+
+import java.util.Map;
 
 public class OutTextRecord {
 
@@ -28,25 +27,4 @@ public class OutTextRecord {
 	public ArrayMapDeserializer arrayMapDeserializer(){
 		return new ArrayMapDeserializer();
 	}
-
-//	public static void main(String[] args) {
-//		OutTextRecord EMPTY_RECORD = new OutTextRecord(new HashMap[]{
-//				(HashMap<String, Object>) new HashMap<>().put("registro","registro nao encontrado")
-//		});
-//
-//		List<Map<String, Object>> collect = Optional
-//				.ofNullable(Arrays.stream(EMPTY_RECORD.getMap()).collect(Collectors.toList()))
-//				.orElse(Collections.emptyList());
-//
-//		ArrayList<Object> results = Lists.newArrayList();
-//
-//		collect.stream().map(Map::values).forEach(list -> {
-//			StringJoiner joiner = new StringJoiner(",");
-//			list.forEach((v) -> joiner.add((CharSequence) v));
-//			results.add(joiner.toString());
-//		});
-//
-//		System.out.println("results = " + results);
-//
-//	}
 }

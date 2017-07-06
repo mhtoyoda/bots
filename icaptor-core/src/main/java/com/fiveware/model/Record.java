@@ -9,11 +9,6 @@ public class Record {
 
 	public Record() {
 	}
-
-	public Record(Map<String, Object> recordMap) {
-		this.recordMap = recordMap;
-	}
-
 	public synchronized void addRecordLine(String field, Object value) {
 		recordMap.put(field, value);
 	}

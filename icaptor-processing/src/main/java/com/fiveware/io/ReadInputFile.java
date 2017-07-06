@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Component
 public class ReadInputFile {
 
-    public static final int N_LINES = 2;
+    public static final int N_LINES_BY_AGENT = 2;
     
     @Autowired
     private FileUtil fileUtil;
@@ -40,25 +40,25 @@ public class ReadInputFile {
 
     public void readFile(final String queueName, final String path, InputStream file) throws IOException {
         String[] fields = {"campo1"};
-        List<Record> records = fileUtil.linesFrom(file, fields, "|");
+        List<Record> allLines = fileUtil.linesFrom(file, fields, "|");
 
-        List<List<Record>> partition = Lists.partition(records, getLinesRecord(records).intValue());
+        List<List<Record>> partition = Lists.partition(allLines, getLinesByAgent(allLines).intValue());
 
         AtomicInteger rangeChuncks = new AtomicInteger(0);
 
         partition
                 .stream()
                 .forEach((splitList) -> {
-                    sendListToQueue(splitList, queueName, path, records.size(), rangeChuncks);
+                    sendListToQueue(splitList, queueName, path, allLines.size(), rangeChuncks);
                 });
 
     }
 
-    private Long getLinesRecord(List<Record> records) {
+    private Long getLinesByAgent(List<Record> allLines) {
         Long agentCount = agentRepository.count();
-		Long totalAgent = agentCount > 0 ? agentCount : N_LINES;
-        int size = records.size();
-        long linesRecord = Math.floorDiv(size, totalAgent);
+		Long totalByAgent = agentCount > 0 ? agentCount : N_LINES_BY_AGENT;
+        int size = allLines.size();
+        long linesRecord = Math.floorDiv(size, totalByAgent);
         return linesRecord;
     }
 
