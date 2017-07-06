@@ -254,8 +254,25 @@ Exemplo - 7
 * Uso do PDF com Excel
 
 ```java
-import static com.fiveware.automate.BotAutomationBuilder.Web;
-import static com.fiveware.automate.BotWebBrowser.PHANTOM;
+import com.fiveware.Pojo;
+import com.fiveware.dsl.TypeSearch;
+import com.fiveware.dsl.excel.IExcel;
+import com.google.common.collect.Lists;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.fiveware.dsl.pdf.Helpers.FromTo;
+import static com.fiveware.dsl.pdf.Helpers.helpers;
+import static org.junit.Assert.assertEquals;
 
 public class Exemplo7 {
 
