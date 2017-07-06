@@ -19,17 +19,13 @@ public class ExtractPDFTests {
 
 	String path;
 	String outPathFile;
-	String url;
-	String fileExcel;
-	String outFileHtml;
+
+
 	@Before
 	public void setup(){
 			String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
 		path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
 		outPathFile = rootDir + File.separator +"out.pdf";
-		url="http://www.globo.com.br";
-		fileExcel=rootDir + File.separator + "sal.xls";
-		outFileHtml =rootDir + File.separator + "out.html";
 	}
 
 

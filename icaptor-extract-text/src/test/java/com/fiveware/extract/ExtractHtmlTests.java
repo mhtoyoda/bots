@@ -19,34 +19,38 @@ import static org.junit.Assert.assertTrue;
 
 public class ExtractHtmlTests {
 
-	String path;
 	String outPathFile;
-	String urlString;
 	String fileHtml;
-	String fileExcel;
-	String outFileHtml;
 	URL url;
+
 	@Before
 	public void setup() throws MalformedURLException {
 		String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
 		outPathFile = rootDir + File.separator +"out.pdf";
-		urlString ="http://www.globo.com.br";
 		fileHtml=rootDir + File.separator + "cartaExemplo.html";
-		fileExcel=rootDir + File.separator + "sal.xls";
-		outFileHtml =rootDir + File.separator + "out.html";
 		url = new URL("https://www.uol.com.br");
 	}
 
 
 	@Test
-	public void doConversion() throws InvalidParameterException, MalformedURLException, IOException, TikaException, SAXException {
+	public void convertFromFileHtml() throws InvalidParameterException, MalformedURLException, IOException, TikaException, SAXException {
 		File file = helpers().html()
 				.fromFile(fileHtml)
 				.toPdf()
 				.buildToFile(outPathFile);
 
 		InputStream in = new FileInputStream(file);
+		assertTrue(in.available()>-1);
+	}
 
+	@Test
+	public void convertFromUrl() throws InvalidParameterException, MalformedURLException, IOException, TikaException, SAXException {
+		File file = helpers().html()
+				.fromUrl(url)
+				.toPdf()
+				.buildToFile(outPathFile);
+
+		InputStream in = new FileInputStream(file);
 		assertTrue(in.available()>-1);
 	}
 

@@ -46,7 +46,7 @@ public class ExtractExcelTests {
 		Assert.assertTrue(new Double(30).equals(pojo.getValor2()));
 		Assert.assertTrue("SUM(A1:A2)".equals(pojo.getTotal()));
 
-		excel.deleteSheet().build(); // retorna o ultimo elemento inserido
+		excel.deleteSheet().build();
     }
 
 	@Test
