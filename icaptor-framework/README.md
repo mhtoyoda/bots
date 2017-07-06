@@ -259,22 +259,52 @@ import static com.fiveware.automate.BotWebBrowser.PHANTOM;
 
 public class Exemplo7 {
 
+
+    String path,pathFile2;
+    String fileExcel;
+    Pojo pojo,pojo2;
+
     public static void main(String[] args){
-        
-        Map map = new HashMap();
-        map.put(FromTo("cnpj: ","cnpj"), TypeSearch.CNPJ);
-        map.put("icms",  TypeSearch.MONEY);
-        map.put(FromTo("- ","valorpagar"),TypeSearch.MONEY);
-        map.put("vencimento",  TypeSearch.DATE);
-        map.put(FromTo("Data de emissão: ","referencia"),TypeSearch.DATE);
-        map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
-
-        pojo= (Pojo) helpers()
-                .pdf()
-                .open(path)
-                .converter().map(map, Pojo.class).build();
-
-                              				
+        String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
+        fileExcel=rootDir + File.separator + "sal.xls";
+        path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
+        pathFile2 =rootDir + File.separator + "VOTENER-VOTORANTIM COMERCIALIZADORA_0292026574_03-2017.pdf";
+      
+       Map map = new HashMap();
+          map.put(FromTo("cnpj: ","cnpj"), TypeSearch.CNPJ);
+          map.put("icms",  TypeSearch.MONEY);
+          map.put(FromTo("- ","valorpagar"),TypeSearch.MONEY);
+          map.put("vencimento",  TypeSearch.DATE);
+          map.put(FromTo("referência: ","referencia"),"[0-9]{2}/[0-9]{4}");
+          map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
+    
+          pojo= (Pojo) helpers()
+                  .pdf()
+                  .open(path)
+                  .writeObject().map(map, Pojo.class)
+                  .build();
+    
+          pojo2= (Pojo) helpers()
+                  .pdf()
+                  .open(pathFile2)
+                  .writeObject().map(map, Pojo.class)
+                  .build();
+    
+          
+        List<Pojo> objects = Lists.newArrayList();
+                  objects.add(pojo);
+                  objects.add(pojo2);
+      
+                  IExcel excel = helpers().excel()
+                          .open(fileExcel)
+                          .createSheet("importPDF")
+                          .readObject("A1", objects)
+                          .build();
+      
+                  String valorPagar1 = (String) excel.cell("C2").build();
+                  String valorPagar2 = (String) excel.cell("C3").build();
+      
+                  excel.deleteSheet().build();
     }        
 }
 ```
