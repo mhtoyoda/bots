@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -33,9 +34,26 @@ class ExcelCreaterList implements IExcelCreaterList{
     @Override
     public IExcelCreaterList readObject(String reference, Object object) throws IllegalAccessException, InstantiationException {
         this.object =object;
+        if (this.object instanceof List)
+            return generateListToSheet(reference);
+
         fields = this.object.getClass().getDeclaredFields();
         createHeader(reference, fields);
         createList(reference, fields);
+
+        return this;
+    }
+
+    private IExcelCreaterList generateListToSheet(String reference) {
+        List object = (List) this.object;
+        Object o = object.get(0);
+        fields = o.getClass().getDeclaredFields();
+        createHeader(reference, fields);
+
+        object.forEach((o1)->{
+            this.object=o1;
+            createList(reference,fields);
+        });
 
         return this;
     }
@@ -45,7 +63,7 @@ class ExcelCreaterList implements IExcelCreaterList{
 
         CellRangeAddress cellRangeAddress = new CellRangeAddress(cellReference.getRow(),cellReference.getCol(),
                 cellReference.getRow(),cellReference.getCol()+fields.length);
-        Row row = this.excel.getWorksheet().createRow(1);
+        Row row = this.excel.getWorksheet().createRow(this.excel.getWorksheet().getLastRowNum()+1);
         AtomicInteger column= new AtomicInteger(-1);
         Arrays.stream(fields).forEach((field)->{
 

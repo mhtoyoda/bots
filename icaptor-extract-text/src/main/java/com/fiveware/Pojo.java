@@ -12,7 +12,7 @@ public class Pojo {
     private String icms;
     private String valorpagar;
     private String vencimento;
-    private String dataemissao;
+    private String referencia;
     private String numeroconta;
 
     public String getCnpj() {
@@ -47,12 +47,12 @@ public class Pojo {
         this.vencimento = vencimento;
     }
 
-    public String getDataemissao() {
-        return dataemissao;
+    public String getReferencia() {
+        return referencia;
     }
 
-    public void setDataemissao(String dataemissao) {
-        this.dataemissao = dataemissao;
+    public void setReferencia(String referencia) {
+        this.referencia = referencia;
     }
 
     public String getNumeroconta() {

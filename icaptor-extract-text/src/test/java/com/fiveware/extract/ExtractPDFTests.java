@@ -111,7 +111,7 @@ public class ExtractPDFTests {
 		assertEquals("02.558.157/0001-62",pojo.getCnpj());
 		assertEquals("R$18,32",pojo.getValorpagar());
 		assertEquals("R$ 4,25",pojo.getIcms());
-		assertEquals("07/03/2017",pojo.getDataemissao());
+		assertEquals("03/2017",pojo.getReferencia());
 
 		assertEquals("28/03/2017",pojo.getVencimento());
 	}
@@ -122,7 +122,7 @@ public class ExtractPDFTests {
 		map.put("icms",  TypeSearch.MONEY);
 		map.put(FromTo("- ","valorpagar"),TypeSearch.MONEY);
 		map.put("vencimento",  TypeSearch.DATE);
-		map.put(FromTo("Data de emissão: ","dataemissao"),TypeSearch.DATE);
+		map.put(FromTo("referência: ","referencia"),"[0-9]{2}/[0-9]{4}");
 		map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
 
 		return (Pojo) helpers()
