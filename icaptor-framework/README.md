@@ -129,7 +129,7 @@ public class Exemplo5 {
       		map.put("icms",  TypeSearch.MONEY);
       		map.put(FromTo("Total a Pagar - ","valorpagar"),TypeSearch.MONEY);
       		map.put("vencimento",  TypeSearch.DATE);
-      		map.put(FromTo("Data de emissão: ","dataemissao"),TypeSearch.DATE);
+      		map.put(FromTo("Data de emissão: ","referencia"),TypeSearch.DATE);
       		map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
       
       		Pojo pojo = (Pojo) helpers()
@@ -144,7 +144,7 @@ public class Pojo {
     private String icms;
     private String valorpagar;
     private String vencimento;
-    private String dataemissao;
+    private String referencia;
     private String numeroconta;
 
     public String getCnpj() {
@@ -180,11 +180,11 @@ public class Pojo {
     }
 
     public String getDataemissao() {
-        return dataemissao;
+        return referencia;
     }
 
-    public void setDataemissao(String dataemissao) {
-        this.dataemissao = dataemissao;
+    public void setDataemissao(String referencia) {
+        this.referencia = referencia;
     }
 
     public String getNumeroconta() {
@@ -266,7 +266,7 @@ public class Exemplo7 {
         map.put("icms",  TypeSearch.MONEY);
         map.put(FromTo("- ","valorpagar"),TypeSearch.MONEY);
         map.put("vencimento",  TypeSearch.DATE);
-        map.put(FromTo("Data de emissão: ","dataemissao"),TypeSearch.DATE);
+        map.put(FromTo("Data de emissão: ","referencia"),TypeSearch.DATE);
         map.put(FromTo("Conta","numeroconta")," ([0-9]{10})");
 
         pojo= (Pojo) helpers()
