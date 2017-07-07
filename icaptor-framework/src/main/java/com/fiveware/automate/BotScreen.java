@@ -1,12 +1,13 @@
 package com.fiveware.automate;
 
 import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.Options;
 import org.openqa.selenium.WebDriver.TargetLocator;
-import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -91,14 +92,25 @@ public class BotScreen {
 		return this;
 	}	
 
-	public boolean waitUntil(int time, String xpathExpression) {
+	public BotScreen waitVisibilityOfElementByCss(int time, BotScreen botScreen, String cssSelector) {
 		Wait<WebDriver> wait = new WebDriverWait(webDriver, time);
-		wait.until(new ExpectedCondition<Boolean>() {
-			@Override
-			public Boolean apply(WebDriver driver) {				
-				return driver.findElement(By.xpath(xpathExpression)) != null;
-			}
-		});
-		return false;
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(cssSelector)));
+		return this;
+	}
+	
+	public BotScreen waitVisibilityOfElementById(int time, BotScreen botScreen, String id) {
+		Wait<WebDriver> wait = new WebDriverWait(webDriver, time);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(id)));
+		return this;
+	}
+			
+	public BotScreen waitImplicit(int time) {
+		webDriver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);
+		return this;
+	}
+	
+	public BotScreen doFireEvent(String event, BotElement botElement){
+		new BotJS(webDriver).doFireEvent(event, botElement);
+		return this;
 	}
 }

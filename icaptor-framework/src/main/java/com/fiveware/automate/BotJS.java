@@ -3,6 +3,8 @@ package com.fiveware.automate;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
+import com.thoughtworks.selenium.webdriven.JavascriptLibrary;
+
 public class BotJS {
 	
 	private WebDriver driver;
@@ -22,5 +24,10 @@ public class BotJS {
 			if ("complete".equals(js.executeScript("return document.readyState").toString()))
 				break;
 		}
+	}
+	
+	protected void doFireEvent(String event, BotElement botElement) {
+		JavascriptLibrary javascriptLibrary = new JavascriptLibrary();
+		javascriptLibrary.callEmbeddedSelenium(driver, "doFireEvent", botElement.geWebElement(), event);
 	}
 }

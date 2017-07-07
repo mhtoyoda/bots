@@ -77,7 +77,7 @@ public class TesteBot implements Automation<String, Endereco> {
 				.elementBy().xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[4]")
 				.getText();
 
-		logger.info(" Endereco: {} - {} - {} - {}", logradouro, bairro, localidade, cep);
+//		logger.info(" Endereco: {} - {} - {} - {}", logradouro, bairro, localidade, cep);
 
 		return new Endereco(logradouro, bairro, localidade, cep);
 	}
