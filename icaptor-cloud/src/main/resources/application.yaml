@@ -32,6 +32,7 @@ io:
 #  port: 8082
 #  contextPath: /icaptor
 
+
 spring:
   thymeleaf.mode: HTML5
   datasource:
@@ -52,5 +53,5 @@ spring:
   data.rest.detection-strategy: annotated
 
 flyway:
-    enabled: true
+    enabled: "true"
     validateOnMigrate: true
