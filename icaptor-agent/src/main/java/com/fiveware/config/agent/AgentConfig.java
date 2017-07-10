@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.messaging.QueueCreator;
-import com.fiveware.model.Agent;
-import com.fiveware.model.Bot;
+import com.fiveware.model.entities.Agent;
+import com.fiveware.model.entities.Bot;
 import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.Server;
+import com.fiveware.model.entities.Server;
 import com.fiveware.repository.AgentRepository;
 import com.fiveware.repository.BotRepository;
 import com.fiveware.repository.ServerRepository;

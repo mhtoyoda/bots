@@ -8,8 +8,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.fiveware.model.Agent;
-import com.fiveware.model.Bot;
+import com.fiveware.model.entities.Agent;
+import com.fiveware.model.entities.Bot;
 
 @Repository
 public interface AgentRepository extends CrudRepository<Agent, Long>{

@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AgentBotNotFoundException;
-import com.fiveware.model.Agent;
+import com.fiveware.model.entities.Agent;
 import com.fiveware.repository.ServerRepository;
 
 @Component

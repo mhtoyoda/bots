@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.ServerConfig;
 import com.fiveware.ServerConfig.ServerInfo;
-import com.fiveware.model.Server;
+import com.fiveware.model.entities.Server;
 import com.fiveware.repository.ServerRepository;
 
 import javax.annotation.PostConstruct;

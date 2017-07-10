@@ -1,4 +1,4 @@
-package com.fiveware.model;
+package com.fiveware.model.entities;
 
 import java.util.List;
 
