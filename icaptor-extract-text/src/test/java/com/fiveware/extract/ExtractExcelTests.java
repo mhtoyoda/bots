@@ -19,7 +19,7 @@ public class ExtractExcelTests {
 	@Before
 	public void setup() throws IOException, IllegalAccessException, InstantiationException {
 		String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
-		fileExcel=rootDir + File.separator + "sal.xls";
+		fileExcel=rootDir + File.separator + "excel.xls";
 
 	}
 

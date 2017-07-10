@@ -35,7 +35,7 @@ public class PdfXExcelTests {
     public void setup(){
 
         String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
-        fileExcel=rootDir + File.separator + "sal.xls";
+        fileExcel=rootDir + File.separator + "excel.xls";
         path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
         pathFile2 =rootDir + File.separator + "VOTENER-VOTORANTIM COMERCIALIZADORA_0292026574_03-2017.pdf";
 
