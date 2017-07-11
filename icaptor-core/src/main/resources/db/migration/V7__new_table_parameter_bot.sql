@@ -1,0 +1,9 @@
+CREATE TABLE parameter_bot (
+  id BIGINT(20) NOT NULL,
+  parameter VARCHAR(60) NOT NULL,
+  value VARCHAR(180) NOT NULL,
+  id_bot BIGINT(20) NOT NULL,
+  ativo BOOLEAN DEFAULT true,
+  PRIMARY KEY (id),
+  FOREIGN KEY (id_bot) REFERENCES bot(id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
