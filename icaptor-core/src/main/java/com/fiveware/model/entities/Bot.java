@@ -1,10 +1,13 @@
 package com.fiveware.model.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -15,7 +18,7 @@ public class Bot {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name ="nameBot")
+	@Column(name ="name_bot")
 	private String nameBot;
 	
 	@Column(name ="method")
@@ -23,6 +26,9 @@ public class Bot {
 	
 	@Column(name ="endpoint")
 	private String endpoint;
+	
+	@OneToMany
+	private List<ParameterBot> parameterBots;
 	
 	public Long getId() {
 		return id;
@@ -54,6 +60,14 @@ public class Bot {
 
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
+	}
+
+	public List<ParameterBot> getParameterBots() {
+		return parameterBots;
+	}
+
+	public void setParameterBots(List<ParameterBot> parameterBots) {
+		this.parameterBots = parameterBots;
 	}
 
 }
