@@ -1,4 +1,4 @@
-create table server_agents
+create table server_agent
 (
   server_id bigint not null,
   agents_id bigint not null,
@@ -10,5 +10,5 @@ create table server_agents
   foreign key (agents_id) references agent (id)
 );
 
-create index FK_server_id_01 on server_agents (server_id);
+create index FK_server_id_01 on server_agent (server_id);
 

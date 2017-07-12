@@ -1,6 +1,6 @@
 package com.fiveware.scheduler;
 
-import com.fiveware.ServerConfig;
+import com.fiveware.config.ServerConfig;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.MessageBot;
 import com.fiveware.pulling.BrokerPulling;

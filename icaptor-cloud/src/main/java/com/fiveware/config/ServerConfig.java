@@ -1,4 +1,4 @@
-package com.fiveware;
+package com.fiveware.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

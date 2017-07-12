@@ -103,6 +103,15 @@ public class BotScreen {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.id(id)));
 		return this;
 	}
+	
+	public BotScreen wait(int time) {		
+		try {
+			Thread.sleep(time);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return this;
+	}
 			
 	public BotScreen waitImplicit(int time) {
 		webDriver.manage().timeouts().implicitlyWait(time, TimeUnit.SECONDS);

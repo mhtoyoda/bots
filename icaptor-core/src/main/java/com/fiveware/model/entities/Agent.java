@@ -21,17 +21,17 @@ public class Agent {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "nameAgent")
+	@Column(name = "name_agent")
 	private String nameAgent;
 
-	@Column(name = "ipAgent")
+	@Column(name = "ip_agent")
 	private String ip;
 	
-	@Column(name = "portAgent")
+	@Column(name = "port_agent")
 	private int port;
 	
 	@ManyToOne
-	@JoinColumn(name = "serverId")
+	@JoinColumn(name = "server_id")
 	private Server server;
 	
 	@ManyToMany
