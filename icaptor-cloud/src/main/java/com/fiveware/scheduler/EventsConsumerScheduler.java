@@ -38,18 +38,18 @@ public class EventsConsumerScheduler {
 	
 	@PostConstruct
 	public void init(){		
-//		consumersMap = typeConsumerMessage.getConsumer("com.fiveware.messaging");
+		consumersMap = typeConsumerMessage.getConsumer("com.fiveware.messaging");
 	}
 	
 	@Scheduled(fixedDelay = 10000)
 	public void execute() {
-//		MessageAgent messageAgent = receiver.receive(QueueName.EVENTS.name());
-//		if(!Objects.isNull(messageAgent)){
-//			consumersMap.get(messageAgent.getTypeMessage().name()).process(messageAgent);
-//		}
+		MessageAgent messageAgent = receiver.receive(QueueName.EVENTS.name());
+		if(!Objects.isNull(messageAgent)){
+			consumersMap.get(messageAgent.getTypeMessage().name()).process(messageAgent);
+		}
 
-//		MessageBot dictionaryMessage = receiver2.receive("BOT");
-//		if(!Objects.isNull(dictionaryMessage))
-//			consumersMap.get(TypeMessage.INPUT_DICTIONARY.name()).process(dictionaryMessage);
+		MessageBot dictionaryMessage = receiver2.receive("BOT");
+		if(!Objects.isNull(dictionaryMessage))
+			consumersMap.get(TypeMessage.INPUT_DICTIONARY.name()).process(dictionaryMessage);
 	}
 }
