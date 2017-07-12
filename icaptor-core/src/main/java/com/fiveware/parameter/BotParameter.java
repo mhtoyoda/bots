@@ -1,18 +1,17 @@
 package com.fiveware.parameter;
 
+import com.fiveware.model.entities.ParameterBot;
+import com.fiveware.model.entities.ParameterValueBot;
+import com.fiveware.repository.ParameterBotRepository;
+import com.google.common.collect.Lists;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.assertj.core.util.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.fiveware.model.entities.ParameterBot;
-import com.fiveware.model.entities.ParameterValueBot;
-import com.fiveware.repository.ParameterBotRepository;
 
 @Component
 public class BotParameter {
