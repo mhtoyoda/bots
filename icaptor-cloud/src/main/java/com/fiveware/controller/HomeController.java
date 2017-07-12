@@ -1,7 +1,5 @@
 package com.fiveware.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.fiveware.io.ReadInputFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by valdisnei on 06/06/17.
  */
 @RestController
+@RequestMapping("/api")
 public class HomeController {
 
     static Logger logger = LoggerFactory.getLogger(HomeController.class);

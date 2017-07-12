@@ -31,6 +31,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/assets/**").permitAll()
                     .antMatchers("/vendor/**").permitAll()
+                    .antMatchers("/upload/consultaCEP/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
