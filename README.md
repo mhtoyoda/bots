@@ -1,5 +1,8 @@
 # icaptor-automation
 
+Compile
+-  ``` mvn clean package```
+
 
 Start Server (cloud)
 -  ```java -jar target/icaptor-cloud-0.0.1-SNAPSHOT.jar``` 
