@@ -14,6 +14,7 @@ import com.fiveware.model.entities.ParameterValueBot;
 import com.fiveware.repository.ParameterBotRepository;
 import com.google.common.collect.Lists;
 
+
 @Component
 public class BotParameter {
 
