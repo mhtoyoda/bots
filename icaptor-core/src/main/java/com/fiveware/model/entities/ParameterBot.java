@@ -1,5 +1,7 @@
 package com.fiveware.model.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -17,18 +20,18 @@ public class ParameterBot {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "parameter")
-	private String parameter;
-
-	@Column(name = "value")
-	private String value;
+	@Column(name = "name")
+	private String name;
 
 	@ManyToOne
 	@JoinColumn(name = "botId")
 	private Bot bot;
 
 	private Boolean ativo;
-
+	
+	@OneToMany(mappedBy = "parameterBot")
+	private List<ParameterValueBot> parameterValues;
+	
 	public Long getId() {
 		return id;
 	}
@@ -37,20 +40,12 @@ public class ParameterBot {
 		this.id = id;
 	}
 
-	public String getParameter() {
-		return parameter;
+	public String getName() {
+		return name;
 	}
 
-	public void setParameter(String parameter) {
-		this.parameter = parameter;
-	}
-
-	public String getValue() {
-		return value;
-	}
-
-	public void setValue(String value) {
-		this.value = value;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public Bot getBot() {
@@ -67,6 +62,14 @@ public class ParameterBot {
 
 	public void setAtivo(Boolean ativo) {
 		this.ativo = ativo;
+	}
+
+	public List<ParameterValueBot> getParameterValues() {
+		return parameterValues;
+	}
+
+	public void setParameterValues(List<ParameterValueBot> parameterValues) {
+		this.parameterValues = parameterValues;
 	}
 
 }
