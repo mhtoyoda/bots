@@ -1,18 +1,16 @@
 package com.fiveware.register;
 
-import java.util.Optional;
-
+import com.fiveware.config.ServerConfig;
+import com.fiveware.config.ServerConfig.ServerInfo;
+import com.fiveware.model.entities.Server;
+import com.fiveware.repository.ServerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.ServerConfig;
-import com.fiveware.ServerConfig.ServerInfo;
-import com.fiveware.model.entities.Server;
-import com.fiveware.repository.ServerRepository;
-
 import javax.annotation.PostConstruct;
+import java.util.Optional;
 
 @Component
 public class ServerRegister {
