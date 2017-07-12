@@ -18,7 +18,7 @@ public class ParameterValueBot {
 	private Long id;
 
 	@Column(name = "parameter")
-	private String key;
+	private String parameter;
 
 	@Column(name = "value")
 	private String value;
@@ -35,12 +35,12 @@ public class ParameterValueBot {
 		this.id = id;
 	}
 
-	public String getKey() {
-		return key;
+	public String getParameter() {
+		return parameter;
 	}
 
-	public void setKey(String key) {
-		this.key = key;
+	public void setParameter(String parameter) {
+		this.parameter = parameter;
 	}
 
 	public String getValue() {

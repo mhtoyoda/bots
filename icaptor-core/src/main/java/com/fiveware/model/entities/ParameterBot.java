@@ -24,7 +24,7 @@ public class ParameterBot {
 	private String name;
 
 	@ManyToOne
-	@JoinColumn(name = "botId")
+	@JoinColumn(name = "id_bot")
 	private Bot bot;
 
 	private Boolean ativo;

@@ -25,19 +25,19 @@ public class BotParameter {
 	
 	public void loadParameterBot(String nameBot){
 		Optional<List<ParameterBot>> optional = parameterBotRepository.findByNameBotAndAtivoIsTrue(nameBot);
-		optional.ifPresent(list -> {
+		if(optional.isPresent()){
 			parameters = Lists.newArrayList();
 			Map<String, String> map = new LinkedHashMap<String, String>();
-			list.forEach(param -> {
-				List<ParameterValueBot> parameterValues = param.getParameterValues();
+			optional.get().forEach(param -> {				
+				List<ParameterValueBot> parameterValues = (List<ParameterValueBot>) param.getParameterValues();
 				if(CollectionUtils.isNotEmpty(parameterValues)){
 					parameterValues.forEach(paramValue -> {
-						map.put(paramValue.getKey(), paramValue.getValue());
+						map.put(paramValue.getParameter(), paramValue.getValue());
 					});
 				}
 				parameters.add(map);
-			});
-		});
+			});			
+		}
 	}
 
 	public class BotParameterKeyValue {
