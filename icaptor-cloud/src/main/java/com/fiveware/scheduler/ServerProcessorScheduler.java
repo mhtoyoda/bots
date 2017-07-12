@@ -1,14 +1,5 @@
 package com.fiveware.scheduler;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.config.ServerConfig;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.MessageBot;
@@ -18,6 +9,14 @@ import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.repository.AgentRepository;
 import com.fiveware.repository.ServerRepository;
 import com.fiveware.util.FileUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
@@ -42,7 +41,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process(){
-		List<Agent> agents = serverRepository.getAllAgents(serverConfig.getServer().getName());
+		List<Agent> agents = serverRepository.getAllAgent(serverConfig.getServer().getName());
 		agents.forEach(agent -> {
 			log.info("Pulling Message [Agent]: {}", agent.getNameAgent());
 			List<Bot> bots = agentRepository.findBotsByAgent(agent.getNameAgent());

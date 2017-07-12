@@ -1,17 +1,7 @@
 package com.fiveware.model.entities;
 
+import javax.persistence.*;
 import java.util.List;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 @Entity
 @Table(name = "agent")
@@ -35,8 +25,8 @@ public class Agent {
 	private Server server;
 	
 	@ManyToMany
-	@JoinTable(name = "agent_bot", joinColumns = { @JoinColumn(name = "idAgent") }, inverseJoinColumns = {
-			@JoinColumn(name = "idBot") })
+	@JoinTable(name = "agent_bot", joinColumns = { @JoinColumn(name = "id_agent") }, inverseJoinColumns = {
+			@JoinColumn(name = "id_bot") })
 	private List<Bot> bots;
 
 	public Long getId() {
