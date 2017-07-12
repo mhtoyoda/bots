@@ -11,7 +11,7 @@ CREATE TABLE parameter_bot (
 
 CREATE TABLE parameter_value_bot (
   id BIGINT(20) NOT NULL,
-  key VARCHAR(60) NOT NULL,
+  parameter VARCHAR(60) NOT NULL,
   value VARCHAR(180) NOT NULL,
   id_parameter_bot BIGINT(20) NOT NULL,
   PRIMARY KEY (id),
