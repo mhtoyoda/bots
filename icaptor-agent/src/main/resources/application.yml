@@ -16,7 +16,7 @@ icaptor:
 broker:
   user: guest
   pass: guest
-  host: localhost
+  host: 54.224.242.0
   queue.send.schedularTime: 5000 #milli second
 
 io:
