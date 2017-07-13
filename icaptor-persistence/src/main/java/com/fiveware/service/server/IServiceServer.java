@@ -22,4 +22,7 @@ public interface IServiceServer {
 
     @GetMapping("/agents/name/{name}")
     List<Agent> getAllAgent(String name);
+
+    @GetMapping("/serverName/{serverName}/nameBot/{nameBot}/endpoint/{endpoint}")
+    Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint);
 }

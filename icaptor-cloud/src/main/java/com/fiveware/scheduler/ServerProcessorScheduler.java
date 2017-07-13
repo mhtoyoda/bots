@@ -27,7 +27,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	private Receiver<MessageBot> receiver;
 
 	@Autowired
-	private ServiceServer serverRepository;
+	private ServiceServer serviceServer;
 
 	@Autowired
 	private ServiceAgent agentRepository;
@@ -41,7 +41,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process(){
-		List<Agent> agents = serverRepository.getAllAgent(serverConfig.getServer().getName());
+		List<Agent> agents = serviceServer.getAllAgent(serverConfig.getServer().getName());
 		agents.forEach(agent -> {
 			log.info("Pulling Message [Agent]: {}", agent.getNameAgent());
 			List<Bot> bots = agentRepository.findBotsByAgent(agent.getNameAgent());

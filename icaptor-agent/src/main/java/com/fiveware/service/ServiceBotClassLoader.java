@@ -1,5 +1,17 @@
 package com.fiveware.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiveware.exception.ExceptionBot;
+import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.loader.ClassLoaderRunner;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.OutTextRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -7,22 +19,10 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.loader.ClassLoaderConfig;
-import com.fiveware.loader.ClassLoaderRunner;
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.OutTextRecord;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by valdisnei on 29/05/17.

@@ -59,4 +59,17 @@ public class ServiceServer {
 
         return listAgents;
     }
+
+    public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint) {
+
+        RestTemplate restTemplate = new RestTemplate();
+
+        String url = "http://localhost:8085/api/server/nameServer/"+serverName+"/nameBot/"+nameBot+"/endPoint/"+endpoint;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        List<Agent> listAgents = restTemplate.getForObject(url, List.class);
+
+        return Optional.of(listAgents);
+    }
 }

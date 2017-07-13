@@ -1,15 +1,5 @@
 package com.fiveware.task;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.exception.BotNotFoundException;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.QueueName;
@@ -20,17 +10,26 @@ import com.fiveware.model.MessageHeader;
 import com.fiveware.model.entities.Bot;
 import com.fiveware.model.entities.Task;
 import com.fiveware.parameter.BotParameter;
-import com.fiveware.repository.BotRepository;
-import com.fiveware.repository.TaskRepository;
+import com.fiveware.service.ServiceBot;
+import com.fiveware.service.ServiceTask;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+import java.time.Instant;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class TaskManager {
 
 	@Autowired
-	private TaskRepository taskRepository;
+	private ServiceTask taskService;
 	
 	@Autowired
-	private BotRepository botRepository;
+	private ServiceBot serviceBot;
 	
 	@Autowired
     @Qualifier("taskMessageProducer")
@@ -53,14 +52,14 @@ public class TaskManager {
 	}
 	
 	private Task createNewTask(TaskStatus taskStatus, String botName) throws BotNotFoundException {
-		Optional<Bot> bot = botRepository.findByNameBot(botName);		
+		Optional<Bot> bot = serviceBot.findByNameBot(botName);
 		if(bot.isPresent()){
 			Task task = new Task();
 			task.setBot(bot.get());
 			task.setCreateTime(Date.from(Instant.now()));
 			task.setLastUpdateTime(Date.from(Instant.now()));
 			task.setStatus(taskStatus.name());
-			task = taskRepository.save(task);
+			task = taskService.save(task);
 			return task;
 		}else{
 			throw new BotNotFoundException(String.format("Bot %s not found!", botName));

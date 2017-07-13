@@ -1,28 +1,28 @@
 package com.fiveware.parameter;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.fiveware.model.BotParameterKeyValue;
+import com.fiveware.model.entities.ParameterValueBot;
+import com.fiveware.service.ServiceParameterBotValue;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.BotParameterKeyValue;
-import com.fiveware.model.entities.ParameterValueBot;
-import com.fiveware.repository.ParameterBotValueRepository;
-import com.google.common.collect.Lists;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Component
 public class BotParameter {
 	
 	@Autowired
-	private ParameterBotValueRepository parameterBotValueRepository;
+	private ServiceParameterBotValue serviceParameterBotValue;
+
 	
 	public List<Map<String, BotParameterKeyValue>> loadParameterBot(String nameBot){
 		List<Map<String, BotParameterKeyValue>> parameters = Lists.newArrayList();
-		List<ParameterValueBot> list = parameterBotValueRepository.findByParameterBotValues(nameBot);
+		List<ParameterValueBot> list = serviceParameterBotValue.findByParameterBotValues(nameBot);
 		if(CollectionUtils.isNotEmpty(list)){
 			Map<String, BotParameterKeyValue> map = new LinkedHashMap<String, BotParameterKeyValue>();
 			list.forEach(param -> {

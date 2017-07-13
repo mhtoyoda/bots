@@ -40,4 +40,11 @@ public class ServiceServer implements IServiceServer {
     public List<Agent> getAllAgent(String name) {
         return serverRepository.getAllAgent(name);
     }
+
+    @Override
+    @GetMapping("/nameServer/{serverName}/nameBot/{nameBot}/endPoint/{endpoint}")
+    public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint){
+        return serverRepository.getAllAgentsByBotName(serverName,nameBot,endpoint);
+
+    }
 }

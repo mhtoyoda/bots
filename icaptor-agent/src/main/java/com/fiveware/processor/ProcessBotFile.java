@@ -24,7 +24,7 @@ import com.fiveware.model.InputDictionaryContext;
 import com.fiveware.model.MessageBot;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.Record;
-import com.fiveware.service.ServiceBot;
+import com.fiveware.service.IServiceBot;
 import com.fiveware.util.LineUtil;
 import com.fiveware.util.ListJoinUtil;
 import com.fiveware.validate.Validate;
@@ -40,7 +40,7 @@ public class ProcessBotFile implements ProcessBot {
 
 	@Autowired
 	@Qualifier("batch")
-	private ServiceBot serviceBot;
+	private IServiceBot serviceBot;
 
 	@Autowired
 	@Qualifier("fieldValidate")

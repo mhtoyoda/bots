@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fiveware.exception.ExceptionBot;
 import com.fiveware.exception.MessageStatusBot;
-import com.fiveware.service.ServiceBot;
+import com.fiveware.service.IServiceBot;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -28,7 +28,7 @@ public class AgentController {
 
     @Autowired
     @Qualifier("rest")
-    public ServiceBot serviceBot;
+    public IServiceBot serviceBot;
 
     @GetMapping("/{botName}/{endPoint}/{parameter}")
     public ResponseEntity<Object> getBot(@PathVariable String botName,@PathVariable String endPoint,

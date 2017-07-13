@@ -1,9 +1,13 @@
 package com.fiveware.scheduler;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-
+import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.exception.ExceptionBot;
+import com.fiveware.messaging.Receiver;
+import com.fiveware.model.MessageBot;
+import com.fiveware.model.entities.Bot;
+import com.fiveware.processor.ProcessBot;
+import com.fiveware.pulling.BrokerPulling;
+import com.fiveware.service.ServiceAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +16,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.messaging.Receiver;
-import com.fiveware.model.MessageBot;
-import com.fiveware.model.entities.Bot;
-import com.fiveware.processor.ProcessBot;
-import com.fiveware.pulling.BrokerPulling;
-import com.fiveware.repository.AgentRepository;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
@@ -33,7 +32,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	private Receiver<MessageBot> receiver;
 	
 	@Autowired
-	private AgentRepository agentRepository;
+	private ServiceAgent serviceAgent;
 	
 	@Autowired
 	@Qualifier("processBotDefault")
@@ -41,7 +40,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process(){
-		List<Bot> bots = agentRepository.findBotsByAgent(nameAgent);
+		List<Bot> bots = serviceAgent.findBotsByAgent(nameAgent);
 		bots.forEach(bot -> {
 			String botName = bot.getNameBot();
 			String nameQueue = botName+"_IN";			 
