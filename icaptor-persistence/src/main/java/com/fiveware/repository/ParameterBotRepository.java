@@ -1,17 +1,16 @@
 package com.fiveware.repository;
 
-import java.util.List;
-
+import com.fiveware.model.entities.ParameterBot;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.fiveware.model.entities.ParameterBot;
+import java.util.List;
 
 @Repository
 public interface ParameterBotRepository extends CrudRepository<ParameterBot, Long>{
 
-	@Query("FROM ParameterBot p WHERE p.bot.nameBot = :nameBot")
+	@Query("select p FROM ParameterBot p WHERE p.bot.nameBot = :nameBot")
 	List<ParameterBot> findByNameBotAndAtivoIsTrue(@Param("nameBot") String nameBot);
 }

@@ -1,23 +1,22 @@
 package com.fiveware.config.agent;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.messaging.QueueCreator;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.entities.Agent;
+import com.fiveware.model.entities.Bot;
+import com.fiveware.model.entities.Server;
+import com.fiveware.service.ServiceAgent;
+import com.fiveware.service.ServiceBot;
+import com.fiveware.service.ServiceServer;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.loader.ClassLoaderConfig;
-import com.fiveware.messaging.QueueCreator;
-import com.fiveware.model.entities.Agent;
-import com.fiveware.model.entities.Bot;
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.entities.Server;
-import com.fiveware.repository.AgentRepository;
-import com.fiveware.repository.BotRepository;
-import com.fiveware.repository.ServerRepository;
-import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AgentConfig {
@@ -30,13 +29,13 @@ public class AgentConfig {
 	private ClassLoaderConfig classLoaderConfig;
 
 	@Autowired
-	private AgentRepository agentRepository;
+	private ServiceAgent serviceAgent;
 
 	@Autowired
-	private BotRepository botRepository;
+	private ServiceBot serviceBot;
 
 	@Autowired
-	private ServerRepository serverRepository;
+	private ServiceServer serviceServer;
 
 	@Autowired
 	private QueueCreator queueCreator;
@@ -57,8 +56,8 @@ public class AgentConfig {
 		}
 		agent.setBots(botList);
 		server.setAgents(Lists.newArrayList(agent));
-		serverRepository.save(server);
-		agentRepository.save(agent);
+		serviceServer.save(server);
+		serviceAgent.save(agent);
 		createQueueBots(botList);
 	}
 	
@@ -69,7 +68,7 @@ public class AgentConfig {
 	}
 
 	private Bot getBot(BotClassLoaderContext botClassLoaderContext) {
-		Optional<Bot> optional = botRepository.findByNameBot(botClassLoaderContext.getNameBot());
+		Optional<Bot> optional = serviceBot.findByNameBot(botClassLoaderContext.getNameBot());
 		if (optional.isPresent()) {
 			return optional.get();
 		}
@@ -78,15 +77,15 @@ public class AgentConfig {
 		bot.setEndpoint(botClassLoaderContext.getEndpoint());
 		bot.setNameBot(botClassLoaderContext.getNameBot());
 		bot.setMethod(botClassLoaderContext.getMethod());
-		return botRepository.save(bot);
+		return serviceBot.save(bot);
 	}
 
 	private Agent getAgent(Server server) {
-		Optional<Agent> optional = agentRepository.findByNameAgent(data.getAgentName());
+		Optional<Agent> optional = serviceAgent.findByNameAgent(data.getAgentName());
 		if (optional.isPresent()) {
-			Agent agent = agentRepository.findOne(optional.get().getId());
+			Agent agent = serviceAgent.findOne(optional.get().getId());
 			agent.setPort(agentListener.getAgentPort());
-			agent = agentRepository.save(agent);
+			agent = serviceAgent.save(agent);
 			return agent;
 		}
 		Agent agent = new Agent();
@@ -94,17 +93,17 @@ public class AgentConfig {
 		agent.setNameAgent(data.getAgentName());
 		agent.setPort(agentListener.getAgentPort());
 		agent.setServer(server);
-		return agentRepository.save(agent);
+		return serviceAgent.save(agent);
 	}
 
 	private Server getServer() {
-		Optional<Server> optional = serverRepository.findByName(data.getServer());
+		Optional<Server> optional = serviceServer.findByName(data.getServer());
 		if (optional.isPresent()) {
 			return optional.get();
 		}
 		Server serverInfo = new Server();
 		serverInfo.setName(data.getServer());
 		serverInfo.setHost(data.getHost());
-		return serverRepository.save(serverInfo);
+		return serviceServer.save(serverInfo);
 	}
 }

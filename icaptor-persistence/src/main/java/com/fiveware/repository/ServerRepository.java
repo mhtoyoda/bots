@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+
 @Repository
 public interface ServerRepository extends CrudRepository<Server, Long>{
 
@@ -22,5 +23,5 @@ public interface ServerRepository extends CrudRepository<Server, Long>{
 
 	@Query("SELECT a FROM Server s JOIN s.agents a JOIN a.bots b WHERE s.name = :name AND b.nameBot = :nameBot AND b.endpoint = :endpoint")
 	Optional<List<Agent>> getAllAgentsByBotName(@Param("name") String name, @Param("nameBot") String nameBot,
-												@Param("endpoint") String endpoint);
+                                                @Param("endpoint") String endpoint);
 }

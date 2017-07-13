@@ -1,20 +1,21 @@
-package com.fiveware.discovery;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+package com.fiveware.service;
 
 import com.fiveware.exception.AgentBotNotFoundException;
 import com.fiveware.model.entities.Agent;
 import com.fiveware.repository.ServerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class AgentServiceDiscovery implements ServiceDiscovery {
 	
 	@Autowired
 	private ServerRepository serverRepository;
+
+
 	
 	@Override
 	public String getUrlService(String serverName, String nameBot, String endpoint) throws AgentBotNotFoundException {

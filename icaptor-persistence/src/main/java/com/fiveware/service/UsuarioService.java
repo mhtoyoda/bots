@@ -1,5 +1,6 @@
 package com.fiveware.service;
 
+
 import com.fiveware.model.entities.Usuario;
 import com.fiveware.repository.UsuarioRepository;
 import org.slf4j.Logger;
@@ -28,9 +29,9 @@ public class UsuarioService {
 
     @GetMapping(value = "/usuario/{email}/{ativo}")
     public ResponseEntity<Usuario> upload(@PathVariable String email, @PathVariable boolean ativo,
-                                           HttpServletRequest httpRequest){
-        Optional<Usuario> byEmailAndAtivo = usuarioRepository.findByEmailAndAtivo(email, ativo);
+                                          HttpServletRequest httpRequest){
 
+        Optional<Usuario> byEmailAndAtivo = usuarioRepository.findByEmailAndAtivo(email, ativo);
         Usuario usuario = byEmailAndAtivo.orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado!"));
 
         return ResponseEntity.ok(usuario);

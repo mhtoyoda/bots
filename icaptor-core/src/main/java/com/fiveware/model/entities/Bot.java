@@ -1,15 +1,12 @@
 package com.fiveware.model.entities;
 
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
+
+import javax.persistence.*;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
+@AutoProperty
 @Entity
 @Table(name = "bot")
 public class Bot {
@@ -70,4 +67,9 @@ public class Bot {
 		this.parameterBots = parameterBots;
 	}
 
+
+	@Override
+	public String toString() {
+		return Pojomatic.toString(this);
+	}
 }

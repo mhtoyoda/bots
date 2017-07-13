@@ -1,7 +1,9 @@
 package com.fiveware.config.agent;
 
-import javax.annotation.PostConstruct;
-
+import com.fiveware.messaging.Producer;
+import com.fiveware.messaging.QueueName;
+import com.fiveware.messaging.TypeMessage;
+import com.fiveware.model.MessageAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +13,7 @@ import org.springframework.context.Lifecycle;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.messaging.Producer;
-import com.fiveware.messaging.QueueName;
-import com.fiveware.messaging.TypeMessage;
-import com.fiveware.model.MessageAgent;
+import javax.annotation.PostConstruct;
 
 /**
  * Created by valdisnei on 06/06/17.
@@ -24,13 +23,13 @@ public class PlatFormConfig implements Lifecycle {
     
 	static Logger logger= LoggerFactory.getLogger(PlatFormConfig.class);
 	
-	@Value("${agent}")
+	@Value("${icaptor.agent.name}")
 	String agent;
 	
-	@Value("${ip}")
+	@Value("${icaptor.server.ip}")
 	String ip;
 	
-    @Value("${host}")
+    @Value("${icaptor.server.host}")
     String host;
 
     @Autowired

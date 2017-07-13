@@ -21,7 +21,7 @@ public class UsuarioServiceImpl implements UsuarioService{
     public Optional<Object> findByEmailAndAtivo(String email, boolean ativoInativo) {
 
         String pattern = "http://%s:%d/api/usuario/%s/%s";
-        String localhost = String.format(pattern, "localhost", 8082, email, ativoInativo);
+        String localhost = String.format(pattern, "localhost", 8085, email, ativoInativo);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));

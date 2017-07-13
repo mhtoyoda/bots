@@ -1,15 +1,16 @@
 package com.fiveware.service;
 
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-
+import com.fiveware.exception.ExceptionBot;
+import com.fiveware.model.OutTextRecord;
+import com.fiveware.model.entities.Bot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.model.OutTextRecord;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -35,6 +36,16 @@ public class ServiceBatch implements ServiceBot {
     @Override
     public <T> OutTextRecord callBot(String nameBot, String endpoint, T parameter) throws ExceptionBot {
         throw new IllegalArgumentException("Metodo nao permitdo para esta classe!");
+    }
+
+    @Override
+    public Optional<Bot> findByNameBot(String nameBot) {
+        return null;
+    }
+
+    @Override
+    public Bot save(Bot bot) {
+        return null;
     }
 
 }

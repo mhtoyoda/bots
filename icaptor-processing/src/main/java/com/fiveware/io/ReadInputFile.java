@@ -1,12 +1,12 @@
 package com.fiveware.io;
 
-import com.fiveware.util.FileUtil;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.MessageBot;
 import com.fiveware.model.MessageHeader;
 import com.fiveware.model.Record;
-import com.fiveware.repository.AgentRepository;
+import com.fiveware.service.ServiceAgent;
+import com.fiveware.util.FileUtil;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -38,7 +38,7 @@ public class ReadInputFile {
     private Producer<MessageBot> producer;
 
     @Autowired
-    private AgentRepository agentRepository;
+    private ServiceAgent serviceAgent;
 
     public void readFile(final String queueName, final String path, InputStream file) throws IOException {
         String[] fields = {"campo1"};
@@ -57,7 +57,7 @@ public class ReadInputFile {
     }
 
     private Long getLinesByAgent(List<Record> allLines) {
-        Long agentCount = agentRepository.count();
+        Long agentCount = serviceAgent.count();
 		Long totalByAgent = agentCount > 0 ? agentCount : N_LINES_BY_AGENT;
         int size = allLines.size();
         long linesRecord = Math.floorDiv(size, totalByAgent);

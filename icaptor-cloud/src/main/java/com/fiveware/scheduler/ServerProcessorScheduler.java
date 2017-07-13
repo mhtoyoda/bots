@@ -6,8 +6,8 @@ import com.fiveware.model.MessageBot;
 import com.fiveware.model.entities.Agent;
 import com.fiveware.model.entities.Bot;
 import com.fiveware.pulling.BrokerPulling;
-import com.fiveware.repository.AgentRepository;
-import com.fiveware.repository.ServerRepository;
+import com.fiveware.service.ServiceAgent;
+import com.fiveware.service.ServiceServer;
 import com.fiveware.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +27,10 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	private Receiver<MessageBot> receiver;
 
 	@Autowired
-	private ServerRepository serverRepository;
+	private ServiceServer serverRepository;
 
 	@Autowired
-	private AgentRepository agentRepository;
+	private ServiceAgent agentRepository;
 
 	@Autowired
 	private ServerConfig serverConfig;
