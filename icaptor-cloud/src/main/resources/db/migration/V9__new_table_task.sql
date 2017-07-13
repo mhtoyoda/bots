@@ -1,5 +1,5 @@
 CREATE TABLE task (
-  id BIGINT(20) NOT NULL,
+  id BIGINT(20) auto_increment NOT NULL,
   create_time	DATETIME NOT NULL,
   last_update_time	DATETIME NOT NULL,
   start_time	DATETIME,
