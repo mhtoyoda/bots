@@ -1,4 +1,4 @@
-package com.fiveware.controller;
+package com.fiveware.service;
 
 import com.fiveware.config.ServerConfig;
 import com.fiveware.discovery.AgentServiceDiscovery;
@@ -17,9 +17,9 @@ import java.util.Arrays;
 
 @RestController
 @RequestMapping("/api")
-public class ForwardController {
+public class ForwardService {
 
-	static Logger logger = LoggerFactory.getLogger(ForwardController.class);
+	static Logger logger = LoggerFactory.getLogger(ForwardService.class);
 
 	@Autowired
 	private ServerConfig serverConfig;

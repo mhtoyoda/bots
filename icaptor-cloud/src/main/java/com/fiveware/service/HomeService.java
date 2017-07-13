@@ -1,5 +1,6 @@
-package com.fiveware.controller;
+package com.fiveware.service;
 
+import com.fiveware.file.WorkerFile;
 import com.fiveware.io.ReadInputFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/api")
-public class HomeController {
+public class HomeService {
 
-    static Logger logger = LoggerFactory.getLogger(HomeController.class);
+    static Logger logger = LoggerFactory.getLogger(HomeService.class);
 
     @Autowired
     private ReadInputFile readInputFile;
@@ -43,7 +44,7 @@ public class HomeController {
 
         DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
 
-        Thread thread = new Thread(new WorkerArquivo(nameBot+"_IN",file,readInputFile,resultado));
+        Thread thread = new Thread(new WorkerFile(nameBot+"_IN",file,readInputFile,resultado));
         thread.start();
 
         return resultado;

@@ -1,4 +1,4 @@
-package com.fiveware.controller;
+package com.fiveware.service;
 
 import com.fiveware.model.entities.Usuario;
 import com.fiveware.repository.UsuarioRepository;
@@ -19,9 +19,9 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-public class UsuarioController {
+public class UsuarioService {
 
-    static Logger logger = LoggerFactory.getLogger(UsuarioController.class);
+    static Logger logger = LoggerFactory.getLogger(UsuarioService.class);
 
     @Autowired
     private UsuarioRepository usuarioRepository;

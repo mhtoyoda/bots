@@ -1,4 +1,4 @@
-package com.fiveware.controller;
+package com.fiveware.file;
 
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;

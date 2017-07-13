@@ -1,4 +1,4 @@
-package com.fiveware.controller;
+package com.fiveware.file;
 
 import com.fiveware.io.ReadInputFile;
 import org.slf4j.Logger;
@@ -9,9 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-public class WorkerArquivo implements Runnable {
+public class WorkerFile implements Runnable {
 
-    static Logger logger = LoggerFactory.getLogger(WorkerArquivo.class);
+    static Logger logger = LoggerFactory.getLogger(WorkerFile.class);
 
     private MultipartFile[] files;
     private DeferredResult<ResponseEntity<String>> resultado;
@@ -21,7 +21,7 @@ public class WorkerArquivo implements Runnable {
     private String queueName;
 
 
-    public WorkerArquivo(String queueName,MultipartFile[] files, ReadInputFile readInputFile,
+    public WorkerFile(String queueName,MultipartFile[] files, ReadInputFile readInputFile,
                          DeferredResult<ResponseEntity<String>> resultado) {
         this.files = files;
         this.resultado = resultado;
