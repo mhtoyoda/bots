@@ -1,4 +1,4 @@
-package com.fiveware.job;
+package com.fiveware.task;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,9 +8,9 @@ import com.fiveware.messaging.ConsumerTypeMessage;
 import com.fiveware.model.MessageAgent;
 
 @Component("PAUSE_JOB")
-public class PauseJobMessage implements ConsumerTypeMessage<MessageAgent> {
+public class PauseTaskMessage implements ConsumerTypeMessage<MessageAgent> {
 
-	private static Logger log = LoggerFactory.getLogger(PauseJobMessage.class);
+	private static Logger log = LoggerFactory.getLogger(PauseTaskMessage.class);
 	
 	@Override
 	public void process(MessageAgent message) {

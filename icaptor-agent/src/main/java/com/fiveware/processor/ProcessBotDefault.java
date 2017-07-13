@@ -1,10 +1,9 @@
-package com.fiveware.loader;
+package com.fiveware.processor;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -17,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
+import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.messaging.Producer;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.InputDictionaryContext;
@@ -29,10 +30,10 @@ import com.fiveware.util.ListJoinUtil;
 import com.fiveware.validate.Validate;
 import com.google.common.collect.Lists;
 
-@Component
-public class ProcessBotLoader {
+@Component("processBotDefault")
+public class ProcessBotDefault implements ProcessBot {
 
-	Logger logger = LoggerFactory.getLogger(ProcessBotLoader.class);
+	Logger logger = LoggerFactory.getLogger(ProcessBotDefault.class);
 
 	@Autowired
 	private LineUtil lineUtil;
@@ -59,10 +60,9 @@ public class ProcessBotLoader {
 		
 	@Autowired
 	private MessageSource messageSource;
-	private Supplier<? extends Map<String, Object>[]> notFound;
 
 	@SuppressWarnings("rawtypes")
-	public void executeLoad(String botName, MessageBot obj)
+	public void execute(String botName, MessageBot obj)
 			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
 
 		logger.info("Init Import File - [BOT]: {}", botName);
@@ -100,7 +100,7 @@ public class ProcessBotLoader {
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
 
-	public Supplier<OutTextRecord> getNotFound(Object parameter) {
+	private Supplier<OutTextRecord> getNotFound(Object parameter) {
 		Supplier<OutTextRecord> supplier = new Supplier<OutTextRecord>() {
 			@Override
 			public OutTextRecord get() {

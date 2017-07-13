@@ -1,6 +1,6 @@
-package com.fiveware.job;
+package com.fiveware.task;
 
-public enum JobStatus {
+public enum TaskStatus {
 
 	START, PAUSE, STOP, SCHEDULED, CONSOLIDATING, ERROR, ANALYZING;
 }

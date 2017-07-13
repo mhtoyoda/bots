@@ -7,16 +7,17 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.loader.ProcessBotLoader;
 import com.fiveware.messaging.Receiver;
-import com.fiveware.model.entities.Bot;
 import com.fiveware.model.MessageBot;
+import com.fiveware.model.entities.Bot;
+import com.fiveware.processor.ProcessBot;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.repository.AgentRepository;
 
@@ -35,7 +36,8 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	private AgentRepository agentRepository;
 	
 	@Autowired
-	private ProcessBotLoader processBotLoader;
+	@Qualifier("processBotDefault")
+	private ProcessBot processBotDefault;
 	
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process(){
@@ -62,7 +64,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Override
 	public void processMessage(String botName, MessageBot obj) {		
 		try {
-			processBotLoader.executeLoad(botName, obj);
+			processBotDefault.execute(botName, obj);
 			log.debug("[BOT]: {}", botName);
 		} catch (ClassNotFoundException | IOException | AttributeLoadException | ExceptionBot e) {
 			log.error("Error - {}", e.getMessage());
