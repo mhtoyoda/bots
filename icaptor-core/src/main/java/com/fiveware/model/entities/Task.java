@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -48,6 +50,10 @@ public class Task implements Serializable {
 
 	@Column(name = "count_executions")
 	private Integer countExecutions;
+
+	@ManyToOne
+	@JoinColumn(name = "id_bot")
+	private Bot bot;
 
 	public Long getId() {
 		return id;
@@ -103,6 +109,14 @@ public class Task implements Serializable {
 
 	public void setCountExecutions(Integer countExecutions) {
 		this.countExecutions = countExecutions;
+	}
+
+	public Bot getBot() {
+		return bot;
+	}
+
+	public void setBot(Bot bot) {
+		this.bot = bot;
 	}
 
 	@Override
