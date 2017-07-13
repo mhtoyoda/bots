@@ -9,6 +9,7 @@ import com.fiveware.model.Record;
 import com.fiveware.repository.AgentRepository;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -33,6 +34,7 @@ public class ReadInputFile {
     private FileUtil fileUtil;
 
     @Autowired
+    @Qualifier("eventInputDictionaryProducer")
     private Producer<MessageBot> producer;
 
     @Autowired

@@ -7,6 +7,7 @@ import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
 import com.fiveware.messaging.TypeMessage;
+import com.google.common.collect.Lists;
 
 @AutoProperty
 public class MessageBot implements Serializable {
@@ -18,9 +19,17 @@ public class MessageBot implements Serializable {
 	private final MessageHeader messageHeader;
 	private final String pathFile;
 
-	public MessageBot(List<String> line, List<String> lineResult, TypeMessage typeMessage,
-					  String description,
-					  MessageHeader messageHeader, String pathFile) {
+	public MessageBot(TypeMessage typeMessage, String description, MessageHeader messageHeader) {
+		this.line = Lists.newArrayList();
+		this.lineResult = Lists.newArrayList();
+		this.typeMessage = typeMessage;
+		this.description = description;
+		this.messageHeader = messageHeader;
+		this.pathFile = "";
+	}
+
+	public MessageBot(List<String> line, List<String> lineResult, TypeMessage typeMessage, String description,
+			MessageHeader messageHeader, String pathFile) {
 		this.line = line;
 		this.lineResult = lineResult;
 		this.typeMessage = typeMessage;
@@ -29,17 +38,29 @@ public class MessageBot implements Serializable {
 		this.pathFile = pathFile;
 	}
 
-	public TypeMessage getTypeMessage() {return typeMessage;}
+	public TypeMessage getTypeMessage() {
+		return typeMessage;
+	}
 
-	public String getDescription() {return description;}
+	public String getDescription() {
+		return description;
+	}
 
-	public List<String> getLine() {return line;}
-	
-	public List<String> getLineResult() {return lineResult;}
+	public List<String> getLine() {
+		return line;
+	}
 
-	public MessageHeader getMessageHeader() {return messageHeader;}
+	public List<String> getLineResult() {
+		return lineResult;
+	}
 
-	public String getPathFile() {return pathFile;}
+	public MessageHeader getMessageHeader() {
+		return messageHeader;
+	}
+
+	public String getPathFile() {
+		return pathFile;
+	}
 
 	@Override
 	public String toString() {
