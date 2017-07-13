@@ -1,9 +1,10 @@
 package com.fiveware.controller;
 
 import com.fiveware.config.ServerConfig;
+import com.fiveware.discovery.AgentServiceDiscovery;
 import com.fiveware.exception.AgentBotNotFoundException;
 import com.fiveware.exception.MessageStatusBot;
-import com.fiveware.service.AgentServiceDiscovery;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

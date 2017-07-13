@@ -1,4 +1,4 @@
-package com.fiveware.service;
+package com.fiveware.discovery;
 
 import com.fiveware.exception.AgentBotNotFoundException;
 
