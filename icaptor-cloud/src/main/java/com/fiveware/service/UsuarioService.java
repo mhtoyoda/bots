@@ -27,9 +27,9 @@ public class UsuarioService {
     private UsuarioRepository usuarioRepository;
 
     @GetMapping(value = "/usuario/{email}/{ativo}")
-    public ResponseEntity<Usuario> upload(@PathVariable String email, @PathVariable boolean ativoInativo,
+    public ResponseEntity<Usuario> upload(@PathVariable String email, @PathVariable boolean ativo,
                                            HttpServletRequest httpRequest){
-        Optional<Usuario> byEmailAndAtivo = usuarioRepository.findByEmailAndAtivo(email, ativoInativo);
+        Optional<Usuario> byEmailAndAtivo = usuarioRepository.findByEmailAndAtivo(email, ativo);
 
         Usuario usuario = byEmailAndAtivo.orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado!"));
 

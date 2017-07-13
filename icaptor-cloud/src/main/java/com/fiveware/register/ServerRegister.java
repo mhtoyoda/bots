@@ -1,7 +1,7 @@
 package com.fiveware.register;
 
 import com.fiveware.config.ServerConfig;
-import com.fiveware.config.ServerConfig.ServerInfo;
+import com.fiveware.config.ServerInfo;
 import com.fiveware.model.entities.Server;
 import com.fiveware.repository.ServerRepository;
 import org.slf4j.Logger;

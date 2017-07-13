@@ -1,13 +1,16 @@
 package com.fiveware.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
-
+@AutoProperty
 @Entity
 @Table(name = "usuario")
 public class Usuario implements Serializable {
@@ -25,6 +28,7 @@ public class Usuario implements Serializable {
 	@Email(message = "E-mail inválido")
 	private String email;
 
+	@JsonIgnore
 	private String senha;
 	
 	@Transient
@@ -32,6 +36,7 @@ public class Usuario implements Serializable {
 
 	private Boolean ativo;
 
+	@JsonIgnore
 	@Size(min = 1, message = "Selecione pelo menos um grupo")
 	@ManyToMany
 	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "codigo_usuario")
@@ -125,4 +130,8 @@ public class Usuario implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return Pojomatic.toString(this);
+	}
 }

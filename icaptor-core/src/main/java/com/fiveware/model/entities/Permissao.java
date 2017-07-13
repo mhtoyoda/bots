@@ -1,8 +1,12 @@
 package com.fiveware.model.entities;
 
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
+@AutoProperty
 @Entity
 @Table(name = "permissao")
 public class Permissao implements Serializable {
@@ -56,4 +60,9 @@ public class Permissao implements Serializable {
 		return true;
 	}
 
+
+	@Override
+	public String toString() {
+		return Pojomatic.toString(this);
+	}
 }
