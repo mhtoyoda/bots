@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import com.fiveware.exception.MessageStatusBot;
 import com.fiveware.model.entities.Task;
@@ -24,9 +23,6 @@ import com.fiveware.task.TaskStatus;
 public class TaskService {
 
 	static Logger logger = LoggerFactory.getLogger(TaskService.class);
-	
-	@Autowired
-	private RestTemplate restTemplate;
 	
 	@Autowired
 	private TaskManager taskManager;
