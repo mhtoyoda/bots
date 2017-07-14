@@ -14,7 +14,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/server")
-public class ServiceServer implements IServiceServer {
+public class ServiceServerImpl implements IServiceServer {
 
 
     @Autowired

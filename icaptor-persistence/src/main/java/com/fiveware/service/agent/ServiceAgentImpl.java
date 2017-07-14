@@ -15,10 +15,10 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/agent")
-public class ServiceAgent implements IServiceAgent{
-    @Autowired
-    private AgentRepository agentRepository;
+public class ServiceAgentImpl implements IServiceAgent{
 
+	@Autowired
+    private AgentRepository agentRepository;
 
     @Override
     @PostMapping("/save")
@@ -46,7 +46,6 @@ public class ServiceAgent implements IServiceAgent{
     public Long count(){
         return agentRepository.count();
     }
-
 
     @Override
     @GetMapping("/bots/nameAgent/{nameAgent}")

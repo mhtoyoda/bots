@@ -2,3 +2,8 @@ io:
   extension.input.file: .csv
   bot.extension.file: .jar
 
+broker:
+  user: guest
+  pass: guest
+  host: 54.224.242.0
+  queue.send.schedularTime: 5000 #milli second

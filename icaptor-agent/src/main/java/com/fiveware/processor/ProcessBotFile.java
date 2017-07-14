@@ -53,6 +53,7 @@ public class ProcessBotFile implements ProcessBot {
 	private ClassLoaderRunner classLoaderRunner;
 
 	@Autowired
+	@Qualifier("eventInputDictionaryProducer")
 	private Producer<MessageBot> producer;
 
 	@Autowired

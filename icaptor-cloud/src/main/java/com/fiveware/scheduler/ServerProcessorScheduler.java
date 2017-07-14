@@ -30,7 +30,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	private ServiceServer serviceServer;
 
 	@Autowired
-	private ServiceAgent agentRepository;
+	private ServiceAgent serviceAgent;
 
 	@Autowired
 	private ServerConfig serverConfig;
@@ -44,7 +44,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 		List<Agent> agents = serviceServer.getAllAgent(serverConfig.getServer().getName());
 		agents.forEach(agent -> {
 			log.info("Pulling Message [Agent]: {}", agent.getNameAgent());
-			List<Bot> bots = agentRepository.findBotsByAgent(agent.getNameAgent());
+			List<Bot> bots = serviceAgent.findBotsByAgent(agent.getNameAgent());
 			bots.forEach(bot -> {
 				String botName = bot.getNameBot();
 				String nameQueue = botName+"_OUT";
