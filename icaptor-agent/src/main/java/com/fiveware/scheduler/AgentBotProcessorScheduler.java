@@ -29,6 +29,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	private String nameAgent;
 	
 	@Autowired
+	@Qualifier("eventInputDictionaryReceiver")
 	private Receiver<MessageBot> receiver;
 	
 	@Autowired

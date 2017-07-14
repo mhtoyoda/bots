@@ -31,7 +31,7 @@ import com.fiveware.validate.Validate;
 import com.google.common.collect.Lists;
 
 @Component("processBotDefault")
-public class ProcessBotDefault implements ProcessBot {
+public class ProcessBotDefault implements ProcessBot<MessageBot> {
 
 	Logger logger = LoggerFactory.getLogger(ProcessBotDefault.class);
 
@@ -96,7 +96,7 @@ public class ProcessBotDefault implements ProcessBot {
 				listJoin.joinRecord(separatorInput, result, listResults);
 			}
 		}
-		obj.getLineResult().addAll(listResults);
+		
 		producer.send(botName + "_OUT", obj);
 		logger.info("End Import File - [BOT]: {}", botName);
 	}

@@ -1,9 +1,7 @@
 package com.fiveware.processor;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -19,24 +17,18 @@ import com.fiveware.exception.ExceptionBot;
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.messaging.Producer;
+import com.fiveware.messaging.QueueName;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.InputDictionaryContext;
-import com.fiveware.model.MessageBot;
 import com.fiveware.model.OutTextRecord;
-import com.fiveware.model.Record;
 import com.fiveware.service.IServiceBot;
-import com.fiveware.util.LineUtil;
-import com.fiveware.util.ListJoinUtil;
+import com.fiveware.task.TaskMessageBot;
 import com.fiveware.validate.Validate;
-import com.google.common.collect.Lists;
 
 @Component("processBotFile")
-public class ProcessBotFile implements ProcessBot {
+public class ProcessBotFile implements ProcessBot<TaskMessageBot> {
 
 	Logger logger = LoggerFactory.getLogger(ProcessBotFile.class);
-
-	@Autowired
-	private LineUtil lineUtil;
 
 	@Autowired
 	@Qualifier("batch")
@@ -53,51 +45,43 @@ public class ProcessBotFile implements ProcessBot {
 	private ClassLoaderRunner classLoaderRunner;
 
 	@Autowired
-	@Qualifier("eventInputDictionaryProducer")
-	private Producer<MessageBot> producer;
-
-	@Autowired
-	private ListJoinUtil listJoin;
+	@Qualifier("taskMessageProducer")
+	private Producer<TaskMessageBot> producer;
 		
 	@Autowired
 	private MessageSource messageSource;
 
 	@SuppressWarnings("rawtypes")
-	public void execute(String botName, MessageBot obj)
+	public void execute(String botName, TaskMessageBot obj)
 			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
 
 		logger.info("Init Import File - [BOT]: {}", botName);
 
 		Optional<BotClassLoaderContext> context = classLoaderConfig.getPropertiesBot(botName);
-		InputDictionaryContext inputDictionary = context.get().getInputDictionary();
-		String separatorInput = inputDictionary.getSeparator();
-		String[] fieldsInput = inputDictionary.getFields();
-
-		List<Record> recordLines = lineUtil.linesFrom(obj.getLine(), fieldsInput, separatorInput);
+		InputDictionaryContext inputDictionary = context.get().getInputDictionary();		
 		Class classLoader = classLoaderRunner.loadClass(botName);
 
-		List<String> listResults = Lists.newArrayList();
-		for (Record line : recordLines) {
-
-			OutTextRecord result = null;
-
-			Object cep = line.getValue("cep");
-
-			try {
-				validate.validate(cep, classLoader);
-
-				OutTextRecord outTextRecord = serviceBot.callBot(botName, cep);
-
-				result =  Arrays.asList(outTextRecord.getMap()).get(0)==null?getNotFound(cep).get():outTextRecord;
-
-			} catch (Exception e) {
-				logger.error("Unprocessed Record - Cause: " + e.getMessage());
-			} finally {
-				listJoin.joinRecord(separatorInput, result, listResults);
-			}
-		}
-		obj.getLineResult().addAll(listResults);
-		producer.send(botName + "_OUT", obj);
+//		for (Record line : recordLines) {
+//
+//			OutTextRecord result = null;
+//
+//			Object cep = line.getValue("cep");
+//
+//			try {
+//				validate.validate(cep, classLoader);
+//
+//				OutTextRecord outTextRecord = serviceBot.callBot(botName, cep);
+//
+//				result =  Arrays.asList(outTextRecord.getMap()).get(0)==null?getNotFound(cep).get():outTextRecord;
+//
+//			} catch (Exception e) {
+//				logger.error("Unprocessed Record - Cause: " + e.getMessage());
+//			} finally {
+//				listJoin.joinRecord(separatorInput, result, listResults);
+//			}
+//		}
+		
+		producer.send(QueueName.TASKS.name(), obj);
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
 
