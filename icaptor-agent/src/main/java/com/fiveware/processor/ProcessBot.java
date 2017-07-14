@@ -4,10 +4,9 @@ import java.io.IOException;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.model.MessageBot;
 
-public interface ProcessBot {
+public interface ProcessBot<T> {
 
-	void execute(String botName, MessageBot obj)
+	void execute(String botName, T obj)
 			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot;
 }

@@ -12,6 +12,7 @@ import com.fiveware.util.FileUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +25,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	private static Logger log = LoggerFactory.getLogger(ServerProcessorScheduler.class);
 
 	@Autowired
+	@Qualifier("eventInputDictionaryReceiver")
 	private Receiver<MessageBot> receiver;
 
 	@Autowired
@@ -67,9 +69,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	 */
 	@Override
 	public void processMessage(String botName, MessageBot obj) {
-		log.debug("Total de Linhas resultado: {}", obj.getLineResult());
-		//FIXME Consolidar linhas de resultado para gerar o arquivo final
-
+		log.debug("Total de Linhas resultado: {}", obj.getLineResult());		
 		fileUtil.writeFile(obj);
 	}
 
