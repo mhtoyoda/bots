@@ -1,17 +1,9 @@
-package com.fiveware.model.entities;
+package com.fiveware.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @AutoProperty
 @Entity
@@ -28,7 +20,6 @@ public class ParameterValueBot {
 	@Column(name = "value")
 	private String value;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_parameter_bot")
 	private ParameterBot parameterBot;

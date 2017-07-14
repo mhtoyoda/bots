@@ -1,5 +1,6 @@
 package com.fiveware.service;
 
+import com.fiveware.model.Usuario;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -16,19 +17,17 @@ import java.util.Optional;
 @Service
 public class UsuarioServiceImpl implements UsuarioService{
 
-
     @Override
-    public Optional<Object> findByEmailAndAtivo(String email, boolean ativoInativo) {
+    public Optional<Usuario> findByEmailAndAtivo(String email, boolean ativoInativo) {
 
         String pattern = "http://%s:%d/api/usuario/%s/%s";
         String localhost = String.format(pattern, "localhost", 8085, email, ativoInativo);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//        HttpEntity<Object> entity = new HttpEntity<Object>(email, headers);
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Object> result = restTemplate.exchange(localhost, HttpMethod.GET, null, Object.class);
+        ResponseEntity<Usuario> result = restTemplate.exchange(localhost, HttpMethod.GET, null, Usuario.class);
 
         return Optional.of(result.getBody());
     }

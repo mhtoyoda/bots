@@ -2,10 +2,10 @@ package com.fiveware.config.agent;
 
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.messaging.QueueCreator;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Bot;
 import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.entities.Agent;
-import com.fiveware.model.entities.Bot;
-import com.fiveware.model.entities.Server;
+import com.fiveware.model.Server;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceBot;
 import com.fiveware.service.ServiceServer;
@@ -88,11 +88,15 @@ public class AgentConfig {
 			agent = serviceAgent.save(agent);
 			return agent;
 		}
-		Agent agent = new Agent();
-		agent.setIp(data.getIp());
-		agent.setNameAgent(data.getAgentName());
-		agent.setPort(agentListener.getAgentPort());
-		agent.setServer(server);
+
+		Agent agent = new Agent.BuilderAgent()
+				.nameAgent(data.getAgentName())
+				.ip(data.getIp())
+				.port(agentListener.getAgentPort())
+				.server(server)
+				.build();
+
+
 		return serviceAgent.save(agent);
 	}
 

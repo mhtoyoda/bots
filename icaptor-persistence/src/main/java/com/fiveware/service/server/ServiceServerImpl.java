@@ -1,7 +1,7 @@
 package com.fiveware.service.server;
 
-import com.fiveware.model.entities.Agent;
-import com.fiveware.model.entities.Server;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Server;
 import com.fiveware.repository.ServerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,4 +1,4 @@
-package com.fiveware.model.entities;
+package com.fiveware.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
@@ -10,6 +10,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.List;
+
 @AutoProperty
 @Entity
 @Table(name = "usuario")
@@ -28,7 +29,6 @@ public class Usuario implements Serializable {
 	@Email(message = "E-mail inválido")
 	private String email;
 
-	@JsonIgnore
 	private String senha;
 	
 	@Transient

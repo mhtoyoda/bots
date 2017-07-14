@@ -1,7 +1,7 @@
 package com.fiveware.service;
 
 
-import com.fiveware.model.entities.Usuario;
+import com.fiveware.model.Usuario;
 import com.fiveware.repository.UsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

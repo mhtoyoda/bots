@@ -1,7 +1,7 @@
 package com.fiveware.service.discovery;
 
 import com.fiveware.exception.AgentBotNotFoundException;
-import com.fiveware.model.entities.Agent;
+import com.fiveware.model.Agent;
 import com.fiveware.service.ServiceServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

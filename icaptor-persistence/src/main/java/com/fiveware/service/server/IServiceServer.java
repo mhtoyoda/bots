@@ -1,7 +1,7 @@
 package com.fiveware.service.server;
 
-import com.fiveware.model.entities.Agent;
-import com.fiveware.model.entities.Server;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Server;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;

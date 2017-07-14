@@ -1,12 +1,13 @@
 package com.fiveware.service;
 
-import com.fiveware.model.entities.ParameterValueBot;
+import java.util.List;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import com.fiveware.model.ParameterValueBot;
 
 /**
  * Created by valdisnei on 13/07/17.

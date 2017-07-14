@@ -1,7 +1,8 @@
 package com.fiveware.service;
 
-import com.fiveware.model.entities.Agent;
-import com.fiveware.model.entities.Server;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,8 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Optional;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Server;
 
 /**
  * Created by valdisnei on 13/07/17.

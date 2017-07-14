@@ -1,16 +1,14 @@
 package com.fiveware.service;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Bot;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.entities.Agent;
-import com.fiveware.model.entities.Bot;
+import java.util.List;
+import java.util.Optional;
+
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -26,21 +24,20 @@ public class ServiceAgent {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<Agent> entity = new HttpEntity<Agent>(agent,headers);
-        return restTemplate.postForObject(url, entity, Agent.class);
+        Agent agent1 = restTemplate.postForObject(url, entity, Agent.class);
+        return agent1;
     }
 
     public Optional<Agent> findByNameAgent(String name){
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http://localhost:8085/api/agent/"+name;
+        String url = "http://localhost:8085/api/agent/name/"+name;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> entity = new HttpEntity<String>(name,headers);
 
-        Agent agent = restTemplate.getForObject(url, Agent.class);
-
-        return Optional.of(agent);
+        return restTemplate.getForObject(url, Optional.class);
     }
 
     public Agent findOne(Long id) {
@@ -71,7 +68,7 @@ public class ServiceAgent {
         String url = "http://localhost:8085/api/agent/bots/nameAgent/"+nameAgent;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
-        return restTemplate.getForObject(url, List.class);
+        List<Bot> forObject = restTemplate.getForObject(url, List.class);
+        return forObject;
     }
 }

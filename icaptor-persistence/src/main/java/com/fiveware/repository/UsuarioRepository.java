@@ -1,7 +1,7 @@
 package com.fiveware.repository;
 
 
-import com.fiveware.model.entities.Usuario;
+import com.fiveware.model.Usuario;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

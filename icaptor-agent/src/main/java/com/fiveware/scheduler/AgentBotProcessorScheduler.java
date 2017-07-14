@@ -4,7 +4,7 @@ import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.MessageBot;
-import com.fiveware.model.entities.Bot;
+import com.fiveware.model.Bot;
 import com.fiveware.processor.ProcessBot;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;

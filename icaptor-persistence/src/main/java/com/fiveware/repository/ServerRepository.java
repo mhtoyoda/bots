@@ -1,7 +1,7 @@
 package com.fiveware.repository;
 
-import com.fiveware.model.entities.Agent;
-import com.fiveware.model.entities.Server;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Server;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

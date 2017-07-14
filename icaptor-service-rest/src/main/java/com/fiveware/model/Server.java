@@ -1,8 +1,14 @@
-package com.fiveware.model.entities;
+package com.fiveware.model;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
 
 import javax.persistence.*;
 import java.util.List;
 
+@AutoProperty
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "server")
 public class Server {
@@ -52,4 +58,8 @@ public class Server {
 		this.agents = agents;
 	}
 
+	@Override
+	public String toString() {
+		return Pojomatic.toString(this);
+	}
 }

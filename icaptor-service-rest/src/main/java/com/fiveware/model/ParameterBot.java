@@ -1,6 +1,5 @@
-package com.fiveware.model.entities;
+package com.fiveware.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
@@ -19,7 +18,6 @@ public class ParameterBot {
 	@Column(name = "name")
 	private String name;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "id_bot")
 	private Bot bot;

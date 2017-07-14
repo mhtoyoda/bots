@@ -1,4 +1,4 @@
-package com.fiveware.model.entities;
+package com.fiveware.model;
 
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;

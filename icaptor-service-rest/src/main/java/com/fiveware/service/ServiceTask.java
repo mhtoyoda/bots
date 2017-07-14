@@ -1,6 +1,5 @@
 package com.fiveware.service;
 
-import com.fiveware.model.entities.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -9,6 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
+import com.fiveware.model.Task;
 
 @RestController
 @RequestMapping("/api")

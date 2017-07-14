@@ -1,11 +1,11 @@
 package com.fiveware.service.bot;
 
-import com.fiveware.model.entities.ParameterValueBot;
+import com.fiveware.model.ParameterValueBot;
 import com.fiveware.repository.ParameterBotValueRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.fiveware.model.entities.Bot;
+import com.fiveware.model.Bot;
 import com.fiveware.repository.BotRepository;
 
 import java.util.List;
