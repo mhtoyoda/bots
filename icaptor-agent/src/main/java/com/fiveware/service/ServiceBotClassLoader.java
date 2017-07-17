@@ -1,17 +1,5 @@
 package com.fiveware.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.loader.ClassLoaderConfig;
-import com.fiveware.loader.ClassLoaderRunner;
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.OutTextRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -23,6 +11,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiveware.exception.ExceptionBot;
+import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.loader.ClassLoaderRunner;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.OutTextRecord;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -71,12 +72,19 @@ public  class ServiceBotClassLoader<T> {
 
         Class<?> aClass = o.newInstance().getClass();
         Method execute = clazz.getMethod(botClassLoaderContext.get().getMethod(), aClass);
-
-        Object o1 = objectMapper.convertValue(parameter, aClass);
+        
+        Object o1 = null;
+        if( null != parameter ){
+            o1 = objectMapper.convertValue(parameter, aClass);
+        }
 
         Object obj = null;
         try{
-            obj =  execute.invoke(clazz.newInstance(), o1);
+        	if( null != o1){
+        		obj =  execute.invoke(clazz.newInstance(), o1);
+        	}else{
+        		obj =  execute.invoke(clazz.newInstance());
+        	}
         }catch (InvocationTargetException e){
             throw new ExceptionBot(e.getTargetException().getMessage());
         }

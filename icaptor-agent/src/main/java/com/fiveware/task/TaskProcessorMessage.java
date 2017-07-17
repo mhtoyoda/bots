@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
@@ -20,6 +19,7 @@ import com.fiveware.model.entities.Bot;
 import com.fiveware.processor.ProcessBot;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
+import com.fiveware.service.ServiceTask;
 
 @Component("taskProcessorMessage")
 public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
@@ -40,6 +40,9 @@ public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
 	@Autowired
 	private ServiceAgent serviceAgent;
 	
+	@Autowired
+	private ServiceTask serviceTask;
+	
 	//@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process(){
 		List<Bot> bots = serviceAgent.findBotsByAgent(nameAgent);
@@ -52,12 +55,14 @@ public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
 	
 	@Override
 	public boolean canPullingMessage(String queue) {
+		//TODO verificar status da task
 		return true;
 	}
 
 	@Override
 	public void processMessage(String botName, TaskMessageBot obj) {
 		try {
+			//TODO atualizar status da task
 			processBotFile.execute(botName, obj);
 			log.debug("[BOT]: {}", botName);
 		} catch (ClassNotFoundException | IOException | AttributeLoadException | ExceptionBot e) {
@@ -69,5 +74,4 @@ public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
 	public Optional<TaskMessageBot> receiveMessage(String queueName) {		
 		return Optional.ofNullable(receiver.receive(queueName));
 	}
-
 }

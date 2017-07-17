@@ -18,7 +18,8 @@ public class MessageBot implements Serializable {
 	private final String description;
 	private final MessageHeader messageHeader;
 	private final String pathFile;
-
+	private Integer qtdeInstances;
+	
 	public MessageBot(TypeMessage typeMessage, String description, MessageHeader messageHeader) {
 		this.line = Lists.newArrayList();
 		this.lineResult = Lists.newArrayList();
@@ -60,6 +61,14 @@ public class MessageBot implements Serializable {
 
 	public String getPathFile() {
 		return pathFile;
+	}
+	
+	public Integer getQtdeInstances() {
+		return qtdeInstances;
+	}
+
+	public void setQtdeInstances(Integer qtdeInstances) {
+		this.qtdeInstances = qtdeInstances;
 	}
 
 	@Override
