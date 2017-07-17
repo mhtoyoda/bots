@@ -1,11 +1,11 @@
 package com.fiveware.processor;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,21 +75,15 @@ public class ProcessBotDefault implements ProcessBot<MessageBot> {
 
 		List<Record> recordLines = lineUtil.linesFrom(obj.getLine(), fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
-
 		List<String> listResults = Lists.newArrayList();
+		
+		//TODO obter instancias via banco de dados
+		ExecutorService executorService = Executors.newFixedThreadPool(3);
 		for (Record line : recordLines) {
-
 			OutTextRecord result = null;
-
-			Object cep = line.getValue("cep");
-
-			try {
-				validate.validate(cep, classLoader);
-
-				OutTextRecord outTextRecord = serviceBot.callBot(botName, cep);
-
-				result =  Arrays.asList(outTextRecord.getMap()).get(0)==null?getNotFound(cep).get():outTextRecord;
-
+			try {				
+				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(botName, classLoader, serviceBot, line, validate, messageSource));
+				result = outTextRecord.get();
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());
 			} finally {
@@ -98,19 +92,7 @@ public class ProcessBotDefault implements ProcessBot<MessageBot> {
 		}
 		
 		producer.send(botName + "_OUT", obj);
+		executorService.shutdown();
 		logger.info("End Import File - [BOT]: {}", botName);
-	}
-
-	private Supplier<OutTextRecord> getNotFound(Object parameter) {
-		Supplier<OutTextRecord> supplier = new Supplier<OutTextRecord>() {
-			@Override
-			public OutTextRecord get() {
-				String message = messageSource.getMessage("result.bot.notFound", new Object[]{parameter}, null);
-				HashMap<String, Object> notFound = new HashMap<>();
-				notFound.put("registro", message);
-				return new OutTextRecord(new HashMap[]{notFound});
-			}
-		};
-		return supplier;
 	}
 }

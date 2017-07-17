@@ -13,24 +13,24 @@ public class TaskMessageBot implements Serializable {
 	 */
 	private static final long serialVersionUID = -729384364256323660L;
 
-	private String description;
+	private Long taskId;
 	private Integer qtdeInstances;
 	private TaskStatus taskStatus;
 	private Boolean loginShared;
 	private List<Map<String, BotParameterKeyValue>> parameters;
 	
-	public TaskMessageBot(String description, Integer qtdeInstances, TaskStatus taskStatus, Boolean loginShared,
+	public TaskMessageBot(Long taskId, Integer qtdeInstances, TaskStatus taskStatus, Boolean loginShared,
 			List<Map<String, BotParameterKeyValue>> parameters) {
 		super();
-		this.description = description;
+		this.taskId = taskId;
 		this.qtdeInstances = qtdeInstances;
 		this.taskStatus = taskStatus;
 		this.loginShared = loginShared;
 		this.parameters = parameters;
 	}
 
-	public String getDescription() {
-		return description;
+	public Long getTaskId() {
+		return taskId;
 	}
 
 	public Integer getQtdeInstances() {
