@@ -5,6 +5,7 @@ import com.fiveware.UtilsPages;
 import com.fiveware.dsl.TypeSearch;
 import com.fiveware.dsl.pdf.core.Page;
 import com.fiveware.dsl.pdf.core.PageIterator;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -125,14 +126,28 @@ class PdfImpl implements Pdf{
         StringBuilder builder = getBuilder();
 
         if (builder.length()==0){
-            this.page.getText().stream().forEach((s)->{
-                builder.append(s.getText());
-            });
+            Object o = MoreObjects.firstNonNull(this.page, this.pageIterator);
+
+            if (o instanceof PageIterator) {
+                while (((PageIterator) o).hasNext()) {
+                    Page page = ((PageIterator) o).next();
+                    builderText(builder,page);
+                }
+            } else {
+                builderText(builder,page);
+            }
+
 
         }
 
 
         return  builder.toString();
+    }
+
+    private void builderText(StringBuilder builder,Page page) {
+        page.getText().stream().forEach((s)->{
+            builder.append(s.getText());
+        });
     }
 
     @Override

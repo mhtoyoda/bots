@@ -35,7 +35,7 @@ public class ExtractPDFTests {
 		String path =rootDir + File.separator + "VOTORANTIM CIMENTOS NNE SA_200-8462_01-2017.pdf";
 
 		String text = helpers().pdf()
-				.open(path, 1)
+				.open(path)
 				.getText();
 
 
