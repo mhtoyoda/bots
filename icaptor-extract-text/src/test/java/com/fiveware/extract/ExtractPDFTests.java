@@ -19,13 +19,28 @@ public class ExtractPDFTests {
 
 	String path;
 	String outPathFile;
-
+	String rootDir;
 
 	@Before
 	public void setup(){
-			String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
+		rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
 		path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
+
+
 		outPathFile = rootDir + File.separator +"out.pdf";
+	}
+
+	@Test
+	public void baseCalculoICms(){
+		String path =rootDir + File.separator + "VOTORANTIM CIMENTOS NNE SA_200-8462_01-2017.pdf";
+		String baseDeCalculo = helpers().pdf()
+				.open(path,1)
+				.search("basedecalculoicms", "(\\d{1,3}(\\.\\d{3})*,\\d{1,3})")
+				.noSpace()
+				.build();
+
+		assertEquals("6.544,28",baseDeCalculo);
+
 	}
 
 
