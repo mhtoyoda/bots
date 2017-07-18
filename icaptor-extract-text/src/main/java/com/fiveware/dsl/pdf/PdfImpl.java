@@ -122,7 +122,17 @@ class PdfImpl implements Pdf{
 
     @Override
     public String getText(){
-        return  getBuilder().toString();
+        StringBuilder builder = getBuilder();
+
+        if (builder.length()==0){
+            this.page.getText().stream().forEach((s)->{
+                builder.append(s.getText());
+            });
+
+        }
+
+
+        return  builder.toString();
     }
 
     @Override
