@@ -24,8 +24,24 @@ public class ExtractPDFTests {
 	@Before
 	public void setup(){
 			String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
-		path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
+//		path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
+		path =rootDir + File.separator + "VOTORANTIM CIMENTOS NNE SA_200-8462_01-2017.pdf";
+
+
 		outPathFile = rootDir + File.separator +"out.pdf";
+	}
+
+
+	@Test
+	public void baseCalculoICms(){
+		String vencimento = helpers().pdf()
+				.open(path,1)
+				.search("basedecalculoicms", "(\\d{1,3}(\\.\\d{3})*,\\d{1,3})")
+				.noSpace()
+				.build();
+
+		assertEquals("28/03/2017",vencimento);
+
 	}
 
 

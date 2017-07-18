@@ -9,7 +9,9 @@ import java.util.regex.Pattern;
  */
 public interface Search {
 
-    void next(boolean isNext);
+    Search next();
+
+    Search noSpace();
 
     Search seek(String search, TypeSearch typeSearch);
 
