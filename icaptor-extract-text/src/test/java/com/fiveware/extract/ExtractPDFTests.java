@@ -33,6 +33,12 @@ public class ExtractPDFTests {
 	@Test
 	public void baseCalculoICms(){
 		String path =rootDir + File.separator + "VOTORANTIM CIMENTOS NNE SA_200-8462_01-2017.pdf";
+
+		String text = helpers().pdf()
+				.open(path, 1)
+				.getText();
+
+
 		String baseDeCalculo = helpers().pdf()
 				.open(path,1)
 				.search("basedecalculoicms", "(\\d{1,3}(\\.\\d{3})*,\\d{1,3})")
