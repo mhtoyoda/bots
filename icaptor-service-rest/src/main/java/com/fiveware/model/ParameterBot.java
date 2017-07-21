@@ -1,15 +1,13 @@
 package com.fiveware.model;
 
-import org.pojomatic.Pojomatic;
-import org.pojomatic.annotations.AutoProperty;
-
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
-@AutoProperty
+
 @Entity
 @Table(name = "parameter_bot")
-public class ParameterBot {
+public class ParameterBot implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,8 +20,10 @@ public class ParameterBot {
 	@JoinColumn(name = "id_bot")
 	private Bot bot;
 
+
 	private Boolean ativo;
-	
+
+	@Transient
 	@OneToMany(mappedBy = "parameterBot")
 	private List<ParameterValueBot> parameterValues;
 	
@@ -65,11 +65,5 @@ public class ParameterBot {
 
 	public void setParameterValues(List<ParameterValueBot> parameterValues) {
 		this.parameterValues = parameterValues;
-	}
-
-
-	@Override
-	public String toString() {
-		return Pojomatic.toString(this);
 	}
 }

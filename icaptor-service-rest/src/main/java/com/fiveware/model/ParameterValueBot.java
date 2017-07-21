@@ -1,14 +1,11 @@
 package com.fiveware.model;
 
-import org.pojomatic.Pojomatic;
-import org.pojomatic.annotations.AutoProperty;
-
 import javax.persistence.*;
+import java.io.Serializable;
 
-@AutoProperty
 @Entity
 @Table(name = "parameter_value_bot")
-public class ParameterValueBot {
+public class ParameterValueBot implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,9 +53,4 @@ public class ParameterValueBot {
 		this.parameterBot = parameterBot;
 	}
 
-
-	@Override
-	public String toString() {
-		return Pojomatic.toString(this);
-	}
 }

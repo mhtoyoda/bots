@@ -1,21 +1,18 @@
 package com.fiveware.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
-@AutoProperty
 @Entity
 @Table(name = "server")
-public class Server implements Serializable{
-
-
+public class Server implements Serializable,Comparable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@JsonSerialize
@@ -28,8 +25,9 @@ public class Server implements Serializable{
 	@Column(name = "host")
 	private String host;
 
-	@OneToMany
-	private List<Agent> agents;
+	@JsonBackReference
+	@ManyToMany(mappedBy = "server")
+	private Set<Agent> agents;
 
 	public Long getId() {
 		return id;
@@ -55,16 +53,13 @@ public class Server implements Serializable{
 		this.host = host;
 	}
 
-	public List<Agent> getAgents() {
-		return agents;
-	}
+	public Set<Agent> getAgents() {return agents;}
 
-	public void setAgents(List<Agent> agents) {
-		this.agents = agents;
-	}
+	public void setAgents(Set<Agent> agents) {this.agents = agents;}
 
 	@Override
-	public String toString() {
-		return Pojomatic.toString(this);
+	public int compareTo(Object o) {
+		if (this.id==null||((Server)o).id==null) return -1;
+		return this.id.compareTo(((Server)o).id);
 	}
 }

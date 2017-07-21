@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,7 +43,8 @@ public class ServiceBot  {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<Bot> entity = new HttpEntity<Bot>(bot,headers);
-        return restTemplate.postForObject(url, entity, Bot.class);
+        ResponseEntity<Bot> botResponseEntity = restTemplate.postForEntity(url, entity, Bot.class);
+        return botResponseEntity.getBody();
     }
 
 }

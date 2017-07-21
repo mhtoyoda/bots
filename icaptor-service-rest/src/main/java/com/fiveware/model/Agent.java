@@ -1,15 +1,17 @@
 package com.fiveware.model;
 
-import org.pojomatic.Pojomatic;
-import org.pojomatic.annotations.AutoProperty;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
-@AutoProperty
 @Entity
 @Table(name = "agent")
-public class Agent {
+public class Agent implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,11 +26,13 @@ public class Agent {
 	@Column(name = "port_agent")
 	private int port;
 
-	@ManyToOne
-	@JoinColumn(name = "server_id")
-	private Server server;
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "server_agent",
+			joinColumns = @JoinColumn(name = "server_id", referencedColumnName = "id"),
+			inverseJoinColumns = @JoinColumn(name = "agents_id", referencedColumnName = "id"))
+	private Set<Server> server;
 
-	@ManyToMany
+	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "agent_bot", joinColumns = { @JoinColumn(name = "id_agent") },
 			   inverseJoinColumns = {@JoinColumn(name = "id_bot") })
 	private List<Bot> bots;
@@ -36,7 +40,7 @@ public class Agent {
 	public Agent() {
 	}
 
-	public Agent(Long id, String nameAgent, int port, String ip, Server server, List<Bot> bots) {
+	protected Agent(Long id, String nameAgent, int port, String ip, Set<Server> server, List<Bot> bots) {
 		this.id=id;
 		this.nameAgent=nameAgent;
 		this.port=port;
@@ -85,31 +89,24 @@ public class Agent {
 		this.port = port;
 	}
 
-	public Server getServer() {
+	public Set<Server> getServer() {
 		return server;
 	}
 
-	public void setServer(Server server) {
+	public void setServer(Set<Server> server) {
 		this.server = server;
 	}
-
-	@Override
-	public String toString() {
-		return Pojomatic.toString(this);
-	}
-
-
-
 
 	public static class BuilderAgent{
 		private Long id;
 		private String nameAgent;
 		private String ip;
 		private int port;
-		private Server server;
+		private Set<Server> server;
 		private List<Bot> bots;
 
 		public BuilderAgent() {
+			this.server=new TreeSet<>();
 		}
 
 		public BuilderAgent id(Long id){
@@ -131,7 +128,7 @@ public class Agent {
 		}
 
 		public BuilderAgent server(Server server){
-			this.server=server;
+			this.server.add(server);
 			return this;
 		}
 

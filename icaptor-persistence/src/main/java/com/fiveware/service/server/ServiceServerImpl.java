@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -26,12 +27,16 @@ public class ServiceServerImpl implements IServiceServer {
     @Override
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Server server) {
-//        Optional<Server> byName = serverRepository.findByName(server.getName());
-//        if (byName.isPresent())
-//            server.setId(byName.get().getId());
+        Optional<Server> byName = serverRepository.findByName(server.getName());
 
-        Server save = serverRepository.save(server);
-        return ResponseEntity.status(HttpStatus.CREATED).body(save);
+        Server serverSave = byName.orElseGet(new Supplier<Server>() {
+            @Override
+            public Server get() {
+                return serverRepository.save(server);
+            }
+        });
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(serverSave);
     }
 
 
@@ -44,8 +49,8 @@ public class ServiceServerImpl implements IServiceServer {
 
     @Override
     @GetMapping("/agents/name/{name}")
-    public List<Agent> getAllAgent(String name) {
-        return serverRepository.getAllAgent(name);
+    public List<Agent> getAllAgent(@PathVariable String name) {
+        return serverRepository.findByAgentsNameAgent(name);
     }
 
     @Override

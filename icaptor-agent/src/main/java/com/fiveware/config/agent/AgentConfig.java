@@ -7,16 +7,14 @@ import com.fiveware.model.Bot;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.Server;
 import com.fiveware.service.ServiceAgent;
-import com.fiveware.service.ServiceBot;
-import com.fiveware.service.ServiceServer;
 import com.google.common.collect.Lists;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 @Component
 public class AgentConfig {
@@ -32,79 +30,55 @@ public class AgentConfig {
 	private ServiceAgent serviceAgent;
 
 	@Autowired
-	private ServiceBot serviceBot;
-
-	@Autowired
-	private ServiceServer serviceServer;
-
-	@Autowired
 	private QueueCreator queueCreator;
 	
 	@Autowired
 	private AgentListener agentListener;
 	
-	public void saveAgentBot() {
-		List<Bot> botList = Lists.newArrayList();
-		List<BotClassLoaderContext> bots = classLoaderConfig.getAll();
-		Server server = getServer();
-		Agent agent = getAgent(server);
-		if (CollectionUtils.isNotEmpty(bots)) {
-			bots.forEach(bot -> {
-				Bot botInfo = getBot(bot);				
-				botList.add(botInfo);
-			});
-		}
-		agent.setBots(botList);
-		server.setAgents(Lists.newArrayList(agent));
-		serviceServer.save(server);
-		serviceAgent.save(agent);
-		createQueueBots(botList);
-	}
-	
-	private void createQueueBots(List<Bot> bots){
-		bots.forEach(bot -> {
-			queueCreator.createQueue(bot.getNameBot());
-		});
+	public void saveAgentAndCreateQueue() {
+		saveAgentServerBots()
+				.getBots()
+				.forEach(
+					(bot)->queueCreator.createQueue(bot.getNameBot())
+				);
 	}
 
-	private Bot getBot(BotClassLoaderContext botClassLoaderContext) {
-		Optional<Bot> optional = serviceBot.findByNameBot(botClassLoaderContext.getNameBot());
-		if (optional.isPresent()) {
-			return optional.get();
-		}
-
-		Bot bot = new Bot();
-		bot.setEndpoint(botClassLoaderContext.getEndpoint());
-		bot.setNameBot(botClassLoaderContext.getNameBot());
-		bot.setMethod(botClassLoaderContext.getMethod());
-		return serviceBot.save(bot);
-	}
-
-	private Agent getAgent(Server server) {
-		Optional<Agent> optional = serviceAgent.findByNameAgent(data.getAgentName());
-		if (optional.isPresent()) {
-			Agent agent = serviceAgent.findOne(optional.get().getId());
-			agent.setPort(agentListener.getAgentPort());
-			agent = serviceAgent.save(agent);
-			return agent;
-		}
-
+	private Agent saveAgentServerBots() {
 		Agent agent = new Agent.BuilderAgent()
 				.nameAgent(data.getAgentName())
 				.ip(data.getIp())
 				.port(agentListener.getAgentPort())
-				.server(server)
+				.server(getServer())
+				.bots(getBots())
 				.build();
-
 
 		return serviceAgent.save(agent);
 	}
+
+	private List<Bot> getBots() {
+		final List<Bot> botList = Lists.newArrayList();
+
+		Optional.ofNullable(classLoaderConfig.getAll())
+				.ifPresent(new Consumer<List<BotClassLoaderContext>>() {
+			@Override
+			public void accept(List<BotClassLoaderContext> bots) {
+				bots.forEach(botClassLoader -> {
+					Bot bot = new Bot();
+					bot.setEndpoint(botClassLoader.getEndpoint());
+					bot.setNameBot(botClassLoader.getNameBot());
+					bot.setMethod(botClassLoader.getMethod());
+					botList.add(bot);
+				});
+			}
+		});
+		return botList;
+	}
+
 
 	private Server getServer() {
 		Server serverInfo = new Server();
 		serverInfo.setName(data.getServer());
 		serverInfo.setHost(data.getHost());
-		Server save = serviceServer.save(serverInfo);
-		return save;
+		return serverInfo;
 	}
 }

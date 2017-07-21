@@ -10,6 +10,7 @@ import com.fiveware.repository.BotRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -32,7 +33,18 @@ public class ServiceBotImpl {
 
     @PostMapping("/save")
     public Bot save(@RequestBody Bot bot){
-        return botRepository.save(bot);
+        Optional<Bot> optional = botRepository.findByNameBot(bot.getNameBot());
+        return optional.orElseGet(getSave(bot));
+    }
+
+    private Supplier<Bot> getSave(Bot bot) {
+        Supplier<Bot> supplier = new Supplier<Bot>() {
+            @Override
+            public Bot get() {
+                return botRepository.save(bot);
+            }
+        };
+        return supplier;
     }
 
 

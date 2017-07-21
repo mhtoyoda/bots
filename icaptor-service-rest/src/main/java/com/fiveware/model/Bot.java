@@ -1,15 +1,12 @@
 package com.fiveware.model;
 
-import org.pojomatic.Pojomatic;
-import org.pojomatic.annotations.AutoProperty;
-
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
-@AutoProperty
 @Entity
 @Table(name = "bot")
-public class Bot {
+public class Bot implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +20,10 @@ public class Bot {
 	
 	@Column(name ="endpoint")
 	private String endpoint;
-	
+
 	@OneToMany
+	@JoinTable(name = "agent_bot", joinColumns = { @JoinColumn(name = "id_agent") },
+			inverseJoinColumns = {@JoinColumn(name = "id_bot") })
 	private List<ParameterBot> parameterBots;
 	
 	public Long getId() {
@@ -67,9 +66,4 @@ public class Bot {
 		this.parameterBots = parameterBots;
 	}
 
-
-	@Override
-	public String toString() {
-		return Pojomatic.toString(this);
-	}
 }

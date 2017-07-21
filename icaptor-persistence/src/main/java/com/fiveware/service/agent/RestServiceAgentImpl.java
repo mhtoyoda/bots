@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -24,24 +26,35 @@ public class RestServiceAgentImpl {
 	@Transactional(readOnly = false)
     @PostMapping("/save")
     public Agent save(@RequestBody Agent agent){
-        Agent save = agentRepository.save(agent);
+        Agent agentdb = agentRepository.findByNameAgent(agent.getNameAgent());
 
-        Agent build = new Agent.BuilderAgent()
-                .id(save.getId())
-                .nameAgent(save.getNameAgent())
-                .port(save.getPort())
-                .ip(save.getIp())
-                .server(save.getServer())
-                .bots(save.getBots())
-                .build();
+        Optional<Agent> byNameAgent = (Optional<Agent>) Optional.ofNullable(agentdb);
 
-        return build;
+        byNameAgent.ifPresent(new Consumer<Agent>() {
+            @Override
+            public void accept(Agent _agent) {
+                _agent.setPort(agent.getPort());
+            }
+        });
+
+
+        Agent agent1 = byNameAgent
+                .orElseGet(new Supplier<Agent>() {
+                    @Override
+                    public Agent get() {
+                        return agent;
+                    }
+                });
+
+        agentRepository.save(agent1);
+
+        return agent1;
     }
 
 
     @GetMapping("/name/{name}")
-    public Optional<Agent> findByNameAgent(@PathVariable String name){
-        Optional<Agent> byNameAgent = agentRepository.findByNameAgent(name);
+    public Agent findByNameAgent(@PathVariable String name){
+        Agent byNameAgent = agentRepository.findByNameAgent(name);
 
         return byNameAgent;
     }
@@ -59,7 +72,7 @@ public class RestServiceAgentImpl {
 
     @GetMapping("/bots/nameAgent/{nameAgent}")
     public List<Bot> findBotsByAgent(String nameAgent){
-        List<Bot> botsByAgent = agentRepository.findBotsByAgent(nameAgent);
+        List<Bot> botsByAgent = agentRepository.findBynameAgent(nameAgent);
         return botsByAgent;
     }
 }

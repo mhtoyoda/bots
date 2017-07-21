@@ -1,6 +1,7 @@
 package com.fiveware.repository;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -11,4 +12,5 @@ import com.fiveware.model.Bot;
 public interface BotRepository extends CrudRepository<Bot, Long>{
 
 	Optional<Bot> findByNameBot(String nameBot);
+
 }

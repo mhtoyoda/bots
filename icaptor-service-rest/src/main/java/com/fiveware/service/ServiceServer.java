@@ -59,7 +59,6 @@ public class ServiceServer {
 
     public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint) {
 
-
         String url = "http://localhost:8085/api/server/nameServer/"+serverName+"/nameBot/"+nameBot+"/endPoint/"+endpoint;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
