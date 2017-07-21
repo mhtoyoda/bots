@@ -4,9 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -24,19 +22,18 @@ public class ServiceServer {
     private RestTemplate restTemplate;
 
     public Server save(Server server){
-        RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:8085/api/server/save";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity entity = new HttpEntity(server,headers);
 
-        HttpEntity<Server> entity = new HttpEntity<Server>(server,headers);
-        return restTemplate.postForObject(url, entity, Server.class);
+        ResponseEntity<Server> response = restTemplate.exchange(url,HttpMethod.POST, entity, Server.class);
+        return response.getBody();
     }
 
     public Optional<Server> findByName(String nameServer) {
 
-        RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:8085/api/server/name/"+nameServer;
         HttpHeaders headers = new HttpHeaders();
@@ -49,7 +46,6 @@ public class ServiceServer {
     }
 
     public List<Agent> getAllAgent(String name) {
-        RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:8085/api/server/agents/name/"+name;
         HttpHeaders headers = new HttpHeaders();
@@ -63,7 +59,6 @@ public class ServiceServer {
 
     public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint) {
 
-        RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:8085/api/server/nameServer/"+serverName+"/nameBot/"+nameBot+"/endPoint/"+endpoint;
         HttpHeaders headers = new HttpHeaders();

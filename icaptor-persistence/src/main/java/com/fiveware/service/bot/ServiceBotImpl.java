@@ -18,7 +18,6 @@ import java.util.Optional;
 @RequestMapping("/api/bot")
 public class ServiceBotImpl {
 
-
     @Autowired
     private BotRepository botRepository;
 

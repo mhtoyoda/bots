@@ -101,13 +101,10 @@ public class AgentConfig {
 	}
 
 	private Server getServer() {
-		Optional<Server> optional = serviceServer.findByName(data.getServer());
-		if (optional.isPresent()) {
-			return optional.get();
-		}
 		Server serverInfo = new Server();
 		serverInfo.setName(data.getServer());
 		serverInfo.setHost(data.getHost());
-		return serviceServer.save(serverInfo);
+		Server save = serviceServer.save(serverInfo);
+		return save;
 	}
 }

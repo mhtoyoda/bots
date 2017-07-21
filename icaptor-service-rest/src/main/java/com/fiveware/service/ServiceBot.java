@@ -26,12 +26,10 @@ public class ServiceBot  {
 
 
     public Optional<Bot> findByNameBot(String nameBot){
-        RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:8085/api/bot/name/"+nameBot;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
 
         Bot bot = restTemplate.getForObject(url, Bot.class);
         return Optional.of(bot);
@@ -39,8 +37,6 @@ public class ServiceBot  {
 
 
     public Bot save(Bot bot){
-        RestTemplate restTemplate = new RestTemplate();
-
         String url = "http://localhost:8085/api/bot/save";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

@@ -1,20 +1,25 @@
 package com.fiveware.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @AutoProperty
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @Table(name = "server")
-public class Server {
+public class Server implements Serializable{
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonSerialize
+	@JsonProperty("id")
 	private Long id;
 
 	@Column(name = "name")
