@@ -23,7 +23,7 @@ public class UserDetailServiceImpl implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Usuario> clienteOptional = usuarioService.findByEmailAndAtivo(email, true);
+        Optional<Usuario> clienteOptional = usuarioService.findByEmailAndAtivo(email);
 
         Usuario usuario = clienteOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario e/ou não encontrado!"));
 
