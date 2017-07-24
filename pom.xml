@@ -9,6 +9,7 @@
     <name>Icaptor Automation</name>
 
     <modules>
+        <module>icaptor-email</module>
         <module>icaptor-extract-text</module>
         <module>icaptor-framework</module>
         <module>icaptor-service-rest</module>
