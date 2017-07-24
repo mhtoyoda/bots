@@ -34,9 +34,9 @@ public class ExtractPDFTests {
 	public void baseCalculoICms(){
 		String path =rootDir + File.separator + "VOTORANTIM CIMENTOS NNE SA_200-8462_01-2017.pdf";
 
-		String text = helpers().pdf()
-				.open(path)
-				.getText();
+//		String text = helpers().pdf()
+//				.open(path)
+//				.getText();
 
 
 		String baseDeCalculo = helpers().pdf()

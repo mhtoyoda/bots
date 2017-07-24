@@ -11,6 +11,8 @@ public interface Search {
 
     void next(boolean isNext);
 
+    Search noSpace();
+
     Search seek(String search, TypeSearch typeSearch);
 
     Search seek(String search, String typeSearch);

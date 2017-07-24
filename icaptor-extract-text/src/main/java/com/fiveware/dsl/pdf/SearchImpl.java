@@ -27,6 +27,8 @@ class SearchImpl implements Search {
     private Pattern compile;
     private Pdf pdf;
     private boolean isNext;
+    private boolean noSpace;
+
 
     public SearchImpl(Pdf pdf) {
         this.pdf = pdf;
@@ -43,6 +45,12 @@ class SearchImpl implements Search {
         this.isNext = isNext;
     }
 
+
+    @Override
+    public Search noSpace() {
+        this.noSpace = true;
+        return this;
+    }
 
     @Override
     public Search seek(String search, TypeSearch typeSearch){
@@ -80,6 +88,10 @@ class SearchImpl implements Search {
         Pattern compile = Pattern.compile(searchRegex);
 
         Matcher matcher = compile.matcher(this.pdf.getText());
+
+        if (noSpace)
+            matcher = compile.matcher(this.pdf.getText().replaceAll("\\s","").trim());
+
         if (matcher.find()) {
             return matcher.group().replace(search, "").trim();
         } else {
