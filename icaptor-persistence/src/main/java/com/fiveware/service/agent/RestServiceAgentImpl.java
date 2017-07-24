@@ -1,16 +1,22 @@
 package com.fiveware.service.agent;
 
-import com.fiveware.model.Agent;
-import com.fiveware.model.Bot;
-import com.fiveware.repository.AgentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fiveware.model.Agent;
+import com.fiveware.model.Bot;
+import com.fiveware.repository.AgentRepository;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -71,7 +77,7 @@ public class RestServiceAgentImpl {
     }
 
     @GetMapping("/bots/nameAgent/{nameAgent}")
-    public List<Bot> findBotsByAgent(String nameAgent){
+    public List<Bot> findBotsByAgent(@PathVariable("nameAgent") String nameAgent){
         List<Bot> botsByAgent = agentRepository.findBynameAgent(nameAgent);
         return botsByAgent;
     }

@@ -42,20 +42,21 @@ public class ServiceServerImpl implements IServiceServer {
 
     @Override
     @GetMapping("/name/{name}")
-    public Optional<Server> findByName(@PathVariable String name) {
+    public Optional<Server> findByName(@PathVariable("name") String name) {
         return serverRepository.findByName(name);
     }
 
 
     @Override
     @GetMapping("/agents/name/{name}")
-    public List<Agent> getAllAgent(@PathVariable String name) {
+    public List<Agent> getAllAgent(@PathVariable("name") String name) {
         return serverRepository.findByAgentsNameAgent(name);
     }
 
     @Override
     @GetMapping("/nameServer/{serverName}/nameBot/{nameBot}/endPoint/{endpoint}")
-    public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint){
+    public Optional<List<Agent>> getAllAgentsByBotName(@PathVariable("serverName") String serverName,
+    		@PathVariable("nameBot") String nameBot, @PathVariable("endpoint")  String endpoint){
         return serverRepository.getAllAgentsByBotName(serverName,nameBot,endpoint);
 
     }

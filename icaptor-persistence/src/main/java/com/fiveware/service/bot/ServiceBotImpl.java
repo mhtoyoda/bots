@@ -26,7 +26,7 @@ public class ServiceBotImpl {
     private ParameterBotValueRepository parameterBotValueRepository;
 
     @GetMapping("/name/{name}")
-    public Bot findByNameBot(@PathVariable String name){
+    public Bot findByNameBot(@PathVariable("name") String name){
         Optional<Bot> byNameBot = botRepository.findByNameBot(name);
         return byNameBot.get();
     }
@@ -49,7 +49,7 @@ public class ServiceBotImpl {
 
 
     @GetMapping("/parameters/nameBot/{nameBot}")
-    public List<ParameterValueBot> findByParameterBotValues(String nameBot){
+    public List<ParameterValueBot> findByParameterBotValues(@PathVariable("nameBot") String nameBot){
         return parameterBotValueRepository.findByParameterBotValues(nameBot);
 
     }
