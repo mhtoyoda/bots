@@ -18,7 +18,7 @@ public class BotElement {
 		webElement.clear();
 		return this;
 	}
-
+	
 	public BotElement click() {
 		webElement.click();
 		return this;

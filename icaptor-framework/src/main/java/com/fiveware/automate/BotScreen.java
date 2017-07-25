@@ -90,6 +90,10 @@ public class BotScreen {
 		return new BotAutomation(webDriver);
 	}
 	
+	public BotAutomation action(){
+		return new BotAutomation(webDriver);
+	}
+	
 	public BotScreen waitForPageToLoadFor(int time){
 		new BotJS(webDriver).waitForPageToLoadFor(time);
 		return this;

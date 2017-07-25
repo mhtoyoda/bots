@@ -25,4 +25,8 @@ public class BotAutomation {
 	public Frame frameBy() {
 		return new Frame(webDriver);
 	}
+	
+	public BotAction inElement(BotElement botElement){
+		return new BotAction(webDriver, botElement);
+	}
 }
