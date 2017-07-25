@@ -22,4 +22,7 @@ public class BotAutomation {
 		return new DropDownElement(botElement);
 	}	
 	
+	public Frame frameBy() {
+		return new Frame(webDriver);
+	}
 }
