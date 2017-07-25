@@ -1,8 +1,8 @@
 package com.fiveware.dsl.pdf;
 
-import com.fiveware.dsl.TypeSearch;
-
 import java.util.regex.Pattern;
+
+import com.fiveware.dsl.TypeSearch;
 
 /**
  * Created by valdisnei on 05/07/17.

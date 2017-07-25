@@ -2,13 +2,12 @@ create table server_agent
 (
   server_id bigint not null,
   agents_id bigint not null,
-  constraint UK_agents_id
-  unique (agents_id),
-  constraint FK_server_id_01
-  foreign key (server_id) references server (id),
-  constraint FK_agents_id_02
-  foreign key (agents_id) references agent (id)
-);
+  PRIMARY KEY (`server_id`,`agents_id`),
 
-create index FK_server_id_01 on server_agent (server_id);
+  KEY FK_SERVERAGENT_idx (server_id),
+  constraint FK_SERVERAGENT_server
+  foreign key (server_id) references server (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  constraint FK_SERVERAGENT_agent
+  foreign key (agents_id) references agent (id) ON DELETE CASCADE ON UPDATE CASCADE
+);
 

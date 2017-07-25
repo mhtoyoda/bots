@@ -1,9 +1,8 @@
 package com.fiveware.service;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import com.fiveware.model.Usuario;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,21 +15,36 @@ import java.util.Optional;
 @Service
 public class UsuarioServiceImpl implements UsuarioService{
 
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
-    public Optional<Object> findByEmailAndAtivo(String email, boolean ativoInativo) {
+    public Optional<Usuario> findByEmailAndAtivo(String email) {
 
-        String pattern = "http://%s:%d/api/usuario/%s/%s";
-        String localhost = String.format(pattern, "localhost", 8085, email, ativoInativo);
+        String pattern = "http://%s:%d/api/usuario/email";
+        String localhost = String.format(pattern, "localhost", 8085);
+
+        UsuarioRest usuario = new UsuarioRest(email);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-//        HttpEntity<Object> entity = new HttpEntity<Object>(email, headers);
 
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Object> result = restTemplate.exchange(localhost, HttpMethod.GET, null, Object.class);
+        HttpEntity<UsuarioRest> entity = new HttpEntity<UsuarioRest>(usuario);
 
-        return Optional.of(result.getBody());
+        ResponseEntity<Usuario> usuarioResponseEntity = restTemplate.postForEntity(localhost, entity, Usuario.class);
+
+        return Optional.of(usuarioResponseEntity.getBody());
     }
 
+    class UsuarioRest{
+        final String email;
+
+        public UsuarioRest(String email) {
+            this.email = email;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+    }
 }

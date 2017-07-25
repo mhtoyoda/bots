@@ -9,14 +9,16 @@
     <name>Icaptor Automation</name>
 
     <modules>
+        <module>icaptor-email</module>
         <module>icaptor-extract-text</module>
         <module>icaptor-framework</module>
+        <module>icaptor-service-rest</module>
+        <module>icaptor-persistence</module>
         <module>icaptor-core</module>
         <module>icaptor-processing</module>
         <module>icaptor-cloud</module>
         <module>icaptor-agent</module>
         <module>icaptor-ux</module>
-        <module>icaptor-persistence</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>

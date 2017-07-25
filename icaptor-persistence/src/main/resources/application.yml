@@ -16,10 +16,11 @@ spring:
       dialect: org.hibernate.dialect.MySQL5InnoDBDialect
       show-sql: true
 
-  jackson.serialization.fail-on-empty-beans: false
+  jackson:
+    serialization.fail-on-empty-beans: false
+    deserialization.fail-on-unknown-properties: true
 
   data.rest.detection-strategy: annotated
-
 
 
 flyway:

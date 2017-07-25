@@ -1,13 +1,16 @@
 package com.fiveware.service.server;
 
-import com.fiveware.model.entities.Agent;
-import com.fiveware.model.entities.Server;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Server;
 import com.fiveware.repository.ServerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -23,27 +26,37 @@ public class ServiceServerImpl implements IServiceServer {
 
     @Override
     @PostMapping("/save")
-    public Server save(@RequestBody Server server) {
-        return serverRepository.save(server);
+    public ResponseEntity<?> save(@RequestBody Server server) {
+        Optional<Server> byName = serverRepository.findByName(server.getName());
+
+        Server serverSave = byName.orElseGet(new Supplier<Server>() {
+            @Override
+            public Server get() {
+                return serverRepository.save(server);
+            }
+        });
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(serverSave);
     }
 
 
     @Override
     @GetMapping("/name/{name}")
-    public Optional<Server> findByName(@PathVariable String name) {
+    public Optional<Server> findByName(@PathVariable("name") String name) {
         return serverRepository.findByName(name);
     }
 
 
     @Override
     @GetMapping("/agents/name/{name}")
-    public List<Agent> getAllAgent(String name) {
-        return serverRepository.getAllAgent(name);
+    public List<Agent> getAllAgent(@PathVariable("name") String name) {
+        return serverRepository.findByAgentsNameAgent(name);
     }
 
     @Override
     @GetMapping("/nameServer/{serverName}/nameBot/{nameBot}/endPoint/{endpoint}")
-    public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint){
+    public Optional<List<Agent>> getAllAgentsByBotName(@PathVariable("serverName") String serverName,
+    		@PathVariable("nameBot") String nameBot, @PathVariable("endpoint")  String endpoint){
         return serverRepository.getAllAgentsByBotName(serverName,nameBot,endpoint);
 
     }

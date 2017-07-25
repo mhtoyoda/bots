@@ -1,7 +1,7 @@
 package com.fiveware.service;
 
 import com.fiveware.exception.MessageStatusBot;
-import com.fiveware.model.entities.Task;
+import com.fiveware.model.Task;
 import com.fiveware.task.TaskManager;
 import com.fiveware.task.TaskStatus;
 import org.slf4j.Logger;

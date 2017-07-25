@@ -1,6 +1,6 @@
 package com.fiveware.repository;
 
-import com.fiveware.model.entities.ParameterBot;
+import com.fiveware.model.ParameterBot;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

@@ -1,7 +1,8 @@
 package com.fiveware.service.server;
 
-import com.fiveware.model.entities.Agent;
-import com.fiveware.model.entities.Server;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Server;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,7 @@ import java.util.Optional;
  */
 public interface IServiceServer {
     @PostMapping("/save")
-    Server save(@RequestBody Server server);
+    ResponseEntity<?> save(@RequestBody Server server);
 
     @GetMapping("/name/{name}")
     Optional<Server> findByName(@PathVariable String name);

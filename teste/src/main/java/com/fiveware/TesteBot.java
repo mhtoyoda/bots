@@ -2,7 +2,6 @@ package com.fiveware;
 
 import com.fiveware.annotation.*;
 import com.fiveware.automate.BotScreen;
-import com.fiveware.dsl.TypeSearch;
 import com.fiveware.exception.ExceptionBot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import java.util.Iterator;
 
 import static com.fiveware.automate.BotAutomationBuilder.Web;
 import static com.fiveware.automate.BotWebBrowser.PHANTOM;
-import static com.fiveware.dsl.pdf.Helpers.helpers;
 
 /**
  * Created by valdisnei on 5/28/17.
@@ -24,7 +22,8 @@ public class TesteBot implements Automation<String, Endereco> {
 	static Logger logger = LoggerFactory.getLogger(TesteBot.class);
 	
 	public static void main(String[] args) {
-		logger.info("Resultado: {}", new TesteBot().getEndereco(args[0]));
+		Endereco endereco = new TesteBot().getEndereco("07077170");
+		logger.info("Resultado: {}", endereco);
 	}
 
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot",type = String.class)
@@ -33,11 +32,6 @@ public class TesteBot implements Automation<String, Endereco> {
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
 	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws ExceptionBot{
 			Endereco endereco = getEndereco(cep);
-
-		String build = helpers().pdf()
-				.open("",2)
-				.search("CNPJ: ", TypeSearch.CNPJ)
-				.build();
 
 
 		return endereco;
@@ -77,7 +71,7 @@ public class TesteBot implements Automation<String, Endereco> {
 				.elementBy().xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/table/tbody/tr[2]/td[4]")
 				.getText();
 
-//		logger.info(" Endereco: {} - {} - {} - {}", logradouro, bairro, localidade, cep);
+		logger.info(" Endereco: {} - {} - {} - {}", logradouro, bairro, localidade, cep);
 
 		return new Endereco(logradouro, bairro, localidade, cep);
 	}

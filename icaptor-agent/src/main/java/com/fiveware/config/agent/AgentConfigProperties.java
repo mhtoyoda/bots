@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AgentConfigProperties {
 	
-	@Value("${icaptor.agent.name}")
+	@Value("${agent}")
 	public String agentName;
 	
 	@Value("${icaptor.server.ip}")

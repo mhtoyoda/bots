@@ -6,8 +6,6 @@ spring.http:
         max-request-size: 1024MB
 
 icaptor:
-  agent:
-    name: agentTeste-1
   server:
     name: icaptor-server
     host: localhost:8082

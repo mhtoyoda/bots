@@ -1,9 +1,8 @@
 package com.fiveware.extract;
 
-import com.fiveware.Pojo;
-import com.fiveware.dsl.TypeSearch;
-import org.junit.Before;
-import org.junit.Test;
+import static com.fiveware.dsl.pdf.Helpers.FromTo;
+import static com.fiveware.dsl.pdf.Helpers.helpers;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -11,9 +10,11 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.fiveware.dsl.pdf.Helpers.FromTo;
-import static com.fiveware.dsl.pdf.Helpers.helpers;
-import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.fiveware.Pojo;
+import com.fiveware.dsl.TypeSearch;
 
 public class ExtractPDFTests {
 
@@ -37,7 +38,6 @@ public class ExtractPDFTests {
 		String text = helpers().pdf()
 				.open(path)
 				.getText();
-
 
 		String baseDeCalculo = helpers().pdf()
 				.open(path,1)

@@ -90,6 +90,11 @@
 			<artifactId>icaptor-extract-pdf</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>icaptor-email</groupId>
+			<artifactId>icaptor-email</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 
 
 	</dependencies>

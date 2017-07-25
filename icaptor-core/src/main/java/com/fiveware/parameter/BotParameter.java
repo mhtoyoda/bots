@@ -1,7 +1,7 @@
 package com.fiveware.parameter;
 
 import com.fiveware.model.BotParameterKeyValue;
-import com.fiveware.model.entities.ParameterValueBot;
+import com.fiveware.model.ParameterValueBot;
 import com.fiveware.service.ServiceParameterBotValue;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;

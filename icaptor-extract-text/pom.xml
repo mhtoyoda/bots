@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>icaptor-extract-pdf</groupId>
-	<artifactId>icaptor-extract-pdf</artifactId>
+	<groupId>icaptor-extract-text</groupId>
+	<artifactId>icaptor-extract-text</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>icaptor-extract-pdf</name>
-	<description>Demo project for Spring Boot</description>
+	<name>icaptor-extract-text</name>
+	<description>Extrai texto de um arquivo PDF, Excel e Html</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
