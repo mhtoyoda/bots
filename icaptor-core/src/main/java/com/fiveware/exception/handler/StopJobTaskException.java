@@ -14,8 +14,8 @@ public class StopJobTaskException implements JobTaskHandlerException {
 	 * User/Password Invalid
 	 */
 	@Override
-	public void handleException(Exception exception) {
-		log.error(exception.getMessage());
+	public void handleException(Throwable throwable) {
+		log.error(throwable.getMessage());	
 	}
 
 }

@@ -13,7 +13,7 @@ public class RetryJobTaskException implements JobTaskHandlerException  {
 	 * Error 500
 	 */
 	@Override
-	public void handleException(Exception exception) {
-		log.error(exception.getMessage());	
+	public void handleException(Throwable throwable) {
+		log.error(throwable.getMessage());	
 	}
 }

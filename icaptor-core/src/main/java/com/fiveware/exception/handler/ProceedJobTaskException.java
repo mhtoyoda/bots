@@ -5,12 +5,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RetryAfterTimeJobTaskException implements JobTaskHandlerException {
+public class ProceedJobTaskException implements JobTaskHandlerException {
 
-	static Logger log = LoggerFactory.getLogger(RetryAfterTimeJobTaskException.class);
+	static Logger log = LoggerFactory.getLogger(ProceedJobTaskException.class);
 	
 	/**
-	 * Error Intermittent
+	 * Continuar processamento
 	 */
 	@Override
 	public void handleException(Throwable throwable) {
