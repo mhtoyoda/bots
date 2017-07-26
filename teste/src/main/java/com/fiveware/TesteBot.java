@@ -21,7 +21,7 @@ public class TesteBot implements Automation<String, Endereco> {
 
 	static Logger logger = LoggerFactory.getLogger(TesteBot.class);
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ExceptionBot {
 		Endereco endereco = new TesteBot().getEndereco("07077170");
 		logger.info("Resultado: {}", endereco);
 	}
@@ -38,7 +38,7 @@ public class TesteBot implements Automation<String, Endereco> {
 		return endereco;
 	}
 
-	public Endereco getEndereco(String args) {
+	public Endereco getEndereco(String args) throws ExceptionBot {
 		String baseUrl = "http://www.correios.com.br/";
 		BotScreen telaConsultaCep = Web().driver(PHANTOM).openPage(baseUrl + "/para-voce");
 		telaConsultaCep.windowMaximize();
