@@ -9,6 +9,11 @@ import java.util.List;
 @Table(name = "parameter_bot")
 public class ParameterBot implements Serializable{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1667658363527365607L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -20,10 +25,8 @@ public class ParameterBot implements Serializable{
 	@JoinColumn(name = "id_bot")
 	private Bot bot;
 
-
 	private Boolean ativo;
 
-	@Transient
 	@OneToMany(mappedBy = "parameterBot")
 	private List<ParameterValueBot> parameterValues;
 	

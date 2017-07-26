@@ -1,5 +1,13 @@
 package com.fiveware.dsl.pdf;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fiveware.UtilsPages;
 import com.fiveware.dsl.TypeSearch;
 import com.fiveware.dsl.pdf.core.Page;
@@ -9,13 +17,6 @@ import com.fiveware.dsl.pdf.core.Table;
 import com.fiveware.dsl.pdf.core.extractors.BasicExtractionAlgorithm;
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Strings;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by valdisnei on 28/06/17.
@@ -29,7 +30,6 @@ class SearchImpl implements Search {
     private boolean isNext;
     private boolean noSpace;
 
-
     public SearchImpl(Pdf pdf) {
         this.pdf = pdf;
     }
@@ -41,10 +41,10 @@ class SearchImpl implements Search {
     }
 
     @Override
-    public void next(boolean isNext) {
-        this.isNext = isNext;
+    public Search next() {
+        this.isNext = true;
+        return this;
     }
-
 
     @Override
     public Search noSpace() {
@@ -91,7 +91,6 @@ class SearchImpl implements Search {
 
         if (noSpace)
             matcher = compile.matcher(this.pdf.getText().replaceAll("\\s","").trim());
-
         if (matcher.find()) {
             return matcher.group().replace(search, "").trim();
         } else {
