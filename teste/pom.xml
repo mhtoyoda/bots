@@ -24,12 +24,26 @@
 		<!--<slf4j.version>1.7.25</slf4j.version>-->
 	</properties>
 
-	<dependencies>		
+	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-amqp</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.amqp</groupId>
+			<artifactId>spring-rabbit</artifactId>
+		</dependency>
+
+
 		<dependency>
 			<groupId>icaptor-framework</groupId>
 			<artifactId>icaptor-framework</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
+
 	</dependencies>
 
 	<build>

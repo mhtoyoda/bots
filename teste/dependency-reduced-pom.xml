@@ -42,6 +42,18 @@
   </build>
   <dependencies>
     <dependency>
+      <groupId>org.springframework.amqp</groupId>
+      <artifactId>spring-amqp</artifactId>
+      <version>1.7.3.RELEASE</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.amqp</groupId>
+      <artifactId>spring-rabbit</artifactId>
+      <version>1.7.3.RELEASE</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>icaptor-framework</groupId>
       <artifactId>icaptor-framework</artifactId>
       <version>0.0.1-SNAPSHOT</version>
