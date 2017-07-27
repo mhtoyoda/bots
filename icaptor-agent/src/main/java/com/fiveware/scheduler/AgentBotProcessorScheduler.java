@@ -37,8 +37,8 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	private ServiceAgent serviceAgent;
 	
 	@Autowired
-	@Qualifier("processBotDefault")
-	private ProcessBot processBotDefault;
+	@Qualifier("processBotCSV")
+	private ProcessBot<MessageBot> processBotCSV;
 	
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process(){
@@ -66,7 +66,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Override
 	public void processMessage(String botName, MessageBot obj) {		
 		try {
-			processBotDefault.execute(botName, obj);
+			processBotCSV.execute(botName, obj);
 			log.debug("[BOT]: {}", botName);
 		} catch (ClassNotFoundException | IOException | AttributeLoadException | ExceptionBot e) {
 			log.error("Error - {}", e.getMessage());

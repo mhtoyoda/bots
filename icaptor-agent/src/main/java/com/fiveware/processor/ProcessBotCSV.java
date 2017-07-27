@@ -30,10 +30,10 @@ import com.fiveware.util.ListJoinUtil;
 import com.fiveware.validate.Validate;
 import com.google.common.collect.Lists;
 
-@Component("processBotDefault")
-public class ProcessBotDefault implements ProcessBot<MessageBot> {
+@Component("processBotCSV")
+public class ProcessBotCSV implements ProcessBot<MessageBot> {
 
-	Logger logger = LoggerFactory.getLogger(ProcessBotDefault.class);
+	Logger logger = LoggerFactory.getLogger(ProcessBotCSV.class);
 
 	@Autowired
 	private LineUtil lineUtil;
@@ -77,8 +77,7 @@ public class ProcessBotDefault implements ProcessBot<MessageBot> {
 		Class classLoader = classLoaderRunner.loadClass(botName);
 		List<String> listResults = Lists.newArrayList();
 		
-		//TODO obter instancias via banco de dados
-		ExecutorService executorService = Executors.newFixedThreadPool(3);
+		ExecutorService executorService = Executors.newFixedThreadPool(obj.getQtdeInstances());
 		for (Record line : recordLines) {
 			OutTextRecord result = null;
 			try {				

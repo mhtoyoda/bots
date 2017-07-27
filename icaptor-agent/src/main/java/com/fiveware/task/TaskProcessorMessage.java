@@ -21,6 +21,7 @@ import com.fiveware.processor.ProcessBot;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceTask;
+import com.fiveware.task.status.TaskStatus;
 
 @Component("taskProcessorMessage")
 public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
@@ -56,19 +57,19 @@ public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
 	
 	@Override
 	public boolean canPullingMessage() {
-		//TODO verificar status da task
 		return true;
 	}
 
 	@Override
 	public void processMessage(String botName, TaskMessageBot obj) {
 		try {
-			//TODO atualizar status da task
 			Task task = serviceTask.getTaskById(obj.getTaskId());			
 			Optional<Task> taskOptional = Optional.of(task);
 			taskOptional.ifPresent(taskPresent ->{
-				
+				taskPresent = controlStatusTask(taskPresent);
+				serviceTask.save(taskPresent);
 			});
+			
 			processBotFile.execute(botName, obj);
 			log.debug("[BOT]: {}", botName);
 		} catch (ClassNotFoundException | IOException | AttributeLoadException | ExceptionBot e) {
@@ -79,5 +80,21 @@ public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
 	@Override
 	public Optional<TaskMessageBot> receiveMessage(String queueName) {		
 		return Optional.ofNullable(receiver.receive(queueName));
+	}
+
+	private Task controlStatusTask(Task task) {
+		if(task.getStatus().equals(TaskStatus.CREATED.name())){
+			task.getStatusTask().start();
+		}
+		if(task.getStatus().equals(TaskStatus.PAUSE.name())){
+			task.getStatusTask().restart();
+		}
+		if(task.getStatus().equals(TaskStatus.STOP.name())){
+			task.getStatusTask().restart();
+		}
+		if(task.getStatus().equals(TaskStatus.ERROR.name())){
+			task.getStatusTask().restart();
+		}
+		return task;
 	}
 }

@@ -41,7 +41,7 @@ public class TaskManager {
 		Task task = createNewTask(taskStatus, botName);	
 		List<Map<String,BotParameterKeyValue>> parameters = loadParameters(botName);
 		Boolean loginShared = (parameters.isEmpty() || parameters.size() == 1) ? false : true;
-		TaskMessageBot taskMessageBot = new TaskMessageBot(task.getId(), qtdInstances, taskStatus, loginShared , parameters);
+		TaskMessageBot taskMessageBot = new TaskMessageBot(task.getId(), qtdInstances, loginShared , parameters);
 		producer.send(QueueName.TASKS.name(), taskMessageBot);
 		return task;
 	}

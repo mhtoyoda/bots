@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.fiveware.model.BotParameterKeyValue;
-import com.fiveware.task.status.TaskStatus;
 
 public class TaskMessageBot implements Serializable {
 
@@ -16,16 +15,14 @@ public class TaskMessageBot implements Serializable {
 
 	private Long taskId;
 	private Integer qtdeInstances;
-	private TaskStatus taskStatus;
 	private Boolean loginShared;
 	private List<Map<String, BotParameterKeyValue>> parameters;
 	
-	public TaskMessageBot(Long taskId, Integer qtdeInstances, TaskStatus taskStatus, Boolean loginShared,
+	public TaskMessageBot(Long taskId, Integer qtdeInstances, Boolean loginShared,
 			List<Map<String, BotParameterKeyValue>> parameters) {
 		super();
 		this.taskId = taskId;
 		this.qtdeInstances = qtdeInstances;
-		this.taskStatus = taskStatus;
 		this.loginShared = loginShared;
 		this.parameters = parameters;
 	}
@@ -37,11 +34,7 @@ public class TaskMessageBot implements Serializable {
 	public Integer getQtdeInstances() {
 		return qtdeInstances;
 	}
-
-	public TaskStatus getTaskStatus() {
-		return taskStatus;
-	}
-
+	
 	public Boolean getLoginShared() {
 		return loginShared;
 	}
