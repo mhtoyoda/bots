@@ -16,12 +16,8 @@ import javax.persistence.TemporalType;
 
 import org.pojomatic.Pojomatic;
 
-import com.fiveware.task.status.TaskConsolidating;
-import com.fiveware.task.status.TaskCreated;
-import com.fiveware.task.status.TaskError;
-import com.fiveware.task.status.TaskPause;
-import com.fiveware.task.status.TaskScheduled;
-import com.fiveware.task.status.TaskStart;
+import com.fiveware.task.status.TaskStatusCurrent;
+import com.fiveware.task.status.TaskStatusStep;
 
 @Entity
 @Table(name = "task")
@@ -126,37 +122,13 @@ public class Task implements Serializable {
 		this.bot = bot;
 	}
 
-	public TaskCreated created(){
-		return new TaskCreated(this);
+	public TaskStatusStep getStatusTask() {
+		return TaskStatusCurrent.getStatusOf(this);
 	}
-
-	public TaskStart start(){
-		return new TaskStart(this);
-	}
-
-	public TaskPause pause(){
-		return new TaskPause(this);
-	}
-
-	public TaskScheduled scheduled(){
-		return new TaskScheduled(this);
-	}
-
-	public TaskConsolidating consolidating(){
-		return new TaskConsolidating(this);
-	}
-
-	public TaskError error(){
-		return new TaskError(this);
-	}
-
+	
 	@Override
 	public String toString() {
 		return Pojomatic.toString(this);
 	}
-	
-	public static void main(String[] args) {
-		Task task = new Task();
-		task.start().consolidating();
-	}
+
 }
