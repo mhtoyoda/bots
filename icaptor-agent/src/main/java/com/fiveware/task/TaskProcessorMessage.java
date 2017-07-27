@@ -55,7 +55,7 @@ public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
 	}
 	
 	@Override
-	public boolean canPullingMessage(String queue) {
+	public boolean canPullingMessage() {
 		//TODO verificar status da task
 		return true;
 	}
@@ -64,7 +64,7 @@ public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
 	public void processMessage(String botName, TaskMessageBot obj) {
 		try {
 			//TODO atualizar status da task
-			Task task = serviceTask.getTaskById(obj.getTaskId());
+			Task task = serviceTask.getTaskById(obj.getTaskId());			
 			Optional<Task> taskOptional = Optional.of(task);
 			taskOptional.ifPresent(taskPresent ->{
 				

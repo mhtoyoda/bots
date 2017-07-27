@@ -1,14 +1,8 @@
 package com.fiveware.scheduler;
 
-import com.fiveware.config.ServerConfig;
-import com.fiveware.messaging.Receiver;
-import com.fiveware.model.MessageBot;
-import com.fiveware.model.Agent;
-import com.fiveware.model.Bot;
-import com.fiveware.pulling.BrokerPulling;
-import com.fiveware.service.ServiceAgent;
-import com.fiveware.service.ServiceServer;
-import com.fiveware.util.FileUtil;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +10,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
+import com.fiveware.config.ServerConfig;
+import com.fiveware.messaging.Receiver;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Bot;
+import com.fiveware.model.MessageBot;
+import com.fiveware.pulling.BrokerPulling;
+import com.fiveware.service.ServiceAgent;
+import com.fiveware.service.ServiceServer;
+import com.fiveware.util.FileUtil;
 
 @Component
 public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
@@ -60,7 +61,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	 *
 	 */
 	@Override
-	public boolean canPullingMessage(String queue) {
+	public boolean canPullingMessage() {
 		return true;
 	}
 

@@ -56,7 +56,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	 * 
 	 */
 	@Override
-	public boolean canPullingMessage(String queue) {
+	public boolean canPullingMessage() {
 		return true;
 	}
 
