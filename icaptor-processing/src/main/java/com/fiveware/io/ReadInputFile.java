@@ -84,7 +84,7 @@ public class ReadInputFile {
                 .build();
 
         MessageBot messageBot = new MessageBot(lines, Lists.newArrayList(),
-                TypeMessage.INPUT_DICTIONARY,"", messageHeader, path);
+                TypeMessage.TASK, messageHeader, path);
 
         producer.send(queueName, messageBot);
 

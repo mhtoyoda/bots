@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
 
 import com.fiveware.model.MessageBot;
 
-@Service("eventInputDictionaryReceiver")
-public class EventInputDictionaryReceiver implements Receiver<MessageBot> {
+@Service("eventBotReceiver")
+public class EventBotReceiver implements Receiver<MessageBot> {
 	
 	@Autowired
 	private RabbitTemplate rabbit;

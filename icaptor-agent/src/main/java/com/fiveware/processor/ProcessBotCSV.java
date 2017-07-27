@@ -80,8 +80,9 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		ExecutorService executorService = Executors.newFixedThreadPool(obj.getQtdeInstances());
 		for (Record line : recordLines) {
 			OutTextRecord result = null;
-			try {				
-				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(botName, classLoader, serviceBot, line, validate, messageSource));
+			try {
+				ProcessorFields processorFields = new ProcessorFields(botName, classLoader, serviceBot, line, validate, messageSource);
+				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(processorFields));
 				result = outTextRecord.get();
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());

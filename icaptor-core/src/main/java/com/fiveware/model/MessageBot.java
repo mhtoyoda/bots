@@ -15,36 +15,29 @@ public class MessageBot implements Serializable {
 	private final List<String> line;
 	private final List<String> lineResult;
 	private final TypeMessage typeMessage;
-	private final String description;
 	private final MessageHeader messageHeader;
 	private final String pathFile;
 	private Integer qtdeInstances;
 	
-	public MessageBot(TypeMessage typeMessage, String description, MessageHeader messageHeader) {
+	public MessageBot(TypeMessage typeMessage, MessageHeader messageHeader) {
 		this.line = Lists.newArrayList();
 		this.lineResult = Lists.newArrayList();
 		this.typeMessage = typeMessage;
-		this.description = description;
 		this.messageHeader = messageHeader;
 		this.pathFile = "";
 	}
 
-	public MessageBot(List<String> line, List<String> lineResult, TypeMessage typeMessage, String description,
+	public MessageBot(List<String> line, List<String> lineResult, TypeMessage typeMessage,
 			MessageHeader messageHeader, String pathFile) {
 		this.line = line;
 		this.lineResult = lineResult;
 		this.typeMessage = typeMessage;
-		this.description = description;
 		this.messageHeader = messageHeader;
 		this.pathFile = pathFile;
 	}
 
 	public TypeMessage getTypeMessage() {
 		return typeMessage;
-	}
-
-	public String getDescription() {
-		return description;
 	}
 
 	public List<String> getLine() {

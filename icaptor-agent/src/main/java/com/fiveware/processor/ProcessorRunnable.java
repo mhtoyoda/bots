@@ -7,35 +7,20 @@ import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.MessageSource;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
 import com.fiveware.exception.ValidationFieldException;
 import com.fiveware.model.OutTextRecord;
-import com.fiveware.model.Record;
-import com.fiveware.service.IServiceBot;
-import com.fiveware.validate.Validate;
 
 public class ProcessorRunnable implements Callable<OutTextRecord> {
 	
 	Logger logger = LoggerFactory.getLogger(ProcessorRunnable.class);
 	
-	private String botName;
-	private Class classLoader;
-	private IServiceBot serviceBot;
-	private Record record;
-	private Validate validate;
-	private MessageSource messageSource;
+	private ProcessorFields processorFields;
 	
-	public ProcessorRunnable(String botName, Class classLoader, IServiceBot serviceBot, Record record,
-			Validate validate, MessageSource messageSource) {
-		this.botName = botName;
-		this.classLoader = classLoader;
-		this.serviceBot = serviceBot;
-		this.record = record;
-		this.validate = validate;
-		this.messageSource = messageSource;
+	public ProcessorRunnable(ProcessorFields processorFields) {
+		this.processorFields = processorFields;		
 	}
 
 	@Override
@@ -50,9 +35,9 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 	}
 	
 	private OutTextRecord getResult() throws ValidationFieldException, AttributeLoadException, ExceptionBot{
-		Object cep = record.getValue("cep");
-		validate.validate(cep, classLoader);
-		OutTextRecord outTextRecord = serviceBot.callBot(botName, cep);
+		Object cep = processorFields.getRecord().getValue("cep");
+		processorFields.getValidate().validate(cep, processorFields.getClassLoader());
+		OutTextRecord outTextRecord = processorFields.getServiceBot().callBot(processorFields.getBotName(), cep);
 		return Arrays.asList(outTextRecord.getMap()).get(0)==null?getNotFound(cep).get():outTextRecord;
 	}
 	
@@ -60,7 +45,7 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 		Supplier<OutTextRecord> supplier = new Supplier<OutTextRecord>() {
 			@Override
 			public OutTextRecord get() {
-				String message = messageSource.getMessage("result.bot.notFound", new Object[]{parameter}, null);
+				String message = processorFields.getMessageSource().getMessage("result.bot.notFound", new Object[]{parameter}, null);
 				HashMap<String, Object> notFound = new HashMap<>();
 				notFound.put("registro", message);
 				return new OutTextRecord(new HashMap[]{notFound});

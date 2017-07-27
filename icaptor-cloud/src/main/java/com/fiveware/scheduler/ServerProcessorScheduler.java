@@ -26,7 +26,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	private static Logger log = LoggerFactory.getLogger(ServerProcessorScheduler.class);
 
 	@Autowired
-	@Qualifier("eventInputDictionaryReceiver")
+	@Qualifier("eventBotReceiver")
 	private Receiver<MessageBot> receiver;
 
 	@Autowired
