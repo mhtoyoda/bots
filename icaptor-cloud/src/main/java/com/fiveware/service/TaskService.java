@@ -3,7 +3,8 @@ package com.fiveware.service;
 import com.fiveware.exception.MessageStatusBot;
 import com.fiveware.model.Task;
 import com.fiveware.task.TaskManager;
-import com.fiveware.task.TaskStatus;
+import com.fiveware.task.status.TaskStatus;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -19,6 +19,7 @@ import com.fiveware.model.Task;
 import com.fiveware.parameter.BotParameter;
 import com.fiveware.service.ServiceBot;
 import com.fiveware.service.ServiceTask;
+import com.fiveware.task.status.TaskStatus;
 
 @Component
 public class TaskManager {

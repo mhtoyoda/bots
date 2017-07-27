@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.fiveware.model.BotParameterKeyValue;
+import com.fiveware.task.status.TaskStatus;
 
 public class TaskMessageBot implements Serializable {
 

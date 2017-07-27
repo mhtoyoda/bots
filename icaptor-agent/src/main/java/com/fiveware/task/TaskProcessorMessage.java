@@ -16,6 +16,7 @@ import com.fiveware.exception.ExceptionBot;
 import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Bot;
+import com.fiveware.model.Task;
 import com.fiveware.processor.ProcessBot;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
@@ -63,6 +64,11 @@ public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
 	public void processMessage(String botName, TaskMessageBot obj) {
 		try {
 			//TODO atualizar status da task
+			Task task = serviceTask.getTaskById(obj.getTaskId());
+			Optional<Task> taskOptional = Optional.of(task);
+			taskOptional.ifPresent(taskPresent ->{
+				
+			});
 			processBotFile.execute(botName, obj);
 			log.debug("[BOT]: {}", botName);
 		} catch (ClassNotFoundException | IOException | AttributeLoadException | ExceptionBot e) {
