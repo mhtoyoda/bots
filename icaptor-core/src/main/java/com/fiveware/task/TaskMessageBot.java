@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.BotParameterKeyValue;
 
 public class TaskMessageBot implements Serializable {
@@ -16,15 +17,17 @@ public class TaskMessageBot implements Serializable {
 	private Long taskId;
 	private Integer qtdeInstances;
 	private Boolean loginShared;
+	private TypeMessage typeMessage;
 	private List<Map<String, BotParameterKeyValue>> parameters;
 	
 	public TaskMessageBot(Long taskId, Integer qtdeInstances, Boolean loginShared,
-			List<Map<String, BotParameterKeyValue>> parameters) {
+			List<Map<String, BotParameterKeyValue>> parameters, TypeMessage typeMessage) {
 		super();
 		this.taskId = taskId;
 		this.qtdeInstances = qtdeInstances;
 		this.loginShared = loginShared;
 		this.parameters = parameters;
+		this.typeMessage = typeMessage;
 	}
 
 	public Long getTaskId() {
@@ -41,5 +44,9 @@ public class TaskMessageBot implements Serializable {
 
 	public List<Map<String, BotParameterKeyValue>> getParameters() {
 		return parameters;
+	}
+	
+	public TypeMessage getTypeMessage() {
+		return typeMessage;
 	}
 }

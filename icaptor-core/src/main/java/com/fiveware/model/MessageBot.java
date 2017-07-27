@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 @AutoProperty
 public class MessageBot implements Serializable {
 
+	private  Long taskId;
 	private final List<String> line;
 	private final List<String> lineResult;
 	private final TypeMessage typeMessage;
@@ -35,7 +36,11 @@ public class MessageBot implements Serializable {
 		this.messageHeader = messageHeader;
 		this.pathFile = pathFile;
 	}
-
+	
+	public Long getTaskId() {
+		return taskId;
+	}
+	
 	public TypeMessage getTypeMessage() {
 		return typeMessage;
 	}

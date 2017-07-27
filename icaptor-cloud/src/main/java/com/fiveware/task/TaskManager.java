@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.BotNotFoundException;
 import com.fiveware.messaging.Producer;
-import com.fiveware.messaging.QueueName;
+import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.Bot;
 import com.fiveware.model.BotParameterKeyValue;
 import com.fiveware.model.Task;
@@ -41,8 +41,8 @@ public class TaskManager {
 		Task task = createNewTask(taskStatus, botName);	
 		List<Map<String,BotParameterKeyValue>> parameters = loadParameters(botName);
 		Boolean loginShared = (parameters.isEmpty() || parameters.size() == 1) ? false : true;
-		TaskMessageBot taskMessageBot = new TaskMessageBot(task.getId(), qtdInstances, loginShared , parameters);
-		producer.send(QueueName.TASKS.name(), taskMessageBot);
+		TaskMessageBot taskMessageBot = new TaskMessageBot(task.getId(), qtdInstances, loginShared , parameters, TypeMessage.TASK_FILE);
+		producer.send(botName+"_IN", taskMessageBot);
 		return task;
 	}
 	

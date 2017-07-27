@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
 import com.fiveware.messaging.Producer;
-import com.fiveware.messaging.QueueName;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.service.IServiceBot;
 import com.fiveware.task.TaskMessageBot;
@@ -39,7 +38,7 @@ public class ProcessBotFile implements ProcessBot<TaskMessageBot> {
 			logger.error("Unprocessed Record - Cause: " + e.getMessage());
 		}
 		
-		producer.send(QueueName.TASKS.name(), obj);
+		producer.send(botName+"_OUT", obj);
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
 }

@@ -84,7 +84,7 @@ public class ReadInputFile {
                 .build();
 
         MessageBot messageBot = new MessageBot(lines, Lists.newArrayList(),
-                TypeMessage.TASK, messageHeader, path);
+                TypeMessage.TASK_CSV, messageHeader, path);
 
         producer.send(queueName, messageBot);
 

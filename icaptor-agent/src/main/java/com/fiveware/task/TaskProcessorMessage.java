@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Bot;
 import com.fiveware.model.Task;
@@ -50,14 +49,15 @@ public class TaskProcessorMessage extends BrokerPulling<TaskMessageBot> {
 		List<Bot> bots = serviceAgent.findBotsByAgent(nameAgent);
 		bots.forEach(bot -> {
 			String botName = bot.getNameBot();
-			String nameQueue = QueueName.TASKS.name();			 
+			String nameQueue = botName+"_IN";			 
 			pullMessage(botName, nameQueue);
 		});
 	}
 	
 	@Override
 	public boolean canPullingMessage() {
-		return true;
+		//FIXME implementar separacao de tipo de processor csv ou file
+		return false;
 	}
 
 	@Override
