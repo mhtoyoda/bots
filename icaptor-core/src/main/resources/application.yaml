@@ -5,5 +5,5 @@ io:
 broker:
   user: guest
   pass: guest
-  host: 54.224.242.0
+  host: 34.231.45.229
   queue.send.schedularTime: 5000 #milli second
