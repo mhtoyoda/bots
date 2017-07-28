@@ -1,8 +1,9 @@
 package com.fiveware.dsl.pdf;
 
-import java.util.regex.Pattern;
-
 import com.fiveware.dsl.TypeSearch;
+
+import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Created by valdisnei on 05/07/17.
@@ -21,4 +22,7 @@ public interface Search {
 
     String build();
 
+    String next(int nNext);
+
+    List<String> list();
 }

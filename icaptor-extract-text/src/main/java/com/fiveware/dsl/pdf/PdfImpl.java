@@ -1,17 +1,14 @@
 package com.fiveware.dsl.pdf;
 
 
-import com.fiveware.UtilsPages;
 import com.fiveware.dsl.TypeSearch;
-import com.fiveware.dsl.pdf.core.Page;
-import com.fiveware.dsl.pdf.core.PageIterator;
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Strings;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 
 /**
@@ -20,10 +17,11 @@ import java.util.regex.Pattern;
 class PdfImpl implements Pdf{
     static Logger logger= LoggerFactory.getLogger(PdfImpl.class);
 
-    private PageIterator pageIterator;
-    private Page page;
     private StringBuilder builder = new StringBuilder();
     private String pathFile;
+
+    private PDDocument document;
+    private PDFTextStripper pdfStripper;
 
     private PdfImpl() {
     }
@@ -60,13 +58,15 @@ class PdfImpl implements Pdf{
 
     private void main(String pathFile) throws IOException {
         this.pathFile=pathFile;
-        pageIterator = UtilsPages.pages(pathFile);
+        document = PDDocument.load(new File(this.pathFile));
+        pdfStripper = new PDFTextStripper();
+
     }
 
     private void main(Object ... pathFile) throws IOException {
         this.pathFile=pathFile[0].toString();
-        page = UtilsPages.getPage(pathFile[0].toString(),
-                Integer.valueOf((Integer) pathFile[1]).intValue());
+        document = PDDocument.load(new File(this.pathFile));
+        pdfStripper = new PDFTextStripper();
     }
 
 
@@ -84,81 +84,50 @@ class PdfImpl implements Pdf{
     }
 
     @Override
+    public Search search(TypeSearch typeSearch) {
+        Search builderSearch = new SearchImpl(this);
+        return builderSearch.seek("",typeSearch);
+    }
+
+    @Override
     public Search search(String search, String regex) {
         Search builderSearch = new SearchImpl(this);
         return builderSearch.seek(search.toUpperCase(),regex);
     }
 
     @Override
-    public Search search(String search, Pattern pattern) {
+    public Search search(String regex) {
         Search builderSearch = new SearchImpl(this);
-        return builderSearch.seek(search.toUpperCase(),pattern);
+        return builderSearch.seek("",regex);
     }
-
 
     @Override
     public Search getSearch(){
         return new SearchImpl(this);
     }
 
-    @Override
-    public Page getPage() {
-        return page;
-    }
-
-    @Override
-    public PageIterator getPageIterator() {
-        return pageIterator;
-    }
-
-
     private StringBuilder getBuilder() {
         return builder;
     }
 
     @Override
-    public String getPathFile() {
-        return pathFile;
-    }
-
-    @Override
-    public String getText(){
+    public String getText() {
         StringBuilder builder = getBuilder();
 
         if (builder.length()==0){
-            Object o = MoreObjects.firstNonNull(this.page, this.pageIterator);
-
-            if (o instanceof PageIterator) {
-                while (((PageIterator) o).hasNext()) {
-                    Page page = ((PageIterator) o).next();
-                    builderText(builder,page);
-                }
-            } else {
-                builderText(builder,page);
+            try {
+                builder.append(pdfStripper.getText(document));
+                return builder.toString();
+            } catch (IOException e) {
+                logger.error("{}",e);
             }
-
-
         }
-
-
         return  builder.toString();
-    }
-
-    private void builderText(StringBuilder builder,Page page) {
-        page.getText().stream().forEach((s)->{
-            builder.append(s.getText());
-        });
     }
 
     @Override
     public void append(String text){
         getBuilder().append(text);
-    }
-
-
-    @Override
-    public boolean isEmptyText(){
-        return  Strings.isNullOrEmpty(getBuilder().toString());
     }
 
 

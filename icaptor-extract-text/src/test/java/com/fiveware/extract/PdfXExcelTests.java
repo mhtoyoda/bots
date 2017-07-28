@@ -5,6 +5,7 @@ import com.fiveware.dsl.TypeSearch;
 import com.fiveware.dsl.excel.IExcel;
 import com.google.common.collect.Lists;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by valdisnei on 03/07/17.
  */
+@Ignore
 public class PdfXExcelTests {
 
     static Logger logger = LoggerFactory.getLogger(PdfXExcelTests.class);
