@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 /**
  * Created by valdisnei on 13/06/17.
  */
-@Service("eventInputDictionaryProducer")
-public class EventInputDictionaryProducer implements Producer<MessageBot> {
+@Service("eventBotProducer")
+public class EventBotProducer implements Producer<MessageBot> {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;

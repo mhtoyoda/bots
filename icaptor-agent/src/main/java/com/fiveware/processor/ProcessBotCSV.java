@@ -53,7 +53,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 	private ClassLoaderRunner classLoaderRunner;
 
 	@Autowired
-	@Qualifier("eventInputDictionaryProducer")
+	@Qualifier("eventBotProducer")
 	private Producer<MessageBot> producer;
 
 	@Autowired

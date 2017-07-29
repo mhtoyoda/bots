@@ -34,7 +34,7 @@ public class ReadInputFile {
     private FileUtil fileUtil;
 
     @Autowired
-    @Qualifier("eventInputDictionaryProducer")
+    @Qualifier("eventBotProducer")
     private Producer<MessageBot> producer;
 
     @Autowired
