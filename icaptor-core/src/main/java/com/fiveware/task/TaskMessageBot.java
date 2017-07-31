@@ -16,16 +16,14 @@ public class TaskMessageBot implements Serializable {
 
 	private Long taskId;
 	private Integer qtdeInstances;
-	private Boolean loginShared;
 	private TypeMessage typeMessage;
 	private List<Map<String, BotParameterKeyValue>> parameters;
 	
-	public TaskMessageBot(Long taskId, Integer qtdeInstances, Boolean loginShared,
+	public TaskMessageBot(Long taskId, Integer qtdeInstances,
 			List<Map<String, BotParameterKeyValue>> parameters, TypeMessage typeMessage) {
 		super();
 		this.taskId = taskId;
 		this.qtdeInstances = qtdeInstances;
-		this.loginShared = loginShared;
 		this.parameters = parameters;
 		this.typeMessage = typeMessage;
 	}
@@ -38,10 +36,6 @@ public class TaskMessageBot implements Serializable {
 		return qtdeInstances;
 	}
 	
-	public Boolean getLoginShared() {
-		return loginShared;
-	}
-
 	public List<Map<String, BotParameterKeyValue>> getParameters() {
 		return parameters;
 	}

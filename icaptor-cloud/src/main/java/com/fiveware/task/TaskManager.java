@@ -7,11 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.BotNotFoundException;
-import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.Bot;
 import com.fiveware.model.BotParameterKeyValue;
@@ -31,19 +29,13 @@ public class TaskManager {
 	private ServiceBot serviceBot;
 	
 	@Autowired
-    @Qualifier("taskMessageProducer")
-    private Producer<TaskMessageBot> producer;
-	
-	@Autowired
 	private BotParameter botParameter;
 	
-	public Task createTask(TaskStatus taskStatus, String botName, Integer qtdInstances) throws BotNotFoundException{
+	public TaskMessageBot createTask(TaskStatus taskStatus, String botName, Integer qtdInstances) throws BotNotFoundException{
 		Task task = createNewTask(taskStatus, botName);	
 		List<Map<String,BotParameterKeyValue>> parameters = loadParameters(botName);
-		Boolean loginShared = (parameters.isEmpty() || parameters.size() == 1) ? false : true;
-		TaskMessageBot taskMessageBot = new TaskMessageBot(task.getId(), qtdInstances, loginShared , parameters, TypeMessage.TASK_FILE);
-		producer.send(botName+"_IN", taskMessageBot);
-		return task;
+		TaskMessageBot taskMessageBot = new TaskMessageBot(task.getId(), qtdInstances , parameters, TypeMessage.TASK_FILE);
+		return taskMessageBot;
 	}
 	
 	private Task createNewTask(TaskStatus taskStatus, String botName) throws BotNotFoundException {
