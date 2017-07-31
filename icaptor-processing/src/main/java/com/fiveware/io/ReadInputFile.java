@@ -85,7 +85,7 @@ public class ReadInputFile {
 
         MessageBot messageBot = new MessageBot(lines, Lists.newArrayList(),
                 TypeMessage.TASK_CSV, messageHeader, path);
-
+        messageBot.setQtdeInstances(N_LINES_BY_AGENT);
         producer.send(queueName, messageBot);
 
     }
