@@ -24,19 +24,20 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 	}
 
 	@Override
-	public OutTextRecord call() throws Exception {
+	public OutTextRecord call() throws ExceptionBot {
 		OutTextRecord result = null;
-		try {
-			result = getResult();
-		} catch (ValidationFieldException | AttributeLoadException | ExceptionBot e) {
-			logger.error("Unprocessed Record - Cause: " + e.getMessage());
-		}		
+		result = getResult();		
 		return result;
 	}
 	
-	private OutTextRecord getResult() throws ValidationFieldException, AttributeLoadException, ExceptionBot{
+	private OutTextRecord getResult() throws ExceptionBot{
 		Object cep = processorFields.getRecord().getValue("cep");
-		processorFields.getValidate().validate(cep, processorFields.getClassLoader());
+		try {
+			processorFields.getValidate().validate(cep, processorFields.getClassLoader());
+		} catch (ValidationFieldException | AttributeLoadException e) {
+			logger.error("Unprocessed Record - Cause: " + e.getMessage());
+			return getErrorValidation(cep).get();
+		}
 		OutTextRecord outTextRecord = processorFields.getServiceBot().callBot(processorFields.getBotName(), cep);
 		return Arrays.asList(outTextRecord.getMap()).get(0)==null?getNotFound(cep).get():outTextRecord;
 	}
@@ -46,6 +47,19 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 			@Override
 			public OutTextRecord get() {
 				String message = processorFields.getMessageSource().getMessage("result.bot.notFound", new Object[]{parameter}, null);
+				HashMap<String, Object> notFound = new HashMap<>();
+				notFound.put("registro", message);
+				return new OutTextRecord(new HashMap[]{notFound});
+			}
+		};
+		return supplier;
+	}
+	
+	private Supplier<OutTextRecord> getErrorValidation(Object parameter) {
+		Supplier<OutTextRecord> supplier = new Supplier<OutTextRecord>() {
+			@Override
+			public OutTextRecord get() {
+				String message = processorFields.getMessageSource().getMessage("result.bot.validation", new Object[]{parameter}, null);
 				HashMap<String, Object> notFound = new HashMap<>();
 				notFound.put("registro", message);
 				return new OutTextRecord(new HashMap[]{notFound});

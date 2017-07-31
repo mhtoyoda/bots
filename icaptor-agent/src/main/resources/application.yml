@@ -1,4 +1,4 @@
-server.port: ${PORT:${SERVER_PORT:0}}
+server.port: ${PORT:${SERVER_PORT:8088}}
 
 spring.http:
     multipart:
