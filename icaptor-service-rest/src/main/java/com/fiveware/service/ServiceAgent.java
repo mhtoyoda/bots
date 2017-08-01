@@ -1,17 +1,16 @@
 package com.fiveware.service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
+import com.fiveware.model.Agent;
+import com.fiveware.model.Bot;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.Agent;
-import com.fiveware.model.Bot;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -23,7 +22,7 @@ public class ServiceAgent {
     public Agent save(Agent agent){
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http://localhost:8085/api/agent/save";
+        String url = "http://localhost:8085/api/agent";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -35,7 +34,7 @@ public class ServiceAgent {
     public Optional<Agent> findByNameAgent(String name){
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http://localhost:8085/api/agent/name/"+name;
+        String url = "http://localhost:8085/api/agent/"+name+"/name";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -47,7 +46,7 @@ public class ServiceAgent {
     public Agent findOne(Long id) {
         RestTemplate restTemplate = new RestTemplate();
 
-        String url = "http://localhost:8085/api/agent/id/"+id;
+        String url = "http://localhost:8085/api/agent/"+id;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
