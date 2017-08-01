@@ -17,15 +17,11 @@ import java.util.function.Supplier;
  */
 @RestController
 @RequestMapping("/api/server")
-public class ServiceServerImpl implements IServiceServer {
-
-
+public class ServiceServerImpl {
     @Autowired
     private ServerRepository serverRepository;
 
-
-    @Override
-    @PostMapping("/save")
+    @PostMapping
     public ResponseEntity<?> save(@RequestBody Server server) {
         Optional<Server> byName = serverRepository.findByName(server.getName());
 
@@ -39,21 +35,17 @@ public class ServiceServerImpl implements IServiceServer {
         return ResponseEntity.status(HttpStatus.CREATED).body(serverSave);
     }
 
-
-    @Override
     @GetMapping("/name/{name}")
     public Optional<Server> findByName(@PathVariable("name") String name) {
         return serverRepository.findByName(name);
     }
 
 
-    @Override
     @GetMapping("/agents/name/{name}")
     public List<Agent> getAllAgent(@PathVariable("name") String name) {
         return serverRepository.findByAgentsNameAgent(name);
     }
 
-    @Override
     @GetMapping("/nameServer/{serverName}/nameBot/{nameBot}/endPoint/{endpoint}")
     public Optional<List<Agent>> getAllAgentsByBotName(@PathVariable("serverName") String serverName,
     		@PathVariable("nameBot") String nameBot, @PathVariable("endpoint")  String endpoint){

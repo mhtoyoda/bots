@@ -1,15 +1,14 @@
 package com.fiveware.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.fiveware.model.Agent;
+import com.fiveware.model.Server;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.Agent;
-import com.fiveware.model.Server;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -17,13 +16,12 @@ import com.fiveware.model.Server;
 @Service
 public class ServiceServer {
 
-
     @Autowired
     private RestTemplate restTemplate;
 
     public Server save(Server server){
 
-        String url = "http://localhost:8085/api/server/save";
+        String url = "http://localhost:8085/api/server";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity entity = new HttpEntity(server,headers);
