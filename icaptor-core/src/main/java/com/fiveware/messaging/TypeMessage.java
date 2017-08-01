@@ -2,7 +2,7 @@ package com.fiveware.messaging;
 
 public enum TypeMessage {
 
-	START_AGENT, KEEP_ALIVE, BOT, PING, STOP_AGENT, INPUT_DICTIONARY, TASK_CSV, TASK_FILE;
+	START_AGENT, KEEP_ALIVE, BOT, PING, STOP_AGENT, INPUT_DICTIONARY, TASK_CSV;
 
 
 	@Override

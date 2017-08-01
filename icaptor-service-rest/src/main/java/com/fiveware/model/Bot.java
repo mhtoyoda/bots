@@ -1,8 +1,17 @@
 package com.fiveware.model;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "bot")
@@ -25,6 +34,18 @@ public class Bot implements Serializable {
 	@JoinTable(name = "agent_bot", joinColumns = { @JoinColumn(name = "id_agent") },
 			inverseJoinColumns = {@JoinColumn(name = "id_bot") })
 	private List<ParameterBot> parameterBots;
+	
+	@Column(name ="fieldsInput")
+	private String fieldsInput;
+	
+	@Column(name ="fieldsOutput")
+	private String fieldsOutput;
+	
+	@Column(name ="typeFileIn")
+	private String typeFileIn;
+	
+	@Column(name ="separatorFile")
+	private String separatorFile;
 	
 	public Long getId() {
 		return id;
@@ -66,4 +87,35 @@ public class Bot implements Serializable {
 		this.parameterBots = parameterBots;
 	}
 
+	public String getFieldsInput() {
+		return fieldsInput;
+	}
+
+	public void setFieldsInput(String fieldsInput) {
+		this.fieldsInput = fieldsInput;
+	}
+
+	public String getFieldsOutput() {
+		return fieldsOutput;
+	}
+
+	public void setFieldsOutput(String fieldsOutput) {
+		this.fieldsOutput = fieldsOutput;
+	}
+
+	public String getTypeFileIn() {
+		return typeFileIn;
+	}
+
+	public void setTypeFileIn(String typeFileIn) {
+		this.typeFileIn = typeFileIn;
+	}
+
+	public String getSeparatorFile() {
+		return separatorFile;
+	}
+
+	public void setSeparatorFile(String separatorFile) {
+		this.separatorFile = separatorFile;
+	}
 }

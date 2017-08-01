@@ -8,6 +8,8 @@ import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.Server;
 import com.fiveware.service.ServiceAgent;
 import com.google.common.collect.Lists;
+
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -67,13 +69,16 @@ public class AgentConfig {
 					bot.setEndpoint(botClassLoader.getEndpoint());
 					bot.setNameBot(botClassLoader.getNameBot());
 					bot.setMethod(botClassLoader.getMethod());
+					bot.setFieldsInput(StringUtils.join(botClassLoader.getInputDictionary().getFields(), ","));
+					bot.setFieldsOutput(StringUtils.join(botClassLoader.getOutputDictionary().getFields(), ","));
+					bot.setSeparatorFile(botClassLoader.getInputDictionary().getSeparator());
+					bot.setTypeFileIn(botClassLoader.getInputDictionary().getTypeFileIn());
 					botList.add(bot);
 				});
 			}
 		});
 		return botList;
 	}
-
 
 	private Server getServer() {
 		Server serverInfo = new Server();
