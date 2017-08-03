@@ -1,4 +1,4 @@
-package com.fiveware.service.server;
+package com.fiveware.resource.server;
 
 import com.fiveware.model.Agent;
 import com.fiveware.model.Server;
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  */
 @RestController
 @RequestMapping("/api/server")
-public class ServiceServerImpl {
+public class ResourceServer {
     @Autowired
     private ServerRepository serverRepository;
 
@@ -45,6 +45,12 @@ public class ServiceServerImpl {
     public List<Agent> getAllAgent(@PathVariable("name") String name) {
         return serverRepository.findByAgentsNameAgent(name);
     }
+
+    @GetMapping
+    public ResponseEntity<Iterable<Server>> findAll() {
+        return ResponseEntity.ok(serverRepository.findAll());
+    }
+
 
     @GetMapping("/nameServer/{serverName}/nameBot/{nameBot}/endPoint/{endpoint}")
     public Optional<List<Agent>> getAllAgentsByBotName(@PathVariable("serverName") String serverName,

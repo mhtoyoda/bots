@@ -2,6 +2,7 @@ package com.fiveware.service;
 
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -19,8 +20,10 @@ import java.util.Optional;
 @Service
 public class ServiceAgent {
 
+    @Autowired
+    private RestTemplate restTemplate;
+
     public Agent save(Agent agent){
-        RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:8085/api/agent";
         HttpHeaders headers = new HttpHeaders();
@@ -32,7 +35,6 @@ public class ServiceAgent {
     }
 
     public Optional<Agent> findByNameAgent(String name){
-        RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:8085/api/agent/"+name+"/name";
         HttpHeaders headers = new HttpHeaders();
@@ -44,7 +46,6 @@ public class ServiceAgent {
     }
 
     public Agent findOne(Long id) {
-        RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:8085/api/agent/"+id;
         HttpHeaders headers = new HttpHeaders();
@@ -56,7 +57,6 @@ public class ServiceAgent {
     }
 
     public Long count() {
-        RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:8085/api/agent/count";
         HttpHeaders headers = new HttpHeaders();
@@ -66,7 +66,6 @@ public class ServiceAgent {
     }
 
     public List<Bot> findBotsByAgent(String nameAgent) {
-        RestTemplate restTemplate = new RestTemplate();
 
         String url = "http://localhost:8085/api/agent/bots/nameAgent/"+nameAgent;
         HttpHeaders headers = new HttpHeaders();

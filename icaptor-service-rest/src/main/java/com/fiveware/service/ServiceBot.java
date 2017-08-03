@@ -1,7 +1,6 @@
 package com.fiveware.service;
 
-import java.util.Optional;
-
+import com.fiveware.model.Bot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.Bot;
+import java.util.Optional;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -38,7 +37,7 @@ public class ServiceBot  {
 
 
     public Bot save(Bot bot){
-        String url = "http://localhost:8085/api/bot/save";
+        String url = "http://localhost:8085/api/bot";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

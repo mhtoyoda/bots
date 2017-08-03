@@ -1,10 +1,9 @@
-package com.fiveware.service.user;
+package com.fiveware.resource.user;
 
 
-import java.util.Optional;
-
-import javax.servlet.http.HttpServletResponse;
-
+import com.fiveware.event.RecursoCriadoEvent;
+import com.fiveware.model.Usuario;
+import com.fiveware.repository.UsuarioRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,25 +11,18 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.fiveware.event.RecursoCriadoEvent;
-import com.fiveware.model.Usuario;
-import com.fiveware.repository.UsuarioRepository;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 
 /**
  * Created by valdisnei on 06/06/17.
  */
 @RestController
 @RequestMapping("/api/usuario")
-public class UsuarioService {
-
-    static Logger logger = LoggerFactory.getLogger(UsuarioService.class);
+public class ResourceUsuario {
+    static Logger logger = LoggerFactory.getLogger(ResourceUsuario.class);
 
 
     @Autowired
@@ -63,9 +55,10 @@ public class UsuarioService {
         Optional<Usuario> usuario = Optional.ofNullable(usuarioRepository.findOne(id));
 
         return usuario.orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado!"));
-
-
     }
-
+    @GetMapping
+    public ResponseEntity<Iterable<Usuario>> list(){
+        return ResponseEntity.ok(usuarioRepository.findAll());
+    }
 
 }

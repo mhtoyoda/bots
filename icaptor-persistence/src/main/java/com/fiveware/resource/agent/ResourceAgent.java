@@ -1,15 +1,15 @@
-package com.fiveware.service.agent;
+package com.fiveware.resource.agent;
 
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
 import com.fiveware.repository.AgentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -17,7 +17,7 @@ import java.util.function.Supplier;
  */
 @RestController
 @RequestMapping("/api/agent")
-public class RestServiceAgentImpl {
+public class ResourceAgent {
 
 	@Autowired
     private AgentRepository agentRepository;
@@ -26,16 +26,16 @@ public class RestServiceAgentImpl {
 	@Transactional(readOnly = false)
     @PostMapping
     public Agent save(@RequestBody Agent agent){
-        Agent agentdb = agentRepository.findByNameAgent(agent.getNameAgent());
+        Agent agentdb = agentRepository.findByNameAgentAndPort(agent.getNameAgent(),agent.getPort());
 
         Optional<Agent> byNameAgent = (Optional<Agent>) Optional.ofNullable(agentdb);
 
-        byNameAgent.ifPresent(new Consumer<Agent>() {
-            @Override
-            public void accept(Agent _agent) {
-                _agent.setPort(agent.getPort());
-            }
-        });
+//        byNameAgent.ifPresent(new Consumer<Agent>() {
+//            @Override
+//            public void accept(Agent _agent) {
+//                _agent.setPort(agent.getPort());
+//            }
+//        });
 
 
         Agent agent1 = byNameAgent
@@ -63,6 +63,11 @@ public class RestServiceAgentImpl {
     public Agent findOne(@PathVariable Long id){
 
         return agentRepository.findOne(id);
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<Agent>> findAll(){
+        return ResponseEntity.ok(agentRepository.findAll());
     }
 
     @GetMapping("/count")

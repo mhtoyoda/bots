@@ -20,7 +20,6 @@ public class ServiceServer {
     private RestTemplate restTemplate;
 
     public Server save(Server server){
-
         String url = "http://localhost:8085/api/server";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -31,32 +30,24 @@ public class ServiceServer {
     }
 
     public Optional<Server> findByName(String nameServer) {
-
-
         String url = "http://localhost:8085/api/server/name/"+nameServer;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<String> entity = new HttpEntity<String>(nameServer,headers);
 
         Server server = restTemplate.getForObject(url, Server.class);
         return Optional.of(server);
     }
 
     public List<Agent> getAllAgent(String name) {
-
         String url = "http://localhost:8085/api/server/agents/name/"+name;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-
         List<Agent> listAgents = restTemplate.getForObject(url, List.class);
-
         return listAgents;
     }
 
     public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint) {
-
         String url = "http://localhost:8085/api/server/nameServer/"+serverName+"/nameBot/"+nameBot+"/endPoint/"+endpoint;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

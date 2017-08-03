@@ -3,8 +3,6 @@ package com.fiveware.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import org.pojomatic.Pojomatic;
-import org.pojomatic.annotations.AutoProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;

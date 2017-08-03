@@ -1,7 +1,6 @@
 package com.fiveware.service;
 
-import java.util.List;
-
+import com.fiveware.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.Task;
+import java.util.List;
 
 @Service
 public class ServiceTask {
@@ -22,7 +21,7 @@ public class ServiceTask {
 	private RestTemplate restTemplate;
 
 	public Task save(Task task) {
-		String url = "http://localhost:8085/api/task/save";
+		String url = "http://localhost:8085/api/task";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Task> entity = new HttpEntity<Task>(task, headers);
@@ -38,7 +37,7 @@ public class ServiceTask {
 	}
 	
 	public Task getTaskById(Long id) {
-		String url = "http://localhost:8085/api/task/id/" +id;
+		String url = "http://localhost:8085/api/task/" +id;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		Task task = restTemplate.getForObject(url, Task.class);

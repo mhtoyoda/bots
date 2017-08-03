@@ -1,13 +1,13 @@
 package com.fiveware.service;
 
-import java.util.List;
-
+import com.fiveware.model.ParameterValueBot;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.ParameterValueBot;
+import java.util.List;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -15,10 +15,12 @@ import com.fiveware.model.ParameterValueBot;
 @Service
 public class ServiceParameterBotValue {
 
-    public List<ParameterValueBot> findByParameterBotValues(String nameBot) {
-        RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    private RestTemplate restTemplate;
 
-        String url = "http://localhost:8085/api/bot/parameters/nameBot/"+nameBot;
+    public List<ParameterValueBot> findByParameterBotValues(String nameBot) {
+
+        String url = "http://localhost:8085/api/parameters/nameBot/"+nameBot;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
