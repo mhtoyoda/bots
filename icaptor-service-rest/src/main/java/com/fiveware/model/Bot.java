@@ -1,16 +1,12 @@
 package com.fiveware.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -29,11 +25,6 @@ public class Bot implements Serializable {
 	
 	@Column(name ="endpoint")
 	private String endpoint;
-
-	@OneToMany
-	@JoinTable(name = "agent_bot", joinColumns = { @JoinColumn(name = "id_agent") },
-			inverseJoinColumns = {@JoinColumn(name = "id_bot") })
-	private List<ParameterBot> parameterBots;
 	
 	@Column(name ="fields_input")
 	private String fieldsInput;
@@ -77,14 +68,6 @@ public class Bot implements Serializable {
 
 	public void setEndpoint(String endpoint) {
 		this.endpoint = endpoint;
-	}
-
-	public List<ParameterBot> getParameterBots() {
-		return parameterBots;
-	}
-
-	public void setParameterBots(List<ParameterBot> parameterBots) {
-		this.parameterBots = parameterBots;
 	}
 
 	public String getFieldsInput() {
