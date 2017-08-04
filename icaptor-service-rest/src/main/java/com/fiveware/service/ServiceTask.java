@@ -1,6 +1,7 @@
 package com.fiveware.service;
 
-import com.fiveware.model.Task;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import com.fiveware.model.Task;
 
 @Service
 public class ServiceTask {
@@ -28,8 +29,8 @@ public class ServiceTask {
 		return restTemplate.postForObject(url, entity, Task.class);
 	}
 
-	public List<Task> getAllAgent(String nameBot, String status) {
-		String url = "http://localhost:8085/api/task/bot/" + nameBot + "/status/" + status;
+	public List<Task> getAll() {
+		String url = "http://localhost:8085/api/task";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		List<Task> tasks = restTemplate.getForObject(url, List.class);
@@ -42,5 +43,21 @@ public class ServiceTask {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		Task task = restTemplate.getForObject(url, Task.class);
 		return task;
+	}
+	
+	public List<Task> getTaskByBot(String botName) {
+		String url = "http://localhost:8085/api/task/nameBot/" +botName;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		List<Task> tasks = restTemplate.getForObject(url, List.class);
+		return tasks;
+	}
+	
+	public List<Task> getTaskByStatus(String status) {
+		String url = "http://localhost:8085/api/task/status/" +status;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		List<Task> tasks = restTemplate.getForObject(url, List.class);
+		return tasks;
 	}
 }
