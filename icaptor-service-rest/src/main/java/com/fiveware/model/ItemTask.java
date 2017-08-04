@@ -17,8 +17,8 @@ import javax.persistence.TemporalType;
 import org.pojomatic.Pojomatic;
 
 @Entity
-@Table(name = "task")
-public class Task implements Serializable {
+@Table(name = "item_task")
+public class ItemTask implements Serializable {
 
 	/**
 	 * 
@@ -29,10 +29,6 @@ public class Task implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "load_time")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date loadTime;
-
 	@Column(name = "start_at")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date startAt;
@@ -41,21 +37,22 @@ public class Task implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date endAt;
 
-	@Column(name = "schedule_to")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date scheduleTo;
+	@Column(name = "attempts_count")
+	private Integer attemptsCount;
 
 	@ManyToOne
-	@JoinColumn(name = "id_bot")
-	private Bot bot;
-
-	@ManyToOne
-	@JoinColumn(name = "id_user")
-	private Usuario usuario;
+	@JoinColumn(name = "id_task")
+	private Task task;
 
 	@ManyToOne
 	@JoinColumn(name = "id_status")
 	private StatuProcess statusProcess;
+
+	@Column(name = "data_in")
+	private String dataIn;
+
+	@Column(name = "data_out")
+	private String dataOut;
 
 	public Long getId() {
 		return id;
@@ -63,14 +60,6 @@ public class Task implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Date getLoadTime() {
-		return loadTime;
-	}
-
-	public void setLoadTime(Date loadTime) {
-		this.loadTime = loadTime;
 	}
 
 	public Date getStartAt() {
@@ -89,28 +78,20 @@ public class Task implements Serializable {
 		this.endAt = endAt;
 	}
 
-	public Date getScheduleTo() {
-		return scheduleTo;
+	public Integer getAttemptsCount() {
+		return attemptsCount;
 	}
 
-	public void setScheduleTo(Date scheduleTo) {
-		this.scheduleTo = scheduleTo;
+	public void setAttemptsCount(Integer attemptsCount) {
+		this.attemptsCount = attemptsCount;
 	}
 
-	public Bot getBot() {
-		return bot;
+	public Task getTask() {
+		return task;
 	}
 
-	public void setBot(Bot bot) {
-		this.bot = bot;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
+	public void setTask(Task task) {
+		this.task = task;
 	}
 
 	public StatuProcess getStatusProcess() {
@@ -119,6 +100,22 @@ public class Task implements Serializable {
 
 	public void setStatusProcess(StatuProcess statusProcess) {
 		this.statusProcess = statusProcess;
+	}
+
+	public String getDataIn() {
+		return dataIn;
+	}
+
+	public void setDataIn(String dataIn) {
+		this.dataIn = dataIn;
+	}
+
+	public String getDataOut() {
+		return dataOut;
+	}
+
+	public void setDataOut(String dataOut) {
+		this.dataOut = dataOut;
 	}
 
 	@Override

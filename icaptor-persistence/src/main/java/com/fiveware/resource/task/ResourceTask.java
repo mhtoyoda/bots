@@ -1,13 +1,17 @@
 package com.fiveware.resource.task;
 
-import com.fiveware.model.Task;
-import com.fiveware.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.fiveware.model.Task;
+import com.fiveware.repository.TaskRepository;
 
 @RestController
 @RequestMapping("/api/task")
@@ -32,8 +36,4 @@ public class ResourceTask {
 		return ResponseEntity.ok(taskRepository.findAll());
 	}
 
-	@GetMapping("/bot/{nameBot}/status/{status}")
-	public List<Task> getAllTaskByStatus(@PathVariable("nameBot") String nameBot, @PathVariable("status") String status) {
-		return taskRepository.getAllTaskBotByStatus(nameBot, status);
-	}
 }
