@@ -1,5 +1,7 @@
 package com.fiveware.resource.task;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,5 +37,14 @@ public class ResourceTask {
 	public ResponseEntity<Iterable<Task>> findAll() {
 		return ResponseEntity.ok(taskRepository.findAll());
 	}
-
+	
+	@GetMapping("/nameBot/{nameBot}")
+	public ResponseEntity<List<Task>> findByBot(@PathVariable("nameBot") String nameBot) {
+		return ResponseEntity.ok(taskRepository.findTaskbyBot(nameBot));
+	}
+	
+	@GetMapping("/status/{status}")
+	public ResponseEntity<List<Task>> findByStatus(@PathVariable("status") String status) {
+		return ResponseEntity.ok(taskRepository.findTaskbyStatusProcess(status));
+	}
 }
