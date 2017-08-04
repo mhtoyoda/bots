@@ -35,16 +35,16 @@ public class Bot implements Serializable {
 			inverseJoinColumns = {@JoinColumn(name = "id_bot") })
 	private List<ParameterBot> parameterBots;
 	
-	@Column(name ="fieldsInput")
+	@Column(name ="fields_input")
 	private String fieldsInput;
 	
-	@Column(name ="fieldsOutput")
+	@Column(name ="fields_output")
 	private String fieldsOutput;
 	
-	@Column(name ="typeFileIn")
+	@Column(name ="type_file_in")
 	private String typeFileIn;
 	
-	@Column(name ="separatorFile")
+	@Column(name ="separator_file")
 	private String separatorFile;
 	
 	public Long getId() {
