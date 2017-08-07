@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.model.ItemTask;
 import com.fiveware.model.Task;
 import com.fiveware.service.ServiceBot;
 import com.fiveware.service.ServiceItemTask;
@@ -39,5 +40,14 @@ public class TaskManager {
 		task.setUsuario(serviceUser.getUserById(userId));
 		task = serviceTask.save(task);
 		return task;
+	}
+	
+	public ItemTask createItemTask(Task task, String recordLine){
+		ItemTask itemTask = new ItemTask();
+		itemTask.setTask(task);
+		itemTask.setDataIn(recordLine);
+		itemTask.setStatusProcess(serviceStatusProcessTask.getStatusProcessById(StatuProcessEnum.AVAILABLE.getId()));
+		itemTask = itemServiceTask.save(itemTask);
+		return itemTask;
 	}
 }
