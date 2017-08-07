@@ -1,5 +1,19 @@
 package com.fiveware.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.UnRecoverableException;
+import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.loader.ClassLoaderRunner;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.OutTextRecord;
+import com.fiveware.task.status.TaskStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -11,21 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-import com.fiveware.exception.Recoverable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.loader.ClassLoaderConfig;
-import com.fiveware.loader.ClassLoaderRunner;
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.OutTextRecord;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -51,7 +50,7 @@ public  class ServiceBotClassLoader<T> {
     public OutTextRecord executeMainClass(String nameBot, T parameter) throws IOException,
             ClassNotFoundException, InstantiationException,
             IllegalAccessException, NoSuchMethodException, InvocationTargetException,
-            ExceptionBot,Recoverable {
+            ExceptionBot,UnRecoverableException {
         Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
 
         return executeMainClass(parameter, botClassLoaderContext);
@@ -59,7 +58,7 @@ public  class ServiceBotClassLoader<T> {
 
     public OutTextRecord executeMainClass(String nameBot,String endpoint, T parameter) throws IOException,
             ClassNotFoundException, InstantiationException, IllegalAccessException,
-            NoSuchMethodException, ExceptionBot,Recoverable {
+            NoSuchMethodException, ExceptionBot,UnRecoverableException {
         Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
 
         if(!endpoint.equals(botClassLoaderContext.get().getEndpoint()))
@@ -69,7 +68,7 @@ public  class ServiceBotClassLoader<T> {
     }
 
     private OutTextRecord executeMainClass(T parameter, Optional<BotClassLoaderContext> botClassLoaderContext)
-            throws ClassNotFoundException, ExceptionBot,Recoverable, NoSuchMethodException, IllegalAccessException,
+            throws ClassNotFoundException, ExceptionBot,UnRecoverableException, NoSuchMethodException, IllegalAccessException,
             InstantiationException, IOException {
 
         ClassLoader classLoader = classLoaderRunner.loadClassLoader(botClassLoaderContext.get().getNameBot());
@@ -91,11 +90,17 @@ public  class ServiceBotClassLoader<T> {
         	}else{
         		obj =  execute.invoke(clazz.newInstance());
         	}
-        }catch (InvocationTargetException e){
-            if (e.getCause().getClass().getName().equals(Recoverable.class.getName()))
-                throw new Recoverable();
-            else
+        }catch (InvocationTargetException e) {
+            if (e.getCause().getClass().getName().equals(UnRecoverableException.class.getName())){
+                UnRecoverableException unRecoverableException = new UnRecoverableException(e.getCause());
+                Map map = new HashMap();
+                map.put(TaskStatus.ERROR,"0:"+unRecoverableException.getMessage());
+                HashMap[] hashMaps = {(HashMap) map};
+
+                return new OutTextRecord(hashMaps);
+            }else{
                 throw new ExceptionBot(e.getTargetException().getMessage());
+            }
         }
 
         if (obj instanceof List)

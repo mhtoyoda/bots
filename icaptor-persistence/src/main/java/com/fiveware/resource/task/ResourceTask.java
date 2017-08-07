@@ -22,6 +22,14 @@ public class ResourceTask {
 		return ResponseEntity.status(HttpStatus.CREATED).body(task);
 	}
 
+	@PutMapping("/{status}/status")
+	public ResponseEntity<?> update(@RequestBody Task task,@PathVariable String status) {
+		Task one = taskRepository.findOne(task.getId());
+		one.setStatus(status);
+		taskRepository.save(one);
+		return ResponseEntity.status(HttpStatus.OK).body(one);
+	}
+
 	@GetMapping("/{id}")
 	public Task findOne(@PathVariable Long id) {
 		return taskRepository.findOne(id);

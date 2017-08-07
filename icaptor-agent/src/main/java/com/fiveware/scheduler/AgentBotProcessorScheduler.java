@@ -3,7 +3,7 @@ package com.fiveware.scheduler;
 import com.fiveware.config.agent.AgentConfigProperties;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.exception.Recoverable;
+import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Bot;
 import com.fiveware.model.MessageBot;
@@ -14,10 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,7 +41,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	private ProcessBot<MessageBot> processBotCSV;
 	
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
-	public void process() throws ExceptionBot,Recoverable{
+	public void process() throws ExceptionBot,UnRecoverableException {
 
 		List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
 		bots.forEach(bot -> {
@@ -77,7 +75,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 			log.error("{}",e);
 		} catch (ExceptionBot exceptionBot) {
 			log.error("{}",exceptionBot);
-		} catch (Recoverable recoverable) {
+		} catch (UnRecoverableException recoverable) {
 			log.error("{}",recoverable);
 		}finally {
 			log.debug("[BOT]: {}", botName);

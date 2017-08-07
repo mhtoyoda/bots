@@ -20,8 +20,8 @@ public abstract class BrokerPulling<T> {
 	}
 
 //
-//	@ExceptionHandler(Recoverable.class)
-//	public Object handleBotException(Recoverable ex) {
+//	@ExceptionHandler(UnRecoverableException.class)
+//	public Object handleBotException(UnRecoverableException ex) {
 //		String mensagemDesenvolvedor = ex.toString();
 //		return mensagemDesenvolvedor;
 //	}

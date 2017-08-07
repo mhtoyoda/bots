@@ -21,3 +21,30 @@ io:
   worker.dir: ${HOME}/.icaptor-agent
   worker.file: ${HOME}/.icaptor-out-file
   file-read: ${HOME}/.icaptor-read-file
+
+---
+server.port: ${PORT:${SERVER_PORT:0}}
+
+spring.http:
+    multipart:
+        max-file-size: 1024MB
+        max-request-size: 1024MB
+spring:
+  profiles: dev
+
+icaptor:
+  server:
+    name: icaptor-server
+    host: localhost:8082
+    ip: 127.0.0.1
+
+broker:
+  user: guest
+  pass: guest
+  host: localhost
+  queue.send.schedularTime: 5000 #milli second
+
+io:
+  worker.dir: ${HOME}/.icaptor-agent
+  worker.file: ${HOME}/.icaptor-out-file
+  file-read: ${HOME}/.icaptor-read-file

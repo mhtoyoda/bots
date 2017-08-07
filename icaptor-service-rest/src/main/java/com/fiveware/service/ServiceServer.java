@@ -7,6 +7,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,12 +40,12 @@ public class ServiceServer {
     }
 
     public List<Agent> getAllAgent(String name) {
-        String url = "http://localhost:8085/api/server/agents/name/"+name;
+        String url = "http://localhost:8085/api/server/agents/"+name+"/name";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        List<Agent> listAgents = restTemplate.getForObject(url, List.class);
-        return listAgents;
+        Agent[] forObject = restTemplate.getForObject(url, Agent[].class);
+        return Arrays.asList(forObject);
     }
 
     public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint) {

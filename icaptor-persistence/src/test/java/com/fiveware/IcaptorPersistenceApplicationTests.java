@@ -1,7 +1,6 @@
 package com.fiveware;
 
 import com.fiveware.config.DataBaseConfigTest;
-import com.fiveware.model.Agent;
 import com.fiveware.repository.ServerRepository;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -9,8 +8,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes= DataBaseConfigTest.class)
@@ -24,10 +21,10 @@ public class IcaptorPersistenceApplicationTests {
 	@Test
 	public void contextLoads() {
 
-		List<Agent> server =
-				serverRepository.findByAgentsNameAgent("server");
-
-		System.out.println("server = " + server);
+//		Set<Agent> server =
+//				serverRepository.findByName("server").get().getAgents();
+//
+//		System.out.println("server = " + server);
 	}
 
 }

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
 /**
@@ -41,9 +42,10 @@ public class ResourceServer {
     }
 
 
-    @GetMapping("/agents/name/{name}")
-    public List<Agent> getAllAgent(@PathVariable("name") String name) {
-        return serverRepository.findByAgentsNameAgent(name);
+    @GetMapping("/agents/{name}/name")
+    public Set<Agent> getAllAgent(@PathVariable("name") String name) {
+        Optional<Server> byName = serverRepository.findByName(name);
+        return byName.get().getAgents();
     }
 
     @GetMapping

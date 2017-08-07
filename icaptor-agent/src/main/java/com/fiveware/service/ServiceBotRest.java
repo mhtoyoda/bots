@@ -1,13 +1,12 @@
 package com.fiveware.service;
 
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.exception.Recoverable;
+import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.model.OutTextRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 
@@ -23,7 +22,7 @@ public class ServiceBotRest implements IServiceBot {
     private ServiceBotClassLoader serviceBotClassLoader;
 
     public <T> OutTextRecord callBot(String nameBot, String endpoint, T parameter)
-            throws ExceptionBot,Recoverable {
+            throws ExceptionBot,UnRecoverableException {
     	try {
     	    return serviceBotClassLoader.executeMainClass(nameBot,endpoint, parameter);
         } catch (ExceptionBot e){

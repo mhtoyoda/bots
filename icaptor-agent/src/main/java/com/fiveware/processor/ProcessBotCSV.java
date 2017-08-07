@@ -1,13 +1,17 @@
 package com.fiveware.processor;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import com.fiveware.exception.Recoverable;
+import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.UnRecoverableException;
+import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.loader.ClassLoaderRunner;
+import com.fiveware.messaging.Producer;
+import com.fiveware.model.*;
+import com.fiveware.service.IServiceBot;
+import com.fiveware.util.LineUtil;
+import com.fiveware.util.ListJoinUtil;
+import com.fiveware.validate.Validate;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,21 +19,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.loader.ClassLoaderConfig;
-import com.fiveware.loader.ClassLoaderRunner;
-import com.fiveware.messaging.Producer;
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.InputDictionaryContext;
-import com.fiveware.model.MessageBot;
-import com.fiveware.model.OutTextRecord;
-import com.fiveware.model.Record;
-import com.fiveware.service.IServiceBot;
-import com.fiveware.util.LineUtil;
-import com.fiveware.util.ListJoinUtil;
-import com.fiveware.validate.Validate;
-import com.google.common.collect.Lists;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 @Component("processBotCSV")
 public class ProcessBotCSV implements ProcessBot<MessageBot> {
@@ -65,7 +60,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 
 	@SuppressWarnings("rawtypes")
 	public void execute(String botName, MessageBot obj)
-			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot, Recoverable {
+			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot, UnRecoverableException {
 
 		logger.info("Init Import File - [BOT]: {}", botName);
 
@@ -76,8 +71,10 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 
 		List<Record> recordLines = lineUtil.linesFrom(obj.getLine(), fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
-		List<String> listResults = Lists.newArrayList();
-		
+		List<String> resultSuccess = Lists.newArrayList();
+		List<String> resultError = Lists.newArrayList();
+
+
 		ExecutorService executorService = Executors.newFixedThreadPool(obj.getQtdeInstances());
 		for (Record line : recordLines) {
 			OutTextRecord result = null;
@@ -85,18 +82,18 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 				ProcessorFields processorFields = new ProcessorFields(botName, classLoader, serviceBot, line, validate, messageSource);
 				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(processorFields));
 				result = outTextRecord.get();
+
+				listJoin.joinRecord(separatorInput, result, resultSuccess);
+
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());
-				if (e.getCause() instanceof ExceptionBot)
+				if (e.getCause() instanceof ExceptionBot) {
 					throw new ExceptionBot(e.getMessage());
-				if (e.getCause() instanceof Recoverable)
-					throw new Recoverable();
-
-
+				}
 			}
-			listJoin.joinRecord(separatorInput, result, listResults);
 		}
-		
+
+		obj.getLineResult().addAll(resultSuccess);
 		producer.send(botName + "_OUT", obj);
 		executorService.shutdown();
 		logger.info("End Import File - [BOT]: {}", botName);

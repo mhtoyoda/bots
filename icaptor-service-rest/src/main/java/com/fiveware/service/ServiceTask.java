@@ -4,9 +4,7 @@ import com.fiveware.model.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,5 +40,14 @@ public class ServiceTask {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		Task task = restTemplate.getForObject(url, Task.class);
 		return task;
+	}
+
+	public Task updateStatus(Task task, String status) {
+		String url = "http://localhost:8085/api/task/" +status+"/status";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity entity = new HttpEntity(task,headers);
+		ResponseEntity<Task> exchange = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
+		return exchange.getBody();
 	}
 }

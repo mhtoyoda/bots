@@ -1,18 +1,17 @@
 package com.fiveware.processor;
 
+import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.UnRecoverableException;
+import com.fiveware.exception.ValidationFieldException;
+import com.fiveware.model.OutTextRecord;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
-
-import com.fiveware.exception.Recoverable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.exception.ValidationFieldException;
-import com.fiveware.model.OutTextRecord;
 
 public class ProcessorRunnable implements Callable<OutTextRecord> {
 	
@@ -25,13 +24,13 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 	}
 
 	@Override
-	public OutTextRecord call() throws ExceptionBot,Recoverable {
+	public OutTextRecord call() throws ExceptionBot,UnRecoverableException {
 		OutTextRecord result = null;
 		result = getResult();		
 		return result;
 	}
 	
-	private OutTextRecord getResult() throws ExceptionBot,Recoverable{
+	private OutTextRecord getResult() throws ExceptionBot,UnRecoverableException {
 		Object cep = processorFields.getRecord().getValue("cep");
 		try {
 			processorFields.getValidate().validate(cep, processorFields.getClassLoader());

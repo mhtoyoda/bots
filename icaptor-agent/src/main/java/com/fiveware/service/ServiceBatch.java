@@ -1,7 +1,7 @@
 package com.fiveware.service;
 
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.exception.Recoverable;
+import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.model.OutTextRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class ServiceBatch implements IServiceBot {
     @Autowired
     private ServiceBotClassLoader serviceBotClassLoader;
 
-    public <T> OutTextRecord callBot(String nameBot, T parameter) throws ExceptionBot,Recoverable {
+    public <T> OutTextRecord callBot(String nameBot, T parameter) throws ExceptionBot,UnRecoverableException {
     	try {
 			return serviceBotClassLoader.executeMainClass(nameBot, parameter);
         } catch (IOException | ClassNotFoundException |

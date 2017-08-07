@@ -1,8 +1,6 @@
 package com.fiveware.scheduler;
 
 import com.fiveware.config.ServerConfig;
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.exception.Recoverable;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
@@ -71,7 +69,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	 */
 	@Override
 	public void processMessage(String botName, MessageBot obj) {
-		log.debug("Total de Linhas resultado: {}", obj.getLineResult());		
+		log.debug("Total de Linhas resultado: {}", obj.getLineResult().size());
 		fileUtil.writeFile(obj);
 	}
 

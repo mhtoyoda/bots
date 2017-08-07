@@ -1,13 +1,12 @@
 package com.fiveware.model;
 
-import java.io.Serializable;
-import java.util.List;
-
+import com.fiveware.messaging.TypeMessage;
+import com.google.common.collect.Lists;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
-import com.fiveware.messaging.TypeMessage;
-import com.google.common.collect.Lists;
+import java.io.Serializable;
+import java.util.List;
 
 @AutoProperty
 public class MessageBot implements Serializable {

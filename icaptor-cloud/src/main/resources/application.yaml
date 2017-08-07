@@ -14,3 +14,24 @@ io:
   worker.dir: ${HOME}/.icaptor-agent
   worker.file: ${HOME}/.icaptor-out-file
   file-read: ${HOME}/.icaptor-read-file
+
+---
+server:
+  name: icaptor-server
+  host: localhost
+  port: 8082
+
+spring:
+  profiles: dev
+
+broker:
+  user: guest
+  pass: guest
+  host: localhost
+  queue.send.schedularTime: 5000 #milli second
+
+
+io:
+  worker.dir: ${HOME}/.icaptor-agent
+  worker.file: ${HOME}/.icaptor-out-file
+  file-read: ${HOME}/.icaptor-read-file
