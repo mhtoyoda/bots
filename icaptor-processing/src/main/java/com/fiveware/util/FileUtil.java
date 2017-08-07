@@ -49,20 +49,20 @@ public class FileUtil {
 
 	public void writeFile(MessageBot messageBot) {
 
-		String path = workerFileRead + File.separator + messageBot.getPathFile();
+		String path = workerFileRead + File.separator + messageBot.getMessageHeader().getPathFile();
 
 		File fileOut = new File(path);
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut, true))) {
-			
-			messageBot.getLineResult().forEach((line)->{
-				try {
-					bw.write(line);
-					bw.newLine();
-
-				} catch (IOException e) {
-					logger.error("{}", e);
-				}
-			});
+			//FIXME corrigir bug para fazer append por task ID
+//			messageBot.getLineResult().forEach((line)->{
+//				try {
+//					bw.write(line);
+//					bw.newLine();
+//
+//				} catch (IOException e) {
+//					logger.error("{}", e);
+//				}
+//			});
 		} catch (IOException e) {
 			logger.error("{}", e);
 		}
