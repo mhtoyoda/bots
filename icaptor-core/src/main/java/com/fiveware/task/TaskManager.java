@@ -18,22 +18,22 @@ import com.fiveware.service.ServiceUser;
 public class TaskManager {
 
 	@Autowired
-    private ServiceTask serviceTask;
-	
+	private ServiceTask serviceTask;
+
 	@Autowired
-    private ServiceItemTask itemServiceTask;
-	
+	private ServiceItemTask itemServiceTask;
+
 	@Autowired
 	private ServiceStatusProcessTask serviceStatusProcessTask;
-	
+
 	@Autowired
 	private ServiceUser serviceUser;
-	
+
 	@Autowired
 	private ServiceBot serviceBot;
-	
-	public Task createTask(String nameBot, Long userId){
-		Task task = new Task();		
+
+	public Task createTask(String nameBot, Long userId) {
+		Task task = new Task();
 		task.setBot(serviceBot.findByNameBot(nameBot).get());
 		task.setLoadTime(new Date());
 		task.setStatusProcess(serviceStatusProcessTask.getStatusProcessById(StatuProcessEnum.CREATED.getId()));
@@ -42,17 +42,17 @@ public class TaskManager {
 		task = serviceTask.save(task);
 		return task;
 	}
-	
-	public Task updateTask(Long taskId, StatuProcessEnum statuProcessEnum){
+
+	public Task updateTask(Long taskId, StatuProcessEnum statuProcessEnum) {
 		Task task = serviceTask.getTaskById(taskId);
 		task.setStatusProcess(serviceStatusProcessTask.getStatusProcessById(statuProcessEnum.getId()));
-		if( statuProcessEnum.equals(StatuProcessEnum.ERROR) || statuProcessEnum.equals(StatuProcessEnum.SUCCESS)){			
+		if (statuProcessEnum.equals(StatuProcessEnum.ERROR) || statuProcessEnum.equals(StatuProcessEnum.SUCCESS)) {
 			task.setEndAt(new Date());
 		}
 		return task;
 	}
-	
-	public ItemTask createItemTask(Task task, String recordLine){
+
+	public ItemTask createItemTask(Task task, String recordLine) {
 		ItemTask itemTask = new ItemTask();
 		itemTask.setTask(task);
 		itemTask.setDataIn(recordLine);
@@ -60,18 +60,18 @@ public class TaskManager {
 		itemTask = itemServiceTask.save(itemTask);
 		return itemTask;
 	}
-	
-	public ItemTask updateItemTask(Long itemTaskId, StatuProcessEnum statuProcessEnum, String dataOut){
+
+	public ItemTask updateItemTask(Long itemTaskId, StatuProcessEnum statuProcessEnum, String dataOut) {
 		ItemTask itemTask = itemServiceTask.getItemTaskById(itemTaskId);
 		itemTask.setStatusProcess(serviceStatusProcessTask.getStatusProcessById(statuProcessEnum.getId()));
-		if(StringUtils.isNotBlank(dataOut)){
+		if (StringUtils.isNotBlank(dataOut)) {
 			itemTask.setDataOut(dataOut);
 		}
-		if( statuProcessEnum.equals(StatuProcessEnum.ERROR) || statuProcessEnum.equals(StatuProcessEnum.SUCCESS)){			
+		if (statuProcessEnum.equals(StatuProcessEnum.ERROR) || statuProcessEnum.equals(StatuProcessEnum.SUCCESS)) {
 			itemTask.setEndAt(new Date());
 		}
-		if( statuProcessEnum.equals(StatuProcessEnum.PROCESSING)){
-			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 :  itemTask.getAttemptsCount()+1;
+		if (statuProcessEnum.equals(StatuProcessEnum.PROCESSING)) {
+			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
 			itemTask.setAttemptsCount(attemptsCount);
 		}
 		return itemTask;
