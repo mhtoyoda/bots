@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -26,16 +27,16 @@ public class ResourceAgent {
 	@Transactional(readOnly = false)
     @PostMapping
     public Agent save(@RequestBody Agent agent){
-        Agent agentdb = agentRepository.findByNameAgentAndPort(agent.getNameAgent(),agent.getPort());
+        Agent agentdb = agentRepository.findByNameAgent(agent.getNameAgent());
 
         Optional<Agent> byNameAgent = (Optional<Agent>) Optional.ofNullable(agentdb);
 
-//        byNameAgent.ifPresent(new Consumer<Agent>() {
-//            @Override
-//            public void accept(Agent _agent) {
-//                _agent.setPort(agent.getPort());
-//            }
-//        });
+        byNameAgent.ifPresent(new Consumer<Agent>() {
+            @Override
+            public void accept(Agent _agent) {
+                _agent.setPort(agent.getPort());
+            }
+        });
 
 
         Agent agent1 = byNameAgent
