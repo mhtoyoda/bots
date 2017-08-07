@@ -28,7 +28,7 @@ public class TesteBot implements Automation<String, Endereco> {
 	}
 
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot",type = String.class)
-	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
+	@InputDictionary(fields = {"cep"}, separator = "|", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
 	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws ExceptionBot,UnRecoverableException {
