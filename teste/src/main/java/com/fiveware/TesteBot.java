@@ -3,6 +3,7 @@ package com.fiveware;
 import com.fiveware.annotation.*;
 import com.fiveware.automate.BotScreen;
 import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.Recoverable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,16 +31,14 @@ public class TesteBot implements Automation<String, Endereco> {
 	@InputDictionary(fields = {"cep"}, separator = ",", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws ExceptionBot{
+	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws Recoverable{
+//		Endereco endereco = getEndereco(cep);
 
-		Endereco endereco = getEndereco(cep);
-
-
-		return endereco;
+		throw new Recoverable();
 	}
 
 	public Endereco getEndereco(String args) throws ExceptionBot {
-		String baseUrl = "http://www.correios.com.br/";
+		String baseUrl = "http://www.correios.com222/";
 		BotScreen telaConsultaCep = Web().driver(PHANTOM).openPage(baseUrl + "/para-voce");
 		telaConsultaCep.windowMaximize();
 		telaConsultaCep.find().elementBy().id("acesso-busca").sendKeys(args);		

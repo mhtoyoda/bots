@@ -1,6 +1,7 @@
 package com.fiveware.service;
 
 import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.Recoverable;
 import com.fiveware.model.OutTextRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +22,9 @@ public class ServiceBotRest implements IServiceBot {
     @Autowired
     private ServiceBotClassLoader serviceBotClassLoader;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-
-    public <T> OutTextRecord callBot(String nameBot, String endpoint, T parameter) throws ExceptionBot {
+    public <T> OutTextRecord callBot(String nameBot, String endpoint, T parameter)
+            throws ExceptionBot,Recoverable {
     	try {
-
     	    return serviceBotClassLoader.executeMainClass(nameBot,endpoint, parameter);
         } catch (ExceptionBot e){
     	    throw e;

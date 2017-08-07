@@ -2,6 +2,7 @@ package com.fiveware.controller;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.fiveware.exception.Recoverable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,9 @@ public class AgentController {
         try {
             obj = serviceBot.callBot(botName,endPoint,parameter);
         } catch (ExceptionBot e) {
+            return ResponseEntity.badRequest().
+                    body(new MessageStatusBot(HttpStatus.BAD_REQUEST.value(),e.getMessage()));
+        } catch (Recoverable e) {
             return ResponseEntity.badRequest().
                     body(new MessageStatusBot(HttpStatus.BAD_REQUEST.value(),e.getMessage()));
         }

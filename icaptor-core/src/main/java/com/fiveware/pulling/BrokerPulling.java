@@ -6,16 +6,23 @@ public abstract class BrokerPulling<T> {
 
 	public abstract boolean canPullingMessage();
 	
-	public abstract void processMessage(String botName, T obj);
+	public abstract void processMessage(String botName, T obj) ;
 	
 	public abstract Optional<T> receiveMessage(String queueName);
 	
 	protected void pullMessage(String botName, String queue){
 		if(canPullingMessage()){
 			Optional<T> obj = receiveMessage(queue);
-			obj.ifPresent(message -> {
+			obj.ifPresent((T message) -> {
 				processMessage(botName, message);
-			});			
+			});
 		}
 	}
+
+//
+//	@ExceptionHandler(Recoverable.class)
+//	public Object handleBotException(Recoverable ex) {
+//		String mensagemDesenvolvedor = ex.toString();
+//		return mensagemDesenvolvedor;
+//	}
 }

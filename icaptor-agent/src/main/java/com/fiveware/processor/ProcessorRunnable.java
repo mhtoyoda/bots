@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 
+import com.fiveware.exception.Recoverable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,13 +25,13 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 	}
 
 	@Override
-	public OutTextRecord call() throws ExceptionBot {
+	public OutTextRecord call() throws ExceptionBot,Recoverable {
 		OutTextRecord result = null;
 		result = getResult();		
 		return result;
 	}
 	
-	private OutTextRecord getResult() throws ExceptionBot{
+	private OutTextRecord getResult() throws ExceptionBot,Recoverable{
 		Object cep = processorFields.getRecord().getValue("cep");
 		try {
 			processorFields.getValidate().validate(cep, processorFields.getClassLoader());

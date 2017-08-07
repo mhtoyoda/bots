@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.fiveware.exception.Recoverable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +65,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 
 	@SuppressWarnings("rawtypes")
 	public void execute(String botName, MessageBot obj)
-			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
+			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot, Recoverable {
 
 		logger.info("Init Import File - [BOT]: {}", botName);
 
@@ -86,13 +87,19 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 				result = outTextRecord.get();
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());
-			} finally {
-				listJoin.joinRecord(separatorInput, result, listResults);
+				if (e.getCause() instanceof ExceptionBot)
+					throw new ExceptionBot(e.getMessage());
+				if (e.getCause() instanceof Recoverable)
+					throw new Recoverable();
+
+
 			}
+			listJoin.joinRecord(separatorInput, result, listResults);
 		}
 		
 		producer.send(botName + "_OUT", obj);
 		executorService.shutdown();
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
+
 }

@@ -1,6 +1,8 @@
 package com.fiveware.scheduler;
 
 import com.fiveware.config.ServerConfig;
+import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.Recoverable;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
@@ -42,7 +44,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	private FileUtil fileUtil;
 
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
-	public void process(){
+	public void process() {
 		List<Agent> agents = serviceServer.getAllAgent(serverConfig.getServer().getName());
 		agents.forEach(agent -> {
 			log.info("Pulling Message [Agent]: {}", agent.getNameAgent());

@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.fiveware.exception.Recoverable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.OutTextRecord;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -46,14 +48,18 @@ public  class ServiceBotClassLoader<T> {
     private MessageSource messageSource;
 
 
-    public OutTextRecord executeMainClass(String nameBot, T parameter) throws IOException, ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException, ExceptionBot {
+    public OutTextRecord executeMainClass(String nameBot, T parameter) throws IOException,
+            ClassNotFoundException, InstantiationException,
+            IllegalAccessException, NoSuchMethodException, InvocationTargetException,
+            ExceptionBot,Recoverable {
         Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
 
         return executeMainClass(parameter, botClassLoaderContext);
     }
-    
+
     public OutTextRecord executeMainClass(String nameBot,String endpoint, T parameter) throws IOException,
-            ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, ExceptionBot {
+            ClassNotFoundException, InstantiationException, IllegalAccessException,
+            NoSuchMethodException, ExceptionBot,Recoverable {
         Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
 
         if(!endpoint.equals(botClassLoaderContext.get().getEndpoint()))
@@ -63,7 +69,7 @@ public  class ServiceBotClassLoader<T> {
     }
 
     private OutTextRecord executeMainClass(T parameter, Optional<BotClassLoaderContext> botClassLoaderContext)
-            throws ClassNotFoundException, ExceptionBot, NoSuchMethodException, IllegalAccessException,
+            throws ClassNotFoundException, ExceptionBot,Recoverable, NoSuchMethodException, IllegalAccessException,
             InstantiationException, IOException {
 
         ClassLoader classLoader = classLoaderRunner.loadClassLoader(botClassLoaderContext.get().getNameBot());
@@ -86,7 +92,10 @@ public  class ServiceBotClassLoader<T> {
         		obj =  execute.invoke(clazz.newInstance());
         	}
         }catch (InvocationTargetException e){
-            throw new ExceptionBot(e.getTargetException().getMessage());
+            if (e.getCause().getClass().getName().equals(Recoverable.class.getName()))
+                throw new Recoverable();
+            else
+                throw new ExceptionBot(e.getTargetException().getMessage());
         }
 
         if (obj instanceof List)
