@@ -14,11 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class ControlPanelController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ControlPanelController.class);
-
+	
 	@GetMapping("/loadUserInfo")
-	public ResponseEntity<Object> loadUserInfo(@AuthenticationPrincipal User user) {
-		logger.info("Carregando as informacoes do usuario [{}]", user.getUsername());
-
+	public ResponseEntity<Object> loadUserInfo() {
+		logger.info("Carregando as informacoes do usuario.");
 		return ResponseEntity.ok().build();
 	}
 
@@ -49,4 +48,5 @@ public class ControlPanelController {
 	public ResponseEntity<Object> cancelTask() {
 		return ResponseEntity.ok().build();
 	}
+
 }
