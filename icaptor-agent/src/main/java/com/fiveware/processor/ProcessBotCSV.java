@@ -72,12 +72,12 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		InputDictionaryContext inputDictionary = context.get().getInputDictionary();
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
-
-		List<Record> recordLines = lineUtil.linesFrom(obj.getLine(), fieldsInput, separatorInput);
+		List<String> list = Lists.newArrayList(obj.getLine());
+		List<Record> recordLines = lineUtil.linesFrom(list, fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
 		List<String> listResults = Lists.newArrayList();
 		
-		ExecutorService executorService = Executors.newFixedThreadPool(obj.getQtdeInstances());
+		ExecutorService executorService = Executors.newFixedThreadPool(2);
 		for (Record line : recordLines) {
 			OutTextRecord result = null;
 			try {
