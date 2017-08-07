@@ -45,7 +45,7 @@ public class HomeService {
 
         DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
 
-        Thread thread = new Thread(new WorkerFile(nameBot+"_IN",file,readInputFile,resultado));
+        Thread thread = new Thread(new WorkerFile(nameBot, file, readInputFile, resultado));
         thread.start();
 
         return resultado;
