@@ -39,7 +39,7 @@ public class ResourceBot {
     @GetMapping("/name/{name}")
     public Bot findByNameBot(@PathVariable("name") String name){
         Optional<Bot> byNameBot = botRepository.findByNameBot(name);
-        return byNameBot.get();
+        return byNameBot.orElseThrow(() -> new IllegalArgumentException("Bot nao encontrado!"));
     }
 
 }
