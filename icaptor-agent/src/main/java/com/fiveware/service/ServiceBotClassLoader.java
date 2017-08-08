@@ -7,7 +7,6 @@ import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.OutTextRecord;
-import com.fiveware.task.status.TaskStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +93,7 @@ public  class ServiceBotClassLoader<T> {
             if (e.getCause().getClass().getName().equals(UnRecoverableException.class.getName())){
                 UnRecoverableException unRecoverableException = new UnRecoverableException(e.getCause());
                 Map map = new HashMap();
-                map.put(TaskStatus.ERROR,"0:"+unRecoverableException.getMessage());
+                map.put("ERROR","0:"+unRecoverableException.getMessage());
                 HashMap[] hashMaps = {(HashMap) map};
 
                 return new OutTextRecord(hashMaps);
