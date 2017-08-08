@@ -1,22 +1,21 @@
 package com.fiveware.config.agent;
 
-import com.fiveware.loader.ClassLoaderConfig;
-import com.fiveware.messaging.QueueCreator;
-import com.fiveware.model.Agent;
-import com.fiveware.model.Bot;
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.Server;
-import com.fiveware.service.ServiceAgent;
-import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
+import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Bot;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.Server;
+import com.fiveware.service.ServiceAgent;
+import com.google.common.collect.Lists;
 
 @Component
 public class AgentConfig {
@@ -30,19 +29,12 @@ public class AgentConfig {
 
 	@Autowired
 	private ServiceAgent serviceAgent;
-
-	@Autowired
-	private QueueCreator queueCreator;
 	
 	@Autowired
 	private AgentListener agentListener;
 	
-	public void saveAgentAndCreateQueue() {
-		saveAgentServerBots()
-				.getBots()
-				.forEach(
-					(bot)->queueCreator.createQueue(bot.getNameBot())
-				);
+	public void saveAgent() {
+		saveAgentServerBots();
 	}
 
 	private Agent saveAgentServerBots() {

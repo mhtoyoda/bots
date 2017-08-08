@@ -1,13 +1,17 @@
 package com.fiveware;
 
+import org.springframework.amqp.core.AmqpManagementOperations;
+import org.springframework.amqp.rabbit.core.RabbitManagementTemplate;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import com.fiveware.messaging.BrokerConfig;
+
 @SpringBootApplication
 public class IcaptorPlatformApplication {
-
+	
 	public static void main(String[] args) {
 		SpringApplication.run(IcaptorPlatformApplication.class, args);
 	}
@@ -15,5 +19,16 @@ public class IcaptorPlatformApplication {
 	@Bean
 	public RestTemplate restTemplate(){
 		return new RestTemplate();
+	}
+	
+	@Bean
+	public BrokerConfig brokerConfig(){
+		return new BrokerConfig();
+	}
+	
+	@Bean
+	public AmqpManagementOperations amqpManagementOperations(){
+		String uri = String.format("http://%s:%d/api/", brokerConfig().getHost(), brokerConfig().getPort());
+		return new RabbitManagementTemplate(uri, brokerConfig().getUser(), brokerConfig().getPass());
 	}
 }

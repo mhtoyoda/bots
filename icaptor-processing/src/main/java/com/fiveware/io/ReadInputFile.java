@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.messaging.BrokerManager;
 import com.fiveware.messaging.Producer;
 import com.fiveware.model.Bot;
 import com.fiveware.model.ItemTask;
@@ -44,6 +45,9 @@ public class ReadInputFile {
 
     @Autowired
     private TaskManager taskManager;
+    
+    @Autowired
+    private BrokerManager brokerManager;
 
 	private Long userId = 1L;
 
@@ -60,7 +64,8 @@ public class ReadInputFile {
 
     private void sendListToQueue(Task task, List<Record> recordList, String path, Integer size) {
     	final List<String> lines = Lists.newArrayList();
-    	String nameQueue = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
+    	String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
+    	createQueueTaskIn(queueName);
         Consumer<List<Record>> consumer = records ->
                 records
                         .stream()
@@ -77,13 +82,13 @@ public class ReadInputFile {
     	if(CollectionUtils.isEmpty(lines)){
     		ItemTask itemTask = taskManager.createItemTask(task, "");
     		MessageBot messageBot = new MessageBot(task.getId(), itemTask.getId(), "", messageHeader);
-    		producer.send(nameQueue, messageBot);
+    		producer.send(queueName, messageBot);
     	}
     	
     	lines.stream().forEach(line -> {
     		ItemTask itemTask = taskManager.createItemTask(task, line);
     		MessageBot messageBot = new MessageBot(task.getId(), itemTask.getId(), line, messageHeader);
-    		producer.send(nameQueue, messageBot);
+    		producer.send(queueName, messageBot);
     	});
     }
     
@@ -99,4 +104,7 @@ public class ReadInputFile {
     	return taskManager.createTask(nameBot, userId);
     }
  
+    private void createQueueTaskIn(String queueName){
+    	brokerManager.createQueue(queueName);
+    }
 }

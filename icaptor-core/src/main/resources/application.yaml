@@ -6,4 +6,5 @@ broker:
   user: guest
   pass: guest
   host: 34.231.45.229
+  port: 30001
   queue.send.schedularTime: 5000 #milli second

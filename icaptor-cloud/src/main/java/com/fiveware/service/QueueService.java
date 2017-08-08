@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fiveware.exception.MessageStatusBot;
-import com.fiveware.messaging.QueueCreator;
+import com.fiveware.messaging.BrokerManager;
 
 @RestController
 @RequestMapping("/api")
@@ -22,13 +22,13 @@ public class QueueService {
 	static Logger logger = LoggerFactory.getLogger(QueueService.class);
 	
 	@Autowired
-	private QueueCreator queueCreator;
+	private BrokerManager brokerManager;
 	
 	@GetMapping("queue/{queue}")
 	public ResponseEntity<Object> createQueue(@PathVariable String queue,		
 			HttpServletRequest httpRequest) {
 		try {			
-			queueCreator.createQueueSimple(queue);	    			
+			brokerManager.createQueue(queue);						
 			return ResponseEntity.ok().body("QUEUE CREATED: "+queue);                    
 		} catch (Exception e) {
 			  return ResponseEntity.badRequest().

@@ -49,7 +49,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 			List<Bot> bots = serviceAgent.findBotsByAgent(agent.getNameAgent());
 			bots.forEach(bot -> {
 				String botName = bot.getNameBot();
-				String nameQueue = botName+"_OUT";
+				String nameQueue = "task.out";
 				pullMessage(botName, nameQueue);
 			});
 		});
