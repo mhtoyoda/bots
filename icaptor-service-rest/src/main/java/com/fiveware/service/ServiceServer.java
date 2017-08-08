@@ -2,14 +2,16 @@ package com.fiveware.service;
 
 import com.fiveware.model.Agent;
 import com.fiveware.model.Server;
+import com.google.common.base.MoreObjects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Supplier;
+
+import static java.util.Arrays.asList;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -45,7 +47,8 @@ public class ServiceServer {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Agent[] forObject = restTemplate.getForObject(url, Agent[].class);
-        return Arrays.asList(forObject);
+
+        return !Objects.isNull(forObject)?asList(forObject):Collections.emptyList();
     }
 
     public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint) {
