@@ -92,7 +92,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		}
 
 		obj.getLineResult().addAll(resultSuccess);
-		producer.send(botName + "_OUT", obj);
+		producer.send("task.out", obj);
 		executorService.shutdown();
 		logger.info("End Import File - [BOT]: {}", botName);
 	}

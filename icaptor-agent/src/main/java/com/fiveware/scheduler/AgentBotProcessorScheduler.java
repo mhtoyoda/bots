@@ -46,6 +46,8 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 		List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
 		bots.forEach(bot -> {
 			String botName = bot.getNameBot();
+			//FIXME sera alterado para olhar o contexto de tasks existentes
+			//FIXME nameQueue sera exemplo 'consultaCEP.1.IN'
 			String nameQueue = botName+"_IN";			 
 			pullMessage(botName, nameQueue);
 		});
