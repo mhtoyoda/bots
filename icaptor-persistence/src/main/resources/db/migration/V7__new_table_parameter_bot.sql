@@ -13,7 +13,7 @@ CREATE TABLE scope_parameter(
 CREATE TABLE parameter(
 	id bigint auto_increment primary key,
     field_value varchar(200) not null,
-	active boolean default false,
+	active boolean default true,
     id_type_parameter bigint(20) not null,
     id_scope_parameter bigint(20) not null,
     id_cloud bigint(20) not null,
