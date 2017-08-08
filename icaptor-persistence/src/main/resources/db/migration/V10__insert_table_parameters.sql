@@ -1,15 +1,11 @@
-insert into parameter(name) values('credential');
-insert into parameter(name) values('retry');
-insert into parameter(name) values('timeToWait');
+insert into type_parameter(name, exclusive) values('credential', 0);
+insert into type_parameter(name, exclusive) values('retry', 0);
+insert into type_parameter(name, exclusive) values('timeout', 0);
 
-insert into parameter_key(name, id_parameter) values('login', 1);
-insert into parameter_key(name, id_parameter) values('senha', 1);
-insert into parameter_key(name, id_parameter) values('retry', 2);
-insert into parameter_key(name, id_parameter) values('timeWait', 3);
-
-INSERT INTO type_parameter(type_parameter) values('parâmetro cloud');
-INSERT INTO type_parameter(type_parameter) values('parâmetro cloud bot');
-INSERT INTO type_parameter(type_parameter) values('parâmetro sessão');
+insert into scope_parameter(name, priority) values('plataforma', 0);
+insert into scope_parameter(name, priority) values('bot', 1);
+insert into scope_parameter(name, priority) values('plataforma_bot', 2);
+insert into scope_parameter(name, priority) values('session', 3);
 
 insert into status_process(name) values('Created');
 insert into status_process(name) values('Validate');
