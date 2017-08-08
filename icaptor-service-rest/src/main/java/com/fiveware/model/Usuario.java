@@ -101,9 +101,9 @@ public class Usuario implements Serializable {
 		this.confirmacaoSenha = confirmacaoSenha;
 	}
 	
-	public boolean isNovo() {
-		return id == null;
-	}
+//	public boolean isNovo() {
+//		return id == null;
+//	}
 
 	@Override
 	public int hashCode() {
