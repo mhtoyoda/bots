@@ -33,11 +33,9 @@ public class MessageBot implements Serializable {
 	public List<String> getLineResult() {
 		return lineResult;
 	}
-	
 	public void setLineResult(List<String> lineResult) {
 		this.lineResult = lineResult;
 	}
-		
 	public MessageHeader getMessageHeader() {
 		return messageHeader;
 	}
