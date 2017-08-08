@@ -2,9 +2,9 @@ insert into type_parameter(name, exclusive) values('credential', 0);
 insert into type_parameter(name, exclusive) values('retry', 0);
 insert into type_parameter(name, exclusive) values('timeout', 0);
 
-insert into scope_parameter(name, priority) values('plataforma', 0);
+insert into scope_parameter(name, priority) values('cloud', 0);
 insert into scope_parameter(name, priority) values('bot', 1);
-insert into scope_parameter(name, priority) values('plataforma_bot', 2);
+insert into scope_parameter(name, priority) values('cloud_bot', 2);
 insert into scope_parameter(name, priority) values('session', 3);
 
 insert into status_process(name) values('Created');
