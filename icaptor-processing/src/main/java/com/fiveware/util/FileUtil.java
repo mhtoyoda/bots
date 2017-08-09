@@ -27,7 +27,7 @@ public class FileUtil {
 	
 	public Record linesFrom(InputStream file, String[] fields, String separator) throws IOException {
 		String line =buildScanner(file);
-		Record record = lineUtil.getLines(line, fields, separator);
+		Record record = lineUtil.linesFrom(line, fields, separator);
 		return record;
 	}	
 
