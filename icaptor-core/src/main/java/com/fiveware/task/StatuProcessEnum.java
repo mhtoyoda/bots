@@ -3,14 +3,17 @@ package com.fiveware.task;
 public enum StatuProcessEnum {
 
 	CREATED(1L, "Created"),
-	VALIDATE(2l, "Validate"),
-	PROCESSING(3L, "Processing"),
-	PROCCESSED(4L, "Proccessed"),
-	SUSPENDED(5L, "Suspended"),
-	AVAILABLE(6L, "Available"),
-	INLINE(7L, "InLine"),
-	SUCCESS(8L, "Success"),
-	ERROR(9l, "Error");
+	VALIDATING(2l, "Validating"),
+	REJECTED(3L, "Rejected"),
+	SCHEDULED(4L, "Scheduled"),	
+	PROCESSING(5L, "Processing"),
+	PROCCESSED(6L, "Proccessed"),
+	SUSPENDED(7L, "Suspended"),
+	AVAILABLE(8L, "Available"),
+	INLINE(9L, "InLine"),
+	SUCCESS(10L, "Success"),
+	ERROR(11l, "Error"),
+	CANCELED(12L, "Canceled");
 
 	private StatuProcessEnum(Long id, String name) {
 		this.id = id;
