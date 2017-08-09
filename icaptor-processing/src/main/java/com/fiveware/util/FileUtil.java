@@ -1,15 +1,18 @@
 package com.fiveware.util;
 
-import com.fiveware.model.MessageBot;
-import com.fiveware.model.Record;
+import java.io.*;
+import java.util.List;
+import java.util.Scanner;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
-import java.util.Scanner;
+import com.fiveware.model.MessageBot;
+import com.fiveware.model.Record;
+import com.google.common.collect.Lists;
 
 @Component
 public class FileUtil {
@@ -25,24 +28,28 @@ public class FileUtil {
 	@Autowired
 	private LineUtil lineUtil;
 	
-	public Record linesFrom(InputStream file, String[] fields, String separator) throws IOException {
-		String line =buildScanner(file);
-		Record record = lineUtil.linesFrom(line, fields, separator);
-		return record;
-	}	
+	public List<String> linesFrom(InputStream file){
+		List<String> linhas = Lists.newArrayList();
+		buildLines(file, linhas);
+		return linhas;
+	}
 
-	private String buildScanner(InputStream file) {
+	public List<Record> linesFrom(List<String> lines, String[] fields, String separator) throws IOException {
+		List<Record> lineRecords = lineUtil.getLines(lines, fields, separator);
+		return lineRecords;
+	}
+
+	private void buildLines(InputStream file, List<String> linhas) {
 		Scanner scanner = new Scanner(file);
-		while (scanner.hasNextLine())
-			return scanner.nextLine();
-
-		return "";
+		while (scanner.hasNextLine()) {
+			String line = scanner.nextLine();
+			linhas.add(line);
+		}
+		scanner.close();
 	}
 
 	public void writeFile(MessageBot messageBot) {
-
 		String path = workerFileRead + File.separator + messageBot.getMessageHeader().getPathFile();
-
 		File fileOut = new File(path);
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut, true))) {
 			//FIXME corrigir bug para fazer append por task ID

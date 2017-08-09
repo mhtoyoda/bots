@@ -1,20 +1,25 @@
 package com.fiveware.io;
 
-import com.fiveware.messaging.BrokerManager;
-import com.fiveware.messaging.Producer;
-import com.fiveware.model.*;
-import com.fiveware.task.TaskManager;
-import com.fiveware.util.FileUtil;
-import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
-import com.google.common.collect.Iterables;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.StringJoiner;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.StringJoiner;
+import com.fiveware.messaging.BrokerManager;
+import com.fiveware.messaging.Producer;
+import com.fiveware.model.*;
+import com.fiveware.task.StatuProcessEnum;
+import com.fiveware.task.TaskManager;
+import com.fiveware.util.FileUtil;
+import com.fiveware.validate.RuleValidations;
+import com.fiveware.validate.ValidationFileErrorException;
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
+import com.google.common.collect.Iterables;
 
 /**
  * Created by valdisnei on 13/06/17.
@@ -36,6 +41,9 @@ public class ReadInputFile {
     
     @Autowired
     private BrokerManager brokerManager;
+    
+    @Autowired
+    private RuleValidations ruleValidations;
 
 	private Long userId = 1L;
 
@@ -45,10 +53,16 @@ public class ReadInputFile {
         String separatorFile = bot.getSeparatorFile();
 		Iterable<String> split = Splitter.on(separatorFile).split(bot.getFieldsInput());
         String[] fields = Iterables.toArray(split, String.class);
-		Record allLines = fileUtil.linesFrom(file, fields, separatorFile);
-
-		//TODO incluir validacao de arquivo aqui
-        sendListToQueue(task, allLines, path);
+        List<String> lines = fileUtil.linesFrom(file);
+        try {
+        	taskManager.updateTask(task.getId(), StatuProcessEnum.VALIDATING);
+        	ruleValidations.executeValidations(lines, fields, separatorFile);
+        	taskManager.updateTask(task.getId(), StatuProcessEnum.PROCESSING);
+        	List<Record> allLines = fileUtil.linesFrom(lines, fields, separatorFile);
+        	sendListToQueue(task, allLines, path);
+		} catch (ValidationFileErrorException e) {			
+			taskManager.updateTask(task.getId(), StatuProcessEnum.REJECTED);
+		}
     }
 
     private void sendListToQueue(Task task, Record record, String path) {
