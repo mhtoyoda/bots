@@ -1,13 +1,12 @@
 package com.fiveware.processor;
 
-import com.fiveware.model.MessageBot;
+import java.io.Serializable;
+
 import org.springframework.context.MessageSource;
 
 import com.fiveware.model.Record;
 import com.fiveware.service.IServiceBot;
 import com.fiveware.validate.Validate;
-
-import java.io.Serializable;
 
 public class ProcessorFields {
 
@@ -16,18 +15,16 @@ public class ProcessorFields {
 	private final IServiceBot serviceBot;
 	private final Record record;
 	private final Validate validate;
-	private final MessageSource messageSource;
-	private final MessageBot messageBot;
+	private final MessageSource messageSource;	
 
 	public ProcessorFields(String botName, Class classLoader, IServiceBot serviceBot, Record record,
-						   Validate validate, MessageSource messageSource, MessageBot messageBot) {
+						   Validate validate, MessageSource messageSource) {
 		this.botName = botName;
 		this.classLoader = classLoader;
 		this.serviceBot = serviceBot;
 		this.record = record;
 		this.validate = validate;
 		this.messageSource = messageSource;
-		this.messageBot = messageBot;
 	}
 
 	public String getBotName() {
@@ -54,11 +51,6 @@ public class ProcessorFields {
 		return messageSource;
 	}
 
-	public MessageBot getMessageBot() {
-		return messageBot;
-	}
-
-
 	public static class ProcessorFieldsBuilder implements Serializable{
 		private String botName;
 		private Class classLoader;
@@ -66,9 +58,6 @@ public class ProcessorFields {
 		private Record record;
 		private Validate validate;
 		private MessageSource messageSource;
-		private MessageBot messageBot;
-
-
 	}
 
 }
