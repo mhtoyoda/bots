@@ -1,16 +1,16 @@
 package com.fiveware.util;
 
-import com.fiveware.model.Record;
-import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
+
+import com.fiveware.model.Record;
+import com.google.common.collect.Lists;
+
 @Component
 public class LineUtil {
-
 	public List<Record> linesFrom(List<String> linhas, String[] fields, String separator) throws IOException {
 		List<Record> lines = getLines(linhas, fields, separator);
 		return lines;
@@ -40,6 +40,7 @@ public class LineUtil {
 		}
 		return record;
 	}
+
 
 
 }

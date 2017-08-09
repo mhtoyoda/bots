@@ -1,20 +1,5 @@
 package com.fiveware.io;
 
-import com.fiveware.messaging.BrokerManager;
-import com.fiveware.messaging.Producer;
-import com.fiveware.model.*;
-import com.fiveware.task.StatuProcessEnum;
-import com.fiveware.task.TaskManager;
-import com.fiveware.util.FileUtil;
-import com.fiveware.validate.RuleValidations;
-import com.fiveware.validate.ValidationFileErrorException;
-import com.google.common.base.Splitter;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,6 +9,28 @@ import java.util.Map;
 import java.util.StringJoiner;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+import com.fiveware.messaging.BrokerManager;
+import com.fiveware.messaging.Producer;
+import com.fiveware.model.Bot;
+import com.fiveware.model.ItemTask;
+import com.fiveware.model.MessageBot;
+import com.fiveware.model.MessageHeader;
+import com.fiveware.model.Record;
+import com.fiveware.model.Task;
+import com.fiveware.task.StatuProcessEnum;
+import com.fiveware.task.TaskManager;
+import com.fiveware.util.FileUtil;
+import com.fiveware.validate.RuleValidations;
+import com.fiveware.validate.ValidationFileErrorException;
+import com.google.common.base.Splitter;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Created by valdisnei on 13/06/17.
