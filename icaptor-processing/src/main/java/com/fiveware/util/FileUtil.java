@@ -2,7 +2,6 @@ package com.fiveware.util;
 
 import com.fiveware.model.MessageBot;
 import com.fiveware.model.Record;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.util.List;
 import java.util.Scanner;
 
 @Component
@@ -27,25 +25,19 @@ public class FileUtil {
 	@Autowired
 	private LineUtil lineUtil;
 	
-	public List<Record> linesFrom(InputStream file, String[] fields, String separator) throws IOException {
-		List<String> linhas = Lists.newArrayList();
-
-		buildScanner(file, linhas);
-
-		List<Record> lines = lineUtil.getLines(linhas, fields, separator);
-		return lines;
+	public Record linesFrom(InputStream file, String[] fields, String separator) throws IOException {
+		String line =buildScanner(file);
+		Record record = lineUtil.getLines(line, fields, separator);
+		return record;
 	}	
 
-	private void buildScanner(InputStream file, List<String> linhas) {
-
+	private String buildScanner(InputStream file) {
 		Scanner scanner = new Scanner(file);
+		while (scanner.hasNextLine())
+			return scanner.nextLine();
 
-		while (scanner.hasNextLine()) {
-			String line = scanner.nextLine();
-			linhas.add(line);
-		}
-		scanner.close();
-	}	
+		return "";
+	}
 
 	public void writeFile(MessageBot messageBot) {
 

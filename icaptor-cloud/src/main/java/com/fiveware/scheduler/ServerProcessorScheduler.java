@@ -69,7 +69,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	 */
 	@Override
 	public void processMessage(String botName, MessageBot obj) {
-		log.debug("Total de Linhas resultado: {}", obj.getLineResult().size());
+		log.debug("Total de Linhas resultado: {}", obj.getLineResult());
 		fileUtil.writeFile(obj);
 	}
 

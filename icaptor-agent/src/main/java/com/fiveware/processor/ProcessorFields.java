@@ -17,17 +17,15 @@ public class ProcessorFields {
 	private final Record record;
 	private final Validate validate;
 	private final MessageSource messageSource;
-	private final MessageBot messageBot;
 
 	public ProcessorFields(String botName, Class classLoader, IServiceBot serviceBot, Record record,
-						   Validate validate, MessageSource messageSource, MessageBot messageBot) {
+						   Validate validate, MessageSource messageSource ) {
 		this.botName = botName;
 		this.classLoader = classLoader;
 		this.serviceBot = serviceBot;
 		this.record = record;
 		this.validate = validate;
 		this.messageSource = messageSource;
-		this.messageBot = messageBot;
 	}
 
 	public String getBotName() {
@@ -53,11 +51,6 @@ public class ProcessorFields {
 	public MessageSource getMessageSource() {
 		return messageSource;
 	}
-
-	public MessageBot getMessageBot() {
-		return messageBot;
-	}
-
 
 	public static class ProcessorFieldsBuilder implements Serializable{
 		private String botName;
