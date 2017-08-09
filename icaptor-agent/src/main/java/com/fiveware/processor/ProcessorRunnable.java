@@ -38,7 +38,7 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 			logger.error("Unprocessed Record - Cause: " + e.getMessage());
 			return getErrorValidation(cep).get();
 		}
-		OutTextRecord outTextRecord = processorFields.getServiceBot().callBot(processorFields.getBotName(), cep);
+		OutTextRecord outTextRecord = processorFields.getServiceBot().callBot(processorFields, cep);
 		return Arrays.asList(outTextRecord.getMap()).get(0)==null?getNotFound(cep).get():outTextRecord;
 	}
 	

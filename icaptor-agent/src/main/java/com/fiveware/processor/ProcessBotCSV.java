@@ -71,16 +71,24 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		String line = obj.getLine();
 		Record record = lineUtil.linesFrom(line, fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
-		List<String> resultSuccess = Lists.newArrayList();
 
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
-			OutTextRecord result = null;
-			try {
-				ProcessorFields processorFields = new ProcessorFields(botName, classLoader, serviceBot, record, validate, messageSource);
-				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(processorFields));
-				result = outTextRecord.get();
 
-				listJoin.joinRecord(separatorInput, result, resultSuccess);
+			try {
+				ProcessorFields processorFields = new ProcessorFields.ProcessorFieldsBuilder()
+															.nameBot(botName)
+															.classLoader(classLoader)
+															.bot(serviceBot)
+															.record(record)
+															.validate(validate)
+															.messageSource(messageSource)
+															.messageBot(obj)
+															.context(context)
+															.build();
+				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(processorFields));
+
+				List<String> resultSuccess = Lists.newArrayList();
+				listJoin.joinRecord(separatorInput, outTextRecord.get(), resultSuccess);
 
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());

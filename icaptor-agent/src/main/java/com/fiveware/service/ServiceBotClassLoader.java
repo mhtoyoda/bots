@@ -7,6 +7,8 @@ import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.OutTextRecord;
+import com.fiveware.model.OutputDictionaryContext;
+import com.fiveware.processor.ProcessorFields;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +48,19 @@ public  class ServiceBotClassLoader<T> {
     private MessageSource messageSource;
 
 
-    public OutTextRecord executeMainClass(String nameBot, T parameter) throws IOException,
+    public OutTextRecord executeMainClass(ProcessorFields processorFields, T parameter) throws IOException,
             ClassNotFoundException, InstantiationException,
             IllegalAccessException, NoSuchMethodException, InvocationTargetException,
             ExceptionBot,UnRecoverableException {
-        Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
 
-        return executeMainClass(parameter, botClassLoaderContext);
+        return executeMainClass(parameter, processorFields);
+    }
+
+    private OutTextRecord executeMainClass(T parameter, ProcessorFields processorFields) throws IOException,
+            ClassNotFoundException, InstantiationException,IllegalAccessException, NoSuchMethodException, InvocationTargetException,
+            ExceptionBot,UnRecoverableException {
+
+        return getOutTextRecord(parameter,processorFields);
     }
 
     public OutTextRecord executeMainClass(String nameBot,String endpoint, T parameter) throws IOException,
@@ -63,12 +71,15 @@ public  class ServiceBotClassLoader<T> {
         if(!endpoint.equals(botClassLoaderContext.get().getEndpoint()))
             throw new ExceptionBot(messageSource.getMessage("endPoint.notFound",new Object[]{endpoint},null));
 
-        return executeMainClass(parameter, botClassLoaderContext);
+        return getOutTextRecord(parameter, null);
     }
 
-    private OutTextRecord executeMainClass(T parameter, Optional<BotClassLoaderContext> botClassLoaderContext)
-            throws ClassNotFoundException, ExceptionBot,UnRecoverableException, NoSuchMethodException, IllegalAccessException,
-            InstantiationException, IOException {
+
+    private OutTextRecord getOutTextRecord(T parameter, ProcessorFields processorFields)
+            throws ClassNotFoundException, ExceptionBot, IOException, InstantiationException, IllegalAccessException,
+            NoSuchMethodException {
+
+        Optional<BotClassLoaderContext> botClassLoaderContext = processorFields.getContext();
 
         ClassLoader classLoader = classLoaderRunner.loadClassLoader(botClassLoaderContext.get().getNameBot());
         Class clazz = classLoader.loadClass(botClassLoaderContext.get().getClassLoader());
@@ -76,7 +87,7 @@ public  class ServiceBotClassLoader<T> {
 
         Class<?> aClass = o.newInstance().getClass();
         Method execute = clazz.getMethod(botClassLoaderContext.get().getMethod(), aClass);
-        
+
         Object o1 = null;
         if( null != parameter ){
             o1 = objectMapper.convertValue(parameter, aClass);
@@ -90,10 +101,14 @@ public  class ServiceBotClassLoader<T> {
         		obj =  execute.invoke(clazz.newInstance());
         	}
         }catch (InvocationTargetException e) {
+
             if (e.getCause().getClass().getName().equals(UnRecoverableException.class.getName())){
                 UnRecoverableException unRecoverableException = new UnRecoverableException(e.getCause());
                 Map map = new HashMap();
-                map.put("ERROR","|1|"+unRecoverableException.getMessage());
+
+                String fields = getOutputDictionary(processorFields);
+
+                map.put("ERROR",  fields+"|"+processorFields.getMessageBot().getTaskId()+"|"+unRecoverableException.getMessage());
                 HashMap[] hashMaps = {(HashMap) map};
 
                 return new OutTextRecord(hashMaps);
@@ -109,6 +124,12 @@ public  class ServiceBotClassLoader<T> {
         HashMap[] hashMaps = {(HashMap) map};
 
         return new OutTextRecord(hashMaps);
+    }
+
+    private String getOutputDictionary(ProcessorFields processorFields) {
+        OutputDictionaryContext outputDictionary = processorFields.getContext().get().getOutputDictionary();
+        return outputDictionary.fieldsToLine();
+
     }
 
     protected ClassLoader getClassLoader(String pathJar) throws MalformedURLException {
