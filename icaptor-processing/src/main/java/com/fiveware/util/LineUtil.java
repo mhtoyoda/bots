@@ -22,13 +22,11 @@ public class LineUtil {
 
 		lines.forEach(record -> {
 			String[] recordArray = StringUtils.split(record, separator);
-			if (recordArray.length == fields.length) {
-				Record recordLines = new Record();
-				for (int i = 0; i < fields.length; i++) {
-					recordLines.addRecordLine(fields[i], recordArray[i]);
-				}
-				recordsLines.add(recordLines);
+			Record recordLines = new Record();
+			for (int i = 0; i < fields.length; i++) {
+				recordLines.addRecordLine(fields[i], recordArray[i]);
 			}
+			recordsLines.add(recordLines);
 		});
 		return recordsLines;
 	}

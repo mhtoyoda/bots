@@ -27,19 +27,19 @@ public class FileUtil {
 	@Autowired
 	private LineUtil lineUtil;
 	
-	public List<Record> linesFrom(InputStream file, String[] fields, String separator) throws IOException {
+	public List<String> linesFrom(InputStream file){
 		List<String> linhas = Lists.newArrayList();
-
-		buildScanner(file, linhas);
-
-		List<Record> lines = lineUtil.getLines(linhas, fields, separator);
-		return lines;
+		buildLines(file, linhas);
+		return linhas;
+	}
+	
+	public List<Record> linesFrom(List<String> lines, String[] fields, String separator) throws IOException {
+		List<Record> lineRecords = lineUtil.getLines(lines, fields, separator);
+		return lineRecords;
 	}	
 
-	private void buildScanner(InputStream file, List<String> linhas) {
-
+	private void buildLines(InputStream file, List<String> linhas) {
 		Scanner scanner = new Scanner(file);
-
 		while (scanner.hasNextLine()) {
 			String line = scanner.nextLine();
 			linhas.add(line);
@@ -48,9 +48,7 @@ public class FileUtil {
 	}	
 
 	public void writeFile(MessageBot messageBot) {
-
 		String path = workerFileRead + File.separator + messageBot.getMessageHeader().getPathFile();
-
 		File fileOut = new File(path);
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut, true))) {
 			//FIXME corrigir bug para fazer append por task ID

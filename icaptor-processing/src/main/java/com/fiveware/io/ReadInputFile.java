@@ -22,8 +22,11 @@ import com.fiveware.model.MessageBot;
 import com.fiveware.model.MessageHeader;
 import com.fiveware.model.Record;
 import com.fiveware.model.Task;
+import com.fiveware.task.StatuProcessEnum;
 import com.fiveware.task.TaskManager;
 import com.fiveware.util.FileUtil;
+import com.fiveware.validate.RuleValidations;
+import com.fiveware.validate.ValidationFileErrorException;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -48,6 +51,9 @@ public class ReadInputFile {
     
     @Autowired
     private BrokerManager brokerManager;
+    
+    @Autowired
+    private RuleValidations ruleValidations;
 
 	private Long userId = 1L;
 
@@ -57,9 +63,16 @@ public class ReadInputFile {
         String separatorFile = bot.getSeparatorFile();
 		Iterable<String> split = Splitter.on(separatorFile).split(bot.getFieldsInput());
         String[] fields = Iterables.toArray(split, String.class);
-		List<Record> allLines = fileUtil.linesFrom(file, fields, separatorFile);
-		//TODO incluir validacao de arquivo aqui
-        sendListToQueue(task, allLines, path, allLines.size());
+        List<String> lines = fileUtil.linesFrom(file);
+        try {
+        	taskManager.updateTask(task.getId(), StatuProcessEnum.VALIDATING);
+        	ruleValidations.executeValidations(lines, fields, separatorFile);
+        	taskManager.updateTask(task.getId(), StatuProcessEnum.PROCESSING);
+        	List<Record> allLines = fileUtil.linesFrom(lines, fields, separatorFile);
+        	sendListToQueue(task, allLines, path, allLines.size());
+		} catch (ValidationFileErrorException e) {			
+			taskManager.updateTask(task.getId(), StatuProcessEnum.REJECTED);
+		}
     }
 
     private void sendListToQueue(Task task, List<Record> recordList, String path, Integer size) {
