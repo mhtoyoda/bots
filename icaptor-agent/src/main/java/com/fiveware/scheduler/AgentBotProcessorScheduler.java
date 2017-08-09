@@ -48,7 +48,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 			String botName = bot.getNameBot();
 			//FIXME sera alterado para olhar o contexto de tasks existentes
 			//FIXME nameQueue sera exemplo 'consultaCEP.1.IN'
-			String nameQueue = botName+"_IN";			 
+			String nameQueue = botName+".3.IN";
 			pullMessage(botName, nameQueue);
 		});
 	}

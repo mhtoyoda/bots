@@ -1,10 +1,9 @@
 package com.fiveware.model;
 
-import java.io.Serializable;
-import java.util.List;
-
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
+
+import java.io.Serializable;
 
 @AutoProperty
 public class MessageBot implements Serializable {
@@ -12,7 +11,7 @@ public class MessageBot implements Serializable {
 	private final Long taskId;
 	private final Long itemTaskId;
 	private final String line;
-	private List<String> lineResult;
+	private String lineResult;
 	private final MessageHeader messageHeader;
 
 	public MessageBot(Long taskId, Long itemTaskId, String line, MessageHeader messageHeader) {
@@ -30,12 +29,13 @@ public class MessageBot implements Serializable {
 		return line;
 	}
 
-	public List<String> getLineResult() {
+	public String getLineResult() {
 		return lineResult;
 	}
-	public void setLineResult(List<String> lineResult) {
+	public void setLineResult(String lineResult) {
 		this.lineResult = lineResult;
 	}
+
 	public MessageHeader getMessageHeader() {
 		return messageHeader;
 	}

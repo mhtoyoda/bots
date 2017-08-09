@@ -68,16 +68,15 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		InputDictionaryContext inputDictionary = context.get().getInputDictionary();
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
-		List<String> list = Lists.newArrayList(obj.getLine());
-		List<Record> recordLines = lineUtil.linesFrom(list, fieldsInput, separatorInput);
+		String line = obj.getLine();
+		Record record = lineUtil.linesFrom(line, fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
 		List<String> resultSuccess = Lists.newArrayList();
-		
+
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
-		for (Record line : recordLines) {
 			OutTextRecord result = null;
 			try {
-				ProcessorFields processorFields = new ProcessorFields(botName, classLoader, serviceBot, line, validate, messageSource);
+				ProcessorFields processorFields = new ProcessorFields(botName, classLoader, serviceBot, record, validate, messageSource);
 				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(processorFields));
 				result = outTextRecord.get();
 
@@ -89,9 +88,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 					throw new ExceptionBot(e.getMessage());
 				}
 			}
-		}
 
-		obj.getLineResult().addAll(resultSuccess);
 		producer.send("task.out", obj);
 		executorService.shutdown();
 		logger.info("End Import File - [BOT]: {}", botName);

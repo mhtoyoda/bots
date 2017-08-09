@@ -93,7 +93,7 @@ public  class ServiceBotClassLoader<T> {
             if (e.getCause().getClass().getName().equals(UnRecoverableException.class.getName())){
                 UnRecoverableException unRecoverableException = new UnRecoverableException(e.getCause());
                 Map map = new HashMap();
-                map.put("ERROR","0:"+unRecoverableException.getMessage());
+                map.put("ERROR","|1|"+unRecoverableException.getMessage());
                 HashMap[] hashMaps = {(HashMap) map};
 
                 return new OutTextRecord(hashMaps);

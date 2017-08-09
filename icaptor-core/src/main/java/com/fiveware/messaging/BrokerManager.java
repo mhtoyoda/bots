@@ -1,8 +1,5 @@
 package com.fiveware.messaging;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.amqp.core.AmqpManagementOperations;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -10,6 +7,9 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class BrokerManager {
@@ -24,7 +24,7 @@ public class BrokerManager {
 		if(notExistQueue(queueName)){
 			Queue queue = declareQueue(queueName);		
 			DirectExchange exchange = new DirectExchange("file-exchange", true, false);		
-			rabbitAdmin.declareExchange(exchange);		
+			rabbitAdmin.declareExchange(exchange);
 			rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange).with(queue.getName()));			
 		}
 	}
