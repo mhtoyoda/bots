@@ -1,22 +1,17 @@
 package com.fiveware.util;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.List;
-import java.util.Scanner;
-
-import org.assertj.core.util.Lists;
+import com.fiveware.model.MessageBot;
+import com.fiveware.model.Record;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.MessageBot;
-import com.fiveware.model.Record;
+import java.io.*;
+import java.util.List;
+import java.util.Scanner;
 
 @Component
 public class FileUtil {
