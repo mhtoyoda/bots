@@ -39,7 +39,7 @@ public class ResourceServer {
         return ResponseEntity.status(HttpStatus.CREATED).body(serverSave);
     }
 
-    @GetMapping("/name/{name}")
+    @GetMapping("/{name}/name")
     public Optional<Server> findByName(@PathVariable("name") String name) {
         return serverRepository.findByName(name);
     }

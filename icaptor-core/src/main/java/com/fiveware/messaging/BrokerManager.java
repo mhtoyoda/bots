@@ -40,7 +40,9 @@ public class BrokerManager {
 	}
 	
 	private boolean notExistQueue(String queue){
-		List<Queue> queues = amqpManagementOperations.getQueues().stream().filter(q -> queue.equals(q.getName())).collect(Collectors.toList());
-		return queues.isEmpty();		
+		List<Queue> queues = amqpManagementOperations.getQueues().stream()
+				.filter(q -> queue.equals(q.getName()))
+				.collect(Collectors.toList());
+		return queues.isEmpty();
 	}
 }

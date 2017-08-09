@@ -33,7 +33,7 @@ public class ServiceServer {
     }
 
     public Optional<Server> findByName(String nameServer) {
-        String url = "http://localhost:8085/api/server/name/"+nameServer;
+        String url = "http://localhost:8085/api/server/"+nameServer+"/name";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
