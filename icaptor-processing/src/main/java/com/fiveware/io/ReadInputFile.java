@@ -60,7 +60,7 @@ public class ReadInputFile {
         	taskManager.updateTask(task.getId(), StatuProcessEnum.PROCESSING);
         	List<Record> allLines = fileUtil.linesFrom(lines, fields, separatorFile);
         	sendListToQueue(task, allLines, path);
-		} catch (ValidationFileErrorException e) {			
+		} catch (ValidationFileErrorException e) {
 			taskManager.updateTask(task.getId(), StatuProcessEnum.REJECTED);
 		}
     }
