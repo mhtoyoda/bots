@@ -1,6 +1,8 @@
 package com.fiveware.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.StringJoiner;
 
 public class OutputDictionaryContext implements Serializable {
 
@@ -35,6 +37,13 @@ public class OutputDictionaryContext implements Serializable {
 
 	public String getNameFileOut() {
 		return nameFileOut;
+	}
+
+
+	public String fieldsToLine() {
+		StringJoiner joiner = new StringJoiner(this.separator);
+		Arrays.asList(this.fields).forEach((v) -> joiner.add((CharSequence) v));
+		return joiner.toString();
 	}
 
 }

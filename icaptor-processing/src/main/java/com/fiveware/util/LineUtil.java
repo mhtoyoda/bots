@@ -4,6 +4,9 @@ import com.fiveware.model.Record;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.StringJoiner;
+
 @Component
 public class LineUtil {
 
@@ -18,4 +21,6 @@ public class LineUtil {
 		}
 		return record;
 	}
+
+
 }
