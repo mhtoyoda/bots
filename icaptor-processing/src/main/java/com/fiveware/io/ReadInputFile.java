@@ -38,8 +38,6 @@ import com.google.common.collect.Lists;
 @Component
 public class ReadInputFile {
 
-    public static final int N_LINES_BY_AGENT = 2;
-
     @Autowired
     private FileUtil fileUtil;
 

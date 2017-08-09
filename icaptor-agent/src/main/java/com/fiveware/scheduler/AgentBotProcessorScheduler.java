@@ -39,7 +39,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Qualifier("processBotCSV")
 	private ProcessBot<MessageBot> processBotCSV;
 	
-//	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
+	//@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process() throws ExceptionBot,UnRecoverableException {
 
 		List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
