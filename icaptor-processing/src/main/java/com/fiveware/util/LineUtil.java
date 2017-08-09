@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.model.Record;
-import com.google.common.collect.Lists;
 
 @Component
 public class LineUtil {

@@ -15,7 +15,7 @@ public class ProcessorFields {
 	private final IServiceBot serviceBot;
 	private final Record record;
 	private final Validate validate;
-	private final MessageSource messageSource;	
+	private final MessageSource messageSource;
 
 	public ProcessorFields(String botName, Class classLoader, IServiceBot serviceBot, Record record,
 						   Validate validate, MessageSource messageSource) {

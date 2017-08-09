@@ -1,17 +1,22 @@
 package com.fiveware.util;
 
-import com.fiveware.model.MessageBot;
-import com.fiveware.model.Record;
-import com.google.common.collect.Lists;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+import java.util.Scanner;
+
+import org.assertj.core.util.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.*;
-import java.util.List;
-import java.util.Scanner;
+import com.fiveware.model.MessageBot;
+import com.fiveware.model.Record;
 
 @Component
 public class FileUtil {
@@ -46,6 +51,19 @@ public class FileUtil {
 		}
 		scanner.close();
 	}	
+
+	public Record linesFrom(InputStream file, String[] fields, String separator) throws IOException {
+		String line = buildScanner(file);
+		Record record = lineUtil.linesFrom(line, fields, separator);
+		return record;
+	}	
+
+	private String buildScanner(InputStream file) {
+		Scanner scanner = new Scanner(file);
+		while (scanner.hasNextLine())
+			return scanner.nextLine();
+		return "";
+	}
 
 	public void writeFile(MessageBot messageBot) {
 		String path = workerFileRead + File.separator + messageBot.getMessageHeader().getPathFile();

@@ -69,13 +69,13 @@ public class ReadInputFile {
         	ruleValidations.executeValidations(lines, fields, separatorFile);
         	taskManager.updateTask(task.getId(), StatuProcessEnum.PROCESSING);
         	List<Record> allLines = fileUtil.linesFrom(lines, fields, separatorFile);
-        	sendListToQueue(task, allLines, path, allLines.size());
+        	sendListToQueue(task, allLines, path, separatorFile);
 		} catch (ValidationFileErrorException e) {			
 			taskManager.updateTask(task.getId(), StatuProcessEnum.REJECTED);
 		}
     }
 
-    private void sendListToQueue(Task task, List<Record> recordList, String path, Integer size) {
+    private void sendListToQueue(Task task, List<Record> recordList, String path, String separatorFile) {
     	final List<String> lines = Lists.newArrayList();
     	String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
     	createQueueTaskIn(queueName);
@@ -84,11 +84,11 @@ public class ReadInputFile {
                         .stream()
                         .map(Record::getRecordMap)
                         .collect(Collectors.toList())
-                        .stream().map(Map::values).forEach(convertMapToCSVLine(lines));
+                        .stream().map(Map::values).forEach(convertMapToCSVLine(lines, separatorFile));
         consumer.accept(recordList);
         
     	MessageHeader messageHeader = new MessageHeader
-                .MessageHeaderBuilder(path, size)                
+                .MessageHeaderBuilder(path)                
                 .timeStamp(System.currentTimeMillis())
                 .build();
     	
@@ -105,9 +105,9 @@ public class ReadInputFile {
     	});
     }
     
-    private Consumer<Collection<Object>> convertMapToCSVLine(List<String> lines) {
+    private Consumer<Collection<Object>> convertMapToCSVLine(List<String> lines, String separatorFile) {
         return line -> {
-            final StringJoiner joiner = new StringJoiner("|");
+            final StringJoiner joiner = new StringJoiner(separatorFile);
             line.forEach((column) -> joiner.add((CharSequence) column));
             lines.add(joiner.toString());
         };

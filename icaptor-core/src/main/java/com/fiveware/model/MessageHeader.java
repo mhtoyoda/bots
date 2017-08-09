@@ -1,9 +1,9 @@
 package com.fiveware.model;
 
-import java.io.Serializable;
-
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
+
+import java.io.Serializable;
 
 /**
  * Created by valdisnei on 14/06/17.
@@ -11,17 +11,11 @@ import org.pojomatic.annotations.AutoProperty;
 @AutoProperty
 public class MessageHeader implements Serializable{
     private final String pathFile;
-    private final Integer totalLines;
     private final Long timeStamp;
 
-    private MessageHeader(String pathFile, Integer totalLines, Long timeStamp) {
+    private MessageHeader(String pathFile, Long timeStamp) {
         this.pathFile = pathFile;
-        this.totalLines = totalLines;
         this.timeStamp = timeStamp;
-    }
-
-    public Integer getTotalLines() {
-        return totalLines;
     }
 
     public String getPathFile() {
@@ -39,12 +33,10 @@ public class MessageHeader implements Serializable{
 
     public static class MessageHeaderBuilder implements Serializable{
         private final String pathFile;
-        private final Integer totalLines;
         private  Long timeStamp;
 
-        public MessageHeaderBuilder(String pathFile, Integer totalLines) {
+        public MessageHeaderBuilder(String pathFile) {
             this.pathFile = pathFile;
-            this.totalLines = totalLines;
         }
 
         public MessageHeaderBuilder timeStamp(Long timeStamp){
@@ -53,7 +45,7 @@ public class MessageHeader implements Serializable{
         }
 
         public MessageHeader build(){
-            return new MessageHeader(pathFile, totalLines, timeStamp);
+            return new MessageHeader(pathFile, timeStamp);
         }
 
     }
