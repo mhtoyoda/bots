@@ -13,8 +13,8 @@ import java.io.IOException;
 /**
  * Created by valdisnei on 29/05/17.
  */
-@Service(value = "rest")
-public class ServiceBotRest implements IServiceBot {
+@Service
+public class ServiceBotRest  {
 
     static Logger logger = LoggerFactory.getLogger(ServiceBotRest.class);
 
@@ -32,11 +32,6 @@ public class ServiceBotRest implements IServiceBot {
             logger.error(" ServiceBotRest: ", e);
         }
         return null;
-    }
-
-    @Override
-    public <T> OutTextRecord callBot(String nameBot, T parameter) throws ExceptionBot {
-        throw new IllegalArgumentException("Metodo nao permitdo para esta classe!");
     }
 
 

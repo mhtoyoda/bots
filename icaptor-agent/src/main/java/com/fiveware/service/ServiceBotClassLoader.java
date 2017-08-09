@@ -108,7 +108,7 @@ public  class ServiceBotClassLoader<T> {
 
                 String fields = getOutputDictionary(processorFields);
 
-                map.put("ERROR",  fields+"|"+processorFields.getMessageBot().getTaskId()+"|"+unRecoverableException.getMessage());
+                map.put("ERROR",  fields+"|1|"+unRecoverableException.getMessage());
                 HashMap[] hashMaps = {(HashMap) map};
 
                 return new OutTextRecord(hashMaps);
