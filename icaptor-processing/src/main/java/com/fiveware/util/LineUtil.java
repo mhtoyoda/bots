@@ -1,13 +1,12 @@
 package com.fiveware.util;
 
-import java.io.IOException;
-import java.util.List;
-
+import com.fiveware.model.Record;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.Record;
-import com.google.common.collect.Lists;
+import java.io.IOException;
+import java.util.List;
 
 @Component
 public class LineUtil {
