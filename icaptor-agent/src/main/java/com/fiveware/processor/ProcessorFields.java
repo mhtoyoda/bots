@@ -1,13 +1,12 @@
 package com.fiveware.processor;
 
-import com.fiveware.model.MessageBot;
+import java.io.Serializable;
+
 import org.springframework.context.MessageSource;
 
 import com.fiveware.model.Record;
 import com.fiveware.service.IServiceBot;
 import com.fiveware.validate.Validate;
-
-import java.io.Serializable;
 
 public class ProcessorFields {
 
@@ -19,7 +18,7 @@ public class ProcessorFields {
 	private final MessageSource messageSource;
 
 	public ProcessorFields(String botName, Class classLoader, IServiceBot serviceBot, Record record,
-						   Validate validate, MessageSource messageSource ) {
+						   Validate validate, MessageSource messageSource) {
 		this.botName = botName;
 		this.classLoader = classLoader;
 		this.serviceBot = serviceBot;
@@ -59,9 +58,6 @@ public class ProcessorFields {
 		private Record record;
 		private Validate validate;
 		private MessageSource messageSource;
-		private MessageBot messageBot;
-
-
 	}
 
 }
