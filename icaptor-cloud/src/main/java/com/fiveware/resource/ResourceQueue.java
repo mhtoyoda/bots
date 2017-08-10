@@ -1,7 +1,7 @@
-package com.fiveware.service;
+package com.fiveware.resource;
 
-import javax.servlet.http.HttpServletRequest;
-
+import com.fiveware.exception.MessageStatusBot;
+import com.fiveware.messaging.BrokerManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fiveware.exception.MessageStatusBot;
-import com.fiveware.messaging.BrokerManager;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/api")
-public class QueueService {
+public class ResourceQueue {
 
-	static Logger logger = LoggerFactory.getLogger(QueueService.class);
+	static Logger logger = LoggerFactory.getLogger(ResourceQueue.class);
 	
 	@Autowired
 	private BrokerManager brokerManager;
