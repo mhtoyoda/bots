@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class ControlPanelController {
 
 	private static final Logger logger = LoggerFactory.getLogger(ControlPanelController.class);
-	
+
 	@GetMapping("/loadUserInfo")
-	public ResponseEntity<Object> loadUserInfo() {
-		logger.info("Carregando as informacoes do usuario.");
+	public ResponseEntity<Object> loadUserInfo(@AuthenticationPrincipal User user) {
+		logger.info("Carregando as informacoes do usuario [{}]", user.getUsername());
+
 		return ResponseEntity.ok().build();
 	}
 
