@@ -31,7 +31,7 @@ public class RunningReadFiles extends RunningWatchServiceRecursive {
     public void includeAction(Path path) throws IOException, AttributeLoadException {
         if (isValidTypeFile(path)) {
             jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());
-            agentConfig.saveAgentAndCreateQueue();
+            agentConfig.saveAgent();
         }
     }
 

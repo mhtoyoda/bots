@@ -11,7 +11,6 @@ import com.google.common.collect.Lists;
 
 @Component
 public class LineUtil {
-
 	public List<Record> linesFrom(List<String> linhas, String[] fields, String separator) throws IOException {
 		List<Record> lines = getLines(linhas, fields, separator);
 		return lines;
@@ -22,14 +21,26 @@ public class LineUtil {
 
 		lines.forEach(record -> {
 			String[] recordArray = StringUtils.split(record, separator);
-			if (recordArray.length == fields.length) {
-				Record recordLines = new Record();
-				for (int i = 0; i < fields.length; i++) {
-					recordLines.addRecordLine(fields[i], recordArray[i]);
-				}
-				recordsLines.add(recordLines);
+			Record recordLines = new Record();
+			for (int i = 0; i < fields.length; i++) {
+				recordLines.addRecordLine(fields[i], recordArray[i]);
 			}
+			recordsLines.add(recordLines);
 		});
 		return recordsLines;
 	}
+
+	public Record linesFrom(String line, String[] fields, String separator) {
+		Record record = new Record();
+		String[] recordArray = StringUtils.split(line, separator);
+		if (recordArray.length == fields.length) {
+			for (int i = 0; i < fields.length; i++) {
+				record.addRecordLine(fields[i], recordArray[i]);
+			}
+		}
+		return record;
+	}
+
+
+
 }

@@ -7,8 +7,8 @@ public class Record {
 
 	private Map<String, Object> recordMap = new LinkedHashMap<String, Object>();
 
-	public Record() {
-	}
+	public Record() {}
+	
 	public synchronized void addRecordLine(String field, Object value) {
 		recordMap.put(field, value);
 	}
@@ -17,9 +17,7 @@ public class Record {
 		return recordMap;
 	}
 
-
 	public Object getValue(String key) {
 		return this.recordMap.get(key);
 	}
-
 }

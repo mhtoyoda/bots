@@ -1,4 +1,4 @@
-package com.fiveware.service;
+package com.fiveware.resource;
 
 import com.fiveware.file.WorkerFile;
 import com.fiveware.io.ReadInputFile;
@@ -17,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/api")
-public class HomeService {
+public class ResourceBot {
 
-    static Logger logger = LoggerFactory.getLogger(HomeService.class);
+    static Logger logger = LoggerFactory.getLogger(ResourceBot.class);
 
     @Autowired
     private ReadInputFile readInputFile;

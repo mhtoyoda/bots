@@ -1,5 +1,5 @@
 CREATE TABLE status_process (
-  id BIGINT(20) auto_increment NOT NULL,
+  id BIGINT(20) NOT NULL,
   name varchar(20) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -3,6 +3,7 @@ package com.fiveware;
 import com.fiveware.annotation.*;
 import com.fiveware.automate.BotScreen;
 import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.UnRecoverableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ public class TesteBot implements Automation<String, Endereco> {
 
 	static Logger logger = LoggerFactory.getLogger(TesteBot.class);
 	
-	public static void main(String[] args) throws ExceptionBot {
+	public static void main(String[] args) throws ExceptionBot,UnRecoverableException {
 		Endereco endereco = new TesteBot().getEndereco("07077170");
 		logger.info("Resultado: {}", endereco);
 	}
@@ -30,16 +31,13 @@ public class TesteBot implements Automation<String, Endereco> {
 	@InputDictionary(fields = {"cep"}, separator = "|", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws ExceptionBot{
-
+	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws ExceptionBot,UnRecoverableException {
 		Endereco endereco = getEndereco(cep);
-
-
 		return endereco;
 	}
 
-	public Endereco getEndereco(String args) throws ExceptionBot {
-		String baseUrl = "http://www.correios.com.br/";
+	public Endereco getEndereco(String args) throws ExceptionBot,UnRecoverableException {
+		String baseUrl = "http://www.correios.com/";
 		BotScreen telaConsultaCep = Web().driver(PHANTOM).openPage(baseUrl + "/para-voce");
 		telaConsultaCep.windowMaximize();
 		telaConsultaCep.find().elementBy().id("acesso-busca").sendKeys(args);		
@@ -56,7 +54,8 @@ public class TesteBot implements Automation<String, Endereco> {
 				.elementBy().xpath("/html/body/div[1]/div[3]/div[2]/div/div/div[2]/div[2]/div[2]/p").getText();
 
 		if ("DADOS NAO ENCONTRADOS".equalsIgnoreCase(resultado)){
-			return null;			
+			logger.warn("DADOS NAO ENCONTRADOS");
+			throw new UnRecoverableException("DADOS NAO ENCONTRADOS");
 		}
 
 		String logradouro = telaConsultaCep.find()

@@ -1,16 +1,19 @@
 package com.fiveware.register;
 
-import com.fiveware.config.ServerConfig;
-import com.fiveware.config.ServerInfo;
-import com.fiveware.model.Server;
-import com.fiveware.service.ServiceServer;
+import java.util.Optional;
+
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.util.Optional;
+import com.fiveware.config.ServerConfig;
+import com.fiveware.config.ServerInfo;
+import com.fiveware.messaging.BrokerManager;
+import com.fiveware.model.Server;
+import com.fiveware.service.ServiceServer;
 
 @Component
 public class ServerRegister {
@@ -23,11 +26,15 @@ public class ServerRegister {
 	@Autowired
 	private ServiceServer serviceServer;
 
+	@Autowired
+	private BrokerManager brokerManager;
+	
 	@PostConstruct
 	public void register() {
 		ServerInfo server = serverConfig.getServer();
 		log.info("Init Server Host: {} - Port: {}", server.getHost(), server.getPort());
 		registerServer();
+		createQueueTaskOut();
 	}
 
 	private void registerServer() {
@@ -41,5 +48,9 @@ public class ServerRegister {
 			serviceServer.save(server);
 			log.info("Register Server Host: {}", host);
 		}
+	}
+	
+	private void createQueueTaskOut(){
+		brokerManager.createQueue("task.out");
 	}
 }

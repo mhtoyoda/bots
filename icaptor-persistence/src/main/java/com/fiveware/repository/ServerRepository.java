@@ -21,9 +21,7 @@ public interface ServerRepository extends CrudRepository<Server, Long>{
 	Optional<List<Agent>> getAllAgentsByBotName(@Param("name") String name, @Param("nameBot") String nameBot,
                                                 @Param("endpoint") String endpoint);
 
-
 	@Transactional(readOnly = false)
 	Server save(Server server);
 
-	List<Agent> findByAgentsNameAgent(String name);
 }

@@ -49,6 +49,7 @@ public class TaskManager {
 		if (statuProcessEnum.equals(StatuProcessEnum.ERROR) || statuProcessEnum.equals(StatuProcessEnum.SUCCESS)) {
 			task.setEndAt(new Date());
 		}
+		task = serviceTask.save(task);
 		return task;
 	}
 
@@ -74,6 +75,7 @@ public class TaskManager {
 			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
 			itemTask.setAttemptsCount(attemptsCount);
 		}
+		itemTask = itemServiceTask.save(itemTask);
 		return itemTask;
 	}
 }

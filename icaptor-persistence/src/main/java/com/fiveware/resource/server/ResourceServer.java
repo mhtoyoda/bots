@@ -3,13 +3,17 @@ package com.fiveware.resource.server;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Server;
 import com.fiveware.repository.ServerRepository;
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -35,15 +39,21 @@ public class ResourceServer {
         return ResponseEntity.status(HttpStatus.CREATED).body(serverSave);
     }
 
-    @GetMapping("/name/{name}")
+    @GetMapping("/{name}/name")
     public Optional<Server> findByName(@PathVariable("name") String name) {
         return serverRepository.findByName(name);
     }
 
 
-    @GetMapping("/agents/name/{name}")
-    public List<Agent> getAllAgent(@PathVariable("name") String name) {
-        return serverRepository.findByAgentsNameAgent(name);
+    @GetMapping("/agents/{name}/name")
+    public Set<Agent> getAllAgent(@PathVariable("name") String name) {
+        Optional<Server> byName = serverRepository.findByName(name);
+        return byName.orElseGet(new Supplier<Server>() {
+            @Override
+            public Server get() {
+                return new Server();
+            }
+        }).getAgents();
     }
 
     @GetMapping

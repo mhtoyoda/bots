@@ -2,13 +2,16 @@ package com.fiveware.service;
 
 import com.fiveware.model.Agent;
 import com.fiveware.model.Server;
+import com.google.common.base.MoreObjects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Supplier;
+
+import static java.util.Arrays.asList;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -30,7 +33,7 @@ public class ServiceServer {
     }
 
     public Optional<Server> findByName(String nameServer) {
-        String url = "http://localhost:8085/api/server/name/"+nameServer;
+        String url = "http://localhost:8085/api/server/"+nameServer+"/name";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -39,12 +42,13 @@ public class ServiceServer {
     }
 
     public List<Agent> getAllAgent(String name) {
-        String url = "http://localhost:8085/api/server/agents/name/"+name;
+        String url = "http://localhost:8085/api/server/agents/"+name+"/name";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        List<Agent> listAgents = restTemplate.getForObject(url, List.class);
-        return listAgents;
+        Agent[] forObject = restTemplate.getForObject(url, Agent[].class);
+
+        return !Objects.isNull(forObject)?asList(forObject):Collections.emptyList();
     }
 
     public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint) {

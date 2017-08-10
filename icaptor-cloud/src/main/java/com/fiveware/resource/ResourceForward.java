@@ -1,4 +1,4 @@
-package com.fiveware.service;
+package com.fiveware.resource;
 
 import com.fiveware.exception.AgentBotNotFoundException;
 import com.fiveware.exception.MessageStatusBot;
@@ -18,9 +18,9 @@ import java.util.Arrays;
 
 @RestController
 @RequestMapping("/api")
-public class ForwardService {
+public class ResourceForward {
 
-	static Logger logger = LoggerFactory.getLogger(ForwardService.class);
+	static Logger logger = LoggerFactory.getLogger(ResourceForward.class);
 
 	@Autowired
 	private AgentServiceDiscovery agentServiceDiscovery;
