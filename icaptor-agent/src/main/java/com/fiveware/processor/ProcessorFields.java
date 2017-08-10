@@ -1,14 +1,15 @@
 package com.fiveware.processor;
 
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.MessageBot;
-import com.fiveware.model.Record;
-import com.fiveware.service.IServiceBach;
-import com.fiveware.validate.Validate;
-import org.springframework.context.MessageSource;
-
 import java.io.Serializable;
 import java.util.Optional;
+
+import org.springframework.context.MessageSource;
+
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.Record;
+import com.fiveware.model.message.MessageBot;
+import com.fiveware.service.IServiceBach;
+import com.fiveware.validate.Validate;
 
 public class ProcessorFields {
 
@@ -105,7 +106,7 @@ public class ProcessorFields {
 
 		public ProcessorFieldsBuilder context(Optional<BotClassLoaderContext> context) {
 			this.context=context;
-			return null;
+			return this;
 		}
 
 		public ProcessorFields build(){

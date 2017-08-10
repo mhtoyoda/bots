@@ -10,25 +10,25 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fiveware.model.message.MessageBot;
+import com.fiveware.model.message.MessageTask;
 
-@Service("eventBotReceiver")
-public class EventBotReceiver implements Receiver<MessageBot> {
+@Service("eventTaskReceiver")
+public class EventTaskReceiver implements Receiver<MessageTask> {
 	
 	@Autowired
 	private RabbitTemplate rabbit;
 	
 	@Override
-	public MessageBot receive(String queue){
+	public MessageTask receive(String queue){
 		Message message = rabbit.receive(queue);
 		return  Objects.isNull(message) ? null : convert(message.getBody());
 	}
 	
-	private MessageBot convert(byte[] body) {
+	private MessageTask convert(byte[] body) {
 		ByteArrayInputStream in = new ByteArrayInputStream(body);
 		try {
 			ObjectInputStream is = new ObjectInputStream(in);
-			MessageBot readObject = (MessageBot) is.readObject();
+			MessageTask readObject = (MessageTask) is.readObject();
 			return readObject;
 		} catch (IOException | ClassNotFoundException e) {
 			return null;

@@ -1,15 +1,17 @@
 package com.fiveware.messaging;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.amqp.core.AmqpManagementOperations;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.core.Exchange;
+import org.springframework.amqp.core.FanoutExchange;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class BrokerManager {
@@ -44,5 +46,30 @@ public class BrokerManager {
 				.filter(q -> queue.equals(q.getName()))
 				.collect(Collectors.toList());
 		return queues.isEmpty();
+	}
+	
+	private boolean notExistExchange(String nameExchange){
+		List<Exchange> exchanges = amqpManagementOperations.getExchanges().stream()
+				.filter(e -> nameExchange.equals(e.getName()))
+				.collect(Collectors.toList());
+		return exchanges.isEmpty();
+	}
+	
+	public void createTopicExchange(String exchangeName, List<String> agents){
+		FanoutExchange exchange;
+		if(notExistExchange(exchangeName)){
+			exchange = new FanoutExchange(exchangeName, true, false);								
+		}else{
+			exchange = (FanoutExchange) amqpManagementOperations.getExchange(exchangeName);
+		}
+		rabbitAdmin.declareExchange(exchange);
+		
+		agents.stream().forEach(agent -> {
+			String queueName = "tasks."+agent+".in";
+			if(notExistQueue(queueName)){
+				Queue queue = declareQueue(queueName);				
+				rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange));
+			}
+		});
 	}
 }

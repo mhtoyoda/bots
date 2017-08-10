@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.TypeMessage;
-import com.fiveware.model.MessageAgent;
+import com.fiveware.model.message.MessageAgent;
 
 /**
  * Created by valdisnei on 06/06/17.

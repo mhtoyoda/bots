@@ -1,6 +1,8 @@
 package com.fiveware.register;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.fiveware.config.ServerConfig;
 import com.fiveware.config.ServerInfo;
 import com.fiveware.messaging.BrokerManager;
+import com.fiveware.model.Agent;
 import com.fiveware.model.Server;
 import com.fiveware.service.ServiceServer;
 
@@ -35,6 +38,7 @@ public class ServerRegister {
 		log.info("Init Server Host: {} - Port: {}", server.getHost(), server.getPort());
 		registerServer();
 		createQueueTaskOut();
+		createTopicAgents();
 	}
 
 	private void registerServer() {
@@ -52,5 +56,12 @@ public class ServerRegister {
 	
 	private void createQueueTaskOut(){
 		brokerManager.createQueue("task.out");
+	}
+	
+	private void createTopicAgents(){
+	   	String exchangeName = "topic-exchange";
+    	List<Agent> allAgent = serviceServer.getAllAgent(serverConfig.getServer().getName());
+    	List<String> agents = allAgent.stream().map(Agent::getNameAgent).collect(Collectors.toList());
+		brokerManager.createTopicExchange(exchangeName, agents);
 	}
 }

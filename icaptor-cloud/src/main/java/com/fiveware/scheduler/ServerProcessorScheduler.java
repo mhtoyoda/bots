@@ -14,7 +14,7 @@ import com.fiveware.config.ServerConfig;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
-import com.fiveware.model.MessageBot;
+import com.fiveware.model.message.MessageBot;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceServer;
