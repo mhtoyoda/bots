@@ -17,7 +17,7 @@ import java.util.Optional;
  * Created by valdisnei on 29/05/17.
  */
 @Service
-public class ServiceBot  {
+public class ServiceBot {
 
     static Logger logger = LoggerFactory.getLogger(ServiceBot.class);
 

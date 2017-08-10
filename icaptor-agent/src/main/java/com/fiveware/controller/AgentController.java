@@ -3,9 +3,8 @@ package com.fiveware.controller;
 import com.fiveware.exception.ExceptionBot;
 import com.fiveware.exception.MessageStatusBot;
 import com.fiveware.exception.UnRecoverableException;
-import com.fiveware.service.IServiceBot;
+import com.fiveware.service.ResourceBot;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 public class AgentController {
 
     @Autowired
-    @Qualifier("rest")
-    public IServiceBot serviceBot;
+    public ResourceBot serviceBot;
 
     @GetMapping("/{botName}/{endPoint}/{parameter}")
     public ResponseEntity<Object> getBot(@PathVariable String botName,@PathVariable String endPoint,

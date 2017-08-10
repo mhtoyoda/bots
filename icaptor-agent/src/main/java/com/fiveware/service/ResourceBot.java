@@ -14,9 +14,9 @@ import java.io.IOException;
  * Created by valdisnei on 29/05/17.
  */
 @Service
-public class ServiceBotRest  {
+public class ResourceBot {
 
-    static Logger logger = LoggerFactory.getLogger(ServiceBotRest.class);
+    static Logger logger = LoggerFactory.getLogger(ResourceBot.class);
 
     @Autowired
     private ServiceBotClassLoader serviceBotClassLoader;

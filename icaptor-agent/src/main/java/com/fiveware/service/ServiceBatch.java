@@ -16,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
  * Created by valdisnei on 29/05/17.
  */
 @Service("batch")
-public class ServiceBatch implements IServiceBot {
+public class ServiceBatch implements IServiceBach {
 
     static Logger logger = LoggerFactory.getLogger(ServiceBatch.class);
 

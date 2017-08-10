@@ -7,7 +7,7 @@ import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.messaging.Producer;
 import com.fiveware.model.*;
-import com.fiveware.service.IServiceBot;
+import com.fiveware.service.IServiceBach;
 import com.fiveware.util.LineUtil;
 import com.fiveware.util.ListJoinUtil;
 import com.fiveware.validate.Validate;
@@ -36,7 +36,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 
 	@Autowired
 	@Qualifier("batch")
-	private IServiceBot serviceBot;
+	private IServiceBach serviceBot;
 
 	@Autowired
 	@Qualifier("fieldValidate")

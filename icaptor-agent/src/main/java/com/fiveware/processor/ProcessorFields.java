@@ -3,7 +3,7 @@ package com.fiveware.processor;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.MessageBot;
 import com.fiveware.model.Record;
-import com.fiveware.service.IServiceBot;
+import com.fiveware.service.IServiceBach;
 import com.fiveware.validate.Validate;
 import org.springframework.context.MessageSource;
 
@@ -14,14 +14,14 @@ public class ProcessorFields {
 
 	private final String botName;
 	private final Class classLoader;
-	private final IServiceBot serviceBot;
+	private final IServiceBach serviceBot;
 	private final Record record;
 	private final Validate validate;
 	private final MessageSource messageSource;
 	private final MessageBot messageBot;
 	private final Optional<BotClassLoaderContext> context;
 
-	public ProcessorFields(String botName, Class classLoader, IServiceBot serviceBot, Record record,
+	public ProcessorFields(String botName, Class classLoader, IServiceBach serviceBot, Record record,
 						   Validate validate, MessageSource messageSource, MessageBot messageBot,
 						   Optional<BotClassLoaderContext> context) {
 		this.botName = botName;
@@ -42,7 +42,7 @@ public class ProcessorFields {
 		return classLoader;
 	}
 
-	public IServiceBot getServiceBot() {
+	public IServiceBach getServiceBot() {
 		return serviceBot;
 	}
 
@@ -65,7 +65,7 @@ public class ProcessorFields {
 	public static class ProcessorFieldsBuilder implements Serializable{
 		private String botName;
 		private Class classLoader;
-		private IServiceBot serviceBot;
+		private IServiceBach serviceBot;
 		private Record record;
 		private Validate validate;
 		private MessageSource messageSource;
@@ -80,7 +80,7 @@ public class ProcessorFields {
 			this.classLoader=classLoader;
 			return this;
 		}
-		public ProcessorFieldsBuilder bot(IServiceBot iServiceBot){
+		public ProcessorFieldsBuilder bot(IServiceBach iServiceBot){
 			this.serviceBot=iServiceBot;
 			return this;
 		}
