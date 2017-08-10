@@ -1,15 +1,10 @@
 package com.fiveware.scheduler;
 
-import com.fiveware.config.agent.AgentConfigProperties;
-import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.exception.UnRecoverableException;
-import com.fiveware.messaging.Receiver;
-import com.fiveware.model.Bot;
-import com.fiveware.model.MessageBot;
-import com.fiveware.processor.ProcessBot;
-import com.fiveware.pulling.BrokerPulling;
-import com.fiveware.service.ServiceAgent;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +12,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
+import com.fiveware.config.agent.AgentConfigProperties;
+import com.fiveware.context.QueueContext;
+import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.UnRecoverableException;
+import com.fiveware.messaging.Receiver;
+import com.fiveware.model.Bot;
+import com.fiveware.model.message.MessageBot;
+import com.fiveware.processor.ProcessBot;
+import com.fiveware.pulling.BrokerPulling;
+import com.fiveware.service.ServiceAgent;
 
 @Component
 public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
@@ -40,16 +43,19 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Qualifier("processBotCSV")
 	private ProcessBot<MessageBot> processBotCSV;
 	
+	@Autowired
+	private QueueContext queueContext;
+	
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process() throws ExceptionBot,UnRecoverableException {
 
 		List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
 		bots.forEach(bot -> {
 			String botName = bot.getNameBot();
-			//FIXME sera alterado para olhar o contexto de tasks existentes
-			//FIXME nameQueue sera exemplo 'consultaCEP.1.IN'
-			String nameQueue = botName+".1.IN";
-			pullMessage(botName, nameQueue);
+			Set<String> queues = queueContext.getTasksQueues(botName);
+			queues.stream().forEach(queue ->{
+				pullMessage(botName, queue);				
+			});
 		});
 	}
 
@@ -59,7 +65,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	 */
 	@Override
 	public boolean canPullingMessage() {
-		return true;
+		return queueContext.hasTask();
 	}
 
 	/**
@@ -88,7 +94,5 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	public Optional<MessageBot> receiveMessage(String queueName) {
 		return Optional.ofNullable(receiver.receive(queueName));
 	}
-
-
-
+	
 }

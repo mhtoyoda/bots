@@ -1,4 +1,4 @@
-package com.fiveware.model;
+package com.fiveware.model.message;
 
 import com.fiveware.task.StatuProcessEnum;
 import org.pojomatic.Pojomatic;

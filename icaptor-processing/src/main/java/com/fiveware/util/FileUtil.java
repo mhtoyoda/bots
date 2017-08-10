@@ -10,10 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+<<<<<<< HEAD
 import java.io.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
+=======
+import com.fiveware.model.Record;
+import com.fiveware.model.message.MessageBot;
+import com.google.common.collect.Lists;
+>>>>>>> ICAPTOR-120 Topico de tasks para notificar agentes
 
 @Component
 public class FileUtil {

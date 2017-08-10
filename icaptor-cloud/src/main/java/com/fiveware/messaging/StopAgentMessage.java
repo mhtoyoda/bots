@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.MessageAgent;
+import com.fiveware.model.message.MessageAgent;
 
 @Component("STOP_AGENT")
 public class StopAgentMessage implements ConsumerTypeMessage<MessageAgent> {

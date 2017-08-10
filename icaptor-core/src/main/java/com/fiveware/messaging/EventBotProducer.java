@@ -1,9 +1,10 @@
 package com.fiveware.messaging;
 
-import com.fiveware.model.MessageBot;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.fiveware.model.message.MessageBot;
 
 /**
  * Created by valdisnei on 13/06/17.

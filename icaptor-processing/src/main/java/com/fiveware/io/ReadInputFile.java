@@ -19,10 +19,11 @@ import com.fiveware.messaging.BrokerManager;
 import com.fiveware.messaging.Producer;
 import com.fiveware.model.Bot;
 import com.fiveware.model.ItemTask;
-import com.fiveware.model.MessageBot;
-import com.fiveware.model.MessageHeader;
 import com.fiveware.model.Record;
 import com.fiveware.model.Task;
+import com.fiveware.model.message.MessageBot;
+import com.fiveware.model.message.MessageHeader;
+import com.fiveware.model.message.MessageTask;
 import com.fiveware.task.StatuProcessEnum;
 import com.fiveware.task.TaskManager;
 import com.fiveware.util.FileUtil;
@@ -46,6 +47,10 @@ public class ReadInputFile {
     private Producer<MessageBot> producer;
 
     @Autowired
+    @Qualifier("eventTaskProducer")
+    private Producer<MessageTask> taskProducer;
+    
+    @Autowired
     private TaskManager taskManager;
 
     @Autowired
@@ -55,7 +60,7 @@ public class ReadInputFile {
     private RuleValidations ruleValidations;
 
     private Long userId = 1L;
-
+    
     public void readFile(final String nameBot, final String path, InputStream file) throws IOException {
         Task task = createTask(nameBot, userId);
         Bot bot = task.getBot();
@@ -102,6 +107,8 @@ public class ReadInputFile {
             MessageBot messageBot = new MessageBot(task.getId(), itemTask.getId(), line, messageHeader);
             producer.send(queueName, messageBot);
         });
+        
+        sendNotificationTaskCreated(queueName, task.getBot().getNameBot());
     }
 
     private Consumer<Collection<Object>> convertMapToCSVLine(List<String> lines, String separatorFile) {
@@ -118,5 +125,10 @@ public class ReadInputFile {
 
     private void createQueueTaskIn(String queueName){
         brokerManager.createQueue(queueName);
+    }
+    
+    private void sendNotificationTaskCreated(String nameQueueTask, String botName){ 
+    	MessageTask message = new MessageTask(nameQueueTask, botName);
+		taskProducer.send("", message);
     }
 }

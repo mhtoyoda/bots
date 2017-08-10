@@ -14,7 +14,7 @@ import com.fiveware.messaging.ConsumerTypeMessage;
 import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.messaging.TypeConsumerMessage;
-import com.fiveware.model.MessageAgent;
+import com.fiveware.model.message.MessageAgent;
 
 @Component
 public class EventsConsumerScheduler {
