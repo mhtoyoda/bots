@@ -52,7 +52,6 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 			String botName = bot.getNameBot();
 			Set<String> queues = queueContext.getTasksQueues(botName);
 			queues.stream().forEach(queue ->{
-
 				try{
 					pullMessage(botName, queue);
 				}catch (ExceptionBot exceptionBot){
