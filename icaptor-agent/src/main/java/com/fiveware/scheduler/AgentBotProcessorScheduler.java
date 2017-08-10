@@ -1,5 +1,18 @@
 package com.fiveware.scheduler;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Consumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
 import com.fiveware.config.agent.AgentConfigProperties;
 import com.fiveware.config.agent.AgentListener;
 import com.fiveware.context.QueueContext;
@@ -17,18 +30,6 @@ import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Sets;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Consumer;
 
 @Component
 public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {

@@ -3,15 +3,9 @@ package com.fiveware.messaging;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.amqp.core.AmqpManagementOperations;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Exchange;
-import org.springframework.amqp.core.FanoutExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -71,7 +65,6 @@ public class BrokerManager {
 		FanoutExchange exchange;
 		if(notExistExchange(exchangeName)){
 			exchange = new FanoutExchange(exchangeName, true, false);
-			log.info("Create exchange: {}", exchangeName);
 		}else{
 			exchange = (FanoutExchange) amqpManagementOperations.getExchange(exchangeName);
 		}
@@ -82,26 +75,7 @@ public class BrokerManager {
 			if(notExistQueue(queueName)){
 				Queue queue = declareQueue(queueName);				
 				rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange));
-				log.info("Create queue: {} - exchange: {}", queueName, exchangeName);
 			}
 		});
-	}
-	
-	public void createTopicExchange(String exchangeName, String agent){
-		FanoutExchange exchange;
-		if(notExistExchange(exchangeName)){
-			exchange = new FanoutExchange(exchangeName, true, false);
-			rabbitAdmin.declareExchange(exchange);
-			log.info("Create exchange: {}", exchangeName);
-		}else{
-			exchange = (FanoutExchange) amqpManagementOperations.getExchange(exchangeName);
-		}
-		
-		String queueName = String.format("tasks.%s.in", StringUtils.trim(agent));
-		if(notExistQueue(queueName)){
-			Queue queue = declareQueue(queueName);				
-			rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange));
-			log.info("Create queue: {} - exchange: {}", queueName, exchangeName);
-		}
 	}
 }

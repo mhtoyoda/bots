@@ -25,16 +25,16 @@ public class AgentTaskProcessorScheduler {
 	
 	@Autowired
 	private QueueContext queueContext;
-	
+
+	@Autowired
+	private AgentConfigProperties data;
+
 	@Autowired
 	@Qualifier("eventTaskReceiver")
 	private Receiver<MessageTask> receiver;
 	
 	@Autowired
 	private ServiceAgent serviceAgent;
-	
-	@Autowired
-	private AgentConfigProperties data;
 	
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process() {
