@@ -1,12 +1,19 @@
 package com.fiveware.model;
 
+import java.io.Serializable;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 @Table(name = "server")
@@ -24,7 +31,7 @@ public class Server implements Serializable,Comparable{
 	private String host;
 
 	@JsonBackReference
-	@ManyToMany(mappedBy = "server")
+	@OneToMany(mappedBy = "server")
 	private Set<Agent> agents;
 
 	public Long getId() {

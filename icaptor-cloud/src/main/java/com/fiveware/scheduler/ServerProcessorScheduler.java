@@ -40,7 +40,6 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Autowired
 	private ServerConfig serverConfig;
 
-
 	@Autowired
 	private FileUtil fileUtil;
 

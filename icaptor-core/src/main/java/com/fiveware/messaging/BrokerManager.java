@@ -3,6 +3,9 @@ package com.fiveware.messaging;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.AmqpManagementOperations;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -16,6 +19,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class BrokerManager {
 	
+	private Logger log = LoggerFactory.getLogger(BrokerManager.class);
+	
 	@Autowired
 	private RabbitAdmin rabbitAdmin;
 	
@@ -28,6 +33,7 @@ public class BrokerManager {
 			DirectExchange exchange = new DirectExchange("file-exchange", true, false);		
 			rabbitAdmin.declareExchange(exchange);
 			rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange).with(queue.getName()));			
+			log.info("Create queue: {}", queueName);
 		}
 	}
 	
@@ -38,6 +44,7 @@ public class BrokerManager {
 	}
 	
 	public boolean deleteQueue(String queueName){
+		log.info("Delete queue: {}", queueName);
 		return rabbitAdmin.deleteQueue(queueName);		
 	}
 	
@@ -58,7 +65,8 @@ public class BrokerManager {
 	public void createTopicExchange(String exchangeName, List<String> agents){
 		FanoutExchange exchange;
 		if(notExistExchange(exchangeName)){
-			exchange = new FanoutExchange(exchangeName, true, false);								
+			exchange = new FanoutExchange(exchangeName, true, false);
+			log.info("Create exchange: {}", exchangeName);
 		}else{
 			exchange = (FanoutExchange) amqpManagementOperations.getExchange(exchangeName);
 		}
@@ -69,7 +77,26 @@ public class BrokerManager {
 			if(notExistQueue(queueName)){
 				Queue queue = declareQueue(queueName);				
 				rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange));
+				log.info("Create queue: {} - exchange: {}", queueName, exchangeName);
 			}
 		});
+	}
+	
+	public void createTopicExchange(String exchangeName, String agent){
+		FanoutExchange exchange;
+		if(notExistExchange(exchangeName)){
+			exchange = new FanoutExchange(exchangeName, true, false);
+			rabbitAdmin.declareExchange(exchange);
+			log.info("Create exchange: {}", exchangeName);
+		}else{
+			exchange = (FanoutExchange) amqpManagementOperations.getExchange(exchangeName);
+		}
+		
+		String queueName = String.format("tasks.%s.in", StringUtils.trim(agent));
+		if(notExistQueue(queueName)){
+			Queue queue = declareQueue(queueName);				
+			rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange));
+			log.info("Create queue: {} - exchange: {}", queueName, exchangeName);
+		}
 	}
 }
