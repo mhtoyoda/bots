@@ -1,10 +1,19 @@
 package com.fiveware.model;
 
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "agent")
@@ -23,11 +32,9 @@ public class Agent implements Serializable {
 	@Column(name = "port_agent")
 	private int port;
 
-	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "server_agent",
-			joinColumns = @JoinColumn(name = "server_id", referencedColumnName = "id"),
-			inverseJoinColumns = @JoinColumn(name = "agents_id", referencedColumnName = "id"))
-	private Set<Server> server;
+	@ManyToOne
+	@JoinColumn(name ="id_server")
+	private Server server;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "agent_bot", joinColumns = { @JoinColumn(name = "id_agent") },
@@ -37,7 +44,7 @@ public class Agent implements Serializable {
 	public Agent() {
 	}
 
-	protected Agent(Long id, String nameAgent, int port, String ip, Set<Server> server, List<Bot> bots) {
+	protected Agent(Long id, String nameAgent, int port, String ip, Server server, List<Bot> bots) {
 		this.id=id;
 		this.nameAgent=nameAgent;
 		this.port=port;
@@ -86,11 +93,11 @@ public class Agent implements Serializable {
 		this.port = port;
 	}
 
-	public Set<Server> getServer() {
+	public Server getServer() {
 		return server;
 	}
 
-	public void setServer(Set<Server> server) {
+	public void setServer(Server server) {
 		this.server = server;
 	}
 
@@ -99,11 +106,10 @@ public class Agent implements Serializable {
 		private String nameAgent;
 		private String ip;
 		private int port;
-		private Set<Server> server;
+		private Server server;
 		private List<Bot> bots;
 
 		public BuilderAgent() {
-			this.server=new TreeSet<>();
 		}
 
 		public BuilderAgent id(Long id){
@@ -125,7 +131,7 @@ public class Agent implements Serializable {
 		}
 
 		public BuilderAgent server(Server server){
-			this.server.add(server);
+			this.server = server;
 			return this;
 		}
 

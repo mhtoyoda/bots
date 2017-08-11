@@ -1,7 +1,6 @@
 package com.fiveware.register;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
@@ -43,19 +42,16 @@ public class ServerRegister {
 
 	private void registerServer() {
 		ServerInfo serverInfo = serverConfig.getServer();
-		Optional<Server> optional = serviceServer.findByName(serverInfo.getName());
-		if (!optional.isPresent()) {
-			Server server = new Server();
-			server.setName(serverInfo.getName());
-			String host = serverInfo.getHost() + ":" + serverInfo.getPort();
-			server.setHost(host);
-			serviceServer.save(server);
-			log.info("Register Server Host: {}", host);
-		}
+		Server server = new Server();
+		server.setName(serverInfo.getName());
+		String host = serverInfo.getHost() + ":" + serverInfo.getPort();
+		server.setHost(host);
+		serviceServer.save(server);
+		log.info("Register Server Host: {}", host);
 	}
 	
 	private void createQueueTaskOut(){
-		brokerManager.createQueue("task.out");
+		brokerManager.createQueue("task.out");		
 	}
 	
 	private void createTopicAgents(){

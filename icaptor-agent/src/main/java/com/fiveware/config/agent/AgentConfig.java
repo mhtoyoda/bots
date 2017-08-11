@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.messaging.BrokerManager;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
 import com.fiveware.model.BotClassLoaderContext;
@@ -33,11 +34,16 @@ public class AgentConfig {
 	@Autowired
 	private AgentListener agentListener;
 	
+	@Autowired
+	private BrokerManager brokerManager;
+	
 	public void saveAgent() {
 		saveAgentServerBots();
+		bindQueueAgenteInTaskTopic("topic-exchange", data.getAgentName());
 	}
 
 	private Agent saveAgentServerBots() {
+		data.setAgentName("Agent-"+agentListener.getAgentPort());
 		Agent agent = new Agent.BuilderAgent()
 				.nameAgent(data.getAgentName())
 				.ip(data.getIp())
@@ -73,9 +79,13 @@ public class AgentConfig {
 	}
 
 	private Server getServer() {
-		Server serverInfo = new Server();
+		Server serverInfo = new Server();	
 		serverInfo.setName(data.getServer());
 		serverInfo.setHost(data.getHost());
 		return serverInfo;
+	}
+	
+	private void bindQueueAgenteInTaskTopic(String exchangeName, String agent){
+		brokerManager.createTopicExchange(exchangeName, agent);
 	}
 }

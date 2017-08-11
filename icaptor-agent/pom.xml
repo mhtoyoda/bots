@@ -70,7 +70,11 @@
 			<groupId>org.thymeleaf.extras</groupId>
 			<artifactId>thymeleaf-extras-springsecurity4</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>com.github.javafaker</groupId>
+			<artifactId>javafaker</artifactId>
+			<version>0.13</version>
+		</dependency>
 		<dependency>
 			<groupId>icaptor-core</groupId>
 			<artifactId>icaptor-core</artifactId>
@@ -81,7 +85,7 @@
 			<groupId>icaptor-processing</groupId>
 			<artifactId>icaptor-processing</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
-		</dependency>		
+		</dependency>
 
 		<!-- Tests -->
 		<dependency>
