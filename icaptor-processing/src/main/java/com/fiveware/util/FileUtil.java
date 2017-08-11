@@ -1,18 +1,19 @@
 package com.fiveware.util;
 
-import java.io.*;
-import java.util.List;
-import java.util.Scanner;
-
+import com.fiveware.model.MessageBot;
+import com.fiveware.model.Record;
+import com.fiveware.task.TaskManager;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.MessageBot;
-import com.fiveware.model.Record;
-import com.google.common.collect.Lists;
+import java.io.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Scanner;
 
 @Component
 public class FileUtil {
@@ -27,6 +28,10 @@ public class FileUtil {
 
 	@Autowired
 	private LineUtil lineUtil;
+
+	@Autowired
+	private TaskManager taskManager;
+
 
 	public List<String> linesFrom(InputStream file){
 		List<String> linhas = Lists.newArrayList();
@@ -64,6 +69,12 @@ public class FileUtil {
 	public void writeFile(MessageBot messageBot) {
 		String path = workerFileRead + File.separator + messageBot.getMessageHeader().getPathFile();
 		File fileOut = new File(path);
+
+		if (!Objects.isNull(messageBot.getStatuProcessEnum()))
+			taskManager.updateItemTask(messageBot.getItemTaskId(),
+						messageBot.getStatuProcessEnum(),messageBot.getLineResult());
+
+
 		try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut, true))) {
 			//FIXME corrigir bug para fazer append por task ID
 //			messageBot.getLineResult().forEach((line)->{

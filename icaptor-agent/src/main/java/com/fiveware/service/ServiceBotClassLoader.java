@@ -9,6 +9,7 @@ import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.OutputDictionaryContext;
 import com.fiveware.processor.ProcessorFields;
+import com.fiveware.task.StatuProcessEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,21 +96,29 @@ public  class ServiceBotClassLoader<T> {
 
         Object obj = null;
         try{
+
         	if( null != o1){
         		obj =  execute.invoke(clazz.newInstance(), o1);
         	}else{
         		obj =  execute.invoke(clazz.newInstance());
         	}
+
+            processorFields.getMessageBot().setStatuProcessEnum(StatuProcessEnum.SUCCESS);
+            processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
+
         }catch (InvocationTargetException e) {
 
             if (e.getCause().getClass().getName().equals(UnRecoverableException.class.getName())){
-                UnRecoverableException unRecoverableException = new UnRecoverableException(e.getCause());
+
+                UnRecoverableException unRecoverable = new UnRecoverableException(e.getCause());
+
                 Map map = new HashMap();
-
                 String fields = getOutputDictionary(processorFields);
-
-                map.put("ERROR",  fields+"|1|"+unRecoverableException.getMessage());
+                map.put("ERROR",  fields+"|"+unRecoverable.getMessage());
                 HashMap[] hashMaps = {(HashMap) map};
+
+                processorFields.getMessageBot().setStatuProcessEnum(StatuProcessEnum.ERROR);
+                processorFields.getMessageBot().setLineResult(fields+"|"+unRecoverable.getMessage());
 
                 return new OutTextRecord(hashMaps);
             }else{

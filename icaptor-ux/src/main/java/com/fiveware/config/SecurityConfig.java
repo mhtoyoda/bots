@@ -31,7 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                     .antMatchers("/assets/**").permitAll()
                     .antMatchers("/vendor/**").permitAll()
-                    .antMatchers("/upload/consultaCEP/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -44,5 +43,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

@@ -105,7 +105,7 @@ public class ProcessorFields {
 
 		public ProcessorFieldsBuilder context(Optional<BotClassLoaderContext> context) {
 			this.context=context;
-			return null;
+			return this;
 		}
 
 		public ProcessorFields build(){

@@ -1,5 +1,6 @@
 package com.fiveware.model;
 
+import com.fiveware.task.StatuProcessEnum;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
@@ -13,6 +14,7 @@ public class MessageBot implements Serializable {
 	private final String line;
 	private String lineResult;
 	private final MessageHeader messageHeader;
+	private StatuProcessEnum statuProcessEnum;
 
 	public MessageBot(Long taskId, Long itemTaskId, String line, MessageHeader messageHeader) {
 		this.taskId = taskId;
@@ -25,6 +27,8 @@ public class MessageBot implements Serializable {
 		return taskId;
 	}
 
+	public Long getItemTaskId() {return itemTaskId;}
+
 	public String getLine() {
 		return line;
 	}
@@ -32,6 +36,7 @@ public class MessageBot implements Serializable {
 	public String getLineResult() {
 		return lineResult;
 	}
+
 	public void setLineResult(String lineResult) {
 		this.lineResult = lineResult;
 	}
@@ -39,6 +44,9 @@ public class MessageBot implements Serializable {
 	public MessageHeader getMessageHeader() {
 		return messageHeader;
 	}
+
+	public StatuProcessEnum getStatuProcessEnum() {return statuProcessEnum;}
+	public void setStatuProcessEnum(StatuProcessEnum statuProcessEnum) {this.statuProcessEnum = statuProcessEnum;}
 
 	@Override
 	public String toString() {

@@ -16,7 +16,6 @@ public class HomeController {
         return "pages/pages_register";
     }
 
-
     @GetMapping("/login")
     public String login(@AuthenticationPrincipal User user){
         if (user != null) {
@@ -24,6 +23,4 @@ public class HomeController {
         }
         return "pages/pages_login";
     }
-
-
 }

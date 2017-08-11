@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Qualifier("processBotCSV")
 	private ProcessBot<MessageBot> processBotCSV;
 	
-	//@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
+	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process() throws ExceptionBot,UnRecoverableException {
 
 		List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
@@ -47,7 +48,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
 			String botName = bot.getNameBot();
 			//FIXME sera alterado para olhar o contexto de tasks existentes
 			//FIXME nameQueue sera exemplo 'consultaCEP.1.IN'
-			String nameQueue = botName+".3.IN";
+			String nameQueue = botName+".1.IN";
 			pullMessage(botName, nameQueue);
 		});
 	}
