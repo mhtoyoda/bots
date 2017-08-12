@@ -49,24 +49,10 @@ public  class ServiceBotClassLoader<T> {
     private MessageSource messageSource;
 
 
-    public OutTextRecord executeMainClass(ProcessorFields processorFields, T parameter) throws IOException,
-            ClassNotFoundException, InstantiationException,
-            IllegalAccessException, NoSuchMethodException, InvocationTargetException,
-            ExceptionBot,UnRecoverableException {
-
-        return executeMainClass(parameter, processorFields);
-    }
-
-    private OutTextRecord executeMainClass(T parameter, ProcessorFields processorFields) throws IOException,
-            ClassNotFoundException, InstantiationException,IllegalAccessException, NoSuchMethodException, InvocationTargetException,
-            ExceptionBot,UnRecoverableException {
-
-        return getOutTextRecord(parameter,processorFields);
-    }
 
     public OutTextRecord executeMainClass(String nameBot,String endpoint, T parameter) throws IOException,
             ClassNotFoundException, InstantiationException, IllegalAccessException,
-            NoSuchMethodException, ExceptionBot,UnRecoverableException {
+            NoSuchMethodException, ExceptionBot {
         Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
 
         if(!endpoint.equals(botClassLoaderContext.get().getEndpoint()))
@@ -76,7 +62,7 @@ public  class ServiceBotClassLoader<T> {
     }
 
 
-    private OutTextRecord getOutTextRecord(T parameter, ProcessorFields processorFields)
+    public OutTextRecord getOutTextRecord(T parameter, ProcessorFields processorFields)
             throws ClassNotFoundException, ExceptionBot, IOException, InstantiationException, IllegalAccessException,
             NoSuchMethodException {
 

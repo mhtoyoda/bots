@@ -30,7 +30,7 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 		return result;
 	}
 	
-	private OutTextRecord getResult() throws ExceptionBot,UnRecoverableException {
+	private OutTextRecord getResult() throws ExceptionBot {
 		Object cep = processorFields.getRecord().getValue("cep");
 		try {
 			processorFields.getValidate().validate(cep, processorFields.getClassLoader());
@@ -38,7 +38,7 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 			logger.error("Unprocessed Record - Cause: " + e.getMessage());
 			return getErrorValidation(cep).get();
 		}
-		OutTextRecord outTextRecord = processorFields.getServiceBot().callBot(processorFields, cep);
+		OutTextRecord outTextRecord = processorFields.getServiceBatch().callBot(processorFields, cep);
 		return Arrays.asList(outTextRecord.getMap()).get(0)==null?getNotFound(cep).get():outTextRecord;
 	}
 	

@@ -9,5 +9,5 @@ import com.fiveware.exception.UnRecoverableException;
 public interface ProcessBot<T> {
 
 	void execute(String botName, T obj)
-            throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot,UnRecoverableException;
+            throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot;
 }

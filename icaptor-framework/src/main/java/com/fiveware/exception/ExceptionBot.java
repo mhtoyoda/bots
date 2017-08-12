@@ -3,7 +3,7 @@ package com.fiveware.exception;
 /**
  * Created by valdisnei on 31/05/17.
  */
-public class ExceptionBot extends Exception {
+public class ExceptionBot extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 

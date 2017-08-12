@@ -15,7 +15,7 @@ public class ProcessorFields {
 
 	private final String botName;
 	private final Class classLoader;
-	private final IServiceBach serviceBot;
+	private final IServiceBach serviceBach;
 	private final Record record;
 	private final Validate validate;
 	private final MessageSource messageSource;
@@ -27,7 +27,7 @@ public class ProcessorFields {
 						   Optional<BotClassLoaderContext> context) {
 		this.botName = botName;
 		this.classLoader = classLoader;
-		this.serviceBot = serviceBot;
+		this.serviceBach = serviceBot;
 		this.record = record;
 		this.validate = validate;
 		this.messageSource = messageSource;
@@ -43,8 +43,8 @@ public class ProcessorFields {
 		return classLoader;
 	}
 
-	public IServiceBach getServiceBot() {
-		return serviceBot;
+	public IServiceBach getServiceBatch() {
+		return serviceBach;
 	}
 
 	public Record getRecord() {

@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
-import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.messaging.Producer;
@@ -40,8 +39,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 	private LineUtil lineUtil;
 
 	@Autowired
-	@Qualifier("batch")
-	private IServiceBach serviceBot;
+	private IServiceBach serviceBach;
 
 	@Autowired
 	@Qualifier("fieldValidate")
@@ -65,7 +63,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 
 	@SuppressWarnings("rawtypes")
 	public void execute(String botName, MessageBot obj)
-			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot, UnRecoverableException {
+			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
 
 		logger.info("Init Import File - [BOT]: {}", botName);
 
@@ -83,7 +81,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 				ProcessorFields processorFields = new ProcessorFields.ProcessorFieldsBuilder()
 															.nameBot(botName)
 															.classLoader(classLoader)
-															.bot(serviceBot)
+															.bot(serviceBach)
 															.record(record)
 															.validate(validate)
 															.messageSource(messageSource)

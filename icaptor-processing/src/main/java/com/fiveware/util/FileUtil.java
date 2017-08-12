@@ -1,7 +1,9 @@
 package com.fiveware.util;
 
-import com.fiveware.model.MessageBot;
 import com.fiveware.model.Record;
+import com.fiveware.model.message.MessageBot;
+import com.fiveware.service.ServiceStatusProcessTask;
+import com.fiveware.task.StatuProcessEnum;
 import com.fiveware.task.TaskManager;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -10,16 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-<<<<<<< HEAD
 import java.io.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
-=======
-import com.fiveware.model.Record;
-import com.fiveware.model.message.MessageBot;
-import com.google.common.collect.Lists;
->>>>>>> ICAPTOR-120 Topico de tasks para notificar agentes
 
 @Component
 public class FileUtil {
@@ -80,20 +76,19 @@ public class FileUtil {
 			taskManager.updateItemTask(messageBot.getItemTaskId(),
 						messageBot.getStatuProcessEnum(),messageBot.getLineResult());
 
+		if (StatuProcessEnum.SUCCESS.equals(messageBot.getStatuProcessEnum())) {
+			try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut, true))) {
+				//FIXME corrigir bug para fazer append por task ID
+				try {
+					bw.write(messageBot.getLineResult());
+					bw.newLine();
 
-		try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut, true))) {
-			//FIXME corrigir bug para fazer append por task ID
-//			messageBot.getLineResult().forEach((line)->{
-//				try {
-//					bw.write(line);
-//					bw.newLine();
-//
-//				} catch (IOException e) {
-//					logger.error("{}", e);
-//				}
-//			});
-		} catch (IOException e) {
-			logger.error("{}", e);
+				} catch (IOException e) {
+					logger.error("{}", e);
+				}
+			} catch (IOException e) {
+				logger.error("{}", e);
+			}
 		}
 	}
 }
