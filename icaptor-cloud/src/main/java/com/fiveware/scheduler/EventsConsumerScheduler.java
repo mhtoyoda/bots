@@ -19,6 +19,7 @@ import com.fiveware.model.message.MessageAgent;
 @Component
 public class EventsConsumerScheduler {
 
+	@Autowired
 	private Map<String, ConsumerTypeMessage> consumersMap;
 	
 	@Autowired
@@ -30,7 +31,7 @@ public class EventsConsumerScheduler {
 	
 	@PostConstruct
 	public void init(){		
-		consumersMap = typeConsumerMessage.getConsumer("com.fiveware.messaging");
+		consumersMap = typeConsumerMessage.loadConsumer();
 	}
 	
 	@Scheduled(fixedDelay = 10000)
