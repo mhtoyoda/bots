@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.fiveware.model.message.MessageBot;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,11 @@ public class TypeConsumerMessage {
 	@Autowired
 	@Qualifier("KEEP_ALIVE")
 	private ConsumerTypeMessage<MessageAgent> keepAlive;
-	  
+
+	@Autowired
+	@Qualifier("PURGE_QUEUES")
+	private ConsumerTypeMessage<MessageAgent> purgeQueues;
+
 	private Set<Class<? extends ConsumerTypeMessage>> scan(String namePackage){
 		Reflections reflections = new Reflections(namePackage);
 		Set<Class<? extends ConsumerTypeMessage>> subTypesOf = reflections.getSubTypesOf(ConsumerTypeMessage.class);
@@ -55,6 +60,7 @@ public class TypeConsumerMessage {
 		consumersMap.put("KEEP_ALIVE", keepAlive);
 		consumersMap.put("START_AGENT", startAgent);
 		consumersMap.put("STOP_AGENT", stopAgent);
+		consumersMap.put("PURGE_QUEUES", purgeQueues);
 		return consumersMap;
 	}
 }

@@ -90,7 +90,9 @@ public class AgentConfig {
 	}
 	
 	private void notifyServerUpAgent(){
-		MessageAgent message = new MessageAgent(data.getHost(), "Agent-"+agentListener.getAgentPort(), data.getIp(), agentListener.getAgentPort(), TypeMessage.START_AGENT, "Start Agent!");    
+		MessageAgent message = new MessageAgent(data.getHost(), "Agent-"+agentListener.getAgentPort(),
+				data.getIp(), agentListener.getAgentPort(),
+				TypeMessage.START_AGENT, "Start Agent!");
         producer.send(QueueName.EVENTS.name(), message);
 	}
 }

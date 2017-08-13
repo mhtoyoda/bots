@@ -24,10 +24,10 @@ public class ResourceTask {
 		return ResponseEntity.status(HttpStatus.CREATED).body(task);
 	}
 
-	@PutMapping("/{status}/status")
-	public ResponseEntity<?> update(@RequestBody Task task,@PathVariable String status) {
-		Task one = taskRepository.findOne(task.getId());
-//		one.setStatusProcess(statusProcess);
+	@PutMapping("/{id}/status")
+	public ResponseEntity<?> update(@RequestBody Task task,@PathVariable Long id) {
+		Task one = taskRepository.findOne(id);
+		one.setStatusProcess(task.getStatusProcess());
 		taskRepository.save(one);
 		return ResponseEntity.status(HttpStatus.OK).body(one);
 	}

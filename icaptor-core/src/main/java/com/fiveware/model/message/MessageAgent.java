@@ -2,9 +2,13 @@ package com.fiveware.model.message;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import com.fiveware.messaging.TypeMessage;
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
 
+@AutoProperty
 public class MessageAgent implements Serializable {
 
 	/**
@@ -19,7 +23,8 @@ public class MessageAgent implements Serializable {
 	private TypeMessage typeMessage;
 	private String description;
 	private List<MessageAgentBot> messageAgentBots;
-	
+	private Set<String> nameQueues;
+
 	public MessageAgent(){}
 	
 	public MessageAgent(String host, String agent, String ip, int port, TypeMessage typeMessage, String description) {
@@ -89,8 +94,12 @@ public class MessageAgent implements Serializable {
 		this.messageAgentBots = messageAgentBots;
 	}
 
+	public void setNameQueues(Set<String> nameQueues) {this.nameQueues = nameQueues;}
+
+	public Set<String> getNameQueues() {return nameQueues;}
+
 	@Override
 	public String toString() {
-		return "Message [host=" + host + ", typeMessage=" + typeMessage.name() + ", description=" + description + "]";
+		return Pojomatic.toString(this);
 	}
 }

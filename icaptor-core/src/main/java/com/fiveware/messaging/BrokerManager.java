@@ -47,6 +47,11 @@ public class BrokerManager {
 		log.info("Delete queue: {}", queueName);
 		return rabbitAdmin.deleteQueue(queueName);		
 	}
+
+	public void purgeQueue(String queueName){
+		log.info("Purge queue: {}", queueName);
+		 rabbitAdmin.purgeQueue(queueName,true);
+	}
 	
 	private boolean notExistQueue(String queue){
 		List<Queue> queues = amqpManagementOperations.getQueues().stream()

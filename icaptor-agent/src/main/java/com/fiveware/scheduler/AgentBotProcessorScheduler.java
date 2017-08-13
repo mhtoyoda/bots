@@ -1,11 +1,16 @@
 package com.fiveware.scheduler;
 
 import com.fiveware.config.agent.AgentConfigProperties;
+import com.fiveware.config.agent.AgentListener;
 import com.fiveware.context.QueueContext;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ExceptionBot;
+import com.fiveware.messaging.Producer;
+import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
+import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.Bot;
+import com.fiveware.model.message.MessageAgent;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.processor.ProcessBot;
 import com.fiveware.pulling.BrokerPulling;
@@ -21,77 +26,104 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Consumer;
 
 @Component
-public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot>{
+public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
 
-	private static Logger log = LoggerFactory.getLogger(AgentBotProcessorScheduler.class);
-	
-	@Autowired
-	private AgentConfigProperties data;
-	
-	@Autowired
-	@Qualifier("eventBotReceiver")
-	private Receiver<MessageBot> receiver;
-	
-	@Autowired
-	private ServiceAgent serviceAgent;
-	
-	@Autowired
-	@Qualifier("processBotCSV")
-	private ProcessBot<MessageBot> processBotCSV;
-	
-	@Autowired
-	private QueueContext queueContext;
-	
-	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
-	public void process() throws ExceptionBot {
+    private static Logger log = LoggerFactory.getLogger(AgentBotProcessorScheduler.class);
 
-		List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
-		bots.forEach(bot -> {
-			String botName = bot.getNameBot();
-			Set<String> queues = queueContext.getTasksQueues(botName);
-			queues.stream().forEach(queue ->{
-				try{
-					pullMessage(botName, queue);
-				}catch (ExceptionBot exceptionBot){
-					queueContext.removeQueueInContext(botName,queue);
-					return;
-				}
-			});
-		});
-	}
+    @Autowired
+    private AgentConfigProperties data;
 
-	/**
-	 * Validar regras de bloqueio para pulling de fila
-	 * 
-	 */
-	@Override
-	public boolean canPullingMessage() {
-		return queueContext.hasTask();
-	}
+    @Autowired
+    @Qualifier("eventBotReceiver")
+    private Receiver<MessageBot> receiver;
 
-	/**
-	 * Processa mensagem recebida do Broker
-	 */
-	@Override
-	public void processMessage(String botName, MessageBot obj) throws ExceptionBot{
-		try {
-			processBotCSV.execute(botName, obj);
-		} catch (IOException e) {
-			log.error("{}",e);
-		} catch (AttributeLoadException e) {
-			log.error("{}",e);
-		} catch (ClassNotFoundException e) {
-			log.error("{}",e);
-		}finally {
-			log.debug("[BOT]: {}", botName);
-		}
-	}
+    @Autowired
+    private ServiceAgent serviceAgent;
 
-	@Override
-	public Optional<MessageBot> receiveMessage(String queueName) {
-		return Optional.ofNullable(receiver.receive(queueName));
-	}
-	
+    @Autowired
+    @Qualifier("processBotCSV")
+    private ProcessBot<MessageBot> processBotCSV;
+
+    @Autowired
+    private QueueContext queueContext;
+
+    @Autowired
+    private AgentListener agentListener;
+
+    @Autowired
+    @Qualifier("eventMessageProducer")
+    private Producer<MessageAgent> producer;
+
+    @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
+    public void process() throws ExceptionBot {
+
+        List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
+        bots.forEach(bot -> {
+            String botName = bot.getNameBot();
+            Set<String> queues = queueContext.getTasksQueues(botName);
+            queues.stream().forEach(queue -> {
+                try {
+                    pullMessage(botName, queue);
+                } catch (ExceptionBot exceptionBot) {
+                    notifyServerPurgeQueues(bot.getNameBot(), data.getAgentName());
+                    return;
+                }
+            });
+        });
+    }
+
+    /**
+     * Validar regras de bloqueio para pulling de fila
+     */
+    @Override
+    public boolean canPullingMessage() {
+        return queueContext.hasTask();
+    }
+
+    /**
+     * Processa mensagem recebida do Broker
+     */
+    @Override
+    public void processMessage(String botName, MessageBot obj) throws ExceptionBot {
+        try {
+            processBotCSV.execute(botName, obj);
+        } catch (IOException e) {
+            log.error("{}", e);
+        } catch (AttributeLoadException e) {
+            log.error("{}", e);
+        } catch (ClassNotFoundException e) {
+            log.error("{}", e);
+        } finally {
+            log.debug("[BOT]: {}", botName);
+        }
+    }
+
+    @Override
+    public Optional<MessageBot> receiveMessage(String queueName) {
+        return Optional.ofNullable(receiver.receive(queueName));
+    }
+
+    private void notifyServerPurgeQueues(String nameBot, String nameAgent) {
+        Set<String> queues = queueContext.getTasksQueues(nameBot);
+
+        MessageAgent message = new MessageAgent(data.getHost(), nameAgent,
+                data.getIp(), agentListener.getAgentPort(),
+                TypeMessage.PURGE_QUEUES, "Purge Queues!");
+        message.setNameQueues(queues);
+
+        producer.send(QueueName.EVENTS.name(), message);
+
+        queues.forEach(new Consumer<String>() {
+            @Override
+            public void accept(String nameQueue) {
+                queueContext.removeQueueInContext(nameBot, nameQueue);
+            }
+        });
+
+
+    }
+
 }

@@ -25,6 +25,14 @@ public class StatuProcess implements Serializable {
 	@Column(name = "name")
 	private String name;
 
+	public StatuProcess() {
+	}
+
+	public StatuProcess(Long id, String name) {
+		this.id=id;
+		this.name = name;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -40,4 +48,7 @@ public class StatuProcess implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
+
 }

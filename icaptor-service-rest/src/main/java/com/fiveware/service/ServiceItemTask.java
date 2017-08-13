@@ -2,12 +2,11 @@ package com.fiveware.service;
 
 import java.util.List;
 
+import com.fiveware.model.StatuProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -45,11 +44,15 @@ public class ServiceItemTask {
 		return item;
 	}
 	
-	public List<ItemTask> getItemTaskByStatus(String status) {
-		String url = "http://localhost:8085/api/item/task/status" +status;
+	public ItemTask updateStatus(Long id,StatuProcess status) {
+		String url = "http://localhost:8085/api/item/task/" +id+"/status";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<ItemTask> item = restTemplate.getForObject(url, List.class);
-		return item;
+		ItemTask itemTask = new ItemTask();
+		itemTask.setStatusProcess(status);
+		HttpEntity<ItemTask> entity = new HttpEntity<ItemTask>(itemTask, headers);
+
+		ResponseEntity<ItemTask> exchange = restTemplate.exchange(url, HttpMethod.PUT, entity, ItemTask.class);
+		return exchange.getBody();
 	}
 }
