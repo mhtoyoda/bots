@@ -44,6 +44,7 @@ public class PurgeQueuesMessage implements ConsumerTypeMessage<MessageAgent> {
 														     messageBot.getStatuProcessEnum().getName());
 				serviceItemTask.updateStatus(messageBot.getItemTaskId(),statuProcess);
 				serviceTask.updateStatus(messageBot.getTaskId(),statuProcess);
+
 			}
 		});
 	}

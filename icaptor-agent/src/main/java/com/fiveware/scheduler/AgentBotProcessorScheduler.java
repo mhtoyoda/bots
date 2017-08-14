@@ -15,6 +15,8 @@ import com.fiveware.model.message.MessageBot;
 import com.fiveware.processor.ProcessBot;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,21 +59,29 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     @Qualifier("eventMessageProducer")
     private Producer<MessageAgent> producer;
 
+    private Boolean stopProcessQueues;
+
     @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
     public void process() throws ExceptionBot {
+
+        if (stopProcessQueues)
+            return;
 
         List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
         bots.forEach(bot -> {
             String botName = bot.getNameBot();
-            Set<String> queues = queueContext.getTasksQueues(botName);
+            Set<String> queues = MoreObjects.firstNonNull(queueContext.getTasksQueues(botName), Sets.newHashSet());
+
             queues.stream().forEach(queue -> {
                 try {
                     pullMessage(botName, queue);
                 } catch (ExceptionBot exceptionBot) {
+                    stopProcessQueues=true;
                     notifyServerPurgeQueues(bot.getNameBot(), data.getAgentName());
                     return;
                 }
             });
+
         });
     }
 
