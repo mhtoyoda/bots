@@ -17,8 +17,6 @@ public class EventTaskProducer implements Producer<MessageTask> {
 
     @Override
     public void send(String queue, MessageTask message) {
-    	rabbitTemplate.setExchange("topic-exchange");
-    	rabbitTemplate.setRoutingKey("task.in");
-    	rabbitTemplate.convertAndSend(queue, message);
+    	rabbitTemplate.convertAndSend("topic-exchange", "task.in", message);
     }
 }
