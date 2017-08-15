@@ -1,14 +1,14 @@
 package com.fiveware.messaging;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class BrokerManager {
@@ -39,6 +39,9 @@ public class BrokerManager {
 	
 	public boolean deleteQueue(String queueName){
 		log.info("Delete queue: {}", queueName);
+
+
+
 		return rabbitAdmin.deleteQueue(queueName);		
 	}
 

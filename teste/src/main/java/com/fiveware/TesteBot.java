@@ -37,7 +37,7 @@ public class TesteBot implements Automation<String, Endereco> {
 	}
 
 	public Endereco getEndereco(String args) throws ExceptionBot,UnRecoverableException {
-		String baseUrl = "http://www.correios.com2/";
+		String baseUrl = "http://www.correios.com/";
 		BotScreen telaConsultaCep = Web().driver(PHANTOM).openPage(baseUrl + "/para-voce");
 		telaConsultaCep.windowMaximize();
 		telaConsultaCep.find().elementBy().id("acesso-busca").sendKeys(args);		

@@ -1,5 +1,7 @@
 package com.fiveware.task;
 
+import com.fiveware.model.StatuProcess;
+
 public enum StatuProcessEnum {
 
 	CREATED(1L, "Created"),
@@ -14,6 +16,8 @@ public enum StatuProcessEnum {
 	SUCCESS(10L, "Success"),
 	ERROR(11l, "Error"),
 	CANCELED(12L, "Canceled");
+
+	private StatuProcess statuProcess;
 
 	private StatuProcessEnum(Long id, String name) {
 		this.id = id;
@@ -30,5 +34,9 @@ public enum StatuProcessEnum {
 	
 	public String getName() {
 		return name;
-	}	
+	}
+
+	public StatuProcess getStatuProcess() {
+		return new StatuProcess(this.id,this.name);
+	}
 }

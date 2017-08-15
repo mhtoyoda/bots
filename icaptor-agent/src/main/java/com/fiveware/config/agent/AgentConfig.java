@@ -1,14 +1,5 @@
 package com.fiveware.config.agent;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.messaging.BrokerManager;
 import com.fiveware.messaging.Producer;
@@ -20,6 +11,14 @@ import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.message.MessageAgent;
 import com.fiveware.service.ServiceAgent;
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 @Component
 public class AgentConfig {
@@ -46,7 +45,8 @@ public class AgentConfig {
 	
 	public void initAgent() {
 		saveAgentServerBots();
-		bindQueueAgenteInTaskTopic("topic-exchange", data.getAgentName());
+		bindQueueAgenteInTaskTopic("topic-exchange",
+				Lists.newArrayList(data.getAgentName()));
 		notifyServerUpAgent();
 	}
 
@@ -85,7 +85,7 @@ public class AgentConfig {
 		return botList;
 	}
 
-	private void bindQueueAgenteInTaskTopic(String exchangeName, String agent){
+	private void bindQueueAgenteInTaskTopic(String exchangeName, List<String> agent){
 		brokerManager.createTopicExchange(exchangeName, agent);
 	}
 	

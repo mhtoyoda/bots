@@ -24,10 +24,4 @@ public abstract class BrokerPulling<T> {
 			});
 		}
 	}
-
-//	@ExceptionHandler(ExceptionBot.class)
-//	public Object handleBotException(ExceptionBot ex) {
-//		String mensagemDesenvolvedor = ex.toString();
-//		return mensagemDesenvolvedor;
-//	}
 }
