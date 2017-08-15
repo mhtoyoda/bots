@@ -1,15 +1,17 @@
 package com.fiveware.messaging;
 
-import com.fiveware.model.message.MessageAgent;
-import com.fiveware.model.message.MessageBot;
-import com.fiveware.service.ServiceItemTask;
-import com.fiveware.service.ServiceTask;
-import com.fiveware.task.StatuProcessEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import com.fiveware.model.message.MessageAgent;
+import com.fiveware.model.message.MessageBot;
+import com.fiveware.service.ServiceItemTask;
+import com.fiveware.service.ServiceTask;
+import com.fiveware.task.StatuProcessItemTaskEnum;
+import com.fiveware.task.StatuProcessTaskEnum;
 
 @Component("PURGE_QUEUES")
 public class PurgeQueuesMessage implements ConsumerTypeMessage<MessageAgent> {
@@ -37,8 +39,8 @@ public class PurgeQueuesMessage implements ConsumerTypeMessage<MessageAgent> {
 			MessageBot messageBot;
 			while ((messageBot = receiveMessage(q))!=null){
 				logger.debug("purge: {}",messageBot);
-				serviceItemTask.updateStatus(messageBot.getItemTaskId(),StatuProcessEnum.ERROR.getStatuProcess());
-				serviceTask.updateStatus(messageBot.getTaskId(),StatuProcessEnum.ERROR.getStatuProcess());
+				serviceItemTask.updateStatus(messageBot.getItemTaskId(),StatuProcessItemTaskEnum.ERROR.getStatuProcess());
+				serviceTask.updateStatus(messageBot.getTaskId(),StatuProcessTaskEnum.ERROR.getStatuProcess());
 			}
 			brokerManager.deleteQueue(q);
 		});

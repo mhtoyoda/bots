@@ -1,4 +1,10 @@
-CREATE TABLE status_process (
+CREATE TABLE status_process_task (
+  id BIGINT(20) NOT NULL,
+  name varchar(20) NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE status_process_item_task (
   id BIGINT(20) NOT NULL,
   name varchar(20) NOT NULL,
   PRIMARY KEY (id)
@@ -16,7 +22,7 @@ CREATE TABLE task (
   PRIMARY KEY (id),
   FOREIGN KEY (id_bot) REFERENCES bot(id),
   FOREIGN KEY (id_user) REFERENCES usuario(id),
-  FOREIGN KEY (id_status) REFERENCES status_process(id)
+  FOREIGN KEY (id_status) REFERENCES status_process_task(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE item_task (
@@ -30,5 +36,5 @@ CREATE TABLE item_task (
   data_out MEDIUMTEXT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (id_task) REFERENCES task(id),
-  FOREIGN KEY (id_status) REFERENCES status_process(id)
+  FOREIGN KEY (id_status) REFERENCES status_process_item_task(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

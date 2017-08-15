@@ -1,8 +1,8 @@
 package com.fiveware.task;
 
-import com.fiveware.model.StatuProcess;
+import com.fiveware.model.StatuProcessTask;
 
-public enum StatuProcessEnum {
+public enum StatuProcessTaskEnum {
 
 	CREATED(1L, "Created"),
 	VALIDATING(2l, "Validating"),
@@ -11,15 +11,11 @@ public enum StatuProcessEnum {
 	PROCESSING(5L, "Processing"),
 	PROCCESSED(6L, "Proccessed"),
 	SUSPENDED(7L, "Suspended"),
-	AVAILABLE(8L, "Available"),
-	INLINE(9L, "InLine"),
-	SUCCESS(10L, "Success"),
-	ERROR(11l, "Error"),
-	CANCELED(12L, "Canceled");
+	SUCCESS(8L, "Success"),
+	ERROR(9l, "Error"),
+	CANCELED(10L, "Canceled");
 
-	private StatuProcess statuProcess;
-
-	private StatuProcessEnum(Long id, String name) {
+	private StatuProcessTaskEnum(Long id, String name) {
 		this.id = id;
 		this.name = name;
 	}
@@ -36,7 +32,7 @@ public enum StatuProcessEnum {
 		return name;
 	}
 
-	public StatuProcess getStatuProcess() {
-		return new StatuProcess(this.id,this.name);
+	public StatuProcessTask getStatuProcess() {
+		return new StatuProcessTask(this.id,this.name);
 	}
 }

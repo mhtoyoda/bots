@@ -8,7 +8,8 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.StatuProcess;
+import com.fiveware.model.StatuProcessItemTask;
+import com.fiveware.model.StatuProcessTask;
 
 @Service
 public class ServiceStatusProcessTask {
@@ -18,11 +19,19 @@ public class ServiceStatusProcessTask {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	public StatuProcess getStatusProcessById(Long id) {
+	public StatuProcessTask getStatusProcessById(Long id) {
 		String url = "http://localhost:8085/api/status/" +id;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		StatuProcess status = restTemplate.getForObject(url, StatuProcess.class);
+		StatuProcessTask status = restTemplate.getForObject(url, StatuProcessTask.class);
+		return status;
+	}
+	
+	public StatuProcessItemTask getStatusProcessItemTaskById(Long id) {
+		String url = "http://localhost:8085/api/item/status/" +id;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		StatuProcessItemTask status = restTemplate.getForObject(url, StatuProcessItemTask.class);
 		return status;
 	}
 }

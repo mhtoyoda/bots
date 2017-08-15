@@ -2,7 +2,7 @@ package com.fiveware.resource.task;
 
 import java.util.List;
 
-import com.fiveware.model.StatuProcess;
+import com.fiveware.model.StatuProcessTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

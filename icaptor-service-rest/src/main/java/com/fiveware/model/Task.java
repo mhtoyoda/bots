@@ -55,7 +55,7 @@ public class Task implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "id_status")
-	private StatuProcess statusProcess;
+	private StatuProcessTask statusProcess;
 
 	public Long getId() {
 		return id;
@@ -113,11 +113,11 @@ public class Task implements Serializable {
 		this.usuario = usuario;
 	}
 
-	public StatuProcess getStatusProcess() {
+	public StatuProcessTask getStatusProcess() {
 		return statusProcess;
 	}
 
-	public void setStatusProcess(StatuProcess statusProcess) {
+	public void setStatusProcess(StatuProcessTask statusProcess) {
 		this.statusProcess = statusProcess;
 	}
 

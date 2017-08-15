@@ -6,19 +6,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fiveware.model.StatuProcessTask;
-import com.fiveware.repository.StatuProcessRepository;
+import com.fiveware.model.StatuProcessItemTask;
+import com.fiveware.repository.StatuProcessItemTaskRepository;
 
 @RestController
-@RequestMapping("/api/status")
-public class ResourceStatusProcessTask {
+@RequestMapping("/api/item/status/")
+public class ResourceStatusProcessItemTask {
 
 	@Autowired
-	private StatuProcessRepository statuProcessRepository;
+	private StatuProcessItemTaskRepository statuProcessItemTaskRepository;
 
 	@GetMapping("/{id}")
-	public StatuProcessTask findOne(@PathVariable Long id) {
-		return statuProcessRepository.findOne(id);
+	public StatuProcessItemTask findOne(@PathVariable Long id) {
+		return statuProcessItemTaskRepository.findOne(id);
 	}
 	
 }

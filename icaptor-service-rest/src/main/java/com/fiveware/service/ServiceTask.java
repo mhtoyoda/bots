@@ -3,7 +3,7 @@ package com.fiveware.service;
 import java.util.List;
 
 import com.fiveware.model.ItemTask;
-import com.fiveware.model.StatuProcess;
+import com.fiveware.model.StatuProcessTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +45,7 @@ public class ServiceTask {
 		return task;
 	}
 
-	public Task updateStatus(Long id, StatuProcess status) {
+	public Task updateStatus(Long id, StatuProcessTask status) {
 		String url = "http://localhost:8085/api/task/"+id+"/status";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);

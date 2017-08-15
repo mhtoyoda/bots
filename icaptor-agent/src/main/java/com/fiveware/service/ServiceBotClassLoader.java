@@ -9,7 +9,7 @@ import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.OutputDictionaryContext;
 import com.fiveware.processor.ProcessorFields;
-import com.fiveware.task.StatuProcessEnum;
+import com.fiveware.task.StatuProcessTaskEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +89,7 @@ public  class ServiceBotClassLoader<T> {
         		obj =  execute.invoke(clazz.newInstance());
         	}
 
-            processorFields.getMessageBot().setStatuProcessEnum(StatuProcessEnum.SUCCESS);
+            processorFields.getMessageBot().setStatuProcessEnum(StatuProcessTaskEnum.SUCCESS);
             processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
 
         }catch (InvocationTargetException e) {
@@ -103,7 +103,7 @@ public  class ServiceBotClassLoader<T> {
                 map.put("ERROR",  fields+"|"+unRecoverable.getMessage());
                 HashMap[] hashMaps = {(HashMap) map};
 
-                processorFields.getMessageBot().setStatuProcessEnum(StatuProcessEnum.ERROR);
+                processorFields.getMessageBot().setStatuProcessEnum(StatuProcessTaskEnum.ERROR);
                 processorFields.getMessageBot().setLineResult(fields+"|"+unRecoverable.getMessage());
 
                 return new OutTextRecord(hashMaps);

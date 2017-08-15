@@ -2,15 +2,19 @@ package com.fiveware.service;
 
 import java.util.List;
 
-import com.fiveware.model.StatuProcess;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.fiveware.model.ItemTask;
+import com.fiveware.model.StatuProcessItemTask;
 
 @Service
 public class ServiceItemTask {
@@ -44,7 +48,7 @@ public class ServiceItemTask {
 		return item;
 	}
 	
-	public ItemTask updateStatus(Long id,StatuProcess status) {
+	public ItemTask updateStatus(Long id, StatuProcessItemTask status) {
 		String url = "http://localhost:8085/api/item/task/" +id+"/status";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
