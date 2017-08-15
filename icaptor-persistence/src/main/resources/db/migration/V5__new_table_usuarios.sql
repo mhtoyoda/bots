@@ -33,4 +33,4 @@ CREATE TABLE grupo_permissao (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 insert into usuario (nome, email, senha, ativo)
-  VALUES ("admin","admin@icaptor.com",'$2a$10$1lJQbWF0ltIijDtzxayOSe1qVM1LZP.Aq2uoOZXTSpE/Uf68WWZK.',1);
+  VALUES ("admin","admin@icaptor.com",'$2a$10$0ympKfE9MW6ERWelQBvPNOO2GNI2AZ6isfRCayMUsb6k3rnrFX/Yq',1);

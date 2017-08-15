@@ -1,5 +1,6 @@
 package com.fiveware.messaging;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
@@ -39,17 +40,9 @@ public class BrokerManager {
 	
 	public boolean deleteQueue(String queueName){
 		log.info("Delete queue: {}", queueName);
-
-
-
-		return rabbitAdmin.deleteQueue(queueName);		
+		return rabbitAdmin.deleteQueue(queueName);
 	}
 
-	public void purgeQueue(String queueName){
-		log.info("Purge queue: {}", queueName);
-		 rabbitAdmin.purgeQueue(queueName,true);
-	}
-	
 	private boolean notExistQueue(String queue){
 		List<Queue> queues = amqpManagementOperations.getQueues().stream()
 				.filter(q -> queue.equals(q.getName()))
@@ -68,6 +61,7 @@ public class BrokerManager {
 		FanoutExchange exchange;
 		if(notExistExchange(exchangeName)){
 			exchange = new FanoutExchange(exchangeName, true, false);
+			log.info("Create exchange: {}", exchangeName);
 		}else{
 			exchange = (FanoutExchange) amqpManagementOperations.getExchange(exchangeName);
 		}
@@ -78,7 +72,26 @@ public class BrokerManager {
 			if(notExistQueue(queueName)){
 				Queue queue = declareQueue(queueName);				
 				rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange));
+				log.info("Create queue: {} - exchange: {}", queueName, exchangeName);
 			}
 		});
+	}
+	
+	public void createTopicExchange(String exchangeName, String agent){
+		FanoutExchange exchange;
+		if(notExistExchange(exchangeName)){
+			exchange = new FanoutExchange(exchangeName, true, false);
+			rabbitAdmin.declareExchange(exchange);
+			log.info("Create exchange: {}", exchangeName);
+		}else{
+			exchange = (FanoutExchange) amqpManagementOperations.getExchange(exchangeName);
+		}
+		
+		String queueName = String.format("tasks.%s.in", StringUtils.trim(agent));
+		if(notExistQueue(queueName)){
+			Queue queue = declareQueue(queueName);				
+			rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange));
+			log.info("Create queue: {} - exchange: {}", queueName, exchangeName);
+		}
 	}
 }

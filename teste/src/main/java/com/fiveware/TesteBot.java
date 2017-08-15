@@ -32,8 +32,12 @@ public class TesteBot implements Automation<String, Endereco> {
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
 	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws ExceptionBot,UnRecoverableException {
-		Endereco endereco = getEndereco(cep);
-		return endereco;
+
+		throw new ExceptionBot("Simulando bug ");
+
+		//Endereco endereco = getEndereco(cep);
+
+//		return endereco;
 	}
 
 	public Endereco getEndereco(String args) throws ExceptionBot,UnRecoverableException {
