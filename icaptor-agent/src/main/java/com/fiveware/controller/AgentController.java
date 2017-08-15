@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.MessageStatusBot;
 import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.service.ResourceBot;
@@ -35,7 +35,7 @@ public class AgentController {
         Object obj = null;
         try {
             obj = serviceBot.callBot(botName,endPoint,parameter);
-        } catch (ExceptionBot e) {
+        } catch (RuntimeBotException e) {
             return ResponseEntity.badRequest().
                     body(new MessageStatusBot(HttpStatus.BAD_REQUEST.value(),e.getMessage()));
         } catch (UnRecoverableException e) {

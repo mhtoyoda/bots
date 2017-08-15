@@ -2,7 +2,7 @@ package com.fiveware;
 
 import com.fiveware.annotation.*;
 import com.fiveware.automate.BotScreen;
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class TesteBot implements Automation<String, Endereco> {
 
 	static Logger logger = LoggerFactory.getLogger(TesteBot.class);
 	
-	public static void main(String[] args) throws ExceptionBot,UnRecoverableException {
+	public static void main(String[] args) throws RuntimeBotException,UnRecoverableException {
 		Endereco endereco = new TesteBot().getEndereco("07077170");
 		logger.info("Resultado: {}", endereco);
 	}
@@ -31,16 +31,16 @@ public class TesteBot implements Automation<String, Endereco> {
 	@InputDictionary(fields = {"cep"}, separator = "|	", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws ExceptionBot,UnRecoverableException {
+	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws RuntimeBotException,UnRecoverableException {
 
-		throw new ExceptionBot("Simulando bug ");
+		throw new RuntimeBotException("Simulando bug ");
 
 		//Endereco endereco = getEndereco(cep);
 
 //		return endereco;
 	}
 
-	public Endereco getEndereco(String args) throws ExceptionBot,UnRecoverableException {
+	public Endereco getEndereco(String args) throws RuntimeBotException,UnRecoverableException {
 		String baseUrl = "http://www.correios.com/";
 		BotScreen telaConsultaCep = Web().driver(PHANTOM).openPage(baseUrl + "/para-voce");
 		telaConsultaCep.windowMaximize();

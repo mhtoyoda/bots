@@ -1,7 +1,7 @@
 package com.fiveware.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
@@ -52,18 +52,18 @@ public  class ServiceBotClassLoader<T> {
 
     public OutTextRecord executeMainClass(String nameBot,String endpoint, T parameter) throws IOException,
             ClassNotFoundException, InstantiationException, IllegalAccessException,
-            NoSuchMethodException, ExceptionBot {
+            NoSuchMethodException, RuntimeBotException {
         Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
 
         if(!endpoint.equals(botClassLoaderContext.get().getEndpoint()))
-            throw new ExceptionBot(messageSource.getMessage("endPoint.notFound",new Object[]{endpoint},null));
+            throw new RuntimeBotException(messageSource.getMessage("endPoint.notFound",new Object[]{endpoint},null));
 
         return getOutTextRecord(parameter, null);
     }
 
 
     public OutTextRecord getOutTextRecord(T parameter, ProcessorFields processorFields)
-            throws ClassNotFoundException, ExceptionBot, IOException, InstantiationException, IllegalAccessException,
+            throws ClassNotFoundException, RuntimeBotException, IOException, InstantiationException, IllegalAccessException,
             NoSuchMethodException {
 
         Optional<BotClassLoaderContext> botClassLoaderContext = processorFields.getContext();
@@ -108,7 +108,7 @@ public  class ServiceBotClassLoader<T> {
 
                 return new OutTextRecord(hashMaps);
             }else{
-                throw new ExceptionBot(e.getTargetException().getMessage());
+                throw new RuntimeBotException(e.getTargetException().getMessage());
             }
         }
 

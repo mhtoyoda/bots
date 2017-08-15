@@ -1,6 +1,6 @@
 package com.fiveware.service;
 
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.model.OutTextRecord;
 import org.slf4j.Logger;
@@ -22,10 +22,10 @@ public class ResourceBot {
     private ServiceBotClassLoader serviceBotClassLoader;
 
     public <T> OutTextRecord callBot(String nameBot, String endpoint, T parameter)
-            throws ExceptionBot,UnRecoverableException {
+            throws RuntimeBotException,UnRecoverableException {
     	try {
     	    return serviceBotClassLoader.executeMainClass(nameBot,endpoint, parameter);
-        } catch (ExceptionBot e){
+        } catch (RuntimeBotException e){
     	    throw e;
     	} catch (IOException | ClassNotFoundException |
                 IllegalAccessException | InstantiationException | NoSuchMethodException e) {

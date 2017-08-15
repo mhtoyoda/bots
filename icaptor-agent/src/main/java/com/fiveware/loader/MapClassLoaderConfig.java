@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.model.BotClassLoaderContext;
 import com.google.common.collect.Lists;
 
@@ -26,12 +26,12 @@ public class MapClassLoaderConfig implements ClassLoaderConfig {
 	private MessageSource messageSource;
 
 	@Override
-	public Optional<BotClassLoaderContext> getPropertiesBot(String nameBot) throws ExceptionBot {
+	public Optional<BotClassLoaderContext> getPropertiesBot(String nameBot) throws RuntimeBotException {
 		BotClassLoaderContext botClassLoaderContext = map.get(nameBot);
 		Optional<BotClassLoaderContext> optional = Optional.ofNullable(botClassLoaderContext);
 
 		String message = messageSource.getMessage("bot.notFound", new Object[]{nameBot}, null);
-		return Optional.ofNullable(optional.orElseThrow(() -> new ExceptionBot(message)));
+		return Optional.ofNullable(optional.orElseThrow(() -> new RuntimeBotException(message)));
 	}
 
 	@Override

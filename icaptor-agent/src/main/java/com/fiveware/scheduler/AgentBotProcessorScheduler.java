@@ -17,7 +17,7 @@ import com.fiveware.config.agent.AgentConfigProperties;
 import com.fiveware.config.agent.AgentListener;
 import com.fiveware.context.QueueContext;
 import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
@@ -61,7 +61,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     private Producer<MessageAgent> producer;
 
     @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
-    public void process() throws ExceptionBot {
+    public void process() throws RuntimeBotException {
         List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
         bots.forEach(this::accept);
     }
@@ -75,7 +75,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
                         forEach(queue -> {
                             pullMessage(botName, queue);
                         });
-            } catch (ExceptionBot exceptionBot) {
+            } catch (RuntimeBotException exceptionBot) {
                 notifyServerPurgeQueues(bot.getNameBot(), data.getAgentName());
             }
     }
@@ -92,7 +92,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
      * Processa mensagem recebida do Broker
      */
     @Override
-    public void processMessage(String botName, MessageBot obj) throws ExceptionBot {
+    public void processMessage(String botName, MessageBot obj) throws RuntimeBotException {
         try {
             processBotCSV.execute(botName, obj);
         } catch (IOException e) {

@@ -15,7 +15,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.messaging.Producer;
@@ -63,7 +63,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 
 	@SuppressWarnings("rawtypes")
 	public void execute(String botName, MessageBot obj)
-			throws IOException, AttributeLoadException, ClassNotFoundException, ExceptionBot {
+			throws IOException, AttributeLoadException, ClassNotFoundException, RuntimeBotException {
 
 		logger.info("Init Import File - [BOT]: {}", botName);
 
@@ -95,8 +95,8 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());
-				if (e.getCause() instanceof ExceptionBot) {
-					throw new ExceptionBot(e.getMessage());
+				if (e.getCause() instanceof RuntimeBotException) {
+					throw new RuntimeBotException(e.getMessage());
 				}
 			}
 

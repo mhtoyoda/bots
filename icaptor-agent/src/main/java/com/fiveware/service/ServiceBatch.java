@@ -1,6 +1,6 @@
 package com.fiveware.service;
 
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.processor.ProcessorFields;
 import org.slf4j.Logger;
@@ -22,7 +22,7 @@ public class ServiceBatch implements IServiceBach {
     private ServiceBotClassLoader serviceBotClassLoader;
 
     @Override
-    public <T> OutTextRecord callBot(ProcessorFields processorFields, T parameter) throws ExceptionBot {
+    public <T> OutTextRecord callBot(ProcessorFields processorFields, T parameter) throws RuntimeBotException {
         try {
             return serviceBotClassLoader.getOutTextRecord(parameter, processorFields);
         } catch (IOException | ClassNotFoundException |

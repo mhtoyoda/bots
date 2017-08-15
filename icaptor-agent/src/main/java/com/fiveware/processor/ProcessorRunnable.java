@@ -1,7 +1,7 @@
 package com.fiveware.processor;
 
 import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.exception.ValidationFieldException;
 import com.fiveware.model.OutTextRecord;
@@ -24,13 +24,13 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 	}
 
 	@Override
-	public OutTextRecord call() throws ExceptionBot,UnRecoverableException {
+	public OutTextRecord call() throws RuntimeBotException,UnRecoverableException {
 		OutTextRecord result = null;
 		result = getResult();		
 		return result;
 	}
 	
-	private OutTextRecord getResult() throws ExceptionBot {
+	private OutTextRecord getResult() throws RuntimeBotException {
 		Object cep = processorFields.getRecord().getValue("cep");
 		try {
 			processorFields.getValidate().validate(cep, processorFields.getClassLoader());

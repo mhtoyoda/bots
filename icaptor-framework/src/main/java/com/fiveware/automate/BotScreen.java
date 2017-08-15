@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 
 public class BotScreen {
 
@@ -24,7 +24,7 @@ public class BotScreen {
 		return this;
 	}
 
-	public BotScreen openPage(String url) throws ExceptionBot {
+	public BotScreen openPage(String url) throws RuntimeBotException {
 		BotValidation.verifyUrl(url);
 		webDriver.get(url);
 		return this;

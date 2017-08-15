@@ -3,8 +3,7 @@ package com.fiveware.scheduler;
 import java.util.List;
 import java.util.Optional;
 
-import com.fiveware.exception.ExceptionBot;
-import com.fiveware.exception.UnRecoverableException;
+import com.fiveware.exception.RuntimeBotException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +69,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	 * Processa mensagem recebida do Broker
 	 */
 	@Override
-	public void processMessage(String botName, MessageBot obj) throws ExceptionBot {
+	public void processMessage(String botName, MessageBot obj) throws RuntimeBotException {
 		log.debug("Linha resultado: {}", obj.getLineResult());
 		fileUtil.writeFile(obj);
 	}

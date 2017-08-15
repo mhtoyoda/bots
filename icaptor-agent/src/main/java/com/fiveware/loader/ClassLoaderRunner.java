@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.exception.ExceptionBot;
+import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.model.BotClassLoaderContext;
 
 @Component
@@ -22,7 +22,7 @@ public class ClassLoaderRunner {
 	private ClassLoaderConfig classLoaderConfig;
 
 	@SuppressWarnings({ "rawtypes", "resource" })
-	public Class loadClass(String botName) throws ClassNotFoundException, ExceptionBot, IOException {
+	public Class loadClass(String botName) throws ClassNotFoundException, RuntimeBotException, IOException {
 		Optional<BotClassLoaderContext> context = classLoaderConfig.getPropertiesBot(botName);
 		String className = context.get().getClassLoader();
 		ClassLoader classLoader = new URLClassLoader(new URL[] { context.get().getUrl() });
@@ -30,7 +30,7 @@ public class ClassLoaderRunner {
 		return clazz;
 	}
 
-	public ClassLoader loadClassLoader(String botName) throws ClassNotFoundException, ExceptionBot, IOException {
+	public ClassLoader loadClassLoader(String botName) throws ClassNotFoundException, RuntimeBotException, IOException {
 		Optional<BotClassLoaderContext> context = classLoaderConfig.getPropertiesBot(botName);
 		ClassLoader classLoader = new URLClassLoader(new URL[] { context.get().getUrl() });
 		return classLoader;
