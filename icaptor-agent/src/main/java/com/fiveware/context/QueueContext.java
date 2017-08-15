@@ -15,14 +15,8 @@ public class QueueContext {
 
 	private static Map<String,Set<String>> tasksQueues = new LinkedHashMap<String,Set<String>>();
 	
-	public void addQueueInContext(String bot, String queueName){
-		if(tasksQueues.containsKey(bot)){
-			tasksQueues.get(bot).add(queueName);
-		}else{
-			Set<String> queues = new HashSet<String>();
-			queues.add(queueName);
-			tasksQueues.put(bot, queues);			
-		}
+	public void addQueueInContext(String bot, String queueName){	
+		tasksQueues.computeIfAbsent(bot, queues -> new HashSet<>()).add(queueName);
 	}
 	
 	public void removeQueueInContext(String bot, String queueName){
