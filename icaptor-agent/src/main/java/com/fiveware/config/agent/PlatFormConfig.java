@@ -1,7 +1,5 @@
 package com.fiveware.config.agent;
 
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.TypeMessage;
-import com.fiveware.model.MessageAgent;
+import com.fiveware.model.message.MessageAgent;
 
 /**
  * Created by valdisnei on 06/06/17.
@@ -25,20 +23,17 @@ public class PlatFormConfig implements Lifecycle {
 	
 	@Autowired
 	private AgentConfigProperties data;
+	
+	@Autowired
+	private AgentListener agentListener;
 
     @Autowired
     @Qualifier("eventMessageProducer")
     private Producer<MessageAgent> producer;   
 
     private void sendMessage(TypeMessage typeMessage, String description) throws Exception {
-    	MessageAgent message = new MessageAgent(data.getHost(), data.getAgentName(), data.getIp(), typeMessage, description);
+    	MessageAgent message = new MessageAgent(data.getHost(), "Agent-"+agentListener.getAgentPort(), data.getIp(), agentListener.getAgentPort(), typeMessage, description);
     	producer.send(QueueName.EVENTS.name(), message);		
-    }
-
-    @PostConstruct
-    public void up(){    	    	  
-    	MessageAgent message = new MessageAgent(data.getHost(), data.getAgentName(), data.getIp(), TypeMessage.START_AGENT, "Start Agent!");    
-        producer.send(QueueName.EVENTS.name(), message);
     }
 
 	@Override

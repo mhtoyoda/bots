@@ -14,7 +14,7 @@ import com.fiveware.messaging.BrokerConfig;
 public class IcaptorAgentApplication {
 	
 	public static void main(String[] args) {
-		SpringApplication.run(IcaptorAgentApplication.class, args);	
+		SpringApplication.run(IcaptorAgentApplication.class, args);
 	}
 
 	@Bean

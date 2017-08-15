@@ -4,19 +4,19 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fiveware.model.message.MessageBot;
+import com.fiveware.model.message.MessageTask;
 
 /**
  * Created by valdisnei on 13/06/17.
  */
-@Service("eventBotProducer")
-public class EventBotProducer implements Producer<MessageBot> {
+@Service("eventTaskProducer")
+public class EventTaskProducer implements Producer<MessageTask> {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Override
-    public void send(String queue, MessageBot message) {
-        rabbitTemplate.convertAndSend(queue, message);
+    public void send(String queue, MessageTask message) {
+    	rabbitTemplate.convertAndSend("topic-exchange", "task.in", message);
     }
 }

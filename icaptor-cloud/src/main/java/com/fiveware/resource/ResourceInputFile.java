@@ -17,9 +17,9 @@ import javax.servlet.http.HttpServletRequest;
  */
 @RestController
 @RequestMapping("/api")
-public class ResourceBot {
+public class ResourceInputFile {
 
-    static Logger logger = LoggerFactory.getLogger(ResourceBot.class);
+    static Logger logger = LoggerFactory.getLogger(ResourceInputFile.class);
 
     @Autowired
     private ReadInputFile readInputFile;

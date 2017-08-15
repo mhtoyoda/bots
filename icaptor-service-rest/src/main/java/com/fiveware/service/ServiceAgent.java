@@ -1,17 +1,19 @@
 package com.fiveware.service;
 
-import com.fiveware.model.Agent;
-import com.fiveware.model.Bot;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import com.fiveware.model.Agent;
+import com.fiveware.model.Bot;
 
 
 /**
@@ -74,4 +76,13 @@ public class ServiceAgent {
         List<Bot> forObject = Arrays.asList(objects);
         return forObject;
     }
+
+	public void remove(Agent agent) {
+		String url = "http://localhost:8085/api/agent";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Agent> entity = new HttpEntity<Agent>(agent,headers);
+        restTemplate.exchange(url, HttpMethod.DELETE, entity, Agent.class);        		
+	}
 }

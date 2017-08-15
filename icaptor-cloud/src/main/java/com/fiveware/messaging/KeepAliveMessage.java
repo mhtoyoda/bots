@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.MessageAgent;
+import com.fiveware.model.message.MessageAgent;
 
 @Component("KEEP_ALIVE")
 public class KeepAliveMessage implements ConsumerTypeMessage<MessageAgent> {

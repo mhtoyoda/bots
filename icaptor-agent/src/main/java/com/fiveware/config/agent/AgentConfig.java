@@ -10,10 +10,14 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.messaging.BrokerManager;
+import com.fiveware.messaging.Producer;
+import com.fiveware.messaging.QueueName;
+import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
 import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.Server;
+import com.fiveware.model.message.MessageAgent;
 import com.fiveware.service.ServiceAgent;
 import com.google.common.collect.Lists;
 
@@ -33,16 +37,25 @@ public class AgentConfig {
 	@Autowired
 	private AgentListener agentListener;
 	
-	public void saveAgent() {
+	@Autowired
+	private BrokerManager brokerManager;
+	
+    @Autowired
+    @Qualifier("eventMessageProducer")
+    private Producer<MessageAgent> producer;
+	
+	public void initAgent() {
 		saveAgentServerBots();
+		bindQueueAgenteInTaskTopic("topic-exchange", data.getAgentName());
+		notifyServerUpAgent();
 	}
 
 	private Agent saveAgentServerBots() {
+		data.setAgentName("Agent-"+agentListener.getAgentPort());
 		Agent agent = new Agent.BuilderAgent()
 				.nameAgent(data.getAgentName())
 				.ip(data.getIp())
 				.port(agentListener.getAgentPort())
-				.server(getServer())
 				.bots(getBots())
 				.build();
 
@@ -72,10 +85,12 @@ public class AgentConfig {
 		return botList;
 	}
 
-	private Server getServer() {
-		Server serverInfo = new Server();
-		serverInfo.setName(data.getServer());
-		serverInfo.setHost(data.getHost());
-		return serverInfo;
+	private void bindQueueAgenteInTaskTopic(String exchangeName, String agent){
+		brokerManager.createTopicExchange(exchangeName, agent);
+	}
+	
+	private void notifyServerUpAgent(){
+		MessageAgent message = new MessageAgent(data.getHost(), "Agent-"+agentListener.getAgentPort(), data.getIp(), agentListener.getAgentPort(), TypeMessage.START_AGENT, "Start Agent!");    
+        producer.send(QueueName.EVENTS.name(), message);
 	}
 }

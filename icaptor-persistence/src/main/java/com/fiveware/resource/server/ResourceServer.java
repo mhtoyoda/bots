@@ -1,20 +1,23 @@
 package com.fiveware.resource.server;
 
-import com.fiveware.model.Agent;
-import com.fiveware.model.Server;
-import com.fiveware.repository.ServerRepository;
-import com.google.common.collect.Sets;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.fiveware.model.Agent;
+import com.fiveware.model.Server;
+import com.fiveware.repository.ServerRepository;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -43,7 +46,6 @@ public class ResourceServer {
     public Optional<Server> findByName(@PathVariable("name") String name) {
         return serverRepository.findByName(name);
     }
-
 
     @GetMapping("/agents/{name}/name")
     public Set<Agent> getAllAgent(@PathVariable("name") String name) {

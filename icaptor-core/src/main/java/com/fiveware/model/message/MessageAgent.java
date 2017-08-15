@@ -1,4 +1,4 @@
-package com.fiveware.model;
+package com.fiveware.model.message;
 
 import java.io.Serializable;
 import java.util.List;
@@ -15,18 +15,20 @@ public class MessageAgent implements Serializable {
 	private String host;
 	private String agent;
 	private String ip;
+	private int port;
 	private TypeMessage typeMessage;
 	private String description;
 	private List<MessageAgentBot> messageAgentBots;
 	
 	public MessageAgent(){}
 	
-	public MessageAgent(String host, String agent, String ip, TypeMessage typeMessage, String description) {
+	public MessageAgent(String host, String agent, String ip, int port, TypeMessage typeMessage, String description) {
 		super();
 		this.host = host;
 		this.agent = agent;
 		this.agent = agent;
 		this.ip = ip;
+		this.port = port;
 		this.typeMessage = typeMessage;
 		this.description = description;
 	}
@@ -53,6 +55,14 @@ public class MessageAgent implements Serializable {
 
 	public void setIp(String ip) {
 		this.ip = ip;
+	}
+	
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 
 	public TypeMessage getTypeMessage() {

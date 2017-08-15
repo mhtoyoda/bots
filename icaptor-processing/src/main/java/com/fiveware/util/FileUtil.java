@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.MessageBot;
 import com.fiveware.model.Record;
+import com.fiveware.model.message.MessageBot;
 import com.google.common.collect.Lists;
 
 @Component
