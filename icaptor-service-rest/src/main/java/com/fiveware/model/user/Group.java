@@ -1,23 +1,28 @@
-package com.fiveware.model;
+package com.fiveware.model.user;
 
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @AutoProperty
 @Entity
-@Table(name = "permissao")
-public class Permissao implements Serializable {
+@Table(name = "group")
+public class Group implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	private String nome;
+
+	private String name;
+
+	@ManyToMany
+	@JoinTable(name = "group_permission", joinColumns = @JoinColumn(name = "id_group"), inverseJoinColumns = @JoinColumn(name = "id_permission"))
+	private List<Permission> permissions;
 
 	public Long getId() {
 		return id;
@@ -27,12 +32,20 @@ public class Permissao implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<Permission> getPermissions() {
+		return permissions;
+	}
+
+	public void setPermissions(List<Permission> permissions) {
+		this.permissions = permissions;
 	}
 
 	@Override
@@ -51,7 +64,7 @@ public class Permissao implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Permissao other = (Permissao) obj;
+		Group other = (Group) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -59,7 +72,6 @@ public class Permissao implements Serializable {
 			return false;
 		return true;
 	}
-
 
 	@Override
 	public String toString() {

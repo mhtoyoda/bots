@@ -1,13 +1,13 @@
 package com.fiveware.service;
 
 
-import com.fiveware.model.Usuario;
-
 import java.util.Optional;
+
+import com.fiveware.model.user.IcaptorUser;
 
 /**
  * Created by valdisnei on 12/07/17.
  */
 public interface UsuarioService {
-    Optional<Usuario> findByEmailAndAtivo(String email);
+    Optional<IcaptorUser> findByEmailAndAtivo(String email);
 }

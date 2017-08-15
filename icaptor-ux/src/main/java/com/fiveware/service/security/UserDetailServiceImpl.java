@@ -1,6 +1,6 @@
 package com.fiveware.service.security;
 
-import com.fiveware.model.Usuario;
+import com.fiveware.model.user.IcaptorUser;
 import com.fiveware.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -23,10 +23,10 @@ public class UserDetailServiceImpl implements UserDetailsService{
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<Usuario> clienteOptional = usuarioService.findByEmailAndAtivo(email);
+        Optional<IcaptorUser> clienteOptional = usuarioService.findByEmailAndAtivo(email);
 
-        Usuario usuario = clienteOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario e/ou não encontrado!"));
+        IcaptorUser usuario = clienteOptional.orElseThrow(() -> new UsernameNotFoundException("Usuario e/ou não encontrado!"));
 
-        return new User(usuario.getEmail(),usuario.getSenha(),new TreeSet<>());
+        return new User(usuario.getEmail(),usuario.getPassword(),new TreeSet<>());
     }
 }

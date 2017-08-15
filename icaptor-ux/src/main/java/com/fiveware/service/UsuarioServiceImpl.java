@@ -1,10 +1,11 @@
 package com.fiveware.service;
 
-import com.fiveware.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import com.fiveware.model.user.IcaptorUser;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -19,7 +20,7 @@ public class UsuarioServiceImpl implements UsuarioService{
     private RestTemplate restTemplate;
 
     @Override
-    public Optional<Usuario> findByEmailAndAtivo(String email) {
+    public Optional<IcaptorUser> findByEmailAndAtivo(String email) {
 
         String pattern = "http://%s:%d/api/usuario/email";
         String localhost = String.format(pattern, "localhost", 8085);
@@ -31,7 +32,7 @@ public class UsuarioServiceImpl implements UsuarioService{
 
         HttpEntity<UsuarioRest> entity = new HttpEntity<UsuarioRest>(usuario);
 
-        ResponseEntity<Usuario> usuarioResponseEntity = restTemplate.postForEntity(localhost, entity, Usuario.class);
+        ResponseEntity<IcaptorUser> usuarioResponseEntity = restTemplate.postForEntity(localhost, entity, IcaptorUser.class);
 
         return Optional.of(usuarioResponseEntity.getBody());
     }

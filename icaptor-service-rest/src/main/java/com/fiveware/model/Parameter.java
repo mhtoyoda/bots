@@ -13,6 +13,8 @@ import javax.persistence.Table;
 
 import org.pojomatic.Pojomatic;
 
+import com.fiveware.model.user.IcaptorUser;
+
 @Entity
 @Table(name = "parameter")
 public class Parameter implements Serializable {
@@ -38,7 +40,7 @@ public class Parameter implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "id_user")
-	private Usuario usuario;
+	private IcaptorUser usuario;
 
 	@ManyToOne
 	@JoinColumn(name = "id_cloud")
@@ -84,11 +86,11 @@ public class Parameter implements Serializable {
 		this.bot = bot;
 	}
 
-	public Usuario getUsuario() {
+	public IcaptorUser getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(IcaptorUser usuario) {
 		this.usuario = usuario;
 	}
 

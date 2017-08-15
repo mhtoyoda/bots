@@ -16,6 +16,8 @@ import javax.persistence.TemporalType;
 
 import org.pojomatic.Pojomatic;
 
+import com.fiveware.model.user.IcaptorUser;
+
 @Entity
 @Table(name = "task")
 public class Task implements Serializable {
@@ -51,7 +53,7 @@ public class Task implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "id_user")
-	private Usuario usuario;
+	private IcaptorUser usuario;
 
 	@ManyToOne
 	@JoinColumn(name = "id_status")
@@ -105,11 +107,11 @@ public class Task implements Serializable {
 		this.bot = bot;
 	}
 
-	public Usuario getUsuario() {
+	public IcaptorUser getUsuario() {
 		return usuario;
 	}
 
-	public void setUsuario(Usuario usuario) {
+	public void setUsuario(IcaptorUser usuario) {
 		this.usuario = usuario;
 	}
 

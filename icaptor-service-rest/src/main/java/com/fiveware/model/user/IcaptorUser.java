@@ -1,6 +1,7 @@
-package com.fiveware.model;
+package com.fiveware.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.pojomatic.Pojomatic;
@@ -13,8 +14,8 @@ import java.util.List;
 
 @AutoProperty
 @Entity
-@Table(name = "usuario")
-public class Usuario implements Serializable {
+@Table(name = "user")
+public class IcaptorUser implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
@@ -23,26 +24,28 @@ public class Usuario implements Serializable {
 	private Long id;
 
 	@NotBlank(message = "Nome é obrigatório")
-	private String nome;
+	@Column(name = "display_name")
+	private String name;
 
 	@NotBlank(message = "E-mail é obrigatório")
 	@Email(message = "E-mail inválido")
 	private String email;
 
-	private String senha;
-	
+	private String password;
+
 	@Transient
 	private String confirmacaoSenha;
 
-	private Boolean ativo;
+	private Boolean active;
+
+	@Column(name = "profile_image_path")
+	private String profileImagePath;
 
 	@JsonIgnore
 	@Size(min = 1, message = "Selecione pelo menos um grupo")
 	@ManyToMany
-	@JoinTable(name = "usuario_grupo", joinColumns = @JoinColumn(name = "codigo_usuario")
-				, inverseJoinColumns = @JoinColumn(name = "codigo_grupo"))	
-	private List<Grupo> grupos;
-
+	@JoinTable(name = "group_user", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_group"))
+	private List<Group> grupos;
 
 	public Long getId() {
 		return id;
@@ -52,12 +55,12 @@ public class Usuario implements Serializable {
 		this.id = id;
 	}
 
-	public String getNome() {
-		return nome;
+	public String getName() {
+		return name;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public String getEmail() {
@@ -68,28 +71,27 @@ public class Usuario implements Serializable {
 		this.email = email;
 	}
 
-	public String getSenha() {
-		return senha;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setSenha(String senha) {
-		this.senha = senha;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
-	public Boolean getAtivo() {
-		return ativo;
+	public Boolean getActive() {
+		return active;
 	}
 
-	public void setAtivo(Boolean ativo) {
-		this.ativo = ativo;
+	public void setActive(Boolean active) {
+		this.active = active;
 	}
 
-
-	public List<Grupo> getGrupos() {
+	public List<Group> getGrupos() {
 		return grupos;
 	}
 
-	public void setGrupos(List<Grupo> grupos) {
+	public void setGrupos(List<Group> grupos) {
 		this.grupos = grupos;
 	}
 
@@ -100,10 +102,6 @@ public class Usuario implements Serializable {
 	public void setConfirmacaoSenha(String confirmacaoSenha) {
 		this.confirmacaoSenha = confirmacaoSenha;
 	}
-	
-//	public boolean isNovo() {
-//		return id == null;
-//	}
 
 	@Override
 	public int hashCode() {
@@ -121,7 +119,7 @@ public class Usuario implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Usuario other = (Usuario) obj;
+		IcaptorUser other = (IcaptorUser) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
