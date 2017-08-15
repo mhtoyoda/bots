@@ -21,7 +21,7 @@ CREATE TABLE task (
   id_status BIGINT(20) NOT NULL,  
   PRIMARY KEY (id),
   FOREIGN KEY (id_bot) REFERENCES bot(id),
-  FOREIGN KEY (id_user) REFERENCES usuario(id),
+  FOREIGN KEY (id_user) REFERENCES user(id),
   FOREIGN KEY (id_status) REFERENCES status_process_task(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

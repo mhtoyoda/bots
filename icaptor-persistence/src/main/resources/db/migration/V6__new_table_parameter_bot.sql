@@ -23,5 +23,5 @@ CREATE TABLE parameter(
     FOREIGN KEY (id_scope_parameter) REFERENCES scope_parameter(id),
     FOREIGN KEY (id_cloud) REFERENCES server(id),
     FOREIGN KEY (id_bot) REFERENCES bot(id),
-    FOREIGN KEY (id_user) REFERENCES usuario(id)    
+    FOREIGN KEY (id_user) REFERENCES user(id)    
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
