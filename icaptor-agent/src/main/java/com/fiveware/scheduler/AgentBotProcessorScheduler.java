@@ -68,6 +68,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
 
     private void accept(Bot bot) {
         String botName = bot.getNameBot();
+        queueContext.setKey(botName);
         Set<String> queues = MoreObjects.firstNonNull(queueContext.getTasksQueues(botName),
                                                       Sets.newHashSet());
             try {

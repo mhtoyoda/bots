@@ -51,6 +51,7 @@ public class AgentTaskProcessorScheduler {
 
 	public void processMessage(String botName, MessageTask obj){
 		if(botName.equals(obj.getBotName())){
+			queueContext.setKey(botName);
 			queueContext.addQueueInContext(botName, obj.getNameQueueTask());
 			log.info("Add queue task -> {} - bot -> {}", obj.getNameQueueTask(), obj.getBotName());
 		}
