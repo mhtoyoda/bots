@@ -2,7 +2,7 @@ package com.fiveware.task;
 
 import com.fiveware.model.StatuProcessTask;
 
-public enum StatuProcessTaskEnum {
+public enum StatusProcessTaskEnum {
 
 	CREATED(1L, "Created"),
 	VALIDATING(2l, "Validating"),
@@ -15,7 +15,7 @@ public enum StatuProcessTaskEnum {
 	ERROR(9l, "Error"),
 	CANCELED(10L, "Canceled");
 
-	private StatuProcessTaskEnum(Long id, String name) {
+	private StatusProcessTaskEnum(Long id, String name) {
 		this.id = id;
 		this.name = name;
 	}

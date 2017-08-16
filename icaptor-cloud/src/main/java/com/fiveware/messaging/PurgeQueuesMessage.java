@@ -10,8 +10,8 @@ import com.fiveware.model.message.MessageAgent;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.service.ServiceItemTask;
 import com.fiveware.service.ServiceTask;
-import com.fiveware.task.StatuProcessItemTaskEnum;
-import com.fiveware.task.StatuProcessTaskEnum;
+import com.fiveware.task.StatusProcessItemTaskEnum;
+import com.fiveware.task.StatusProcessTaskEnum;
 
 @Component("PURGE_QUEUES")
 public class PurgeQueuesMessage implements ConsumerTypeMessage<MessageAgent> {
@@ -39,8 +39,8 @@ public class PurgeQueuesMessage implements ConsumerTypeMessage<MessageAgent> {
 			MessageBot messageBot;
 			while ((messageBot = receiveMessage(q))!=null){
 				logger.debug("purge: {}",messageBot);
-				serviceItemTask.updateStatus(messageBot.getItemTaskId(),StatuProcessItemTaskEnum.ERROR.getStatuProcess());
-				serviceTask.updateStatus(messageBot.getTaskId(),StatuProcessTaskEnum.ERROR.getStatuProcess());
+				serviceItemTask.updateStatus(messageBot.getItemTaskId(),StatusProcessItemTaskEnum.ERROR.getStatuProcess());
+				serviceTask.updateStatus(messageBot.getTaskId(),StatusProcessTaskEnum.ERROR.getStatuProcess());
 			}
 			brokerManager.deleteQueue(q);
 		});

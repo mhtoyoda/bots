@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.model.message.MessageTaskAgent;
 import com.fiveware.service.ServiceItemTask;
-import com.fiveware.task.StatuProcessItemTaskEnum;
+import com.fiveware.task.StatusProcessItemTaskEnum;
 
 @Component("ITEM_TASK_PROCESSING")
 public class UpdateItemTaskMessage implements ConsumerTypeMessage<MessageTaskAgent> {
@@ -20,6 +20,6 @@ public class UpdateItemTaskMessage implements ConsumerTypeMessage<MessageTaskAge
 	@Override
 	public void process(MessageTaskAgent message) {
 		logger.info("Update Item Task: {}", message.getItemTaskId());
-		serviceItemTask.updateStatus(message.getItemTaskId(), StatuProcessItemTaskEnum.PROCESSING.getStatuProcess());
+		serviceItemTask.updateStatus(message.getItemTaskId(), StatusProcessItemTaskEnum.PROCESSING.getStatuProcess());
 	}
 }

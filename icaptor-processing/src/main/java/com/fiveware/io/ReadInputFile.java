@@ -26,7 +26,7 @@ import com.fiveware.model.Task;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.model.message.MessageHeader;
 import com.fiveware.model.message.MessageTask;
-import com.fiveware.task.StatuProcessTaskEnum;
+import com.fiveware.task.StatusProcessTaskEnum;
 import com.fiveware.task.TaskManager;
 import com.fiveware.util.FileUtil;
 import com.fiveware.validate.RuleValidations;
@@ -73,13 +73,13 @@ public class ReadInputFile {
         String[] fields = Iterables.toArray(split, String.class);
         List<String> lines = fileUtil.linesFrom(file);
         try {
-            taskManager.updateTask(task.getId(), StatuProcessTaskEnum.VALIDATING);
+            taskManager.updateTask(task.getId(), StatusProcessTaskEnum.VALIDATING);
             ruleValidations.executeValidations(lines, fields, separatorFile);
-            taskManager.updateTask(task.getId(), StatuProcessTaskEnum.PROCESSING);
+            taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCESSING);
             List<Record> allLines = fileUtil.linesFrom(lines, fields, separatorFile);
             sendListToQueue(task, allLines, path, separatorFile);
         } catch (ValidationFileErrorException e) {
-            taskManager.updateTask(task.getId(), StatuProcessTaskEnum.REJECTED);
+            taskManager.updateTask(task.getId(), StatusProcessTaskEnum.REJECTED);
         } catch (Exception e){
         	logger.error("Error {}", e.getMessage());
         }

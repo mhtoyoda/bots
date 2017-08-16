@@ -36,17 +36,17 @@ public class TaskManager {
 		Task task = new Task();
 		task.setBot(serviceBot.findByNameBot(nameBot).get());
 		task.setLoadTime(new Date());
-		task.setStatusProcess(serviceStatusProcessTask.getStatusProcessById(StatuProcessTaskEnum.CREATED.getId()));
+		task.setStatusProcess(serviceStatusProcessTask.getStatusProcessById(StatusProcessTaskEnum.CREATED.getId()));
 		task.setStartAt(new Date());
 		task.setUsuario(serviceUser.getUserById(userId));
 		task = serviceTask.save(task);
 		return task;
 	}
 
-	public Task updateTask(Long taskId, StatuProcessTaskEnum statuProcessEnum) {
+	public Task updateTask(Long taskId, StatusProcessTaskEnum statuProcessEnum) {
 		Task task = serviceTask.getTaskById(taskId);
 		task.setStatusProcess(serviceStatusProcessTask.getStatusProcessById(statuProcessEnum.getId()));
-		if (statuProcessEnum.equals(StatuProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatuProcessTaskEnum.SUCCESS)) {
+		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.SUCCESS)) {
 			task.setEndAt(new Date());
 		}
 		task = serviceTask.save(task);
@@ -57,21 +57,21 @@ public class TaskManager {
 		ItemTask itemTask = new ItemTask();
 		itemTask.setTask(task);
 		itemTask.setDataIn(recordLine);
-		itemTask.setStatusProcess(serviceStatusProcessTask.getStatusProcessItemTaskById(StatuProcessItemTaskEnum.AVAILABLE.getId()));
+		itemTask.setStatusProcess(serviceStatusProcessTask.getStatusProcessItemTaskById(StatusProcessItemTaskEnum.AVAILABLE.getId()));
 		itemTask = itemServiceTask.save(itemTask);
 		return itemTask;
 	}
 
-	public ItemTask updateItemTask(Long itemTaskId, StatuProcessTaskEnum statuProcessEnum, String dataOut) {
+	public ItemTask updateItemTask(Long itemTaskId, StatusProcessTaskEnum statuProcessEnum, String dataOut) {
 		ItemTask itemTask = itemServiceTask.getItemTaskById(itemTaskId);
 		itemTask.setStatusProcess(serviceStatusProcessTask.getStatusProcessItemTaskById(statuProcessEnum.getId()));
 		if (StringUtils.isNotBlank(dataOut)) {
 			itemTask.setDataOut(dataOut);
 		}
-		if (statuProcessEnum.equals(StatuProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatuProcessTaskEnum.SUCCESS)) {
+		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.SUCCESS)) {
 			itemTask.setEndAt(new Date());
 		}
-		if (statuProcessEnum.equals(StatuProcessTaskEnum.PROCESSING)) {
+		if (statuProcessEnum.equals(StatusProcessTaskEnum.PROCESSING)) {
 			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
 			itemTask.setAttemptsCount(attemptsCount);
 		}

@@ -3,7 +3,7 @@ package com.fiveware.util;
 import com.fiveware.model.Record;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.service.ServiceStatusProcessTask;
-import com.fiveware.task.StatuProcessTaskEnum;
+import com.fiveware.task.StatusProcessTaskEnum;
 import com.fiveware.task.TaskManager;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -80,7 +80,7 @@ public class FileUtil {
 			taskManager.updateItemTask(messageBot.getItemTaskId(),
 						messageBot.getStatuProcessEnum(),messageBot.getLineResult());
 
-		if (StatuProcessTaskEnum.SUCCESS.equals(messageBot.getStatuProcessEnum())) {
+		if (StatusProcessTaskEnum.SUCCESS.equals(messageBot.getStatuProcessEnum())) {
 			try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut, true))) {
 				//FIXME corrigir bug para fazer append por task ID
 				try {
