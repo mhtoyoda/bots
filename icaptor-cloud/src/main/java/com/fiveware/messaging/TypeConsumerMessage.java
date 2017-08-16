@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.fiveware.model.message.MessageBot;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.model.message.MessageAgent;
+import com.fiveware.model.message.MessageTaskAgent;
 
 @Component
 public class TypeConsumerMessage {
@@ -34,6 +34,10 @@ public class TypeConsumerMessage {
 	@Autowired
 	@Qualifier("PURGE_QUEUES")
 	private ConsumerTypeMessage<MessageAgent> purgeQueues;
+	
+	@Autowired
+	@Qualifier("ITEM_TASK_PROCESSING")
+	private ConsumerTypeMessage<MessageTaskAgent> updateItemTask;
 
 	private Set<Class<? extends ConsumerTypeMessage>> scan(String namePackage){
 		Reflections reflections = new Reflections(namePackage);
@@ -61,6 +65,7 @@ public class TypeConsumerMessage {
 		consumersMap.put("START_AGENT", startAgent);
 		consumersMap.put("STOP_AGENT", stopAgent);
 		consumersMap.put("PURGE_QUEUES", purgeQueues);
+		consumersMap.put("ITEM_TASK_PROCESSING", updateItemTask);
 		return consumersMap;
 	}
 }

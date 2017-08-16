@@ -34,7 +34,7 @@ public class EventsConsumerScheduler {
 		consumersMap = typeConsumerMessage.loadConsumer();
 	}
 	
-	@Scheduled(fixedDelay = 10000)
+	@Scheduled(fixedDelay = 2000)
 	public void execute() {
 		MessageAgent messageAgent = receiver.receive(QueueName.EVENTS.name());
 		if(!Objects.isNull(messageAgent)){

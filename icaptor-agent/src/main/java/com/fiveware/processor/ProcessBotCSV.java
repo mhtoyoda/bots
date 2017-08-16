@@ -19,11 +19,15 @@ import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.messaging.Producer;
+import com.fiveware.messaging.QueueName;
+import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.InputDictionaryContext;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.Record;
+import com.fiveware.model.message.MessageAgent;
 import com.fiveware.model.message.MessageBot;
+import com.fiveware.model.message.MessageTaskAgent;
 import com.fiveware.service.IServiceBach;
 import com.fiveware.util.LineUtil;
 import com.fiveware.util.ListJoinUtil;
@@ -54,7 +58,11 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 	@Autowired
 	@Qualifier("eventBotProducer")
 	private Producer<MessageBot> producer;
-
+	
+	@Autowired
+	@Qualifier("eventMessageProducer")
+	private Producer<MessageAgent> eventProducer;
+	
 	@Autowired
 	private ListJoinUtil listJoin;
 		
@@ -74,6 +82,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		String line = obj.getLine();
 		Record record = lineUtil.linesFrom(line, fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
+		sendNotificationItemTaskProcessing(obj.getTaskId(), obj.getItemTaskId());
 
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 
@@ -89,7 +98,6 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 															.context(context)
 															.build();
 				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(processorFields));
-
 				List<String> resultSuccess = Lists.newArrayList();
 				listJoin.joinRecord(separatorInput, outTextRecord.get(), resultSuccess);
 
@@ -103,6 +111,12 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		producer.send("task.out", obj);
 		executorService.shutdown();
 		logger.info("End Import File - [BOT]: {}", botName);
+	}
+	
+	private void sendNotificationItemTaskProcessing(Long taskId, Long itemTaskId){
+		MessageTaskAgent message = new MessageTaskAgent(taskId, itemTaskId);
+		message.setTypeMessage(TypeMessage.ITEM_TASK_PROCESSING);
+		eventProducer.send(QueueName.EVENTS.name(), message);
 	}
 
 }
