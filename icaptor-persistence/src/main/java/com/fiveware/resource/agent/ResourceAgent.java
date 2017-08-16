@@ -20,6 +20,7 @@ import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
 import com.fiveware.model.Server;
 import com.fiveware.repository.AgentRepository;
+import com.fiveware.repository.BotRepository;
 import com.fiveware.repository.ServerRepository;
 
 /**
@@ -35,6 +36,9 @@ public class ResourceAgent {
 	@Autowired
 	private ServerRepository serverRepository;
 	
+	@Autowired
+	private BotRepository botRepository;
+	
 	@Transactional(readOnly = false)
     @PostMapping
     public Agent save(@RequestBody Agent agent){
@@ -45,7 +49,7 @@ public class ResourceAgent {
         byNameAgent.ifPresent(new Consumer<Agent>() {
             @Override
             public void accept(Agent _agent) {
-                _agent.setPort(agent.getPort());             
+                _agent.setPort(agent.getPort());                
             }
         });
 

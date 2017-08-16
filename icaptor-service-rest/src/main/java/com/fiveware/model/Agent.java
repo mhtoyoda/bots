@@ -36,7 +36,7 @@ public class Agent implements Serializable {
 	@JoinColumn(name ="id_server")
 	private Server server;
 
-	@ManyToMany(cascade = CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.MERGE)
 	@JoinTable(name = "agent_bot", joinColumns = { @JoinColumn(name = "id_agent") },
 			   inverseJoinColumns = {@JoinColumn(name = "id_bot") })
 	private List<Bot> bots;

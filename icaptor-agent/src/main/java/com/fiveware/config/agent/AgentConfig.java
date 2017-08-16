@@ -1,5 +1,14 @@
 package com.fiveware.config.agent;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.messaging.BrokerManager;
 import com.fiveware.messaging.Producer;
@@ -10,15 +19,8 @@ import com.fiveware.model.Bot;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.message.MessageAgent;
 import com.fiveware.service.ServiceAgent;
+import com.fiveware.service.ServiceBot;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.function.Consumer;
 
 @Component
 public class AgentConfig {
@@ -42,6 +44,9 @@ public class AgentConfig {
     @Autowired
     @Qualifier("eventMessageProducer")
     private Producer<MessageAgent> producer;
+	
+	@Autowired
+	private ServiceBot serviceBot;
 	
 	public void initAgent() {
 		saveAgentServerBots();
@@ -70,7 +75,7 @@ public class AgentConfig {
 			@Override
 			public void accept(List<BotClassLoaderContext> bots) {
 				bots.forEach(botClassLoader -> {
-					Bot bot = new Bot();
+					Bot bot = findBotByName(botClassLoader.getNameBot());
 					bot.setEndpoint(botClassLoader.getEndpoint());
 					bot.setNameBot(botClassLoader.getNameBot());
 					bot.setMethod(botClassLoader.getMethod());
@@ -94,5 +99,15 @@ public class AgentConfig {
 				data.getIp(), agentListener.getAgentPort(),
 				TypeMessage.START_AGENT, "Start Agent!");
         producer.send(QueueName.EVENTS.name(), message);
+	}
+	
+	private Bot findBotByName(String nameBot){
+		Optional<Bot> bot = Optional.empty();
+		try{
+			bot = serviceBot.findByNameBot(nameBot);
+			return bot.get();
+		}catch (Exception e) {			
+			return bot.orElse(new Bot());
+		}
 	}
 }

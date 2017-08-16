@@ -11,6 +11,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -38,7 +40,9 @@ import com.google.common.collect.Lists;
  */
 @Component
 public class ReadInputFile {
-
+	
+	private static Logger logger = LoggerFactory.getLogger(ReadInputFile.class);
+	
     @Autowired
     private FileUtil fileUtil;
 
@@ -76,6 +80,8 @@ public class ReadInputFile {
             sendListToQueue(task, allLines, path, separatorFile);
         } catch (ValidationFileErrorException e) {
             taskManager.updateTask(task.getId(), StatuProcessTaskEnum.REJECTED);
+        } catch (Exception e){
+        	logger.error("Error {}", e.getMessage());
         }
     }
 
