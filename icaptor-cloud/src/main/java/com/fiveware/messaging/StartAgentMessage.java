@@ -1,5 +1,7 @@
 package com.fiveware.messaging;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +11,12 @@ import org.springframework.stereotype.Component;
 import com.fiveware.config.ServerConfig;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Server;
+import com.fiveware.model.Task;
 import com.fiveware.model.message.MessageAgent;
 import com.fiveware.model.message.MessageTask;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceTask;
+import com.fiveware.task.StatusProcessTaskEnum;
 
 @Component("START_AGENT")
 public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {
@@ -37,6 +41,7 @@ public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 		log.info("Start Agent {}",message.toString());
 		Agent agent = new Agent.BuilderAgent().nameAgent(message.getAgent()).port(message.getPort()).server(getServer()).build();
 		serviceAgent.save(agent);
+		includeTasksProcessing();
 	}
 
 	private Server getServer() {
@@ -46,9 +51,13 @@ public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 		return serverInfo;
 	}
 	
-//	private void includeTasksProcessing(){
-//		serviceTask.getTaskByStatus()
-//		String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
-//		
-//	}
+	private void includeTasksProcessing(){
+		List<Task> tasks = serviceTask.getTaskByStatus(StatusProcessTaskEnum.PROCESSING.getName());
+		tasks.stream().forEach(task -> {
+			String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
+			MessageTask message = new MessageTask(queueName, task.getBot().getNameBot());
+			taskProducer.send("", message);
+			log.info("Notify queue {} with tasks Processing", queueName);
+		});		
+	}
 }

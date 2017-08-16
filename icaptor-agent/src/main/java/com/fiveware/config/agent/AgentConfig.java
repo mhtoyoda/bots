@@ -83,6 +83,9 @@ public class AgentConfig {
 					bot.setFieldsOutput(StringUtils.join(botClassLoader.getOutputDictionary().getFields(), ","));
 					bot.setSeparatorFile(botClassLoader.getInputDictionary().getSeparator());
 					bot.setTypeFileIn(botClassLoader.getInputDictionary().getTypeFileIn());
+					if(bot.getId() == null){
+						bot = serviceBot.save(bot);
+					}
 					botList.add(bot);
 				});
 			}
