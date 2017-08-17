@@ -1,16 +1,19 @@
 package com.fiveware.model.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
-import java.util.List;
 
 @AutoProperty
 @Entity
@@ -41,11 +44,11 @@ public class IcaptorUser implements Serializable {
 	@Column(name = "profile_image_path")
 	private String profileImagePath;
 
-	@JsonIgnore
-	@Size(min = 1, message = "Selecione pelo menos um grupo")
-	@ManyToMany
-	@JoinTable(name = "group_user", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_group"))
-	private List<Group> grupos;
+//	@JsonIgnore
+//	@Size(min = 1, message = "Selecione pelo menos um grupo")
+//	@ManyToMany
+//	@JoinTable(name = "group_user", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_group"))
+//	private List<Group> grupos;
 
 	public Long getId() {
 		return id;
@@ -87,13 +90,13 @@ public class IcaptorUser implements Serializable {
 		this.active = active;
 	}
 
-	public List<Group> getGrupos() {
-		return grupos;
-	}
-
-	public void setGrupos(List<Group> grupos) {
-		this.grupos = grupos;
-	}
+//	public List<Group> getGrupos() {
+//		return grupos;
+//	}
+//
+//	public void setGrupos(List<Group> grupos) {
+//		this.grupos = grupos;
+//	}
 
 	public String getConfirmacaoSenha() {
 		return confirmacaoSenha;
@@ -101,6 +104,14 @@ public class IcaptorUser implements Serializable {
 
 	public void setConfirmacaoSenha(String confirmacaoSenha) {
 		this.confirmacaoSenha = confirmacaoSenha;
+	}
+
+	public String getProfileImagePath() {
+		return profileImagePath;
+	}
+
+	public void setProfileImagePath(String profileImagePath) {
+		this.profileImagePath = profileImagePath;
 	}
 
 	@Override
@@ -132,4 +143,5 @@ public class IcaptorUser implements Serializable {
 	public String toString() {
 		return Pojomatic.toString(this);
 	}
+
 }
