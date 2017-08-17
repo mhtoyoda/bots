@@ -38,7 +38,7 @@ public class TaskManager {
 		task.setLoadTime(new Date());
 		task.setStatusProcess(serviceStatusProcessTask.getStatusProcessById(StatuProcessTaskEnum.CREATED.getId()));
 		task.setStartAt(new Date());
-		task.setUsuario(serviceUser.getUserById(userId));
+		task.setUsuario(serviceUser.getUserById(userId).get());
 		task = serviceTask.save(task);
 		return task;
 	}

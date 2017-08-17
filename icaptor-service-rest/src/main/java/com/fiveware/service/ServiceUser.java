@@ -1,5 +1,7 @@
 package com.fiveware.service;
 
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,7 @@ public class ServiceUser {
 	@Autowired
 	private RestTemplate restTemplate;
 
-	public IcaptorUser getUserById(Long id) {
+	public Optional<IcaptorUser> getUserById(Long id) {
 		String url = BASE_URL + id;
 
 		HttpHeaders headers = new HttpHeaders();
@@ -29,19 +31,21 @@ public class ServiceUser {
 
 		IcaptorUser user = restTemplate.getForObject(url, IcaptorUser.class);
 		logger.debug("Retrieved user [{}] by ID [{}]", user.getName(), id);
-		return user;
+		return Optional.of(user);
 	}
 
-	public IcaptorUser getUserByEmail(String email) {
+	public Optional<IcaptorUser> getUserByEmail(String email) {
 		String url = BASE_URL + "email";
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		HttpEntity<String> entity = new HttpEntity<String>(email, headers);
+		IcaptorUser user = new IcaptorUser();
+		user.setEmail(email);
+		HttpEntity<IcaptorUser> entity = new HttpEntity<>(user, headers);
 
-		IcaptorUser user = restTemplate.postForObject(url, entity, IcaptorUser.class);
+		user = restTemplate.postForObject(url, entity, IcaptorUser.class);
 		logger.debug("Retrieved user [{}] by email [{}]", user.getName(), email);
-		return user;
+		return Optional.of(user);
 	}
 }
