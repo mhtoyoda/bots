@@ -5,7 +5,7 @@ CREATE TABLE type_parameter(
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE scope_parameter(
-	id bigint auto_increment primary key,
+	id bigint primary key,
 	name varchar(60) not null,
     priority tinyint(20) not null
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

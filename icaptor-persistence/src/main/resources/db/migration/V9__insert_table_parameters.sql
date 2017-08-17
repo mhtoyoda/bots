@@ -2,10 +2,10 @@ insert into type_parameter(name, exclusive) values('credential', 0);
 insert into type_parameter(name, exclusive) values('retry', 0);
 insert into type_parameter(name, exclusive) values('timeout', 0);
 
-insert into scope_parameter(name, priority) values('cloud', 0);
-insert into scope_parameter(name, priority) values('bot', 1);
-insert into scope_parameter(name, priority) values('cloud_bot', 2);
-insert into scope_parameter(name, priority) values('session', 3);
+insert into scope_parameter(id, name, priority) values(1, 'cloud', 0);
+insert into scope_parameter(id, name, priority) values(2, 'bot', 1);
+insert into scope_parameter(id, name, priority) values(3, 'cloud_bot', 2);
+insert into scope_parameter(id, name, priority) values(4, 'session', 3);
 
 insert into status_process_task(id, name) values(1, 'Created');
 insert into status_process_task(id, name) values(2, 'Validating');
