@@ -18,7 +18,7 @@
         <module>icaptor-processing</module>
         <module>icaptor-cloud</module>
         <module>icaptor-agent</module>
-        <module>icaptor-ux</module>
+        <module>icaptor-web-security</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
