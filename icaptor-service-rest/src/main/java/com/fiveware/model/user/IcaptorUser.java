@@ -1,26 +1,19 @@
 package com.fiveware.model.user;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @AutoProperty
 @Entity
@@ -51,11 +44,11 @@ public class IcaptorUser implements Serializable {
 	@Column(name = "profile_image_path")
 	private String profileImagePath;
 
-	@JsonIgnore
-	@Size(min = 1, message = "Selecione pelo menos um grupo")
-	@ManyToMany
-	@JoinTable(name = "group_user", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_group"))
-	private List<Group> grupos;
+//	@JsonIgnore
+//	@Size(min = 1, message = "Selecione pelo menos um grupo")
+//	@ManyToMany
+//	@JoinTable(name = "group_user", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_group"))
+//	private List<Group> grupos;
 
 	public Long getId() {
 		return id;
