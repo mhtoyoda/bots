@@ -26,6 +26,7 @@ import com.fiveware.model.Task;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.model.message.MessageHeader;
 import com.fiveware.model.message.MessageTask;
+import com.fiveware.task.StatusProcessItemTaskEnum;
 import com.fiveware.task.StatusProcessTaskEnum;
 import com.fiveware.task.TaskManager;
 import com.fiveware.util.FileUtil;
@@ -106,12 +107,14 @@ public class ReadInputFile {
             ItemTask itemTask = taskManager.createItemTask(task, "");
             MessageBot messageBot = new MessageBot(task.getId(), itemTask.getId(), "", messageHeader);
             producer.send(queueName, messageBot);
+            taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.INLINE);
         }
 
         lines.stream().forEach(line -> {
             ItemTask itemTask = taskManager.createItemTask(task, line);
             MessageBot messageBot = new MessageBot(task.getId(), itemTask.getId(), line, messageHeader);
             producer.send(queueName, messageBot);
+            taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.INLINE);
         });
         
         sendNotificationTaskCreated(queueName, task.getBot().getNameBot());

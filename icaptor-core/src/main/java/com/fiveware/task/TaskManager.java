@@ -78,4 +78,16 @@ public class TaskManager {
 		itemTask = itemServiceTask.save(itemTask);
 		return itemTask;
 	}
+	
+	public ItemTask updateItemTask(Long itemTaskId, StatusProcessItemTaskEnum statusProcessItemTaskEnum){
+		ItemTask itemTask = itemServiceTask.getItemTaskById(itemTaskId);
+		itemTask.setStatusProcess(statusProcessItemTaskEnum.getStatuProcess());
+		
+		if (statusProcessItemTaskEnum.equals(StatusProcessTaskEnum.PROCESSING)) {
+			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
+			itemTask.setAttemptsCount(attemptsCount);
+		}		
+		itemTask = itemServiceTask.save(itemTask);
+		return itemTask;
+	}
 }
