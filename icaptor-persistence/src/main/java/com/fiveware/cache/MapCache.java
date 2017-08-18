@@ -1,14 +1,13 @@
 package com.fiveware.cache;
 
+import com.google.common.collect.Sets;
+import org.springframework.stereotype.Component;
+
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
-
-import org.springframework.stereotype.Component;
-
-import com.google.common.collect.Sets;
 
 @Component("mapCache")
 public class MapCache implements CacheManager<String> {
@@ -20,6 +19,7 @@ public class MapCache implements CacheManager<String> {
 		boolean add = cache.computeIfAbsent(key, queues -> new HashSet<>()).add(value);
 		return add;
 	}
+
 
 	@Override
 	public boolean remove(String key, String value) {
@@ -34,6 +34,11 @@ public class MapCache implements CacheManager<String> {
 	@Override
 	public Set<String> getValues(String key) {
 		return cache.get(key) == null ? Sets.newHashSet() : cache.get(key);
+	}
+
+	@Override
+	public Set<Map.Entry<String, Set<String>>> list() {
+		return cache.entrySet();
 	}
 
 	@Override

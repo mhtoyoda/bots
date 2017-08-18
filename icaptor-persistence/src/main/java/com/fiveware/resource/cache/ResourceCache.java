@@ -1,14 +1,11 @@
 package com.fiveware.resource.cache;
 
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.fiveware.cache.CacheManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/cache")
@@ -22,10 +19,27 @@ public class ResourceCache {
 		cacheManager.add(key, value);
 	}
 
-	@GetMapping("/remove/key/{key}/value/{value}")
-	public void remove(@PathVariable("key") String key, @PathVariable("value") String value) {
-		cacheManager.remove(key, value);
+
+	@PostMapping
+	public Boolean add(@RequestBody Map<String,Set<String>> cache) {
+		String key = cache.keySet().iterator().next();
+		Set<String> o = cache.get(key);
+		return cacheManager.add(key, o.iterator().next());
 	}
+
+
+	@DeleteMapping
+	public Boolean remove(@RequestBody Map<String,Set<String>> cache) {
+		String key = cache.keySet().iterator().next();
+		Set<String> o = cache.get(key);
+		return cacheManager.remove(key, o.iterator().next());
+	}
+
+	@GetMapping
+	public Set<Map.Entry<String, Set<String>>> list() {
+		return cacheManager.list();
+	}
+
 
 	@GetMapping("/get/{key}")
 	public Set<String> getValues(@PathVariable("key") String key) {
