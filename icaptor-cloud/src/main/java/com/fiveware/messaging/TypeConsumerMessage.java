@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.model.message.MessageAgent;
+import com.fiveware.model.message.MessageParameterAgent;
 import com.fiveware.model.message.MessageTaskAgent;
 
 @Component
@@ -39,6 +40,10 @@ public class TypeConsumerMessage {
 	@Qualifier("ITEM_TASK_PROCESSING")
 	private ConsumerTypeMessage<MessageTaskAgent> updateItemTask;
 
+	@Autowired
+	@Qualifier("PARAMETERS")
+	private ConsumerTypeMessage<MessageParameterAgent> parameters;
+	
 	private Set<Class<? extends ConsumerTypeMessage>> scan(String namePackage){
 		Reflections reflections = new Reflections(namePackage);
 		Set<Class<? extends ConsumerTypeMessage>> subTypesOf = reflections.getSubTypesOf(ConsumerTypeMessage.class);
@@ -66,6 +71,7 @@ public class TypeConsumerMessage {
 		consumersMap.put("STOP_AGENT", stopAgent);
 		consumersMap.put("PURGE_QUEUES", purgeQueues);
 		consumersMap.put("ITEM_TASK_PROCESSING", updateItemTask);
+		consumersMap.put("PARAMETERS", parameters);
 		return consumersMap;
 	}
 }

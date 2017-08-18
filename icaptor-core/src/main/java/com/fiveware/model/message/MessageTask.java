@@ -1,10 +1,13 @@
 package com.fiveware.model.message;
 
-import com.fiveware.messaging.TypeMessage;
+import java.io.Serializable;
+import java.util.List;
+
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
-import java.io.Serializable;
+import com.fiveware.messaging.TypeMessage;
+import com.google.common.collect.Lists;
 
 @AutoProperty
 public class MessageTask implements Serializable{
@@ -12,18 +15,13 @@ public class MessageTask implements Serializable{
 	private String nameQueueTask;
 	private String botName;
 	private TypeMessage typeMessage;
-	private Long itemTask;
-	
-	public MessageTask(TypeMessage typeMessage, Long itemTask) {
-		super();
-		this.typeMessage = typeMessage;
-		this.itemTask = itemTask;
-	}
+	private List<String> agents;
 
 	public MessageTask(String nameQueueTask, String botName) {
 		super();
 		this.nameQueueTask = nameQueueTask;
 		this.botName = botName;
+		this.agents = Lists.newArrayList();
 	}
 
 	public String getNameQueueTask() {
@@ -38,8 +36,12 @@ public class MessageTask implements Serializable{
 		return typeMessage;
 	}
 	
-	public Long getItemTask() {
-		return itemTask;
+	public List<String> getAgents() {
+		return agents;
+	}
+	
+	public void addAgent(String agent){
+		agents.add(agent);
 	}
 	
 	@Override
