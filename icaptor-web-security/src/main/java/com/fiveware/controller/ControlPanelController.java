@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fiveware.model.StatuProcessTask;
+import com.fiveware.model.Task;
 import com.fiveware.security.IcaptorUserDetail;
 import com.fiveware.service.ServiceStatusProcessTask;
 import com.fiveware.service.ServiceTask;
@@ -30,11 +31,12 @@ public class ControlPanelController {
 
 	@Autowired
 	private ServiceTask taskService;
-
+	
 	@GetMapping("/loadTasks")
 	public ResponseEntity<Object> loadTasks(@AuthenticationPrincipal IcaptorUserDetail userDetail) {
-		logger.info("Carregando as tasks.");
-		return ResponseEntity.ok().build();
+		logger.info("Loading all tasks for user [{}]", userDetail.getUsername());
+		List<Task> tasks = taskService.getTaskByUserIdOrderedByLoadTime(userDetail.getUserId());
+		return ResponseEntity.ok(tasks);
 	}
 
 	@GetMapping("/loadRecentActivities")
