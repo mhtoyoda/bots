@@ -17,4 +17,7 @@ public interface TaskRepository extends CrudRepository<Task, Long>{
 	
 	@Query("FROM Task WHERE bot.nameBot = :nameBot")
 	List<Task> findTaskbyBot(@Param("nameBot") String nameBot);
+	
+	@Query("FROM Task WHERE usuario.id = :userId ORDER BY loadTime DESC")
+	List<Task> findPeloUsuario(@Param("userId") Long userId);
 }
