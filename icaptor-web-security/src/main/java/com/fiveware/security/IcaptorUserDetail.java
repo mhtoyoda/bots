@@ -17,12 +17,17 @@ public class IcaptorUserDetail implements UserDetails {
 		this.user = icaptorUser;
 	}
 
+	public Long getUserId() {
+		return user.getId();
+	}
+
 	public String getDisplayName() {
 		return user.getName();
 	}
 
-	public String getProfileImagePath() {
-		return user.getProfileImagePath();
+	@Override
+	public String getUsername() {
+		return user.getEmail();
 	}
 
 	@Override
@@ -30,9 +35,8 @@ public class IcaptorUserDetail implements UserDetails {
 		return user.getPassword();
 	}
 
-	@Override
-	public String getUsername() {
-		return user.getEmail();
+	public String getProfileImagePath() {
+		return user.getProfileImagePath();
 	}
 
 	@Override

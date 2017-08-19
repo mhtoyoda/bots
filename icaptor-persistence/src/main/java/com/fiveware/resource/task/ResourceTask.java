@@ -2,11 +2,16 @@ package com.fiveware.resource.task;
 
 import java.util.List;
 
-import com.fiveware.model.StatuProcessTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.fiveware.model.Task;
 import com.fiveware.repository.TaskRepository;
@@ -50,5 +55,11 @@ public class ResourceTask {
 	@GetMapping("/status/{status}")
 	public ResponseEntity<List<Task>> findByStatus(@PathVariable("status") String status) {
 		return ResponseEntity.ok(taskRepository.findTaskbyStatusProcess(status));
+	}
+	
+	@GetMapping("/user/{userId}")
+	public ResponseEntity<List<Task>> findByUser(@PathVariable Long userId) {
+		List<Task> tasks= taskRepository.findPeloUsuario(userId);
+		return ResponseEntity.ok(tasks);
 	}
 }
