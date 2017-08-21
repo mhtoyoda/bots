@@ -23,6 +23,14 @@ public class MessageTask implements Serializable{
 		this.botName = botName;
 		this.agents = Lists.newArrayList();
 	}
+	
+	public MessageTask(String nameQueueTask, String botName, List<String> agents) {
+		super();
+		this.nameQueueTask = nameQueueTask;
+		this.botName = botName;
+		this.agents = agents;
+	}
+
 
 	public String getNameQueueTask() {
 		return nameQueueTask;

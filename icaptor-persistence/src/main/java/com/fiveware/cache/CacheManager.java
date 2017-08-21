@@ -1,7 +1,6 @@
 package com.fiveware.cache;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 public interface CacheManager<T>{
@@ -20,9 +19,9 @@ public interface CacheManager<T>{
 
 	boolean remove(String key, String keyValue, String value);
 
-	String getValues(String key, String keyValue);
+	Set<String> getValues(String key, String keyValue);
 
-	Set<Entry<String, Map<String, String>>> map();
+	Set<Map.Entry<String,Map<String,Set<String>>>> map();
 
 	boolean hasValue(String key, String keyValue);
 }

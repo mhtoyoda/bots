@@ -15,6 +15,8 @@ public class QueueContext {
 	
 	private String key;
 	
+	private String keyValue;
+	
 	public void addQueueInContext(String bot, String queueName){	
 		serviceCache.add(bot, queueName);		
 	}
@@ -35,7 +37,27 @@ public class QueueContext {
 		return key;
 	}
 	
+	public String getKeyValue() {
+		return keyValue;
+	}
+
+	public void setKeyValue(String keyValue) {
+		this.keyValue = keyValue;
+	}
+
 	public boolean hasTask(){
 		return serviceCache.has(this.getKey());
+	}
+	
+	public void addQueueInContext(String bot, String keyValue, String queueName){	
+		serviceCache.add(bot, queueName);		
+	}
+	
+	public void removeQueueInContext(String bot, String keyValue, String queueName){
+		serviceCache.remove(bot, queueName);		
+	}
+	
+	public Set<String> getTasksQueues(String bot, String keyValue) {
+		return serviceCache.get(bot, keyValue);
 	}
 }

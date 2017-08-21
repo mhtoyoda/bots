@@ -54,14 +54,14 @@ public class ServiceCache {
     
     public Boolean add(String key, String keyValue, String value){
         String url = "http://localhost:8085/api/cache/hm";
-        HttpEntity<Map<String, Map<String, String>>> entity = getEntity(key, keyValue, value);
+        HttpEntity<Map<String, Map<String, Set<String>>>> entity = getEntity(key, keyValue, value);
         ResponseEntity<Boolean> resp = restTemplate.postForEntity(url, entity, Boolean.class);
         return resp.getBody();
     }
 
     public Boolean remove(String key, String keyValue, String value){
         String url = "http://localhost:8085/api/cache/hm";
-        HttpEntity<Map<String, Map<String, String>>> entity = getEntity(key, keyValue, value);
+        HttpEntity<Map<String, Map<String, Set<String>>>> entity = getEntity(key, keyValue, value);
         ResponseEntity<Boolean> exchange = restTemplate.exchange(url, HttpMethod.DELETE, entity, Boolean.class);
         return exchange.getBody();
     }
@@ -95,14 +95,16 @@ public class ServiceCache {
         return new HttpEntity<Map<String,Set<String>>>(cache, headers);
     }
     
-    private HttpEntity<Map<String, Map<String, String>>> getEntity(String key, String keyValue, String value) {
-        Map<String, Map<String, String>> cache = new LinkedHashMap<>();
-        Map<String, String> valor = new LinkedHashMap<String, String>();
-        valor.put(keyValue, value);
-        cache.put(key,valor);
+    private HttpEntity<Map<String, Map<String, Set<String>>>> getEntity(String key, String keyValue, String value) {
+        Map<String, Map<String, Set<String>>> cache = new LinkedHashMap<>();
+        Map<String, Set<String>> mapValues = new LinkedHashMap<>();
+        Set<String> values = new TreeSet<>();
+        values.add(value);
+        mapValues.put(keyValue, values);    
+        cache.put(key, mapValues);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<Map<String,Map<String, String>>>(cache, headers);
+        return new HttpEntity<Map<String,Map<String, Set<String>>>>(cache, headers);
     }
  }

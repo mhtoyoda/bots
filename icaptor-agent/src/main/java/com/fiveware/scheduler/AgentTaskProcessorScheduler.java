@@ -52,7 +52,10 @@ public class AgentTaskProcessorScheduler {
 	public void processMessage(String botName, MessageTask obj){
 		if(botName.equals(obj.getBotName())){
 			queueContext.setKey(botName);
-			queueContext.addQueueInContext(botName, obj.getNameQueueTask());
+			queueContext.setKeyValue(data.getAgentName());
+			obj.getAgents().forEach(agent -> {				
+				queueContext.addQueueInContext(botName, agent, obj.getNameQueueTask());
+			});
 			log.info("Add queue task -> {} - bot -> {}", obj.getNameQueueTask(), obj.getBotName());
 		}
 	}

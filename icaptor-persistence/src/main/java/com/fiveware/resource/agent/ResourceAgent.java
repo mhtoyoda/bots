@@ -20,7 +20,6 @@ import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
 import com.fiveware.model.Server;
 import com.fiveware.repository.AgentRepository;
-import com.fiveware.repository.BotRepository;
 import com.fiveware.repository.ServerRepository;
 
 /**
@@ -35,9 +34,6 @@ public class ResourceAgent {
 
 	@Autowired
 	private ServerRepository serverRepository;
-	
-	@Autowired
-	private BotRepository botRepository;
 	
 	@Transactional(readOnly = false)
     @PostMapping
@@ -112,5 +108,11 @@ public class ResourceAgent {
     public List<Bot> findBotsByAgent(@PathVariable("nameAgent") String nameAgent){
         List<Bot> botsByAgent = agentRepository.findBynameAgent(nameAgent);
         return botsByAgent;
+    }
+    
+    @GetMapping("/agents/nameBot/{nameBot}")
+    public List<Agent> findByNameBot(@PathVariable("nameBot") String nameBot){
+        List<Agent> agents = agentRepository.findByBot(nameBot);
+        return agents;
     }
 }
