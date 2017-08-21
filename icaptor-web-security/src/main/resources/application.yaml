@@ -1,0 +1,4 @@
+server:
+  name: icaptor-web-server
+  host: localhost
+  port: 8014
