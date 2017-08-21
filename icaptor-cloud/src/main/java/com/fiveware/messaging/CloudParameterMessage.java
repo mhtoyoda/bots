@@ -1,5 +1,6 @@
 package com.fiveware.messaging;
 
+import com.fiveware.model.message.MessageAgent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,7 @@ public class CloudParameterMessage implements ConsumerTypeMessage<MessageParamet
 	
 	@Autowired
 	@Qualifier("eventMessageProducer")
-	private Producer<MessageParameterAgent> producer;
+	private Producer<MessageAgent> producer;
 	
 	@Override
 	public void process(MessageParameterAgent message) {
