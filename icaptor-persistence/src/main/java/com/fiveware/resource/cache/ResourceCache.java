@@ -74,12 +74,12 @@ public class ResourceCache {
 		return cacheManager.map() ;
 	}
 
-	@GetMapping("/hm/get/{key}")
+	@GetMapping("/hm/get/{key}/{keyValue}")
 	public String hmGetValues(@PathVariable("key") String key, @PathVariable("keyValue") String keyValue) {
 		return cacheManager.getValues(key, keyValue);
 	}
 	
-	@GetMapping("/hm/has/{key}")
+	@GetMapping("/hm/has/{key}/{keyValue}")
 	public boolean hmHasValue(@PathVariable("key") String key, @PathVariable("keyValue") String keyValue) {
 		return cacheManager.hasValue(key, keyValue);
 	}
