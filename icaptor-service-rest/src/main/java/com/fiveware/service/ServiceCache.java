@@ -52,37 +52,37 @@ public class ServiceCache {
         return hasItem;
     }
     
-//    public Boolean add(String key, String keyValue, String value){
-//        String url = "http://localhost:8085/api/cache/hm";
-//        HttpEntity<Map<String, Set<String>>> entity = getEntity(key, value);
-//        ResponseEntity<Boolean> resp = restTemplate.postForEntity(url, entity, Boolean.class);
-//        return resp.getBody();
-//    }
-//
-//    public Boolean remove(String key, String keyValue, String value){
-//        String url = "http://localhost:8085/api/cache/hm";
-//        HttpEntity<Map<String, Set<String>>> entity = getEntity(key, value);
-//        ResponseEntity<Boolean> exchange = restTemplate.exchange(url, HttpMethod.DELETE, entity, Boolean.class);
-//        return exchange.getBody();
-//    }
-//
-//    public Set map(){
-//        String url = "http://localhost:8085/api/cache/hm";
-//        Set forObject = restTemplate.getForObject(url, Set.class);
-//        return forObject;
-//    }
-//    
-//    public Set<String> get(String key, String keyValue){
-//        String url = "http://localhost:8085/api/cache/hm/get/"+key;
-//        Set<String> values = restTemplate.getForObject(url, Set.class);
-//        return values;
-//    }
-//   
-//    public Boolean has(String key, String keyValue){
-//        String url = "http://localhost:8085/api/cache/hm/has/"+key;
-//        boolean hasItem = restTemplate.getForObject(url, Boolean.class);
-//        return hasItem;
-//    }
+    public Boolean add(String key, String keyValue, String value){
+        String url = "http://localhost:8085/api/cache/hm";
+        HttpEntity<Map<String, Map<String, String>>> entity = getEntity(key, keyValue, value);
+        ResponseEntity<Boolean> resp = restTemplate.postForEntity(url, entity, Boolean.class);
+        return resp.getBody();
+    }
+
+    public Boolean remove(String key, String keyValue, String value){
+        String url = "http://localhost:8085/api/cache/hm";
+        HttpEntity<Map<String, Map<String, String>>> entity = getEntity(key, keyValue, value);
+        ResponseEntity<Boolean> exchange = restTemplate.exchange(url, HttpMethod.DELETE, entity, Boolean.class);
+        return exchange.getBody();
+    }
+
+    public Set map(){
+        String url = "http://localhost:8085/api/cache/hm";
+        Set forObject = restTemplate.getForObject(url, Set.class);
+        return forObject;
+    }
+    
+    public Set<String> get(String key, String keyValue){
+        String url = "http://localhost:8085/api/cache/hm/get/"+key+"/"+keyValue;
+        Set<String> values = restTemplate.getForObject(url, Set.class);
+        return values;
+    }
+   
+    public Boolean has(String key, String keyValue){
+        String url = "http://localhost:8085/api/cache/hm/has/"+key+"/"+keyValue;
+        boolean hasItem = restTemplate.getForObject(url, Boolean.class);
+        return hasItem;
+    }
 
     private HttpEntity<Map<String, Set<String>>> getEntity(String key, String value) {
         Map<String, Set<String>> cache = new LinkedHashMap<>();
@@ -93,5 +93,16 @@ public class ServiceCache {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         return new HttpEntity<Map<String,Set<String>>>(cache, headers);
-    }  
+    }
+    
+    private HttpEntity<Map<String, Map<String, String>>> getEntity(String key, String keyValue, String value) {
+        Map<String, Map<String, String>> cache = new LinkedHashMap<>();
+        Map<String, String> valor = new LinkedHashMap<String, String>();
+        valor.put(keyValue, value);
+        cache.put(key,valor);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return new HttpEntity<Map<String,Map<String, String>>>(cache, headers);
+    }
  }
