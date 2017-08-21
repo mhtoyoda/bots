@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -16,7 +15,7 @@ import com.google.common.collect.Sets;
 public class MapCache implements CacheManager<String> {
 	
 	private static Map<String,Set<String>> cache = new LinkedHashMap<String,Set<String>>();
-	private static Map<String, Map<String, String>> cacheMap = new HashMap<String, Map<String,String>>();
+	private static Map<String, Map<String, Set<String>>> cacheMap = new HashMap<String, Map<String,Set<String>>>();
 	
 	@Override
 	public boolean add(String key, String value) {
@@ -25,8 +24,22 @@ public class MapCache implements CacheManager<String> {
 	}
 	
 	@Override
-	public boolean add(String key, String keyValue, String value) { 
-		cacheMap.computeIfAbsent(key, queues -> new HashMap<String,String>()).put(keyValue, value);
+	public boolean add(String key, String keyValue, String value) {
+		if(cacheMap.get(key) == null){
+			Map<String, Set<String>> map = new HashMap<>();
+			map.put(keyValue, Sets.newHashSet(value));
+			cacheMap.put(key, map);
+		}else{
+			Map<String, Set<String>> map = cacheMap.get(key);
+			if(map.containsKey(keyValue)){
+				Set<String> values = map.get(keyValue);
+				values.add(value);
+			}else{
+				Set<String> values = Sets.newHashSet(value);
+				map.put(keyValue, values);
+			}
+			cacheMap.put(key, map);
+		}
 		return true;
 	}
 	
@@ -44,9 +57,11 @@ public class MapCache implements CacheManager<String> {
 	public boolean remove(String key, String keyValue, String value) {
 		boolean removeIf = false;
 		if(cacheMap.containsKey(key)){
-			Map<String, String> mapValues = cacheMap.get(key);
-			if(mapValues.containsKey(keyValue)){
-				removeIf = mapValues.entrySet().removeIf(k -> k.equals(keyValue));								
+			Map<String, Set<String>> map = cacheMap.get(key);
+			if(map.containsKey(keyValue)){
+				Set<String> cache = map.get(keyValue);
+				Predicate<String> filter = p-> p.equals(value);
+				removeIf = cache.removeIf(filter);								
 			}
 		}
 		return removeIf;
@@ -58,12 +73,12 @@ public class MapCache implements CacheManager<String> {
 	}
 	
 	@Override
-	public String getValues(String key, String keyValue) {
+	public Set<String> getValues(String key, String keyValue) {
 		if(cacheMap.get(key) == null){
-			return "";
+			return Sets.newHashSet();
 		}
-		Map<String, String> map = cacheMap.get(key);
-		return map.get(keyValue) == null ? "" : map.get(keyValue);		
+		Map<String, Set<String>> cache = cacheMap.get(key);
+		return cache.get(key) == null ? Sets.newHashSet() : cache.get(key);				
 	}
 
 	@Override
@@ -72,7 +87,7 @@ public class MapCache implements CacheManager<String> {
 	}
 
 	@Override
-	public Set<Entry<String, Map<String, String>>> map() {
+	public Set<Map.Entry<String,Map<String,Set<String>>>> map() {
 		return cacheMap.entrySet();
 	}
 	
@@ -86,8 +101,7 @@ public class MapCache implements CacheManager<String> {
 		boolean hasValue = false;
 		if(cacheMap.get(key) == null){
 			return hasValue;
-		}
-		Map<String, String> map = cacheMap.get(key);
-		return map.get(keyValue) == null ? hasValue : true;
+		}		 
+		return cacheMap.get(key).get(keyValue) == null ? hasValue : true;
 	}
 }

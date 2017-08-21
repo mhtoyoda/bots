@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.messaging.BrokerManager;
 import com.fiveware.messaging.Producer;
+import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.Record;
@@ -26,6 +27,7 @@ import com.fiveware.model.Task;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.model.message.MessageHeader;
 import com.fiveware.model.message.MessageTask;
+import com.fiveware.service.ServiceAgent;
 import com.fiveware.task.StatusProcessItemTaskEnum;
 import com.fiveware.task.StatusProcessTaskEnum;
 import com.fiveware.task.TaskManager;
@@ -63,6 +65,9 @@ public class ReadInputFile {
 
     @Autowired
     private RuleValidations ruleValidations;
+    
+    @Autowired
+    private ServiceAgent serviceAgent;
 
     private Long userId = 1L;
     
@@ -137,7 +142,18 @@ public class ReadInputFile {
     }
     
     private void sendNotificationTaskCreated(String nameQueueTask, String botName){ 
-    	MessageTask message = new MessageTask(nameQueueTask, botName);
+    	List<String> agents = getAgentsByBot(botName);
+    	MessageTask message = new MessageTask(nameQueueTask, botName, agents);
 		taskProducer.send("", message);
+    }
+    
+    private List<String> getAgentsByBot(String botName){
+    	//TODO pegar quantidade de parametros com credential por bot
+    	List<Agent> agents = serviceAgent.findAgentsByBotName(botName);
+    	if(CollectionUtils.isNotEmpty(agents)){
+    		List<String> list = agents.stream().map(Agent::getNameAgent).collect(Collectors.toList());
+    		return list;
+    	}
+    	return Lists.newArrayList();
     }
 }

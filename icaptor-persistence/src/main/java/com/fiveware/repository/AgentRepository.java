@@ -18,4 +18,7 @@ public interface AgentRepository extends CrudRepository<Agent, Long> {
 	List<Bot> findBynameAgent(@Param("nameAgent") String nameAgent);
 
     Agent findByNameAgentAndPort(String nameAgent, int port);
+    
+    @Query("SELECT a FROM Agent a join a.bots b where b.nameBot = :nameBot")
+	List<Agent> findByBot(@Param("nameBot") String nameBot);
 }

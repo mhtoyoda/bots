@@ -1,7 +1,6 @@
 package com.fiveware.resource.cache;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,12 +69,12 @@ public class ResourceCache {
 	}
 
 	@GetMapping("/hm")
-	public Set<Entry<String, Map<String, String>>> map() {
-		return cacheManager.map() ;
+	public Set<Map.Entry<String,Map<String,Set<String>>>> map() {
+		return cacheManager.map();
 	}
 
 	@GetMapping("/hm/get/{key}/{keyValue}")
-	public String hmGetValues(@PathVariable("key") String key, @PathVariable("keyValue") String keyValue) {
+	public Set<String> hmGetValues(@PathVariable("key") String key, @PathVariable("keyValue") String keyValue) {
 		return cacheManager.getValues(key, keyValue);
 	}
 	
