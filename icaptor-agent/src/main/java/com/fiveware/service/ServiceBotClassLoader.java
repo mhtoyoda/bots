@@ -1,6 +1,7 @@
 package com.fiveware.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiveware.exception.RecoverableException;
 import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.loader.ClassLoaderConfig;
@@ -9,6 +10,7 @@ import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.OutputDictionaryContext;
 import com.fiveware.processor.ProcessorFields;
+import com.fiveware.task.StatusProcessItemTaskEnum;
 import com.fiveware.task.StatusProcessTaskEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -90,21 +93,27 @@ public  class ServiceBotClassLoader<T> {
         	}
 
             processorFields.getMessageBot().setStatuProcessEnum(StatusProcessTaskEnum.SUCCESS);
+            processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.SUCCESS);
+
             processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
 
         }catch (InvocationTargetException e) {
 
-            if (e.getCause().getClass().getName().equals(UnRecoverableException.class.getName())){
+            Predicate<Class> predicate = new Predicate<Class>() {
+                @Override
+                public boolean test(Class o) {
+                    return o.getName().equals(e.getCause().getClass().getName());
+                }
+            };
 
-                UnRecoverableException unRecoverable = new UnRecoverableException(e.getCause());
+            if (predicate.test(UnRecoverableException.class) ) {
+                processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
 
-                Map map = new HashMap();
-                String fields = getOutputDictionary(processorFields);
-                map.put("ERROR",  fields+"|"+unRecoverable.getMessage());
-                HashMap[] hashMaps = {(HashMap) map};
+                HashMap[] hashMaps = handleException(processorFields,  new UnRecoverableException(e.getCause()));
 
-                processorFields.getMessageBot().setStatuProcessEnum(StatusProcessTaskEnum.ERROR);
-                processorFields.getMessageBot().setLineResult(fields+"|"+unRecoverable.getMessage());
+                return new OutTextRecord(hashMaps);
+            }else if (predicate.test(RecoverableException.class) ){
+                HashMap[] hashMaps = handleException(processorFields, new RecoverableException(e.getCause()));
 
                 return new OutTextRecord(hashMaps);
             }else{
@@ -119,6 +128,18 @@ public  class ServiceBotClassLoader<T> {
         HashMap[] hashMaps = {(HashMap) map};
 
         return new OutTextRecord(hashMaps);
+    }
+
+    private HashMap[] handleException(ProcessorFields processorFields, Exception ex) {
+        Map map = new HashMap();
+        String fields = getOutputDictionary(processorFields);
+        map.put("ERROR",  fields+"|"+ex.getMessage());
+        HashMap[] hashMaps = {(HashMap) map};
+
+        processorFields.getMessageBot().setLineResult(fields+"|"+ex.getMessage());
+        processorFields.getMessageBot().setException(ex);
+
+        return hashMaps;
     }
 
     private String getOutputDictionary(ProcessorFields processorFields) {

@@ -78,21 +78,7 @@ public class FileUtil {
 
 		if (!Objects.isNull(messageBot.getStatuProcessEnum()))
 			taskManager.updateItemTask(messageBot.getItemTaskId(),
-						messageBot.getStatuProcessEnum(),messageBot.getLineResult());
+						messageBot.getStatusProcessItemTaskEnum(),messageBot.getLineResult());
 
-		if (StatusProcessTaskEnum.SUCCESS.equals(messageBot.getStatuProcessEnum())) {
-			try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileOut, true))) {
-				//FIXME corrigir bug para fazer append por task ID
-				try {
-					bw.write(messageBot.getLineResult());
-					bw.newLine();
-
-				} catch (IOException e) {
-					logger.error("{}", e);
-				}
-			} catch (IOException e) {
-				logger.error("{}", e);
-			}
-		}
 	}
 }

@@ -1,7 +1,9 @@
 package com.fiveware.task;
 
 import java.util.Date;
+import java.util.Objects;
 
+import com.fiveware.model.message.MessageBot;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -45,7 +47,7 @@ public class TaskManager {
 
 	public Task updateTask(Long taskId, StatusProcessTaskEnum statuProcessEnum) {
 		Task task = serviceTask.getTaskById(taskId);
-		task.setStatusProcess(serviceStatusProcessTask.getStatusProcessById(statuProcessEnum.getId()));
+		task.setStatusProcess(statuProcessEnum.getStatuProcess());
 		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.SUCCESS)) {
 			task.setEndAt(new Date());
 		}
@@ -62,9 +64,9 @@ public class TaskManager {
 		return itemTask;
 	}
 
-	public ItemTask updateItemTask(Long itemTaskId, StatusProcessTaskEnum statuProcessEnum, String dataOut) {
+	public ItemTask updateItemTask(Long itemTaskId, StatusProcessItemTaskEnum statuProcessEnum, String dataOut) {
 		ItemTask itemTask = itemServiceTask.getItemTaskById(itemTaskId);
-		itemTask.setStatusProcess(serviceStatusProcessTask.getStatusProcessItemTaskById(statuProcessEnum.getId()));
+		itemTask.setStatusProcess(statuProcessEnum.getStatuProcess());
 		if (StringUtils.isNotBlank(dataOut)) {
 			itemTask.setDataOut(dataOut);
 		}
@@ -90,4 +92,34 @@ public class TaskManager {
 		itemTask = itemServiceTask.save(itemTask);
 		return itemTask;
 	}
+
+	public Task getTask(Long taskId) {
+		return serviceTask.getTaskById(taskId);
+	}
+
+	public ItemTask updateItemTask(MessageBot messageBot) {
+		ItemTask itemTask = itemServiceTask.getItemTaskById(messageBot.getItemTaskId());
+
+		if (!Objects.isNull(messageBot.getStatusProcessItemTaskEnum())){
+
+			if (StatusProcessItemTaskEnum.ERROR.equals(messageBot.getStatusProcessItemTaskEnum()) ||
+					StatusProcessItemTaskEnum.SUCCESS.equals(messageBot.getStatusProcessItemTaskEnum())) {
+				itemTask.setEndAt(new Date());
+
+			}
+			if (messageBot.getStatusProcessItemTaskEnum().equals(StatusProcessItemTaskEnum.PROCESSING)) {
+				int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
+				itemTask.setAttemptsCount(attemptsCount);
+			}
+		}
+
+		itemTask.setAttemptsCount(messageBot.getAttemptsCount());
+		itemTask.setStatusProcess(messageBot.getStatusProcessItemTaskEnum().getStatuProcess());
+		itemTask.setDataOut(messageBot.getLineResult());
+
+		itemTask = itemServiceTask.save(itemTask);
+		return itemTask;
+	}
+
+
 }

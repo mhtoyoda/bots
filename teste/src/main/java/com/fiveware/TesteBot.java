@@ -2,6 +2,7 @@ package com.fiveware;
 
 import com.fiveware.annotation.*;
 import com.fiveware.automate.BotScreen;
+import com.fiveware.exception.RecoverableException;
 import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
 import org.slf4j.Logger;
@@ -31,12 +32,15 @@ public class TesteBot implements Automation<String, Endereco> {
 	@InputDictionary(fields = {"cep"}, separator = "|	", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws RuntimeBotException,UnRecoverableException {
+	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws RuntimeBotException,UnRecoverableException,RecoverableException {
 
-		throw new RuntimeBotException("Simulando bug ");
+//		throw new RuntimeBotException("Simulando bug ");
 
-		//Endereco endereco = getEndereco(cep);
+		throw new RecoverableException("Simulando bug RecoverableException");
 
+
+//		Endereco endereco = getEndereco(cep);
+//
 //		return endereco;
 	}
 
