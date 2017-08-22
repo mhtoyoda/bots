@@ -30,6 +30,27 @@
 
 	</properties>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>4.2.0</version>
+				<configuration>
+					<url>
+						jdbc:mysql://localhost:3306/icaptor
+					</url>
+					<user>root</user>
+					<password>root</password>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -63,18 +84,18 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		<!-- Suporte para LogBack -->
 		<!--&lt;!&ndash; JPA / Hibernate &ndash;&gt;-->
-		<!--<dependency>-->
-			<!--<groupId>org.hibernate</groupId>-->
-			<!--<artifactId>hibernate-entitymanager</artifactId>-->
-			<!--<version>${hibernate.version}</version>-->
-			<!--<scope>compile</scope>-->
-		<!--</dependency>-->
+		<dependency>
+			<groupId>org.codehaus.janino</groupId>
+			<artifactId>janino</artifactId>
+			<version>3.0.6</version>
+		</dependency>
 
 		<!--<dependency>-->
-			<!--<groupId>org.hibernate</groupId>-->
-			<!--<artifactId>hibernate-java8</artifactId>-->
-			<!--<version>5.0.3.Final</version>-->
+		<!--<groupId>org.hibernate</groupId>-->
+		<!--<artifactId>hibernate-java8</artifactId>-->
+		<!--<version>5.0.3.Final</version>-->
 		<!--</dependency>-->
 
 		<dependency>
@@ -118,25 +139,4 @@
 
 
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.flywaydb</groupId>
-				<artifactId>flyway-maven-plugin</artifactId>
-				<version>4.2.0</version>
-				<configuration>
-					<url>
-						jdbc:mysql://localhost:3306/icaptor
-					</url>
-					<user>root</user>
-					<password>root</password>
-				</configuration>
-			</plugin>
-
-		</plugins>
-	</build>
 </project>

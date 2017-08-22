@@ -1,15 +1,14 @@
 package com.fiveware.security;
 
-import java.util.Optional;
-
+import com.fiveware.model.user.IcaptorUser;
+import com.fiveware.service.ServiceUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.fiveware.model.user.IcaptorUser;
-import com.fiveware.service.ServiceUser;
+import java.util.Optional;
 
 @Service
 public class UserDetailServiceImpl implements UserDetailsService {
@@ -23,8 +22,13 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
 		IcaptorUser icaptorUser = clienteOptional.orElseThrow(() -> new UsernameNotFoundException(createLoginFailMessage(email)));
 
-		return new IcaptorUserDetail(icaptorUser);
+		IcaptorUserDetail icaptorUserDetail = new IcaptorUserDetail(icaptorUser);
+
+		return  icaptorUserDetail;
 	}
+
+
+
 
 	protected String createLoginFailMessage(String email) {
 		StringBuilder sb = new StringBuilder();

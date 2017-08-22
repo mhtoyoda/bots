@@ -51,10 +51,9 @@ public class IcaptorUser implements Serializable {
 	@Column(name = "profile_image_path")
 	private String profileImagePath;
 
-	@JsonIgnore
 	@Size(min = 1, message = "Selecione pelo menos um grupo")
 	@ManyToMany
-	@JoinTable(name = "group_user", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_group"))
+	@JoinTable(name = "grupo_user", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
 	private List<Group> grupos;
 
 	public Long getId() {
@@ -97,13 +96,13 @@ public class IcaptorUser implements Serializable {
 		this.active = active;
 	}
 
-//	public List<Group> getGrupos() {
-//		return grupos;
-//	}
-//
-//	public void setGrupos(List<Group> grupos) {
-//		this.grupos = grupos;
-//	}
+	public List<Group> getGrupos() {
+		return grupos;
+	}
+
+	public void setGrupos(List<Group> grupos) {
+		this.grupos = grupos;
+	}
 
 	public String getConfirmacaoSenha() {
 		return confirmacaoSenha;

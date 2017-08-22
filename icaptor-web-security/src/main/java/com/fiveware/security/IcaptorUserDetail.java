@@ -1,11 +1,13 @@
 package com.fiveware.security;
 
-import java.util.Collection;
-
+import com.fiveware.model.user.IcaptorUser;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.fiveware.model.user.IcaptorUser;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 public class IcaptorUserDetail implements UserDetails {
 
@@ -15,6 +17,8 @@ public class IcaptorUserDetail implements UserDetails {
 
 	public IcaptorUserDetail(IcaptorUser icaptorUser) {
 		this.user = icaptorUser;
+		getAuthorities();
+
 	}
 
 	public Long getUserId() {
@@ -46,7 +50,7 @@ public class IcaptorUserDetail implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return getPermissoes(this.user);
 	}
 
 	@Override
@@ -62,6 +66,15 @@ public class IcaptorUserDetail implements UserDetails {
 	@Override
 	public boolean isCredentialsNonExpired() {
 		return user.getActive();
+	}
+
+
+	private Collection<? extends GrantedAuthority> getPermissoes(IcaptorUser usuario) {
+		Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+		usuario.getGrupos().forEach(
+				(g)->g.getPermissions().forEach(
+						(p) -> authorities.add(new SimpleGrantedAuthority(p.getName().toUpperCase()))));
+		return authorities;
 	}
 
 }

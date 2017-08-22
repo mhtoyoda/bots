@@ -1,0 +1,20 @@
+server:
+  name: icaptor-web-server
+  host: localhost
+  port: 8014
+icaptor:
+  seguranca:
+    enable-https: false
+---
+server:
+  name: icaptor-web-server
+  host: localhost
+  port: 8014
+icaptor:
+  seguranca:
+    enable-https: true
+  origin-permitida:
+spring:
+  profiles:
+    active: prod
+

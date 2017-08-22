@@ -9,7 +9,7 @@ import java.util.List;
 
 @AutoProperty
 @Entity
-@Table(name = "group")
+@Table(name = "grupo")
 public class Group implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -21,7 +21,7 @@ public class Group implements Serializable {
 	private String name;
 
 	@ManyToMany
-	@JoinTable(name = "group_permission", joinColumns = @JoinColumn(name = "id_group"), inverseJoinColumns = @JoinColumn(name = "id_permission"))
+	@JoinTable(name = "grupo_permission", joinColumns = @JoinColumn(name = "id_grupo"), inverseJoinColumns = @JoinColumn(name = "id_permission"))
 	private List<Permission> permissions;
 
 	public Long getId() {
