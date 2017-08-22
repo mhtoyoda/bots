@@ -5,6 +5,7 @@ server:
 icaptor:
   seguranca:
     enable-https: false
+
 ---
 server:
   name: icaptor-web-server
