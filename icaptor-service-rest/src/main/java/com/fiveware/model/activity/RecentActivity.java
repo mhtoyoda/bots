@@ -20,7 +20,7 @@ import com.fiveware.model.user.IcaptorUser;
 public class RecentActivity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
 	@Size(max = 50)
@@ -30,11 +30,11 @@ public class RecentActivity {
 	private LocalDate creationTime;
 
 	@ManyToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "id", insertable = false, updatable = false)
 	private Task task;
 
 	@ManyToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "id", insertable = false, updatable = false)
 	private IcaptorUser user;
 
 	public Long getId() {
