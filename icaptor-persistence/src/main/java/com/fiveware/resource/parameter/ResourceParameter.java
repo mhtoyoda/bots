@@ -33,6 +33,11 @@ public class ResourceParameter {
 	@Autowired
 	private TypeParameterRepository typeParameterRepository;
 	
+	@GetMapping("/{id}")
+	public Parameter findParameterById(@PathVariable Long id) {
+		return parameterRepository.findOne(id);
+	}
+	
 	@GetMapping("/scope/{id}")
 	public ScopeParameter findScopeParameterById(@PathVariable Long id) {
 		return scopeParameterRepository.findOne(id);

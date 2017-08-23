@@ -33,4 +33,9 @@ public class ParameterResolver {
 		return parameterInfo;
 	}
 	
+	public void disableParameter(Long parameterId){
+		Parameter parameter = serviceParameter.getParameterById(parameterId);
+		parameter.setActive(false);
+		serviceParameter.save(parameter);
+	}
 }

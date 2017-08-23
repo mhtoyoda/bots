@@ -72,6 +72,14 @@ public class ServiceParameter {
 		return scopeParameter;
 	}
 	
+	public Parameter getParameterById(Long id) {
+		String url = "http://localhost:8085/api/parameter/" +id;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		Parameter parameter = restTemplate.getForObject(url, Parameter.class);
+		return parameter;
+	}
+	
 	public List<TypeParameter> getTypeParameterAll() {
 		String url = "http://localhost:8085/api/parameter/type";
 		HttpHeaders headers = new HttpHeaders();
