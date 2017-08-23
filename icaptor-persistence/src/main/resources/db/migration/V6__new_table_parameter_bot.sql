@@ -1,7 +1,8 @@
 CREATE TABLE type_parameter(
 	id bigint auto_increment primary key,
 	name varchar(60) null,
-    exclusive boolean default false
+    exclusive boolean default false,
+    credential boolean default false
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE scope_parameter(
