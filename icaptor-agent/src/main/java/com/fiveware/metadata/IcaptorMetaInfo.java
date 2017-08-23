@@ -77,8 +77,7 @@ public enum IcaptorMetaInfo {
 						Object[] values = (Object[]) methodTarget.invoke(annotation);	
 						for(int index = 0; index < values.length; index++){
 							Class<?>[] proxiedUserInterfaces = AopProxyUtils.proxiedUserInterfaces(values[index]);
-							Class<IcaptorParameter> icaptorParameter = (Class<IcaptorParameter>) proxiedUserInterfaces[0];
-							String name = (String) getValueParameter(values, index, icaptorParameter, NAME.getValue());							
+							Class<IcaptorParameter> icaptorParameter = (Class<IcaptorParameter>) proxiedUserInterfaces[0];														
 							String value  = (String) getValueParameter(values, index, icaptorParameter, VALUE.getValue());
 							String regexValidate  = (String) getValueParameter(values, index, icaptorParameter, REGEXVALIDATE.getValue());
 							String nameTypeParameter  = (String) getValueParameter(values, index, icaptorParameter, NAMETYPEPARAMETER.getValue());
@@ -86,7 +85,7 @@ public enum IcaptorMetaInfo {
 							boolean credential = (Boolean) getValueParameter(values, index, icaptorParameter, CREDENTIAL.getValue());
 							
 							ParameterContextBuilder builder = new ParameterContextBuilder();
-							IcaptorPameterContext icaptorPameterContext = builder.name(name).value(value)
+							IcaptorPameterContext icaptorPameterContext = builder.value(value)
 									.regexValidate(regexValidate).nameTypeParameter(nameTypeParameter)
 									.exclusive(exclusive).credential(credential).build();
 							list.add(icaptorPameterContext);

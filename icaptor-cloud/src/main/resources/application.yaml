@@ -16,6 +16,7 @@ io:
   worker.file: ${HOME}/.icaptor-out-file
   file-read: ${HOME}/.icaptor-read-file
 
+retries: 5
 ---
 server:
   name: icaptor-server
