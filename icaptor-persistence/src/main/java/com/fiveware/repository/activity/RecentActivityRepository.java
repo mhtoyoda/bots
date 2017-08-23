@@ -16,4 +16,7 @@ public interface RecentActivityRepository extends CrudRepository<RecentActivity,
 	
 	@Query("FROM RecentActivity WHERE user.id = :userId")
 	public List<RecentActivity> findAllByUserId(Long userId);
+
+
+	
 }

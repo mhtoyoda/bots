@@ -1,6 +1,6 @@
 package com.fiveware.model.activity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,21 +20,21 @@ import com.fiveware.model.user.IcaptorUser;
 public class RecentActivity {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
 	@Size(max = 50)
 	private String description;
 
 	@Column(name = "creation_time")
-	private LocalDate creationTime;
+	private LocalDateTime creationTime;
 
 	@ManyToOne
-	@JoinColumn(name = "id", insertable = false, updatable = false)
+	@JoinColumn(name = "user_id")
 	private Task task;
 
 	@ManyToOne
-	@JoinColumn(name = "id", insertable = false, updatable = false)
+	@JoinColumn(name = "task_id")
 	private IcaptorUser user;
 
 	public Long getId() {
@@ -53,11 +53,11 @@ public class RecentActivity {
 		this.description = description;
 	}
 
-	public LocalDate getCreationTime() {
+	public LocalDateTime getCreationTime() {
 		return creationTime;
 	}
 
-	public void setCreationTime(LocalDate creationTime) {
+	public void setCreationTime(LocalDateTime creationTime) {
 		this.creationTime = creationTime;
 	}
 
