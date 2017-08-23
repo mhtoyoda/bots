@@ -9,6 +9,7 @@ public class ParameterContextBuilder {
 	private String regexValidate;
 	private String nameTypeParameter;
 	private boolean exclusive;
+	private boolean credential;
 	
 	public ParameterContextBuilder name(String name){
 		this.name = name;
@@ -35,7 +36,12 @@ public class ParameterContextBuilder {
 		return this;
 	}
 	
+	public ParameterContextBuilder credential(boolean credential){
+		this.credential = credential;
+		return this;
+	}
+	
 	public IcaptorPameterContext build(){
-		return new IcaptorPameterContext(name, value, regexValidate, nameTypeParameter, exclusive);
+		return new IcaptorPameterContext(name, value, regexValidate, nameTypeParameter, exclusive, credential);
 	}
 }

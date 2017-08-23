@@ -29,7 +29,10 @@ public class TypeParameter implements Serializable {
 
 	@Column(name = "exclusive")
 	private Boolean exclusive;
-
+	
+	@Column(name = "credential")
+	private Boolean credential;
+	
 	public Long getId() {
 		return id;
 	}
@@ -52,6 +55,14 @@ public class TypeParameter implements Serializable {
 
 	public void setExclusive(Boolean exclusive) {
 		this.exclusive = exclusive;
+	}
+	
+	public Boolean getCredential() {
+		return credential;
+	}
+
+	public void setCredential(Boolean credential) {
+		this.credential = credential;
 	}
 
 	@Override

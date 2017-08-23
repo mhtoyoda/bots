@@ -9,14 +9,16 @@ public class IcaptorPameterContext implements Serializable {
 	private String regex;
 	private String nameTypeParameter;
 	private boolean exclusive;
+	private boolean credential;
 
-	public IcaptorPameterContext(String name, String value, String regex, String nameTypeParameter, boolean exclusive) {
+	public IcaptorPameterContext(String name, String value, String regex, String nameTypeParameter, boolean exclusive, boolean credential) {
 		super();
 		this.name = name;
 		this.value = value;
 		this.regex = regex;
 		this.nameTypeParameter = nameTypeParameter;
 		this.exclusive = exclusive;
+		this.credential = credential;
 	}
 
 	public String getName() {
@@ -37,6 +39,10 @@ public class IcaptorPameterContext implements Serializable {
 
 	public boolean isExclusive() {
 		return exclusive;
+	}
+
+	public boolean isCredential() {
+		return credential;
 	}
 
 }

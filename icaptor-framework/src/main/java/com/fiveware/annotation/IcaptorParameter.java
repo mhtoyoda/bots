@@ -21,4 +21,5 @@ public @interface IcaptorParameter {
 	String regexValidate() default "";
 	String nameTypeParameter();
 	boolean exclusive();
+	boolean credential();
 }

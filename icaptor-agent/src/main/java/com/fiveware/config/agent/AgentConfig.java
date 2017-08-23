@@ -136,7 +136,7 @@ public class AgentConfig {
 					typeParameter = new TypeParameter();
 					typeParameter.setName(parameter.getNameTypeParameter());
 					typeParameter.setExclusive(parameter.isExclusive());
-					typeParameter.setExclusive(parameter.isExclusive());
+					typeParameter.setCredential(parameter.isCredential());
 					typeParameter = serviceParameter.saveTypeParameter(typeParameter);				
 				}
 				Parameter param = new Parameter();

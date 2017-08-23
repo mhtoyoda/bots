@@ -28,8 +28,8 @@ public class TesteBot implements Automation<String, Endereco> {
 		logger.info("Resultado: {}", endereco);
 	}
 	
-	@IcaptorParameter(name = "timeToWait", value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false)
-	@IcaptorParameter(name = "attemptCount", value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false)
+	@IcaptorParameter(name = "timeToWait", value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false, credential = false)
+	@IcaptorParameter(name = "attemptCount", value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot",type = String.class)
 	@InputDictionary(fields = {"cep"}, separator = "|	", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},

@@ -31,7 +31,8 @@ public enum IcaptorMetaInfo {
 	POSITION("position"),
 	TYPEPARAMETER("type"),
 	NAMETYPEPARAMETER("nameTypeParameter"),
-	EXCLUSIVE("exclusive");
+	EXCLUSIVE("exclusive"),
+	CREDENTIAL("credential");
 
 	private String value;
 
@@ -82,9 +83,12 @@ public enum IcaptorMetaInfo {
 							String regexValidate  = (String) getValueParameter(values, index, icaptorParameter, REGEXVALIDATE.getValue());
 							String nameTypeParameter  = (String) getValueParameter(values, index, icaptorParameter, NAMETYPEPARAMETER.getValue());
 							boolean exclusive = (Boolean) getValueParameter(values, index, icaptorParameter, EXCLUSIVE.getValue());
-						
+							boolean credential = (Boolean) getValueParameter(values, index, icaptorParameter, CREDENTIAL.getValue());
+							
 							ParameterContextBuilder builder = new ParameterContextBuilder();
-							IcaptorPameterContext icaptorPameterContext = builder.name(name).value(value).regexValidate(regexValidate).nameTypeParameter(nameTypeParameter).exclusive(exclusive).build();
+							IcaptorPameterContext icaptorPameterContext = builder.name(name).value(value)
+									.regexValidate(regexValidate).nameTypeParameter(nameTypeParameter)
+									.exclusive(exclusive).credential(credential).build();
 							list.add(icaptorPameterContext);
 						}
 						
