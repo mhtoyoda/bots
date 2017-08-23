@@ -3,8 +3,15 @@ package com.fiveware.metadata;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
+import org.springframework.aop.framework.AopProxyUtils;
+
+import com.fiveware.annotation.IcaptorParameter;
 import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.helpers.ParameterContextBuilder;
+import com.fiveware.model.IcaptorPameterContext;
+import com.google.common.collect.Lists;
 
 public enum IcaptorMetaInfo {
 	
@@ -22,7 +29,9 @@ public enum IcaptorMetaInfo {
 	LENGTH("length"),
 	REGEXVALIDATE("regexValidate"),
 	POSITION("position"),
-	TYPEPARAMETER("type");
+	TYPEPARAMETER("type"),
+	NAMETYPEPARAMETER("nameTypeParameter"),
+	EXCLUSIVE("exclusive");
 
 	private String value;
 
@@ -53,5 +62,46 @@ public enum IcaptorMetaInfo {
 			}
 		}
 		return null;
+	}
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<IcaptorPameterContext> getValueAtributeParameter(Class clazz, String typeAnnotation) throws AttributeLoadException {
+		List<IcaptorPameterContext> list = Lists.newArrayList();
+		for (Method method : clazz.getDeclaredMethods()) {
+			for (Annotation annotation : method.getAnnotations()) {
+				Class<? extends Annotation> type = annotation.annotationType();
+				if (type.getSimpleName().equals(typeAnnotation)) {					
+					try {						
+						Method methodTarget = type.getMethod(getValue());						
+						Object[] values = (Object[]) methodTarget.invoke(annotation);	
+						for(int index = 0; index < values.length; index++){
+							Class<?>[] proxiedUserInterfaces = AopProxyUtils.proxiedUserInterfaces(values[index]);
+							Class<IcaptorParameter> icaptorParameter = (Class<IcaptorParameter>) proxiedUserInterfaces[0];
+							String name = (String) getValueParameter(values, index, icaptorParameter, NAME.getValue());							
+							String value  = (String) getValueParameter(values, index, icaptorParameter, VALUE.getValue());
+							String regexValidate  = (String) getValueParameter(values, index, icaptorParameter, REGEXVALIDATE.getValue());
+							String nameTypeParameter  = (String) getValueParameter(values, index, icaptorParameter, NAMETYPEPARAMETER.getValue());
+							boolean exclusive = (Boolean) getValueParameter(values, index, icaptorParameter, EXCLUSIVE.getValue());
+						
+							ParameterContextBuilder builder = new ParameterContextBuilder();
+							IcaptorPameterContext icaptorPameterContext = builder.name(name).value(value).regexValidate(regexValidate).nameTypeParameter(nameTypeParameter).exclusive(exclusive).build();
+							list.add(icaptorPameterContext);
+						}
+						
+						return list;
+					} catch (NoSuchMethodException | SecurityException | IllegalAccessException
+							| IllegalArgumentException | InvocationTargetException e) {
+						throw new AttributeLoadException(e.getMessage());
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	private Object getValueParameter(Object[] values, int i, Class<IcaptorParameter> icaptorParameter, String methodName)
+			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+		Method method = icaptorParameter.getMethod(methodName);
+		return method.invoke(values[i]);
 	}
 }

@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
@@ -19,13 +20,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.Automation;
+import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.helpers.BotClassloaderContextBuilder;
 import com.fiveware.helpers.FieldsDictionary;
 import com.fiveware.helpers.InputDictionaryContextBuilder;
 import com.fiveware.helpers.OutputDictionaryContextBuilder;
-import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.metadata.IcaptorMetaInfo;
 import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.IcaptorPameterContext;
 import com.fiveware.model.InputDictionaryContext;
 import com.fiveware.model.OutputDictionaryContext;
 
@@ -69,9 +71,11 @@ public class JarConfiguration {
 						"IcaptorMethod");
 				InputDictionaryContext inputDictionaryContext = getInputDictionaryAttributes(automationClass);
 				OutputDictionaryContext outputDictionaryContext = getOutputDictionaryAttributes(automationClass);
+				List<IcaptorPameterContext> pameterContext = getIcaptorPameterContextAttributes(automationClass);
+				
 				BotClassLoaderContext botClassLoaderContext = getBotClassLoaderContext(nameBot, classLoaderInfo,
 						nameJar, method, endpoint, inputDictionaryContext, outputDictionaryContext, getUrl(pathJar),
-						typeParameter);
+						typeParameter, pameterContext);
 				saveAttributesClassLoader(botClassLoaderContext);
 			} catch (ClassNotFoundException | AttributeLoadException e) {
 				throw new AttributeLoadException(e.getMessage());
@@ -85,10 +89,10 @@ public class JarConfiguration {
 
 	private BotClassLoaderContext getBotClassLoaderContext(String nameBot, String classLoaderInfo, String nameJar,
 			String method, String endpoint, InputDictionaryContext inputDictionaryContext,
-			OutputDictionaryContext outputDictionaryContext, URL url, Class<?> typeParameter) {
+			OutputDictionaryContext outputDictionaryContext, URL url, Class<?> typeParameter, List<IcaptorPameterContext> pameterContexts) {
 
 		BotClassloaderContextBuilder builder = new BotClassloaderContextBuilder(inputDictionaryContext,
-				outputDictionaryContext);
+				outputDictionaryContext, pameterContexts);
 		return builder.nameBot(nameBot).classLoader(classLoaderInfo).nameJar(nameJar).method(method).endpoint(endpoint)
 				.url(url).typeParameter(typeParameter).build();
 	}
@@ -114,7 +118,11 @@ public class JarConfiguration {
 		builder.typeFileIn(typeFileIn).separator(separator).build();
 		return builder.typeFileIn(typeFileIn).separator(separator).build();
 	}
-
+	
+	private List<IcaptorPameterContext> getIcaptorPameterContextAttributes(Class<?> automationClass) throws AttributeLoadException {
+		List<IcaptorPameterContext> parameters = IcaptorMetaInfo.VALUE.getValueAtributeParameter(automationClass, "IcaptorParameters");
+		return parameters;
+	}
 	protected Object getValue(Annotation annotation, Class<? extends Annotation> annotationType, String attribute)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		Method methodTarget = annotationType.getMethod(attribute);

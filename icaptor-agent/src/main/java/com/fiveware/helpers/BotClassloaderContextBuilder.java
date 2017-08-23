@@ -1,8 +1,10 @@
 package com.fiveware.helpers;
 
 import java.net.URL;
+import java.util.List;
 
 import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.IcaptorPameterContext;
 import com.fiveware.model.InputDictionaryContext;
 import com.fiveware.model.OutputDictionaryContext;
 
@@ -17,11 +19,13 @@ public class BotClassloaderContextBuilder {
 	private OutputDictionaryContext outputDictionary;
 	private URL url;
 	private Class<?> typeParameter;
+	private List<IcaptorPameterContext> pameterContexts;
 	
-	public BotClassloaderContextBuilder(InputDictionaryContext inputDictionaryContext, OutputDictionaryContext outputDictionary){
+	public BotClassloaderContextBuilder(InputDictionaryContext inputDictionaryContext, OutputDictionaryContext outputDictionary, List<IcaptorPameterContext> pameterContexts){
 		this.inputDictionaryContext = inputDictionaryContext;
 		this.outputDictionary = outputDictionary;		
 		this.endpoint = method;
+		this.pameterContexts = pameterContexts;
 	}
 	
 	public BotClassloaderContextBuilder nameBot(String nameBot){
@@ -61,6 +65,6 @@ public class BotClassloaderContextBuilder {
 	
 	public BotClassLoaderContext build(){
 		return new BotClassLoaderContext(nameBot, classLoader, method, 
-				endpoint, nameJar, inputDictionaryContext, outputDictionary, url, typeParameter); 
+				endpoint, nameJar, inputDictionaryContext, outputDictionary, url, typeParameter, pameterContexts); 
 	}
 }

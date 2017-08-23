@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,9 +18,14 @@ import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
 import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.IcaptorPameterContext;
+import com.fiveware.model.Parameter;
+import com.fiveware.model.TypeParameter;
 import com.fiveware.model.message.MessageAgent;
+import com.fiveware.parameter.ScopeParameterEnum;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceBot;
+import com.fiveware.service.ServiceParameter;
 import com.google.common.collect.Lists;
 
 @Component
@@ -47,6 +53,9 @@ public class AgentConfig {
 	
 	@Autowired
 	private ServiceBot serviceBot;
+	
+	@Autowired
+	private ServiceParameter serviceParameter;
 	
 	public void initAgent() {
 		saveAgentServerBots();
@@ -86,6 +95,7 @@ public class AgentConfig {
 					if(bot.getId() == null){
 						bot = serviceBot.save(bot);
 					}
+					saveParametersBot(botClassLoader.getPameterContexts(), bot);
 					botList.add(bot);
 				});
 			}
@@ -111,6 +121,32 @@ public class AgentConfig {
 			return bot.get();
 		}catch (Exception e) {			
 			return bot.orElse(new Bot());
+		}
+	}
+	
+	private void saveParametersBot(List<IcaptorPameterContext> parameters, Bot bot){
+		List<Parameter> parameterList = serviceParameter.getParameterByBot(bot.getNameBot());
+		if(CollectionUtils.isNotEmpty(parameterList)){
+			serviceParameter.delete(parameterList);
+		}
+		if(CollectionUtils.isNotEmpty(parameters)){
+			parameters.forEach(parameter -> {
+				TypeParameter typeParameter = serviceParameter.getTypeParameterByName(parameter.getNameTypeParameter());
+				if(null == typeParameter){
+					typeParameter = new TypeParameter();
+					typeParameter.setName(parameter.getNameTypeParameter());
+					typeParameter.setExclusive(parameter.isExclusive());
+					typeParameter.setExclusive(parameter.isExclusive());
+					typeParameter = serviceParameter.saveTypeParameter(typeParameter);				
+				}
+				Parameter param = new Parameter();
+				param.setBot(bot);
+				param.setActive(true);
+				param.setFieldValue(parameter.getName()+":"+parameter.getValue());
+				param.setScopeParameter(serviceParameter.getScopeParameterById(ScopeParameterEnum.BOT.getId()));
+				param.setTypeParameter(typeParameter);
+				serviceParameter.save(param);
+			});
 		}
 	}
 }

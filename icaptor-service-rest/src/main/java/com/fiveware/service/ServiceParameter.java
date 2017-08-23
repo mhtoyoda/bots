@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -29,6 +30,30 @@ public class ServiceParameter {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Parameter> entity = new HttpEntity<Parameter>(parameter, headers);
 		return restTemplate.postForObject(url, entity, Parameter.class);
+	}
+	
+	public void delete(Parameter parameter) {
+		String url = "http://localhost:8085/api/parameter";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Parameter> entity = new HttpEntity<Parameter>(parameter, headers);		
+		restTemplate.exchange(url, HttpMethod.DELETE, entity, Parameter.class);
+	}
+	
+	public void delete(List<Parameter> parameters) {
+		String url = "http://localhost:8085/api/parameter/all";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<List<Parameter>> entity = new HttpEntity<List<Parameter>>(parameters, headers);		
+		restTemplate.exchange(url, HttpMethod.DELETE, entity, List.class);
+	}
+	
+	public TypeParameter saveTypeParameter(TypeParameter typeParameter) {
+		String url = "http://localhost:8085/api/parameter/type";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<TypeParameter> entity = new HttpEntity<TypeParameter>(typeParameter, headers);
+		return restTemplate.postForObject(url, entity, TypeParameter.class);
 	}
 
 	public List<ScopeParameter> getScopeParameterAll() {
@@ -71,4 +96,11 @@ public class ServiceParameter {
 		return typeParameter;
 	}
 	
+	public List<Parameter> getParameterByBot(String botName) {
+		String url = "http://localhost:8085/api/parameter/bot/"+botName;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		List<Parameter> parameters = restTemplate.getForObject(url, List.class);
+		return parameters;
+	}
 }
