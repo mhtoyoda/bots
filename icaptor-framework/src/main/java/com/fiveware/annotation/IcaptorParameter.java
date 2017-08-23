@@ -16,7 +16,6 @@ import java.lang.annotation.Target;
 @Repeatable(value = IcaptorParameters.class)
 public @interface IcaptorParameter {
 	
-	String name();
 	String value();
 	String regexValidate() default "";
 	String nameTypeParameter();

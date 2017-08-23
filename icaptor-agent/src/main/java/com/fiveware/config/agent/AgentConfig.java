@@ -142,7 +142,7 @@ public class AgentConfig {
 				Parameter param = new Parameter();
 				param.setBot(bot);
 				param.setActive(true);
-				param.setFieldValue(parameter.getName()+":"+parameter.getValue());
+				param.setFieldValue(parameter.getValue());
 				param.setScopeParameter(serviceParameter.getScopeParameterById(ScopeParameterEnum.BOT.getId()));
 				param.setTypeParameter(typeParameter);
 				serviceParameter.save(param);

@@ -4,17 +4,11 @@ import com.fiveware.model.IcaptorPameterContext;
 
 public class ParameterContextBuilder {
 
-	private String name;
 	private String value;
 	private String regexValidate;
 	private String nameTypeParameter;
 	private boolean exclusive;
 	private boolean credential;
-	
-	public ParameterContextBuilder name(String name){
-		this.name = name;
-		return this;
-	}
 	
 	public ParameterContextBuilder value(String value){
 		this.value = value;
@@ -42,6 +36,6 @@ public class ParameterContextBuilder {
 	}
 	
 	public IcaptorPameterContext build(){
-		return new IcaptorPameterContext(name, value, regexValidate, nameTypeParameter, exclusive, credential);
+		return new IcaptorPameterContext(value, regexValidate, nameTypeParameter, exclusive, credential);
 	}
 }
