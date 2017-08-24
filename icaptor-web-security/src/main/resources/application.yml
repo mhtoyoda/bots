@@ -5,6 +5,7 @@ server:
 icaptor:
   seguranca:
     enable-https: false
+  origin-permitida: http://localhost:4200
 
 ---
 server:
@@ -14,7 +15,7 @@ server:
 icaptor:
   seguranca:
     enable-https: true
-  origin-permitida:
+  origin-permitida: http://localhost:4200
 spring:
   profiles:
     active: prod

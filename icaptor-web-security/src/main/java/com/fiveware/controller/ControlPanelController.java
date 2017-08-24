@@ -1,27 +1,22 @@
 package com.fiveware.controller;
 
-import java.util.List;
-
+import com.fiveware.model.StatuProcessTask;
+import com.fiveware.model.Task;
+import com.fiveware.service.ServiceStatusProcessTask;
+import com.fiveware.service.ServiceTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.fiveware.model.StatuProcessTask;
-import com.fiveware.model.Task;
-import com.fiveware.security.IcaptorUserDetail;
-import com.fiveware.service.ServiceStatusProcessTask;
-import com.fiveware.service.ServiceTask;
+import java.util.List;
 
 
 @RestController
+@EnableOAuth2Sso
 @RequestMapping("/controlpanel")
 public class ControlPanelController {
 
@@ -33,11 +28,11 @@ public class ControlPanelController {
 	@Autowired
 	private ServiceTask taskService;
 	
-	@GetMapping("/loadTasks")
-	@PreAuthorize("hasAuthority('ROLE_TASK_LIST') and #oauth2.hasScope('read')")
-	public ResponseEntity<Object> loadTasks(@AuthenticationPrincipal IcaptorUserDetail userDetail) {
-		logger.info("Loading all tasks for user [{}]", userDetail.getUsername());
-		List<Task> tasks = taskService.getTaskByUserIdOrderedByLoadTime(userDetail.getUserId());
+	@GetMapping("/loadTasks/{id}/user")
+	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
+	public ResponseEntity<Object> loadTasks(@PathVariable Long id) {
+		logger.info("Loading all tasks for user [{}]", id);
+		List<Task> tasks = taskService.getTaskByUserIdOrderedByLoadTime(id);
 		return ResponseEntity.ok(tasks);
 	}
 

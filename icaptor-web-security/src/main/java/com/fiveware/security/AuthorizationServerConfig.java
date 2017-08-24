@@ -11,13 +11,11 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import java.util.Arrays;
 
-@Profile("prod")
 @Configuration
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
@@ -32,7 +30,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret("@ngul@r0")
                 .scopes("read", "write")
                 .authorizedGrantTypes("password","refresh_token")
-                .accessTokenValiditySeconds(1800)
+                .accessTokenValiditySeconds(60)
                 .refreshTokenValiditySeconds(3600 * 24);
     }
 
