@@ -46,15 +46,15 @@ public class QueueContext {
 	}
 
 	public boolean hasTask(){
-		return serviceCache.has(this.getKey());
+		return serviceCache.has(this.getKey(), this.getKeyValue());
 	}
 	
 	public void addQueueInContext(String bot, String keyValue, String queueName){	
-		serviceCache.add(bot, queueName);		
+		serviceCache.add(bot, keyValue, queueName);		
 	}
 	
 	public void removeQueueInContext(String bot, String keyValue, String queueName){
-		serviceCache.remove(bot, queueName);		
+		serviceCache.remove(bot, keyValue, queueName);		
 	}
 	
 	public Set<String> getTasksQueues(String bot, String keyValue) {

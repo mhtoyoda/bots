@@ -51,21 +51,21 @@ public class ResourceCache {
 	}
 	
 	@PostMapping("/hm")
-	public Boolean hmAdd(@RequestBody Map<String, Map<String, String>> cache) {
+	public Boolean hmAdd(@RequestBody Map<String, Map<String, Set<String>>> cache) {
 		String key = cache.keySet().iterator().next();
-		Map<String, String> map = cache.get(key);
+		Map<String, Set<String>> map = cache.get(key);
 		String keyValue = map.keySet().iterator().next();
-		String value = map.get(keyValue);
-		return cacheManager.add(key, keyValue, value);
+		Set<String> value = map.get(keyValue);
+		return cacheManager.add(key, keyValue, value.iterator().next());
 	}
 
 	@DeleteMapping("/hm")
-	public Boolean hmRemove(@RequestBody Map<String, Map<String, String>> cache) {
+	public Boolean hmRemove(@RequestBody Map<String, Map<String, Set<String>>> cache) {
 		String key = cache.keySet().iterator().next();
-		Map<String, String> map = cache.get(key);
+		Map<String, Set<String>> map = cache.get(key);
 		String keyValue = map.keySet().iterator().next();
-		String value = map.get(keyValue);
-		return cacheManager.remove(key, keyValue, value);
+		Set<String> value = map.get(keyValue);
+		return cacheManager.remove(key, keyValue, value.iterator().next());
 	}
 
 	@GetMapping("/hm")

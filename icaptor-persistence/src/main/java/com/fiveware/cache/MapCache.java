@@ -78,7 +78,7 @@ public class MapCache implements CacheManager<String> {
 			return Sets.newHashSet();
 		}
 		Map<String, Set<String>> cache = cacheMap.get(key);
-		return cache.get(key) == null ? Sets.newHashSet() : cache.get(key);				
+		return cache.get(keyValue) == null ? Sets.newHashSet() : cache.get(keyValue);				
 	}
 
 	@Override

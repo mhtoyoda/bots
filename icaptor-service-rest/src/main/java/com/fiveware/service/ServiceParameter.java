@@ -111,4 +111,12 @@ public class ServiceParameter {
 		List<Parameter> parameters = restTemplate.getForObject(url, List.class);
 		return parameters;
 	}
+	
+	public List<Parameter> findParameterByScopeAndType(String nameScope, String nameType) {
+		String url = "http://localhost:8085/api/parameter/bot/"+nameScope+"/"+nameType;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		List<Parameter> parameters = restTemplate.getForObject(url, List.class);
+		return parameters;
+	}
 }

@@ -96,7 +96,7 @@ public class ServiceCache {
     }
     
     private HttpEntity<Map<String, Map<String, Set<String>>>> getEntity(String key, String keyValue, String value) {
-        Map<String, Map<String, Set<String>>> cache = new LinkedHashMap<>();
+    	Map<String, Map<String, Set<String>>> cache = new LinkedHashMap<>();
         Map<String, Set<String>> mapValues = new LinkedHashMap<>();
         Set<String> values = new TreeSet<>();
         values.add(value);
@@ -105,6 +105,6 @@ public class ServiceCache {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<Map<String,Map<String, Set<String>>>>(cache, headers);
+        return new HttpEntity<Map<String, Map<String, Set<String>>>>(cache, headers);
     }
  }
