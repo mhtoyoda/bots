@@ -91,4 +91,9 @@ public class ResourceParameter {
 	public ResponseEntity<Iterable<Parameter>> findTypeParameterByBotName(@PathVariable("botName") String botName) {
 		return ResponseEntity.ok(parameterRepository.findByBotName(botName));
 	}
+	
+	@GetMapping("/bot/{nameScope}/{nameType}")
+	public ResponseEntity<List<Parameter>> findParameterByScopeAndType(@PathVariable("nameScope") String nameScope, @PathVariable("nameType") String nameType) {
+		return ResponseEntity.ok(parameterRepository.findParameterByScopeAndType(nameScope, nameType));
+	}
 }

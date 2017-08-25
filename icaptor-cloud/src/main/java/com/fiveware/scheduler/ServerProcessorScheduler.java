@@ -4,13 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import com.fiveware.exception.RecoverableException;
-import com.fiveware.exception.RuntimeBotException;
-import com.fiveware.messaging.Producer;
-import com.fiveware.model.Task;
-import com.fiveware.task.StatusProcessItemTaskEnum;
-import com.fiveware.task.StatusProcessTaskEnum;
-import com.fiveware.task.TaskManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +13,23 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.config.ServerConfig;
+import com.fiveware.exception.RecoverableException;
+import com.fiveware.exception.RuntimeBotException;
+import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
+import com.fiveware.model.Parameter;
+import com.fiveware.model.Task;
 import com.fiveware.model.message.MessageBot;
+import com.fiveware.parameter.ParameterInfo;
+import com.fiveware.parameter.ParameterResolver;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceServer;
-import com.fiveware.util.FileUtil;
+import com.fiveware.task.StatusProcessItemTaskEnum;
+import com.fiveware.task.StatusProcessTaskEnum;
+import com.fiveware.task.TaskManager;
 
 @Component
 public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
@@ -51,14 +53,14 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	private ServerConfig serverConfig;
 
 	@Autowired
-	private FileUtil fileUtil;
-
-	@Autowired
 	private TaskManager taskManager;
 
 	@Autowired
 	private Producer<MessageBot> producer;
-
+	
+	@Autowired
+	private ParameterResolver parameterResolver;
+	
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process() {
 		List<Agent> agents = serviceServer.getAllAgent(serverConfig.getServer().getName());
@@ -88,6 +90,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Override
 	public void processMessage(String botName, MessageBot messageBot) throws RuntimeBotException {
 		log.debug("Linha resultado: {}", messageBot.getLineResult());
+		int parameterRetry = getParameter(botName, "retry");
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof RecoverableException ){
 
@@ -97,7 +100,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 			int attemptsCount = messageBot.getAttemptsCount() + 1;
 			messageBot.setAttemptsCount(attemptsCount);
 
-			if(messageBot.getAttemptsCount() > retries){
+			if(messageBot.getAttemptsCount() > parameterRetry){
 				messageBot.setAttemptsCount(attemptsCount-1);
 				messageBot.setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
 				taskManager.updateItemTask(messageBot);
@@ -118,4 +121,26 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 		return Optional.ofNullable(receiver.receive(queueName));
 	}
 
+	private int getParameter(String botName, String typeParameter){
+		ParameterInfo parameterByBot = parameterResolver.getParameterByBot(botName);
+		Optional<ParameterInfo> optional = Optional.ofNullable(parameterByBot);
+		if(optional.isPresent()){
+			Parameter parameter = optional.get().getParameters().get(typeParameter);
+			return getValue(parameter);
+		}
+		return getParameterCloud(typeParameter);
+	}
+
+	private int getValue(Parameter parameter) {
+		if(parameter.getFieldValue().contains(":")){
+			String[] valuesField = parameter.getFieldValue().split(":");
+			return Integer.parseInt(valuesField[1]);
+		}
+		return Integer.parseInt(parameter.getFieldValue());
+	}
+	
+	private int getParameterCloud(String typeParameter){
+		Parameter parameterCloud = parameterResolver.getParameterCloud(typeParameter);
+		return getValue(parameterCloud);
+	}
 }
