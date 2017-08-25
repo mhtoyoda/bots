@@ -18,7 +18,7 @@ CREATE TABLE parameter(
     id_type_parameter bigint(20) not null,
     id_scope_parameter bigint(20) not null,
     id_cloud bigint(20) null,
-    id_bot bigint(20) not null,
+    id_bot bigint(20)  null,
     id_user bigint(20) null,
     FOREIGN KEY (id_type_parameter) REFERENCES type_parameter(id),
     FOREIGN KEY (id_scope_parameter) REFERENCES scope_parameter(id),
