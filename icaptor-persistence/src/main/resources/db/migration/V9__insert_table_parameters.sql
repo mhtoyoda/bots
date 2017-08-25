@@ -7,6 +7,9 @@ insert into scope_parameter(id, name, priority) values(2, 'bot', 1);
 insert into scope_parameter(id, name, priority) values(3, 'cloud_bot', 2);
 insert into scope_parameter(id, name, priority) values(4, 'session', 3);
 
+insert into parameter(field_value, active, id_type_parameter, id_scope_parameter) values(3, 1, 2, 1);
+insert into parameter(field_value, active, id_type_parameter, id_scope_parameter) values(10, 1, 3, 1);
+
 insert into status_process_task(id, name) values(1, 'Created');
 insert into status_process_task(id, name) values(2, 'Validating');
 insert into status_process_task(id, name) values(3, 'Rejected');
