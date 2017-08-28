@@ -29,13 +29,13 @@ public class ResourceRecentActivity {
 		repository.save(activity);
 	}
 
-	@GetMapping("/user/{id}")
+	@GetMapping("/user/{userId}")
 	public ResponseEntity<List<RecentActivity>> getByUserId(@PathVariable Long userId) {
 		List<RecentActivity> activities = repository.findAllByUserId(userId);
 		return ResponseEntity.ok(activities);
 	}
 
-	@GetMapping("/task/{id}")
+	@GetMapping("/task/{taskId}")
 	public ResponseEntity<List<RecentActivity>> getByTaskId(@PathVariable Long taskId) {
 		List<RecentActivity> activities = repository.findAllByUserId(taskId);
 		return ResponseEntity.ok(activities);
