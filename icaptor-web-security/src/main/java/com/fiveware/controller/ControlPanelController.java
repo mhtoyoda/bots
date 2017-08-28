@@ -2,6 +2,7 @@ package com.fiveware.controller;
 
 import com.fiveware.model.StatuProcessTask;
 import com.fiveware.model.Task;
+import com.fiveware.security.SpringSecurityUtil;
 import com.fiveware.service.ServiceStatusProcessTask;
 import com.fiveware.service.ServiceTask;
 import org.slf4j.Logger;
@@ -10,13 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.web.header.Header;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 
 @RestController
-@EnableOAuth2Sso
 @RequestMapping("/controlpanel")
 public class ControlPanelController {
 
@@ -28,10 +29,10 @@ public class ControlPanelController {
 	@Autowired
 	private ServiceTask taskService;
 	
-	@GetMapping("/loadTasks/{id}/user")
+	@GetMapping("/loadTasks/user/{id}")
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
-	public ResponseEntity<Object> loadTasks(@PathVariable Long id) {
-		logger.info("Loading all tasks for user [{}]", id);
+	public ResponseEntity<Object> loadTasks(@PathVariable Long id,@RequestHeader("Authorization") String details) {
+		logger.debug("Loading all tasks for user [{}]", SpringSecurityUtil.decodeAuthorizationKey(details));
 		List<Task> tasks = taskService.getTaskByUserIdOrderedByLoadTime(id);
 		return ResponseEntity.ok(tasks);
 	}
