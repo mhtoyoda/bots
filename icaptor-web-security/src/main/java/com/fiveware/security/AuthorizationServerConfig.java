@@ -26,8 +26,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-                .withClient("angular")
-                .secret("@ngul@r0")
+                .withClient("icaptor-ui")
+                .secret("1c@pt0r-u1")
                 .scopes("read", "write")
                 .authorizedGrantTypes("password","refresh_token")
                 .accessTokenValiditySeconds(60)
