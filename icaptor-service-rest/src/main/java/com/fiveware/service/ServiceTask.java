@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -72,7 +73,9 @@ public class ServiceTask {
 		String url = BASE_URL + "/status/" + status;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<Task> tasks = restTemplate.getForObject(url, List.class);
+		HttpEntity<Task> httpEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<List<Task>>() {});
+		List<Task> tasks = responseEntity.getBody();
 		return tasks;
 	}
 	

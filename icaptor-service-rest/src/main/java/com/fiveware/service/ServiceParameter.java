@@ -5,10 +5,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -108,7 +110,9 @@ public class ServiceParameter {
 		String url = "http://localhost:8085/api/parameter/bot/"+botName;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<Parameter> parameters = restTemplate.getForObject(url, List.class);
+		HttpEntity<Parameter> requestEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<Parameter>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Parameter>>() {});
+		List<Parameter> parameters = responseEntity.getBody();
 		return parameters;
 	}
 	
