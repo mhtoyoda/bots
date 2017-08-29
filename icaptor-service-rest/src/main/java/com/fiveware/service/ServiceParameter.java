@@ -21,13 +21,15 @@ import com.fiveware.model.TypeParameter;
 @Service
 public class ServiceParameter {
 
+	private static final String URL_API = "http://localhost:8085/api";
+
 	static Logger logger = LoggerFactory.getLogger(ServiceParameter.class);
 
 	@Autowired
 	private RestTemplate restTemplate;
 
 	public Parameter save(Parameter parameter) {
-		String url = "http://localhost:8085/api/parameter";
+		String url = URL_API+"/parameter";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Parameter> entity = new HttpEntity<Parameter>(parameter, headers);
@@ -35,7 +37,7 @@ public class ServiceParameter {
 	}
 	
 	public void delete(Parameter parameter) {
-		String url = "http://localhost:8085/api/parameter";
+		String url = URL_API+"/parameter";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Parameter> entity = new HttpEntity<Parameter>(parameter, headers);		
@@ -43,7 +45,7 @@ public class ServiceParameter {
 	}
 	
 	public void delete(List<Parameter> parameters) {
-		String url = "http://localhost:8085/api/parameter/all";
+		String url = URL_API+"/parameter/all";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<List<Parameter>> entity = new HttpEntity<List<Parameter>>(parameters, headers);		
@@ -51,7 +53,7 @@ public class ServiceParameter {
 	}
 	
 	public TypeParameter saveTypeParameter(TypeParameter typeParameter) {
-		String url = "http://localhost:8085/api/parameter/type";
+		String url = URL_API+"/parameter/type";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<TypeParameter> entity = new HttpEntity<TypeParameter>(typeParameter, headers);
@@ -59,15 +61,17 @@ public class ServiceParameter {
 	}
 
 	public List<ScopeParameter> getScopeParameterAll() {
-		String url = "http://localhost:8085/api/parameter/scope";
+		String url = URL_API+"/parameter/scope";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<ScopeParameter> scopeParameters = restTemplate.getForObject(url, List.class);
+		HttpEntity<ScopeParameter> requestEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<ScopeParameter>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<ScopeParameter>>() {});		
+		List<ScopeParameter> scopeParameters = responseEntity.getBody();
 		return scopeParameters;
 	}
 	
 	public ScopeParameter getScopeParameterById(Long id) {
-		String url = "http://localhost:8085/api/parameter/scope/" +id;
+		String url = URL_API+"/parameter/scope/" +id;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		ScopeParameter scopeParameter = restTemplate.getForObject(url, ScopeParameter.class);
@@ -75,7 +79,7 @@ public class ServiceParameter {
 	}
 	
 	public Parameter getParameterById(Long id) {
-		String url = "http://localhost:8085/api/parameter/" +id;
+		String url = URL_API+"/parameter/" +id;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		Parameter parameter = restTemplate.getForObject(url, Parameter.class);
@@ -83,15 +87,17 @@ public class ServiceParameter {
 	}
 	
 	public List<TypeParameter> getTypeParameterAll() {
-		String url = "http://localhost:8085/api/parameter/type";
+		String url = URL_API+"/parameter/type";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<TypeParameter> typeParameters = restTemplate.getForObject(url, List.class);
+		HttpEntity<TypeParameter> requestEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<TypeParameter>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<TypeParameter>>() {});
+		List<TypeParameter> typeParameters = responseEntity.getBody();
 		return typeParameters;
 	}
 	
 	public TypeParameter getTypeParameterById(Long id) {
-		String url = "http://localhost:8085/api/parameter/type/" +id;
+		String url = URL_API+"/parameter/type/" +id;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		TypeParameter typeParameter = restTemplate.getForObject(url, TypeParameter.class);
@@ -99,7 +105,7 @@ public class ServiceParameter {
 	}
 	
 	public TypeParameter getTypeParameterByName(String name) {
-		String url = "http://localhost:8085/api/parameter/type/name/" +name;
+		String url = URL_API+"/parameter/type/name/" +name;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		TypeParameter typeParameter = restTemplate.getForObject(url, TypeParameter.class);
@@ -107,7 +113,7 @@ public class ServiceParameter {
 	}
 	
 	public List<Parameter> getParameterByBot(String botName) {
-		String url = "http://localhost:8085/api/parameter/bot/"+botName;
+		String url = URL_API+"/parameter/bot/"+botName;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Parameter> requestEntity = new HttpEntity<>(null, headers);
@@ -117,10 +123,12 @@ public class ServiceParameter {
 	}
 	
 	public List<Parameter> findParameterByScopeAndType(String nameScope, String nameType) {
-		String url = "http://localhost:8085/api/parameter/bot/"+nameScope+"/"+nameType;
+		String url = URL_API+"/parameter/bot/"+nameScope+"/"+nameType;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<Parameter> parameters = restTemplate.getForObject(url, List.class);
+		HttpEntity<Parameter> requestEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<Parameter>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Parameter>>() {});
+		List<Parameter> parameters = responseEntity.getBody();
 		return parameters;
 	}
 }

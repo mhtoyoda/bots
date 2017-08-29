@@ -37,7 +37,9 @@ public class ServiceTask {
 	public List<Task> getAll() {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<Task> tasks = restTemplate.getForObject(BASE_URL, List.class);
+		HttpEntity<Task> requestEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(BASE_URL, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Task>>() {});		
+		List<Task> tasks = responseEntity.getBody();
 		return tasks;
 	}
 
@@ -65,7 +67,9 @@ public class ServiceTask {
 		String url = BASE_URL + "/nameBot/" + botName;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<Task> tasks = restTemplate.getForObject(url, List.class);
+		HttpEntity<Task> requestEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Task>>() {});		
+		List<Task> tasks = responseEntity.getBody();		
 		return tasks;
 	}
 
@@ -79,12 +83,13 @@ public class ServiceTask {
 		return tasks;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<Task> getTaskByUserIdOrderedByLoadTime(Long userId) {
 		String url = BASE_URL + "/user/" + userId;
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<Task> tasks = restTemplate.getForObject(url, List.class);
+		headers.setContentType(MediaType.APPLICATION_JSON);	
+		HttpEntity<Task> requestEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Task>>() {});		
+		List<Task> tasks = responseEntity.getBody();
 		logger.debug("Loaded [{}] tasks for user id [{}]", tasks.size(), userId);
 		return tasks;
 	}
