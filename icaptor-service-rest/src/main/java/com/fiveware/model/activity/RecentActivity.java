@@ -1,19 +1,11 @@
 package com.fiveware.model.activity;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.Size;
-
 import com.fiveware.model.Task;
 import com.fiveware.model.user.IcaptorUser;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "recent_activity")
@@ -30,11 +22,11 @@ public class RecentActivity {
 	private LocalDateTime creationTime;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "task_id")
 	private Task task;
 
 	@ManyToOne
-	@JoinColumn(name = "task_id")
+	@JoinColumn(name = "user_id")
 	private IcaptorUser user;
 
 	public Long getId() {
