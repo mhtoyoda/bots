@@ -50,4 +50,14 @@ public class ResourceItemTask {
 	public ResponseEntity<List<ItemTask>> findByStatus(@PathVariable("status") String status) {
 		return ResponseEntity.ok(itemTaskRepository.findItemTaskbyStatusProcess(status));
 	}
+	
+	@GetMapping("/{taskId}/status/list/{status}")
+	public ResponseEntity<List<ItemTask>> findItemTaskbyListStatusProcess(@PathVariable("taskId") Long taskId, @PathVariable("status") List<String> status) {
+		return ResponseEntity.ok(itemTaskRepository.findItemTaskbyListStatusProcess(taskId, status));
+	}
+	
+	@GetMapping("/{taskId}/count")
+	public ResponseEntity<Long> findItemTaskbyListStatusProcess(@PathVariable("taskId") Long taskId) {
+		return ResponseEntity.ok(itemTaskRepository.countItemTask(taskId));
+	}
 }
