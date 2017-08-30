@@ -6,13 +6,16 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.model.Bot;
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.Parameter;
 import com.fiveware.model.Task;
+import com.fiveware.parameter.ParameterInfo;
 import com.fiveware.parameter.ParameterResolver;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
@@ -31,13 +34,27 @@ public class TaskResolver {
 		checkTaskProcessed();
 	}
 
+	public void releaseAgentParameter(Task task){		
+		Bot bot = task.getBot();
+		ParameterInfo parameterInfo = parameterResolver.getParameterByBot(bot.getNameBot());
+		if(null != parameterInfo){
+			Map<String, List<Parameter>> credentials = parameterInfo.getCredentials();
+			for(Map.Entry<String, List<Parameter>> map: credentials.entrySet()){
+				map.getValue().forEach(p -> {
+					Parameter parameter = parameterResolver.getParameterById(p.getId());
+					parameterResolver.removeAgentParameter(parameterResolver.findAgentParameterByParameter(parameter));
+				});
+			}
+		}
+	}
+	
 	private void checkTaskProcessed() {
 		List<Task> taskProcessing = taskManager.allTaskProcessing(StatusProcessTaskEnum.PROCESSING.getName());
 		taskProcessing.stream().forEach(task ->{
 			Long countItemTask = countItemTask(task);
 			Long countItemTaskErrorOrSucess = countItemTaskProcessing(task);
 			if(countItemTask == countItemTaskErrorOrSucess){
-				taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCCESSED);
+				taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCCESSED);				
 			}
 		});
 	}

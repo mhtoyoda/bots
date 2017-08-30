@@ -134,4 +134,16 @@ public class ResourceAgent {
     	agentParameter.setUseDate(new Date());
     	return agentParameterRepository.save(agentParameter);    	
     }
+    
+    @Transactional(readOnly = false)
+    @DeleteMapping("/parameter")
+    public void remove(@RequestBody AgentParameter agentParameter){
+    	agentParameter = agentParameterRepository.findOne(agentParameter.getId());
+        
+        Optional<AgentParameter> byAgentParameter = (Optional<AgentParameter>) Optional.ofNullable(agentParameter);
+
+        if(byAgentParameter.isPresent()){
+        	agentParameterRepository.delete(agentParameter);        	
+        }
+    }
 }

@@ -64,6 +64,11 @@ public class ParameterResolver {
 		return parameterInfo;
 	}
 	
+	public Parameter getParameterById(Long parameterId){
+		Parameter parameter = serviceParameter.getParameterById(parameterId);
+		return parameter;
+	}
+	
 	public void disableParameter(Long parameterId){
 		Parameter parameter = serviceParameter.getParameterById(parameterId);
 		parameter.setActive(false);
@@ -103,7 +108,7 @@ public class ParameterResolver {
 	}
 	
 	private AgentParameter saveAgentParameter(String nameAgent, Parameter param) {
-		AgentParameter agentParameter = serviceAgent.findByAgentNameParameterId(param.getId());
+		AgentParameter agentParameter = findAgentParameterByParameter(param);
 		if(null == agentParameter){
 			agentParameter = new AgentParameter();
 			agentParameter.setAgent(serviceAgent.findByNameAgent(nameAgent));
@@ -112,5 +117,15 @@ public class ParameterResolver {
 			return agentParameter;
 		}
 		return agentParameter;
+	}
+
+	public AgentParameter findAgentParameterByParameter(Parameter param) {
+		AgentParameter agentParameter = serviceAgent.findByAgentNameParameterId(param.getId());
+		return agentParameter;
+	}
+	
+	
+	public void removeAgentParameter(AgentParameter agentParameter){
+		serviceAgent.remove(agentParameter);
 	}
 }
