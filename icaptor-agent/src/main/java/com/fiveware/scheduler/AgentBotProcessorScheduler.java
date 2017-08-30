@@ -4,6 +4,7 @@ import com.fiveware.config.agent.AgentConfigProperties;
 import com.fiveware.config.agent.AgentListener;
 import com.fiveware.context.QueueContext;
 import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.exception.ParameterInvalidException;
 import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.QueueName;
@@ -147,7 +148,9 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
             log.error("{}", e);
         } catch (ClassNotFoundException e) {
             log.error("{}", e);
-        } finally {
+        } catch (ParameterInvalidException e) {
+        	log.error("{}", e);
+		} finally {
             log.debug("[BOT]: {}", botName);
         }
     }

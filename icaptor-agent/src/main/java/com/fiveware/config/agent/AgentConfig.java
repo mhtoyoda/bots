@@ -61,6 +61,7 @@ public class AgentConfig {
 		saveAgentServerBots();
 		bindQueueAgenteInTaskTopic("topic-exchange",
 				Lists.newArrayList(data.getAgentName()));
+		createQueueParameter();
 		notifyServerUpAgent();
 	}
 
@@ -95,7 +96,7 @@ public class AgentConfig {
 					if(bot.getId() == null){
 						bot = serviceBot.save(bot);
 					}
-					saveParametersBot(botClassLoader.getPameterContexts(), bot);
+					saveParametersBot(botClassLoader.getParameterContexts(), bot);
 					botList.add(bot);
 				});
 			}
@@ -105,6 +106,10 @@ public class AgentConfig {
 
 	private void bindQueueAgenteInTaskTopic(String exchangeName, List<String> agent){
 		brokerManager.createTopicExchange(exchangeName, agent);
+	}
+	
+	private void createQueueParameter(){
+		brokerManager.createQueue("parameter."+data.getAgentName());
 	}
 	
 	private void notifyServerUpAgent(){
