@@ -7,6 +7,7 @@ import com.fiveware.model.*;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.model.message.MessageHeader;
 import com.fiveware.model.message.MessageTask;
+import com.fiveware.parameter.ParameterResolver;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.task.StatusProcessItemTaskEnum;
 import com.fiveware.task.StatusProcessTaskEnum;
@@ -66,6 +67,9 @@ public class ReadInputFile {
     @Autowired
     private ServiceAgent serviceAgent;
 
+    @Autowired
+    private ParameterResolver parameterResolver;
+    
     private Long userId = 1L;
     
     public void readFile(final String nameBot, final String path, InputStream file,
@@ -154,9 +158,12 @@ public class ReadInputFile {
     }
     
     private List<String> getAgentsByBot(String botName){
-    	//TODO pegar quantidade de parametros com credential por bot
     	List<Agent> agents = serviceAgent.findAgentsByBotName(botName);
     	if(CollectionUtils.isNotEmpty(agents)){
+    		if(parameterResolver.hasNecessaryParameterFromBot(botName)){
+        		int countParameterCredential = parameterResolver.countParameterCredential(botName);
+        		agents = agents.subList(0, countParameterCredential);
+        	}
     		List<String> list = agents.stream().map(Agent::getNameAgent).collect(Collectors.toList());
     		return list;
     	}
