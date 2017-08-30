@@ -1,6 +1,6 @@
 package com.fiveware.resource;
 
-import com.fiveware.file.WorkerFile;
+import com.fiveware.io.WorkerFile;
 import com.fiveware.io.ReadInputFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

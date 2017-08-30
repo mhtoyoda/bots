@@ -112,7 +112,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 
 			return;
 		}
-		if (!Objects.isNull(messageBot.getStatuProcessEnum()))
+		if (!Objects.isNull(messageBot.getStatusProcessItemTaskEnum()))
 			taskManager.updateItemTask(messageBot);
 	}
 

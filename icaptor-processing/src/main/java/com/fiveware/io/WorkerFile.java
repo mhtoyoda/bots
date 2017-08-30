@@ -1,4 +1,4 @@
-package com.fiveware.file;
+package com.fiveware.io;
 
 import java.io.IOException;
 
@@ -7,8 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.fiveware.io.ReadInputFile;
 
 public class WorkerFile implements Runnable {
 

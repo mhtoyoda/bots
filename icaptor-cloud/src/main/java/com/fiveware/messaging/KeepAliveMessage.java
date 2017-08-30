@@ -39,9 +39,11 @@ public class KeepAliveMessage implements ConsumerTypeMessage<MessageAgent> {
 	@Override
 	public void process(MessageAgent message) {
 		log.debug("Message Receive {}",message.toString());
-		Agent agent = new Agent.BuilderAgent().nameAgent(message.getAgent()).port(message.getPort()).server(getServer()).build();
-		serviceAgent.save(agent);
-		includeTasksProcessing();
+		if (!"agent-0".equalsIgnoreCase(message.getAgent())){
+			Agent agent = new Agent.BuilderAgent().nameAgent(message.getAgent()).port(message.getPort()).server(getServer()).build();
+			serviceAgent.save(agent);
+			includeTasksProcessing();
+		}
 	}
 	
 	private Server getServer() {

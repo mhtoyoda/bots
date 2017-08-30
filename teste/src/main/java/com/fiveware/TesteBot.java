@@ -23,7 +23,7 @@ public class TesteBot implements Automation<String, Endereco> {
 
 	static Logger logger = LoggerFactory.getLogger(TesteBot.class);
 	
-	public static void main(String[] args) throws RuntimeBotException,UnRecoverableException {
+	public static void main(String[] args) throws RuntimeBotException, UnRecoverableException, RecoverableException {
 		Endereco endereco = new TesteBot().getEndereco("07077170");
 		logger.info("Resultado: {}", endereco);
 	}
@@ -40,15 +40,15 @@ public class TesteBot implements Automation<String, Endereco> {
 
 //		throw new RuntimeBotException("Simulando bug ");
 
-		throw new RecoverableException("Simulando bug RecoverableException");
+//		throw new RecoverableException("Simulando bug RecoverableException");
 
 
-//		Endereco endereco = getEndereco(cep);
-//
-//		return endereco;
+		Endereco endereco = getEndereco(cep);
+
+		return endereco;
 	}
 
-	public Endereco getEndereco(String args) throws RuntimeBotException,UnRecoverableException {
+	public Endereco getEndereco(String args) throws RuntimeBotException, UnRecoverableException, RecoverableException {
 		String baseUrl = "http://www.correios.com/";
 		BotScreen telaConsultaCep = Web().driver(PHANTOM).openPage(baseUrl + "/para-voce");
 		telaConsultaCep.windowMaximize();
@@ -67,7 +67,7 @@ public class TesteBot implements Automation<String, Endereco> {
 
 		if ("DADOS NAO ENCONTRADOS".equalsIgnoreCase(resultado)){
 			logger.warn("DADOS NAO ENCONTRADOS");
-			throw new UnRecoverableException("DADOS NAO ENCONTRADOS");
+			throw new RecoverableException("DADOS NAO ENCONTRADOS");
 		}
 
 		String logradouro = telaConsultaCep.find()
