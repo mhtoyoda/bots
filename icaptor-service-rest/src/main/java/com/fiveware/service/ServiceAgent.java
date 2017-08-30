@@ -2,17 +2,20 @@ package com.fiveware.service;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.RestTemplate;
 
 import com.fiveware.model.Agent;
+import com.fiveware.model.AgentParameter;
 import com.fiveware.model.Bot;
 
 
@@ -36,15 +39,15 @@ public class ServiceAgent {
         return agent1;
     }
 
-    public Optional<Agent> findByNameAgent(String name){
+    public Agent findByNameAgent(String name){
 
         String url = "http://localhost:8085/api/agent/"+name+"/name";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<String> entity = new HttpEntity<String>(name,headers);
-
-        return restTemplate.getForObject(url, Optional.class);
+        HttpEntity<Agent> requestEntity = new HttpEntity<>(null, headers);
+        ResponseEntity<Agent> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<Agent>() {});
+        return responseEntity.getBody();
     }
 
     public Agent findOne(Long id) {
@@ -95,4 +98,23 @@ public class ServiceAgent {
         List<Agent> forObject = Arrays.asList(objects);
         return forObject;
     }
+	
+	 public AgentParameter findByAgentNameParameterId(@PathVariable("parameterId") Long parameterId){	        
+		 String url = "http://localhost:8085/api/agent/parameter/id/"+parameterId;	        
+		 HttpHeaders headers = new HttpHeaders();
+	     headers.setContentType(MediaType.APPLICATION_JSON);	        
+	     HttpEntity<AgentParameter> requestEntity = new HttpEntity<>(null, headers);	      
+	     ResponseEntity<AgentParameter> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<AgentParameter>(){});	        	      
+	     AgentParameter agentParameters = responseEntity.getBody();	     
+	     return agentParameters;   
+	 }
+	    
+	 public AgentParameter save(AgentParameter agentParameter){	   
+		 String url = "http://localhost:8085/api/agent/parameter";	      
+		 HttpHeaders headers = new HttpHeaders();	     
+		 headers.setContentType(MediaType.APPLICATION_JSON);
+	     HttpEntity<AgentParameter> entity = new HttpEntity<AgentParameter>(agentParameter,headers);
+	     AgentParameter agentParamter = restTemplate.postForObject(url, entity, AgentParameter.class);	     
+	     return agentParamter;	    
+	 }
 }

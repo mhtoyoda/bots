@@ -1,5 +1,6 @@
 package com.fiveware.resource.agent;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -17,8 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fiveware.model.Agent;
+import com.fiveware.model.AgentParameter;
 import com.fiveware.model.Bot;
 import com.fiveware.model.Server;
+import com.fiveware.repository.AgentParameterRepository;
 import com.fiveware.repository.AgentRepository;
 import com.fiveware.repository.ServerRepository;
 
@@ -34,6 +37,9 @@ public class ResourceAgent {
 
 	@Autowired
 	private ServerRepository serverRepository;
+	
+	@Autowired
+	private AgentParameterRepository agentParameterRepository;
 	
 	@Transactional(readOnly = false)
     @PostMapping
@@ -114,5 +120,18 @@ public class ResourceAgent {
     public List<Agent> findByNameBot(@PathVariable("nameBot") String nameBot){
         List<Agent> agents = agentRepository.findByBot(nameBot);
         return agents;
+    }
+    
+    @GetMapping("/parameter/id/{parameterId}")
+    public AgentParameter findByParameterId(@PathVariable("parameterId") Long parameterId){
+        AgentParameter agentParameter = agentParameterRepository.findByParameterId(parameterId);
+        return agentParameter;
+    }
+    
+    @Transactional(readOnly = false)
+    @PostMapping("/parameter")
+    public AgentParameter save(@RequestBody AgentParameter agentParameter){
+    	agentParameter.setUseDate(new Date());
+    	return agentParameterRepository.save(agentParameter);    	
     }
 }
