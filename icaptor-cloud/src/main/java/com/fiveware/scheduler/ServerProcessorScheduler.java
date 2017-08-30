@@ -100,7 +100,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 			int attemptsCount = messageBot.getAttemptsCount() + 1;
 			messageBot.setAttemptsCount(attemptsCount);
 
-			if(messageBot.getAttemptsCount() > parameterRetry){
+			if(messageBot.getAttemptsCount() >= parameterRetry){
 				messageBot.setAttemptsCount(attemptsCount-1);
 				messageBot.setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
 				taskManager.updateItemTask(messageBot);
