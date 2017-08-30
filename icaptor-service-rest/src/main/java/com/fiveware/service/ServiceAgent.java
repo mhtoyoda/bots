@@ -117,4 +117,13 @@ public class ServiceAgent {
 	     AgentParameter agentParamter = restTemplate.postForObject(url, entity, AgentParameter.class);	     
 	     return agentParamter;	    
 	 }
+	 
+	 public void remove(AgentParameter agentParameter) {
+			String url = "http://localhost:8085/api/agent/parameter";
+	        HttpHeaders headers = new HttpHeaders();
+	        headers.setContentType(MediaType.APPLICATION_JSON);
+
+	        HttpEntity<AgentParameter> entity = new HttpEntity<AgentParameter>(agentParameter, headers);
+	        restTemplate.exchange(url, HttpMethod.DELETE, entity, AgentParameter.class);        		
+		}
 }
