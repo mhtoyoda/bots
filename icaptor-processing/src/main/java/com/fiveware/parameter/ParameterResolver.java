@@ -38,6 +38,12 @@ public class ParameterResolver {
 		return false;		
 	}
 	
+	public int countParameterCredential(String botName){		
+		List<Parameter> list = serviceParameter.getParameterByBot(botName);
+		int count = (int) list.stream().filter(p -> p.getTypeParameter().getCredential()).count();		
+		return count;		
+	}
+	
 	public ParameterInfo getParameterByBot(String botName){
 		List<Parameter> credentials = Lists.newArrayList();
 		ParameterInfo parameterInfo = new ParameterInfo();
