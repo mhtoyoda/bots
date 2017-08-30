@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -58,5 +59,35 @@ public class ServiceItemTask {
 
 		ResponseEntity<ItemTask> exchange = restTemplate.exchange(url, HttpMethod.PUT, entity, ItemTask.class);
 		return exchange.getBody();
+	}
+	
+	public List<ItemTask> getItemTaskByStatus(String status) {
+		String url = "http://localhost:8085/api/item/task/status/" +status;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<ItemTask> httpEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<ItemTask>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<List<ItemTask>>() {});
+		List<ItemTask> item = responseEntity.getBody();
+		return item;
+	}
+	
+	public List<ItemTask> getItemTaskByListStatus(List<String> status, Long taskId) {
+		String url = "http://localhost:8085/api/item/task/"+taskId+"/status/list/" +status;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<ItemTask> httpEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<ItemTask>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<List<ItemTask>>() {});
+		List<ItemTask> item = responseEntity.getBody();
+		return item;
+	}
+	
+	public Long getItemTaskCountByTask(Long taskId) {
+		String url = "http://localhost:8085/api/item/task/"+taskId+"/count";
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Long> httpEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<Long>() {});
+		Long count = responseEntity.getBody();
+		return count;
 	}
 }

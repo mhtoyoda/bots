@@ -1,15 +1,16 @@
 package com.fiveware.task;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
-import com.fiveware.model.message.MessageBot;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.Task;
+import com.fiveware.model.message.MessageBot;
 import com.fiveware.service.ServiceBot;
 import com.fiveware.service.ServiceItemTask;
 import com.fiveware.service.ServiceStatusProcessTask;
@@ -57,7 +58,7 @@ public class TaskManager {
 
 	public ItemTask createItemTask(Task task, String recordLine) {
 		ItemTask itemTask = new ItemTask();
-		itemTask.setTask(task);
+		itemTask.setTask(task);		
 		itemTask.setDataIn(recordLine);
 		itemTask.setStatusProcess(serviceStatusProcessTask.getStatusProcessItemTaskById(StatusProcessItemTaskEnum.AVAILABLE.getId()));
 		itemTask = itemServiceTask.save(itemTask);
@@ -86,6 +87,7 @@ public class TaskManager {
 		itemTask.setStatusProcess(statusProcessItemTaskEnum.getStatuProcess());
 		
 		if (statusProcessItemTaskEnum.equals(StatusProcessTaskEnum.PROCESSING)) {
+			itemTask.setStartAt(new Date());
 			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
 			itemTask.setAttemptsCount(attemptsCount);
 		}		
@@ -121,5 +123,22 @@ public class TaskManager {
 		return itemTask;
 	}
 
-
+	public List<ItemTask> allItemTaskProcessing(String status){
+		List<ItemTask> list = itemServiceTask.getItemTaskByStatus(status);
+		return list;
+	}
+	
+	public List<Task> allTaskProcessing(String status){
+		List<Task> list = serviceTask.getTaskByStatus(status);
+		return list;
+	}
+	
+	public List<ItemTask> itemTaskListStatus(List<String> status, Long taskId){
+		List<ItemTask> list = itemServiceTask.getItemTaskByListStatus(status, taskId);
+		return list;
+	}
+	
+	public Long getItemTaskCountByTask(Long taskId){
+		return itemServiceTask.getItemTaskCountByTask(taskId);
+	}
 }
