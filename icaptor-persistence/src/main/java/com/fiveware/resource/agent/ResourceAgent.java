@@ -128,6 +128,12 @@ public class ResourceAgent {
         return agentParameter;
     }
     
+    @GetMapping("/parameter/nameAgent/{nameAgent}")
+    public AgentParameter findByAgentName(@PathVariable("nameAgent") String nameAgent){
+        AgentParameter agentParameter = agentParameterRepository.findByNameAgent(nameAgent);
+        return agentParameter;
+    }
+    
     @Transactional(readOnly = false)
     @PostMapping("/parameter")
     public AgentParameter save(@RequestBody AgentParameter agentParameter){

@@ -99,8 +99,18 @@ public class ServiceAgent {
         return forObject;
     }
 	
-	 public AgentParameter findByAgentNameParameterId(@PathVariable("parameterId") Long parameterId){	        
+	 public AgentParameter findByAgentParameterId(@PathVariable("parameterId") Long parameterId){	        
 		 String url = "http://localhost:8085/api/agent/parameter/id/"+parameterId;	        
+		 HttpHeaders headers = new HttpHeaders();
+	     headers.setContentType(MediaType.APPLICATION_JSON);	        
+	     HttpEntity<AgentParameter> requestEntity = new HttpEntity<>(null, headers);	      
+	     ResponseEntity<AgentParameter> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<AgentParameter>(){});	        	      
+	     AgentParameter agentParameters = responseEntity.getBody();	     
+	     return agentParameters;   
+	 }
+	 
+	 public AgentParameter findByAgentName(@PathVariable("nameAgent") String nameAgent){	        
+		 String url = "http://localhost:8085/api/agent/parameter/nameAgent/"+nameAgent;	        
 		 HttpHeaders headers = new HttpHeaders();
 	     headers.setContentType(MediaType.APPLICATION_JSON);	        
 	     HttpEntity<AgentParameter> requestEntity = new HttpEntity<>(null, headers);	      

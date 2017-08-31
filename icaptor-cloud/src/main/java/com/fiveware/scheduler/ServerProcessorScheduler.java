@@ -1,11 +1,13 @@
 package com.fiveware.scheduler;
 
 import com.fiveware.config.ServerConfig;
+import com.fiveware.exception.AuthenticationBotException;
 import com.fiveware.exception.RecoverableException;
 import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.model.Agent;
+import com.fiveware.model.AgentParameter;
 import com.fiveware.model.Bot;
 import com.fiveware.model.Parameter;
 import com.fiveware.model.Task;
@@ -96,28 +98,46 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof RecoverableException ){
-
-			Task task = taskManager.getTask(messageBot.getTaskId());
-			String queueName = String.format("%s.%s.IN", botName, task.getId());
-
-			int attemptsCount = messageBot.getAttemptsCount() + 1;
-			messageBot.setAttemptsCount(attemptsCount);
-
-			if(messageBot.getAttemptsCount() >= parameterRetry){
-				messageBot.setAttemptsCount(attemptsCount-1);
-				messageBot.setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
-				taskManager.updateItemTask(messageBot);
-				taskManager.updateTask(messageBot.getTaskId(), StatusProcessTaskEnum.ERROR);
-				return;
-			}
-
-			producer.send(queueName, messageBot);
-
-			return;
+			verifyRetry(botName, messageBot, parameterRetry);
 		}
+		
+		if (!Objects.isNull(messageBot.getException()) &&
+				messageBot.getException() instanceof AuthenticationBotException ){
+			
+			verifyRetry(botName, messageBot, parameterRetry);
+			invalidateParameterCredential(botName, messageBot);
+		}
+		
 		if (!Objects.isNull(messageBot.getStatusProcessItemTaskEnum())){
 			taskManager.updateItemTask(messageBot);			
 		}
+	}
+
+	private void invalidateParameterCredential(String botName, MessageBot messageBot) {
+		if(parameterResolver.hasNecessaryParameterFromBot(botName)){
+			AgentParameter agentParameter = parameterResolver.findAgentParameterByNameAgent(messageBot.getNameAgent());
+			if(Objects.nonNull(agentParameter)){
+				parameterResolver.removeAgentParameter(agentParameter);
+				parameterResolver.disableParameter(agentParameter.getParameter().getId());
+			}
+		}
+	}
+
+	private void verifyRetry(String botName, MessageBot messageBot, int parameterRetry) {
+		Task task = taskManager.getTask(messageBot.getTaskId());
+		String queueName = String.format("%s.%s.IN", botName, task.getId());
+
+		int attemptsCount = messageBot.getAttemptsCount() + 1;
+		messageBot.setAttemptsCount(attemptsCount);
+
+		if(messageBot.getAttemptsCount() >= parameterRetry){
+			messageBot.setAttemptsCount(attemptsCount-1);
+			messageBot.setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
+			taskManager.updateItemTask(messageBot);
+			taskManager.updateTask(messageBot.getTaskId(), StatusProcessTaskEnum.ERROR);
+			return;
+		}
+		producer.send(queueName, messageBot);
 	}
 
 	@Override

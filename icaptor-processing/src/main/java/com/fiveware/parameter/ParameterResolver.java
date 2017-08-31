@@ -125,7 +125,12 @@ public class ParameterResolver {
 	}
 
 	public AgentParameter findAgentParameterByParameter(Parameter param) {
-		AgentParameter agentParameter = serviceAgent.findByAgentNameParameterId(param.getId());
+		AgentParameter agentParameter = serviceAgent.findByAgentParameterId(param.getId());
+		return agentParameter;
+	}
+	
+	public AgentParameter findAgentParameterByNameAgent(String nameAgent) {
+		AgentParameter agentParameter = serviceAgent.findByAgentName(nameAgent);
 		return agentParameter;
 	}
 	
