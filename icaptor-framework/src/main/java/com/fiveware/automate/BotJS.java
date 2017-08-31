@@ -30,4 +30,14 @@ public class BotJS {
 		JavascriptLibrary javascriptLibrary = new JavascriptLibrary();
 		javascriptLibrary.callEmbeddedSelenium(driver, "doFireEvent", botElement.geWebElement(), event);
 	}
+	
+	public void scrollUp() {
+		JavascriptExecutor js = (JavascriptExecutor) driver;	
+		js.executeScript("window.scrollBy(0,-300)", "");
+	}
+	
+	public void scrollDown(int num) {
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		js.executeScript("window.scrollBy(0,"+num+")", "");
+	}
 }
