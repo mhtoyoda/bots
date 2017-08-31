@@ -16,10 +16,11 @@ insert into status_process_task(id, name) values(3, 'Rejected');
 insert into status_process_task(id, name) values(4, 'Scheduled');
 insert into status_process_task(id, name) values(5, 'Processing');
 insert into status_process_task(id, name) values(6, 'Proccessed');
-insert into status_process_task(id, name) values(7, 'Suspended');
-insert into status_process_task(id, name) values(8, 'Success');
-insert into status_process_task(id, name) values(9, 'Error');
-insert into status_process_task(id, name) values(10, 'Canceled');
+insert into status_process_task(id, name) values(7, 'Suspending');
+insert into status_process_task(id, name) values(8, 'Suspended');
+insert into status_process_task(id, name) values(9, 'Success');
+insert into status_process_task(id, name) values(10, 'Error');
+insert into status_process_task(id, name) values(11, 'Canceled');
 
 insert into status_process_item_task(id, name) values(1, 'Available');
 insert into status_process_item_task(id, name) values(2, 'InLine');

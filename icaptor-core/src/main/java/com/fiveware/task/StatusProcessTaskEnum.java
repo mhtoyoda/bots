@@ -10,10 +10,11 @@ public enum StatusProcessTaskEnum {
 	SCHEDULED(4L, "Scheduled"),	
 	PROCESSING(5L, "Processing"),
 	PROCCESSED(6L, "Proccessed"),
-	SUSPENDED(7L, "Suspended"),
-	SUCCESS(8L, "Success"),
-	ERROR(9l, "Error"),
-	CANCELED(10L, "Canceled");
+	SUSPENDING(7L, "Suspending"),
+	SUSPENDED(8L, "Suspended"),
+	SUCCESS(9L, "Success"),
+	ERROR(10l, "Error"),
+	CANCELED(11L, "Canceled");
 
 	private StatusProcessTaskEnum(Long id, String name) {
 		this.id = id;

@@ -70,9 +70,9 @@ public class ControlPanelController {
 	@PutMapping("/pause")
 	@PreAuthorize("hasAuthority('ROLE_TASK_PAUSE') and #oauth2.hasScope('write')")
 	public ResponseEntity<Object> pauseTask(@RequestBody Long taskId) {
-		StatuProcessTask statusTask = statusTaskService.getStatusProcessById(7l);
-
-		statusTask.setName("Suspended");
+		StatuProcessTask statusTask = new StatuProcessTask();
+		statusTask.setId(7l);
+		statusTask.setName("Suspending");
 
 		changeTaskStatus(taskId, statusTask);
 
