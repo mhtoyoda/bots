@@ -156,11 +156,12 @@ public class ReadInputFile {
     	if(CollectionUtils.isNotEmpty(agents)){
     		if(parameterResolver.hasNecessaryParameterFromBot(botName) && parameterResolver.exclusiveParameterCredential(botName)){    			
         		int countParameterCredential = parameterResolver.countParameterCredential(botName);
-        		agents = agents.subList(0, countParameterCredential);
+        		agents = agents.stream().limit(countParameterCredential).collect(Collectors.toList());
         	}
     		List<String> list = agents.stream().map(Agent::getNameAgent).collect(Collectors.toList());
     		return list;
     	}
     	return Lists.newArrayList();
     }
+  
 }
