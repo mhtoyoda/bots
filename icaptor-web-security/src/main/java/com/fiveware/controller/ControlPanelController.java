@@ -66,7 +66,7 @@ public class ControlPanelController {
 	public ResponseEntity<Object> pauseTask(@RequestBody Long taskId) {
 		StatuProcessTask statusTask = new StatuProcessTask();
 		statusTask.setId(7l);
-		statusTask.setName("Suspended");
+		statusTask.setName("Suspending");
 
 		changeTaskStatus(taskId, statusTask);
 
