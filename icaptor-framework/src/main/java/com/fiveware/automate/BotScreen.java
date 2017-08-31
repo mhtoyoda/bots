@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriver.Options;
 import org.openqa.selenium.WebDriver.TargetLocator;
@@ -129,4 +130,69 @@ public class BotScreen {
 		new BotJS(webDriver).doFireEvent(event, botElement);
 		return this;
 	}
+	
+	public BotScreen scrollUpJS(){
+		new BotJS(webDriver).scrollUp();
+		return this;
+	}
+	
+	public BotScreen scrollDownJS(int num){
+		new BotJS(webDriver).scrollDown(num);
+		return this;
+	}
+	
+	public void assertAndVerifyElementBySelectorCSS(String css)  {
+		boolean isNoPresent = true;
+		while(isNoPresent){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(webDriver.findElement(By.cssSelector(css)) != null) {
+	        		isNoPresent = false;
+	        	}
+			}catch (StaleElementReferenceException  e) {
+				assertAndVerifyElementBySelectorCSS(css);
+			}        	
+        }		    
+	}
+	
+	public void assertAndVerifyElementByClassName(String className)  {
+        boolean isNoPresent = true;
+		while(isNoPresent){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			try {
+				if(webDriver.findElement(By.className(className)) != null) {
+	        		isNoPresent = false;
+	        	}
+			}catch (StaleElementReferenceException  e) {
+				assertAndVerifyElementByClassName(className);
+			}        	
+        }		
+    }
+	
+	public void assertAndVerifyElementByXPath(String xpath)  {
+		boolean isNoPresent = true;
+		while(isNoPresent){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				if(webDriver.findElement(By.xpath(xpath)) != null) {
+	        		isNoPresent = false;
+	        	}
+			}catch (StaleElementReferenceException  e) {
+				assertAndVerifyElementByXPath(xpath);
+			}        	        	
+        }
+    }
 }
