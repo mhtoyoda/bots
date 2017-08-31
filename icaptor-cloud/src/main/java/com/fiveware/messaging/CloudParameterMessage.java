@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.AgentParameter;
+import com.fiveware.model.Parameter;
 import com.fiveware.model.message.MessageAgent;
 import com.fiveware.model.message.MessageParameterAgent;
 import com.fiveware.parameter.ParameterResolver;
@@ -26,9 +26,9 @@ public class CloudParameterMessage implements ConsumerTypeMessage<MessageParamet
 	@Override
 	public void process(MessageParameterAgent message) {
 		logger.info("Request Parameters Agent: {}", message.getAgent());
-		AgentParameter parameterCredential = parameterResolver.getParameterCredential(message.getAgent(), message.getNameBot());
+		Parameter parameterCredential = parameterResolver.getParameterCredential(message.getAgent(), message.getNameBot());
 		if(null != parameterCredential){
-			message.setFieldValue(parameterCredential.getParameter().getFieldValue());			
+			message.setFieldValue(parameterCredential.getFieldValue());			
 		}
 		producer.send("parameter."+message.getAgent(), message);
 	}
