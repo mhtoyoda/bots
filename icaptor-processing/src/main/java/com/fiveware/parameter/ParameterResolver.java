@@ -30,18 +30,19 @@ public class ParameterResolver {
 	
 	public Boolean hasNecessaryParameterFromBot(String botName){		
 		List<Parameter> list = serviceParameter.getParameterByBot(botName);
-		for(Parameter param : list){
-			if(param.getTypeParameter().getCredential()){
-				return true;
-			}
-		}
-		return false;		
+		return list.stream().anyMatch(p -> p.getTypeParameter().getCredential());		
 	}
 	
 	public int countParameterCredential(String botName){		
 		List<Parameter> list = serviceParameter.getParameterByBot(botName);
 		int count = (int) list.stream().filter(p -> p.getTypeParameter().getCredential()).count();		
 		return count;		
+	}
+	
+	public boolean exclusiveParameterCredential(String botName){		
+		List<Parameter> list = serviceParameter.getParameterByBot(botName);
+		boolean exclusive = list.stream().filter(p -> p.getTypeParameter().getCredential()).anyMatch( p -> p.getTypeParameter().getExclusive());		
+		return exclusive;		
 	}
 	
 	public ParameterInfo getParameterByBot(String botName){
@@ -64,6 +65,11 @@ public class ParameterResolver {
 		return parameterInfo;
 	}
 	
+	public Parameter getParameterById(Long parameterId){
+		Parameter parameter = serviceParameter.getParameterById(parameterId);
+		return parameter;
+	}
+	
 	public void disableParameter(Long parameterId){
 		Parameter parameter = serviceParameter.getParameterById(parameterId);
 		parameter.setActive(false);
@@ -78,21 +84,25 @@ public class ParameterResolver {
 		return null;
 	}
 	
-	public AgentParameter getParameterCredential(String nameAgent, String nameBot){
+	public Parameter getParameterCredential(String nameAgent, String nameBot){
 		ParameterInfo parameterByBot = getParameterByBot(nameBot);
 		Map<String, List<Parameter>> credentials = parameterByBot.getCredentials();
 		List<Parameter> parameters = credentials.values().stream().flatMap(Collection::stream).collect(Collectors.toList());
 		Iterator<Parameter> iterator = parameters.iterator();
 		AgentParameter agentParameter = null;
-		while(iterator.hasNext()){
-			Parameter param = iterator.next();
-			agentParameter = saveAgentParameter(nameAgent, param);			
-			agentParameter = equalsAgentParameter(agentParameter, nameAgent);
-			if( null != agentParameter){
-				break;				
+		if(exclusiveParameterCredential(nameBot)){
+			while(iterator.hasNext()){
+				Parameter param = iterator.next();
+				agentParameter = saveAgentParameter(nameAgent, param);			
+				agentParameter = equalsAgentParameter(agentParameter, nameAgent);
+				if( null != agentParameter){
+					break;				
+				}
 			}
+			return agentParameter == null ? null : agentParameter.getParameter();
+		}else{
+			return iterator.next();
 		}
-		return agentParameter;
 	}
 	
 	private AgentParameter equalsAgentParameter(AgentParameter agentParameter, String nameAgent){
@@ -102,8 +112,8 @@ public class ParameterResolver {
 		return null;
 	}
 	
-	private AgentParameter saveAgentParameter(String nameAgent, Parameter param) {
-		AgentParameter agentParameter = serviceAgent.findByAgentNameParameterId(param.getId());
+	private synchronized AgentParameter saveAgentParameter(String nameAgent, Parameter param) {
+		AgentParameter agentParameter = findAgentParameterByParameter(param);
 		if(null == agentParameter){
 			agentParameter = new AgentParameter();
 			agentParameter.setAgent(serviceAgent.findByNameAgent(nameAgent));
@@ -112,5 +122,14 @@ public class ParameterResolver {
 			return agentParameter;
 		}
 		return agentParameter;
+	}
+
+	public AgentParameter findAgentParameterByParameter(Parameter param) {
+		AgentParameter agentParameter = serviceAgent.findByAgentNameParameterId(param.getId());
+		return agentParameter;
+	}
+	
+	public void removeAgentParameter(AgentParameter agentParameter){
+		serviceAgent.remove(agentParameter);
 	}
 }

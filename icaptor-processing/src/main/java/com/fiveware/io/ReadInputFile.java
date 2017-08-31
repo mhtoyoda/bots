@@ -154,7 +154,7 @@ public class ReadInputFile {
     private List<String> getAgentsByBot(String botName){
     	List<Agent> agents = serviceAgent.findAgentsByBotName(botName);
     	if(CollectionUtils.isNotEmpty(agents)){
-    		if(parameterResolver.hasNecessaryParameterFromBot(botName)){
+    		if(parameterResolver.hasNecessaryParameterFromBot(botName) && parameterResolver.exclusiveParameterCredential(botName)){    			
         		int countParameterCredential = parameterResolver.countParameterCredential(botName);
         		agents = agents.subList(0, countParameterCredential);
         	}
