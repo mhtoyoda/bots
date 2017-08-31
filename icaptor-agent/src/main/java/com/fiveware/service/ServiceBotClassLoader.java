@@ -1,6 +1,7 @@
 package com.fiveware.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiveware.exception.AuthenticationBotException;
 import com.fiveware.exception.RecoverableException;
 import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
@@ -114,6 +115,10 @@ public  class ServiceBotClassLoader<T> {
                 return new OutTextRecord(hashMaps);
             }else if (predicate.test(RecoverableException.class) ){
                 HashMap[] hashMaps = handleException(processorFields, new RecoverableException(e.getCause()));
+
+                return new OutTextRecord(hashMaps);
+            }else if(predicate.test(AuthenticationBotException.class)){
+                HashMap[] hashMaps = handleException(processorFields, new AuthenticationBotException(e.getCause()));
 
                 return new OutTextRecord(hashMaps);
             }else{

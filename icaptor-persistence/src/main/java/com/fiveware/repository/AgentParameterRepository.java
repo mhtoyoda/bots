@@ -13,4 +13,6 @@ public interface AgentParameterRepository extends CrudRepository<AgentParameter,
 	@Query("FROM AgentParameter WHERE parameter.id = :parameterId")
 	AgentParameter findByParameterId(@Param("parameterId") Long parameterId);
 	
+	@Query("FROM AgentParameter WHERE agent.nameAgent = :nameAgent")
+	AgentParameter findByNameAgent(@Param("nameAgent") String nameAgent);
 }
