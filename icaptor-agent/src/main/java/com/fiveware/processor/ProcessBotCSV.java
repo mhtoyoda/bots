@@ -16,6 +16,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.config.agent.AgentConfigProperties;
+import com.fiveware.context.QueueContext;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ParameterInvalidException;
 import com.fiveware.exception.RuntimeBotException;
@@ -85,14 +86,17 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 	
 	@Autowired
 	private ParameterResolver parameterResolver;
-
+	
+	@Autowired
+	private QueueContext queueContext;
+	
 	@SuppressWarnings("rawtypes")
 	public void execute(String botName, MessageBot obj)
 			throws IOException, AttributeLoadException, ClassNotFoundException, RuntimeBotException, ParameterInvalidException {
 
 		logger.info("Init Import File - [BOT]: {}", botName);
 		Optional<BotClassLoaderContext> context = classLoaderConfig.getPropertiesBot(botName);
-		ParameterValue parameterValue =	validateParameterCredential(botName);		
+		ParameterValue parameterValue =	validateParameterCredential(botName, obj.getTaskId());		
 		InputDictionaryContext inputDictionary = context.get().getInputDictionary();
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
@@ -130,10 +134,10 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
 
-	private ParameterValue validateParameterCredential(String botName) throws ParameterInvalidException {
+	private ParameterValue validateParameterCredential(String botName, Long taskId) throws ParameterInvalidException {
 		ParameterValue parameterValue = null;
 		if(parameterResolver.hasNecessaryParameterFromBot(botName)){		
-			MessageParameterAgent messageParameterAgent = waitParameterMessage(botName, data.getAgentName());
+			MessageParameterAgent messageParameterAgent = waitParameterMessage(botName, data.getAgentName(), taskId);
 			if(null != messageParameterAgent){
 				String[] values = messageParameterAgent.getFieldValue().split(":");
 				parameterValue = new ParameterValue(values[0], values[1]);
@@ -148,7 +152,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		eventProducer.send(QueueName.EVENTS.name(), message);
 	}
 
-	private MessageParameterAgent waitParameterMessage(String botName, String nameAgent) throws ParameterInvalidException {	
+	private MessageParameterAgent waitParameterMessage(String botName, String nameAgent, Long taskId) throws ParameterInvalidException {	
 		MessageParameterAgent message = new MessageParameterAgent(nameAgent, botName, null, null, true);
 		message.setTypeMessage(TypeMessage.PARAMETERS);
 		eventProducer.send(QueueName.EVENTS.name(), message );
@@ -161,7 +165,9 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 			}
 		}
 		
-		if(StringUtils.isEmpty(parameter.getFieldValue())){				
+		if(StringUtils.isEmpty(parameter.getFieldValue())){	
+			String queueName = String.format("%s.%s.IN", botName, taskId);
+			queueContext.removeQueueInContext(botName, nameAgent, queueName);
 			throw new ParameterInvalidException();					
 		}else{						
 			return parameter;					
