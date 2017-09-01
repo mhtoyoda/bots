@@ -77,7 +77,7 @@ public class ReadInputFile {
         Task task = createTask(nameBot, userId);
         Bot bot = task.getBot();
         String separatorFile = bot.getSeparatorFile();
-        Iterable<String> split = Splitter.on(separatorFile).split(bot.getFieldsInput());
+        Iterable<String> split = Splitter.on(",").split(bot.getFieldsInput());
         String[] fields = Iterables.toArray(split, String.class);
         List<String> lines = fileUtil.linesFrom(file);
 

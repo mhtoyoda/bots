@@ -1,24 +1,5 @@
 package com.fiveware.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiveware.exception.AuthenticationBotException;
-import com.fiveware.exception.RecoverableException;
-import com.fiveware.exception.RuntimeBotException;
-import com.fiveware.exception.UnRecoverableException;
-import com.fiveware.loader.ClassLoaderConfig;
-import com.fiveware.loader.ClassLoaderRunner;
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.OutTextRecord;
-import com.fiveware.model.OutputDictionaryContext;
-import com.fiveware.processor.ProcessorFields;
-import com.fiveware.task.StatusProcessItemTaskEnum;
-import com.fiveware.task.StatusProcessTaskEnum;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -31,6 +12,27 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiveware.exception.AuthenticationBotException;
+import com.fiveware.exception.RecoverableException;
+import com.fiveware.exception.RuntimeBotException;
+import com.fiveware.exception.UnRecoverableException;
+import com.fiveware.loader.ClassLoaderConfig;
+import com.fiveware.loader.ClassLoaderRunner;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.OutTextRecord;
+import com.fiveware.model.OutputDictionaryContext;
+import com.fiveware.parameter.ParameterValue;
+import com.fiveware.processor.ProcessorFields;
+import com.fiveware.task.StatusProcessItemTaskEnum;
+import com.fiveware.task.StatusProcessTaskEnum;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -77,7 +79,8 @@ public  class ServiceBotClassLoader<T> {
         Class o = classLoader.loadClass(botClassLoaderContext.get().getTypeParameter().getName());
 
         Class<?> aClass = o.newInstance().getClass();
-        Method execute = clazz.getMethod(botClassLoaderContext.get().getMethod(), aClass);
+        //FIXME Corrigir loader de class parameter
+        Method execute = clazz.getMethod(botClassLoaderContext.get().getMethod(), aClass, ParameterValue.class);
 
         Object o1 = null;
         if( null != parameter ){
@@ -86,9 +89,8 @@ public  class ServiceBotClassLoader<T> {
 
         Object obj = null;
         try{
-
         	if( null != o1){
-        		obj =  execute.invoke(clazz.newInstance(), o1);
+        		obj =  execute.invoke(clazz.newInstance(), o1, processorFields.getParameterValue());
         	}else{
         		obj =  execute.invoke(clazz.newInstance());
         	}

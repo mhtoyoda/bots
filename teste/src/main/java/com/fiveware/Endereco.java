@@ -7,47 +7,63 @@ import org.pojomatic.annotations.AutoProperty;
 
 import com.fiveware.annotation.Field;
 
-/**
- * Created by valdisnei on 16/05/17.
- */
 @AutoProperty
 public class Endereco implements Serializable {
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4321879773490723975L;
-	@Field(name = "logradouro")	
-	private final String logradouro;
-    private final String bairro;
-    private final String localidade;
-    private final String cep;
+	@Field(name = "logradouro")
+	private String logradouro;
+	@Field(name = "bairro")
+	private String bairro;
+	@Field(name = "localidade")
+	private String localidade;
+	@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}")
+	private String cep;
 
-    public Endereco(String logradouro, String bairro, String localidade, String cep) {
-        this.logradouro = logradouro;
-        this.bairro = bairro;
-        this.localidade = localidade;
-        this.cep = cep;
-    }
-    
-    public String getLogradouro() {
-        return logradouro;
-    }
+	public Endereco(){}
+	public Endereco(String logradouro, String bairro, String localidade, String cep) {
+		this.logradouro = logradouro;
+		this.bairro = bairro;
+		this.localidade = localidade;
+		this.cep = cep;
+	}
 
-    public String getBairro() {
-        return bairro;
-    }
+	public String getLogradouro() {
+		return logradouro;
+	}
 
-    public String getLocalidade() {
-        return localidade;
-    }
+	public void setLogradouro(String logradouro) {
+		this.logradouro = logradouro;
+	}
 
-    public String getCep() {
-        return cep;
-    }
+	public String getBairro() {
+		return bairro;
+	}
 
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
 
-    @Override
-    public String toString() {
-        return Pojomatic.toString(this);
-    }
+	public String getLocalidade() {
+		return localidade;
+	}
+
+	public void setLocalidade(String localidade) {
+		this.localidade = localidade;
+	}
+
+	public String getCep() {
+		return cep;
+	}
+
+	public void setCep(String cep) {
+		this.cep = cep;
+	}
+
+	@Override
+	public String toString() {
+		return Pojomatic.toString(this);
+	}
 }

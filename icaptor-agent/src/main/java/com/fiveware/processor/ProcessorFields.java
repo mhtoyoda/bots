@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.Record;
 import com.fiveware.model.message.MessageBot;
+import com.fiveware.parameter.ParameterValue;
 import com.fiveware.service.IServiceBach;
 import com.fiveware.validate.Validate;
 
@@ -21,10 +22,11 @@ public class ProcessorFields {
 	private final MessageSource messageSource;
 	private final MessageBot messageBot;
 	private final Optional<BotClassLoaderContext> context;
+	private final ParameterValue parameterValue;
 
 	public ProcessorFields(String botName, Class classLoader, IServiceBach serviceBot, Record record,
 						   Validate validate, MessageSource messageSource, MessageBot messageBot,
-						   Optional<BotClassLoaderContext> context) {
+						   Optional<BotClassLoaderContext> context, ParameterValue parameterValue) {
 		this.botName = botName;
 		this.classLoader = classLoader;
 		this.serviceBach = serviceBot;
@@ -33,6 +35,7 @@ public class ProcessorFields {
 		this.messageSource = messageSource;
 		this.messageBot=messageBot;
 		this.context = context;
+		this.parameterValue = parameterValue;
 	}
 
 	public String getBotName() {
@@ -59,6 +62,10 @@ public class ProcessorFields {
 		return messageSource;
 	}
 
+	public ParameterValue getParameterValue() {
+		return parameterValue;
+	}
+	
 	public Optional<BotClassLoaderContext> getContext() {return context;	}
 
 	public MessageBot getMessageBot() {return messageBot;	}
@@ -72,6 +79,7 @@ public class ProcessorFields {
 		private MessageSource messageSource;
 		private MessageBot messageBot;
 		private Optional<BotClassLoaderContext> context;
+		private ParameterValue parameterValue;
 
 		public ProcessorFieldsBuilder nameBot(String name){
 			this.botName=name;
@@ -108,11 +116,16 @@ public class ProcessorFields {
 			this.context=context;
 			return this;
 		}
+		
+		public ProcessorFieldsBuilder parameter(ParameterValue parameterValue){
+			this.parameterValue = parameterValue;
+			return this;
+		}
 
 		public ProcessorFields build(){
 			return new ProcessorFields(this.botName,this.classLoader,
 					this.serviceBot,this.record,this.validate,
-					this.messageSource,this.messageBot, context);
+					this.messageSource,this.messageBot, context, parameterValue);
 		}
 	}
 
