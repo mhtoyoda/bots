@@ -22,6 +22,7 @@ import com.fiveware.exception.ParameterInvalidException;
 import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
+import com.fiveware.loader.ParameterClassLoader;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
@@ -57,10 +58,6 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 	private IServiceBach serviceBach;
 
 	@Autowired
-	@Qualifier("fieldValidate")
-	private Validate validate;
-
-	@Autowired
 	private ClassLoaderConfig classLoaderConfig;
 
 	@Autowired
@@ -90,6 +87,9 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 	@Autowired
 	private QueueContext queueContext;
 	
+	@Autowired
+	private ParameterClassLoader parameterClassLoader;
+	
 	@SuppressWarnings("rawtypes")
 	public void execute(String botName, MessageBot obj)
 			throws IOException, AttributeLoadException, ClassNotFoundException, RuntimeBotException, ParameterInvalidException {
@@ -106,8 +106,8 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		sendNotificationItemTaskProcessing(obj.getTaskId(), obj.getItemTaskId());
 
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
-
 			try {
+				Validate validate = parameterClassLoader.getValidateByType(context.get());
 				ProcessorFields processorFields = new ProcessorFields.ProcessorFieldsBuilder()
 															.nameBot(botName)
 															.classLoader(classLoader)
@@ -117,8 +117,10 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 															.messageSource(messageSource)
 															.messageBot(obj)
 															.context(context)
+															.parameter(parameterValue)
 															.build();
-				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(processorFields));
+				
+				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(processorFields, parameterClassLoader));
 				List<String> resultSuccess = Lists.newArrayList();
 				listJoin.joinRecord(separatorInput, outTextRecord.get(), resultSuccess);
 

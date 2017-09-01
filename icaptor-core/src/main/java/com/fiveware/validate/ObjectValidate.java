@@ -3,7 +3,6 @@ package com.fiveware.validate;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,9 +22,8 @@ public class ObjectValidate implements Validate {
 		if (null != clazz) {
 			Method[] methods = clazz.getMethods();
 			for (Method method : methods) {
-				if ("execute".equals(method.getName())) {
-					Parameter parameter = method.getParameters()[0];					
-					Class<?> obj = parameter.getType();
+				if ("execute".equals(method.getName())) {				
+					Class<?> obj = value.getClass();
 					Field[] fields = obj.getDeclaredFields();
 					for (Field field : fields) {
 						field.setAccessible(true);

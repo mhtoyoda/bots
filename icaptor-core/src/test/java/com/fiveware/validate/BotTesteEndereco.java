@@ -8,6 +8,7 @@ import com.fiveware.annotation.Icaptor;
 import com.fiveware.annotation.IcaptorMethod;
 import com.fiveware.annotation.InputDictionary;
 import com.fiveware.annotation.OutputDictionary;
+import com.fiveware.parameter.ParameterValue;
 
 @Icaptor(value = "testeCEP", classloader = "com.fiveware.BotTeste", 
 		 description = "Bot para Testes", version = "1.0.0")
@@ -19,7 +20,7 @@ public class BotTesteEndereco implements Automation<Endereco, com.fiveware.valid
 	@InputDictionary(fields = { "cep" }, separator = ",", typeFileIn = "csv")
 	@OutputDictionary(fields = { "logradouro", "bairro", "localidade",
 			"cep" }, nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(Endereco endereco) {
+	public Endereco execute(Endereco endereco, ParameterValue parameters) {
 		try {
 			endereco.setCep("01310-100");
 			endereco.setLogradouro("Avenida Paulista");
