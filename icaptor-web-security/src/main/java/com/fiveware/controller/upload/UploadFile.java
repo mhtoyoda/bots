@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/bot")
 public class UploadFile {
 
-
     private static final String BASE_URL = "http://localhost:8082/api/upload";
 
     @Autowired
@@ -41,10 +40,8 @@ public class UploadFile {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
-                HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<LinkedMultiValueMap<String, Object>>(
-                        map, headers);
-                ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, requestEntity,
-                        String.class);
+                HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<LinkedMultiValueMap<String, Object>>(map, headers);
+                ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
             }
         });
         thread.start();

@@ -15,12 +15,14 @@ import com.fiveware.model.message.MessageBot;
 import com.fiveware.processor.ProcessBot;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
+import com.fiveware.service.ServiceSocket;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +30,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 @Component
@@ -59,6 +62,9 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     @Qualifier("eventMessageProducer")
     private Producer<MessageAgent> producer;
 
+    @Autowired
+    private ServiceSocket serviceSocket;
+
     @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
     public void process() throws RuntimeBotException {
         List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
@@ -66,6 +72,8 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     }
 
     private void accept(Bot bot) {
+        AtomicInteger atomicInteger = new AtomicInteger(0);
+
         String botName = bot.getNameBot();
         queueContext.setKey(botName);
         queueContext.setKeyValue(data.getAgentName());
@@ -73,7 +81,10 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
                                                       Sets.newHashSet());
             try {
                 queues.stream().
-                        forEach(queue -> {                        	
+                        forEach(queue -> {
+
+                            serviceSocket.setPercent(atomicInteger.getAndIncrement());
+
                             pullMessage(botName, queue);
                         });
             } catch (RuntimeBotException exceptionBot) {
