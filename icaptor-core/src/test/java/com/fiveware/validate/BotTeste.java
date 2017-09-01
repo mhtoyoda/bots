@@ -9,6 +9,7 @@ import com.fiveware.annotation.Icaptor;
 import com.fiveware.annotation.IcaptorMethod;
 import com.fiveware.annotation.InputDictionary;
 import com.fiveware.annotation.OutputDictionary;
+import com.fiveware.parameter.ParameterValue;
 
 @Icaptor(value = "testeCEP", classloader = "com.fiveware.BotTeste", 
 		 description = "Bot para Testes", version = "1.0.0")
@@ -20,7 +21,7 @@ public class BotTeste implements Automation<String, com.fiveware.validate.Endere
 	@InputDictionary(fields = { "cep" }, separator = ",", typeFileIn = "csv")
 	@OutputDictionary(fields = { "logradouro", "bairro", "localidade",
 			"cep" }, nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) {
+	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep, ParameterValue parameters) {
 		try {			
 			com.fiveware.validate.Endereco endereco = new Endereco();
 			logger.debug(cep);

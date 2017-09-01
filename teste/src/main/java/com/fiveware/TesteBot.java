@@ -8,7 +8,6 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fiveware.annotation.Field;
 import com.fiveware.annotation.Icaptor;
 import com.fiveware.annotation.IcaptorMethod;
 import com.fiveware.annotation.IcaptorParameter;
@@ -19,6 +18,7 @@ import com.fiveware.exception.AuthenticationBotException;
 import com.fiveware.exception.RecoverableException;
 import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
+import com.fiveware.parameter.ParameterValue;
 
 /**
  * Created by valdisnei on 5/28/17.
@@ -26,7 +26,7 @@ import com.fiveware.exception.UnRecoverableException;
 
 @Icaptor(value = "consultaCEP", classloader = "com.fiveware.TesteBot",
 		description = "Bot para consulta de ceps, serviço do Correio",version = "1.0.0")
-public class TesteBot implements Automation<String, Endereco> {
+public class TesteBot implements Automation<Endereco, Endereco> {
 
 	static Logger logger = LoggerFactory.getLogger(TesteBot.class);
 	
@@ -39,17 +39,19 @@ public class TesteBot implements Automation<String, Endereco> {
 	@IcaptorParameter(value = "joao:12345", nameTypeParameter = "login", exclusive = true, credential = true)
 	@IcaptorParameter(value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false, credential = false)
 	@IcaptorParameter(value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
-	@IcaptorMethod(value = "execute", endpoint = "correios-bot",type = String.class)
-	@InputDictionary(fields = {"cep"}, separator = "|	", typeFileIn = "csv")
-	@OutputDictionary(fields = {"logradouro", "bairro", "localidade","cep"},
+	@IcaptorMethod(value = "execute", endpoint = "correios-bot", type = Endereco.class)
+	@InputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, separator = "|	", typeFileIn = "csv")
+	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}") String cep) throws RuntimeBotException,UnRecoverableException,RecoverableException, AuthenticationBotException {
+	public Endereco execute(Endereco endereco, ParameterValue parameters) throws RuntimeBotException,UnRecoverableException,RecoverableException, AuthenticationBotException {
 		
-		throw new AuthenticationBotException("Simulando Exception Authentication");
+//		throw new AuthenticationBotException("Simulando Exception Authentication");
 //		throw new RuntimeBotException("Simulando bug ");
 
 //		throw new RecoverableException("Simulando bug RecoverableException");
-
+		logger.info("Dados de Endereco: ",endereco.toString());
+		logger.info("Dados de Parametros: ",parameters.toString());
+		return endereco;
 	}
 
 	public Endereco getEndereco(String args) throws RuntimeBotException, UnRecoverableException, RecoverableException {

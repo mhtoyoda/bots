@@ -1,26 +1,31 @@
 package com.fiveware.processor;
 
-import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.exception.RuntimeBotException;
-import com.fiveware.exception.UnRecoverableException;
-import com.fiveware.exception.ValidationFieldException;
-import com.fiveware.model.OutTextRecord;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.exception.RuntimeBotException;
+import com.fiveware.exception.UnRecoverableException;
+import com.fiveware.exception.ValidationFieldException;
+import com.fiveware.loader.ParameterClassLoader;
+import com.fiveware.model.OutTextRecord;
 
 public class ProcessorRunnable implements Callable<OutTextRecord> {
 	
 	Logger logger = LoggerFactory.getLogger(ProcessorRunnable.class);
 	
 	private ProcessorFields processorFields;
+
+	private ParameterClassLoader parameterClassLoader;
 	
-	public ProcessorRunnable(ProcessorFields processorFields) {
-		this.processorFields = processorFields;		
+	public ProcessorRunnable(ProcessorFields processorFields, ParameterClassLoader parameterClassLoader) {
+		this.processorFields = processorFields;
+		this.parameterClassLoader = parameterClassLoader;
 	}
 
 	@Override
@@ -31,15 +36,21 @@ public class ProcessorRunnable implements Callable<OutTextRecord> {
 	}
 	
 	private OutTextRecord getResult() throws RuntimeBotException {
-		Object cep = processorFields.getRecord().getValue("cep");
+		Object parameter = null;
 		try {
-			processorFields.getValidate().validate(cep, processorFields.getClassLoader());
+			parameter = parameterClassLoader.loaderParameter(processorFields.getContext().get(), processorFields.getRecord());
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | InstantiationException e1) {
+			logger.error("Error Loader Parameters - Cause: " + e1.getMessage());
+			throw new RuntimeBotException(e1.getMessage());
+		}
+		try {
+			processorFields.getValidate().validate(parameter, processorFields.getClassLoader());
 		} catch (ValidationFieldException | AttributeLoadException e) {
 			logger.error("Unprocessed Record - Cause: " + e.getMessage());
-			return getErrorValidation(cep).get();
+			return getErrorValidation(parameter).get();
 		}
-		OutTextRecord outTextRecord = processorFields.getServiceBatch().callBot(processorFields, cep);
-		return Arrays.asList(outTextRecord.getMap()).get(0)==null?getNotFound(cep).get():outTextRecord;
+		OutTextRecord outTextRecord = processorFields.getServiceBatch().callBot(processorFields, parameter);
+		return Arrays.asList(outTextRecord.getMap()).get(0)==null?getNotFound(parameter).get():outTextRecord;
 	}
 	
 	private Supplier<OutTextRecord> getNotFound(Object parameter) {
