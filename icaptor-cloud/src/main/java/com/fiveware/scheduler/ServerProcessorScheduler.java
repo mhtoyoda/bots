@@ -1,17 +1,5 @@
 package com.fiveware.scheduler;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.config.ServerConfig;
 import com.fiveware.exception.RecoverableException;
 import com.fiveware.exception.RuntimeBotException;
@@ -27,9 +15,22 @@ import com.fiveware.parameter.ParameterResolver;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceServer;
+import com.fiveware.service.ServiceSocket;
 import com.fiveware.task.StatusProcessItemTaskEnum;
 import com.fiveware.task.StatusProcessTaskEnum;
 import com.fiveware.task.TaskManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
@@ -60,6 +61,11 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	
 	@Autowired
 	private ParameterResolver parameterResolver;
+
+	@Autowired
+	private ServiceSocket serviceSocket;
+
+	AtomicInteger atomicInteger = new AtomicInteger(0);
 	
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process() {
@@ -91,6 +97,9 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	public void processMessage(String botName, MessageBot messageBot) throws RuntimeBotException {
 		log.debug("Linha resultado: {}", messageBot.getLineResult());
 		int parameterRetry = getParameter(botName, "retry");
+
+		serviceSocket.setPercent(atomicInteger.incrementAndGet());
+
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof RecoverableException ){
 

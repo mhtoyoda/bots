@@ -22,7 +22,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -62,8 +61,6 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     @Qualifier("eventMessageProducer")
     private Producer<MessageAgent> producer;
 
-    @Autowired
-    private ServiceSocket serviceSocket;
 
     @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
     public void process() throws RuntimeBotException {
@@ -72,7 +69,6 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     }
 
     private void accept(Bot bot) {
-        AtomicInteger atomicInteger = new AtomicInteger(0);
 
         String botName = bot.getNameBot();
         queueContext.setKey(botName);
@@ -82,9 +78,6 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
             try {
                 queues.stream().
                         forEach(queue -> {
-
-                            serviceSocket.setPercent(atomicInteger.getAndIncrement());
-
                             pullMessage(botName, queue);
                         });
             } catch (RuntimeBotException exceptionBot) {
@@ -122,6 +115,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     public Optional<MessageBot> receiveMessage(String queueName) {
         return Optional.ofNullable(receiver.receive(queueName));
     }
+
 
     private void notifyServerPurgeQueues(String nameBot, String nameAgent) {
         Set<String> queues = queueContext.getTasksQueues(nameBot);
