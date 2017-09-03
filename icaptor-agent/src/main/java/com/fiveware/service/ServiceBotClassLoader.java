@@ -77,20 +77,26 @@ public  class ServiceBotClassLoader<T> {
         ClassLoader classLoader = classLoaderRunner.loadClassLoader(botClassLoaderContext.get().getNameBot());
         Class clazz = classLoader.loadClass(botClassLoaderContext.get().getClassLoader());
         Class o = classLoader.loadClass(botClassLoaderContext.get().getTypeParameter().getName());
-
+        Class param = classLoader.loadClass(ParameterValue.class.getName());
         Class<?> aClass = o.newInstance().getClass();
-        //FIXME Corrigir loader de class parameter
-        Method execute = clazz.getMethod(botClassLoaderContext.get().getMethod(), aClass, ParameterValue.class);
+        Class<?> paramClass = param.newInstance().getClass();
+        
+        Method execute = clazz.getMethod(botClassLoaderContext.get().getMethod(), o, param);
 
         Object o1 = null;
         if( null != parameter ){
             o1 = objectMapper.convertValue(parameter, aClass);
         }
-
+        
+        Object o2 = null;
+        if( null != processorFields.getParameterValue() ){
+            o2 = objectMapper.convertValue(processorFields.getParameterValue(), paramClass);
+        }
+        
         Object obj = null;
         try{
         	if( null != o1){
-        		obj =  execute.invoke(clazz.newInstance(), o1, processorFields.getParameterValue());
+        		obj =  execute.invoke(clazz.newInstance(), o1, o2);
         	}else{
         		obj =  execute.invoke(clazz.newInstance());
         	}

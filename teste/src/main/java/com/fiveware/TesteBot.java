@@ -49,8 +49,8 @@ public class TesteBot implements Automation<Endereco, Endereco> {
 //		throw new RuntimeBotException("Simulando bug ");
 
 //		throw new RecoverableException("Simulando bug RecoverableException");
-		logger.info("Dados de Endereco: ",endereco.toString());
-		logger.info("Dados de Parametros: ",parameters.toString());
+		logger.info("Dados de Endereco: {}",endereco.toString());
+		logger.info("Dados de Parametros: {}s",parameters.toString());
 		return endereco;
 	}
 
