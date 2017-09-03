@@ -7,6 +7,7 @@ public class ParameterValue implements Serializable {
 	private String field;
 	private String value;
 	
+	public ParameterValue(){}
 	public ParameterValue(String field, String value) {
 		super();
 		this.field = field;
