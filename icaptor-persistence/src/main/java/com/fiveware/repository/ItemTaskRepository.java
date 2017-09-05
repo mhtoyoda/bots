@@ -2,6 +2,7 @@ package com.fiveware.repository;
 
 import java.util.List;
 
+import com.fiveware.model.Task;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,4 +15,6 @@ public interface ItemTaskRepository extends CrudRepository<ItemTask, Long>{
 
 	@Query("FROM ItemTask WHERE statusProcess.name = :statusProcess")
 	List<ItemTask> findItemTaskbyStatusProcess(@Param("statusProcess") String statusProcess);
+
+	List<ItemTask> findByTask(Task task);
 }

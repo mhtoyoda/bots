@@ -15,7 +15,6 @@ import com.fiveware.parameter.ParameterResolver;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceServer;
-import com.fiveware.service.ServiceSocket;
 import com.fiveware.task.StatusProcessItemTaskEnum;
 import com.fiveware.task.StatusProcessTaskEnum;
 import com.fiveware.task.TaskManager;
@@ -30,7 +29,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
@@ -62,13 +60,10 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Autowired
 	private ParameterResolver parameterResolver;
 
-	@Autowired
-	private ServiceSocket serviceSocket;
 
-	AtomicInteger atomicInteger = new AtomicInteger(0);
-	
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process() {
+
 		List<Agent> agents = serviceServer.getAllAgent(serverConfig.getServer().getName());
 		agents.forEach(agent -> {
 			log.info("Pulling Message [Agent]: {}", agent.getNameAgent());
@@ -98,7 +93,6 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 		log.debug("Linha resultado: {}", messageBot.getLineResult());
 		int parameterRetry = getParameter(botName, "retry");
 
-		serviceSocket.setPercent(atomicInteger.incrementAndGet());
 
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof RecoverableException ){

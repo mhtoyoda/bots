@@ -1,29 +1,9 @@
 package com.fiveware.io;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.StringJoiner;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
-import org.apache.commons.collections.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.messaging.BrokerManager;
 import com.fiveware.messaging.Producer;
-import com.fiveware.model.Agent;
-import com.fiveware.model.Bot;
-import com.fiveware.model.ItemTask;
-import com.fiveware.model.Record;
-import com.fiveware.model.Task;
+import com.fiveware.model.*;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.model.message.MessageHeader;
 import com.fiveware.model.message.MessageTask;
@@ -37,6 +17,23 @@ import com.fiveware.validate.ValidationFileErrorException;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.async.DeferredResult;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Created by valdisnei on 13/06/17.
@@ -71,18 +68,27 @@ public class ReadInputFile {
 
     private Long userId = 1L;
     
-    public void readFile(final String nameBot, final String path, InputStream file) throws IOException {
+    public void readFile(final String nameBot, final String path, InputStream file,
+                         DeferredResult<ResponseEntity<String>> resultado) throws IOException {
         Task task = createTask(nameBot, userId);
         Bot bot = task.getBot();
         String separatorFile = bot.getSeparatorFile();
         Iterable<String> split = Splitter.on(separatorFile).split(bot.getFieldsInput());
         String[] fields = Iterables.toArray(split, String.class);
         List<String> lines = fileUtil.linesFrom(file);
+
+        // Devolve a thread do Browser
+        resultado.setResult(ResponseEntity.ok().body("OK"));
+
         try {
             taskManager.updateTask(task.getId(), StatusProcessTaskEnum.VALIDATING);
+
             ruleValidations.executeValidations(lines, fields, separatorFile);
+
             taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCESSING);
             List<Record> allLines = fileUtil.linesFrom(lines, fields, separatorFile);
+
+
             sendListToQueue(task, allLines, path, separatorFile);
         } catch (ValidationFileErrorException e) {
             taskManager.updateTask(task.getId(), StatusProcessTaskEnum.REJECTED);
