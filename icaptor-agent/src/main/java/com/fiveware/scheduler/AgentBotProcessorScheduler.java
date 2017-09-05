@@ -1,25 +1,11 @@
 package com.fiveware.scheduler;
 
-import com.fiveware.config.agent.AgentConfigProperties;
-import com.fiveware.config.agent.AgentListener;
-import com.fiveware.context.QueueContext;
-import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.exception.ParameterInvalidException;
-import com.fiveware.exception.RuntimeBotException;
-import com.fiveware.messaging.Producer;
-import com.fiveware.messaging.QueueName;
-import com.fiveware.messaging.Receiver;
-import com.fiveware.messaging.TypeMessage;
-import com.fiveware.model.Bot;
-import com.fiveware.model.BotsMetric;
-import com.fiveware.model.message.MessageAgent;
-import com.fiveware.model.message.MessageBot;
-import com.fiveware.processor.ProcessBot;
-import com.fiveware.pulling.BrokerPulling;
-import com.fiveware.service.ServiceAgent;
-import com.fiveware.service.ServiceSocket;
-import com.google.common.base.MoreObjects;
-import com.google.common.collect.Sets;
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Consumer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +13,25 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
+import com.fiveware.config.agent.AgentConfigProperties;
+import com.fiveware.config.agent.AgentListener;
+import com.fiveware.context.QueueContext;
+import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.exception.ParameterInvalidException;
+import com.fiveware.exception.RuntimeBotException;
+import com.fiveware.message.validate.ValidateMessage;
+import com.fiveware.messaging.Producer;
+import com.fiveware.messaging.QueueName;
+import com.fiveware.messaging.Receiver;
+import com.fiveware.messaging.TypeMessage;
+import com.fiveware.model.Bot;
+import com.fiveware.model.message.MessageAgent;
+import com.fiveware.model.message.MessageBot;
+import com.fiveware.processor.ProcessBot;
+import com.fiveware.pulling.BrokerPulling;
+import com.fiveware.service.ServiceAgent;
+import com.google.common.base.MoreObjects;
+import com.google.common.collect.Sets;
 
 @Component
 public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
@@ -64,67 +62,31 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     @Qualifier("eventMessageProducer")
     private Producer<MessageAgent> producer;
 
-    private AtomicInteger atomicInteger = new AtomicInteger(0);
-
     @Autowired
-    private ServiceSocket serviceSocket;
-
-    BotsMetric.BuilderBotsMetric builderBotsMetric = new BotsMetric.BuilderBotsMetric();
-
-
-
+    @Qualifier("validateMessageTask")
+    private ValidateMessage validateMessage;
+    
     @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
     public void process() throws RuntimeBotException {
-
-               builderBotsMetric.addAmount(100);
-
-            if(Objects.isNull(builderBotsMetric.get()) ||
-                    builderBotsMetric.get().getProcessed() != builderBotsMetric.get().getAmount()){
-
-                int metric = atomicInteger.addAndGet(10);
-
-            if (metric < 20)
-                builderBotsMetric.addSucess(metric);
-
-            if (metric >= 20)
-                builderBotsMetric.addError(metric);
-
-            builderBotsMetric.addProcessed(metric);
-
-
-            serviceSocket.sendMetric(builderBotsMetric.build());
-
-        }
-
-
-
         List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
         bots.forEach(this::accept);
     }
 
-    public static void main(String[] args) {
-         AtomicInteger atomicInteger = new AtomicInteger(0);
-
-        Float percent = Float.valueOf(atomicInteger.incrementAndGet()) / Float.valueOf(100);
-        System.out.println("percent = " + percent);
-
-    }
-
-    private void accept(Bot bot) {
-
-        String botName = bot.getNameBot();
+    private void accept(Bot bot) {        
+    	String botName = bot.getNameBot();
         queueContext.setKey(botName);
         queueContext.setKeyValue(data.getAgentName());
         Set<String> queues = MoreObjects.firstNonNull(queueContext.getTasksQueues(botName, data.getAgentName()),
-                                                      Sets.newHashSet());
-            try {
-                queues.stream().
-                        forEach(queue -> {
-                            pullMessage(botName, queue);
-                        });
-            } catch (RuntimeBotException exceptionBot) {
-                notifyServerPurgeQueues(bot.getNameBot(), data.getAgentName());
-            }
+                                                      Sets.newHashSet());            
+        try {                
+        	queues.stream().                        
+        	forEach(queue -> {
+        		validateMessage.setParameter(queue);
+        		pullMessage(botName, queue);                        
+        	});            
+        } catch (RuntimeBotException exceptionBot) {        
+        	notifyServerPurgeQueues(bot.getNameBot(), data.getAgentName());    
+        }
     }
 
     /**
@@ -132,7 +94,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
      */
     @Override
     public boolean canPullingMessage() {
-        return queueContext.hasTask();
+        return queueContext.hasTask() && validateMessage.validateStatus();
     }
 
     /**
@@ -160,7 +122,6 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
         return Optional.ofNullable(receiver.receive(queueName));
     }
 
-
     private void notifyServerPurgeQueues(String nameBot, String nameAgent) {
         Set<String> queues = queueContext.getTasksQueues(nameBot);
 
@@ -177,7 +138,5 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
                 queueContext.removeQueueInContext(nameBot, nameQueue);
             }
         });
-
     }
-
 }
