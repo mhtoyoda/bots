@@ -61,7 +61,7 @@ public class ServiceItemTask {
 	}
 
 	public List<ItemTask> getItemTaskByStatus(String status) {
-		String url = "http://localhost:8085/api/item/task/status/" +status;
+		String url = "http://localhost:8085/api/item-task/status/" +status;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<ItemTask> httpEntity = new HttpEntity<>(null, headers);
@@ -71,7 +71,7 @@ public class ServiceItemTask {
 	}
 	
 	public List<ItemTask> getItemTaskByListStatus(List<String> status, Long taskId) {
-		String url = "http://localhost:8085/api/item/task/"+taskId+"/status/list/" +status;
+		String url = "http://localhost:8085/api/item-task/"+taskId+"/status/list/" +status;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<ItemTask> httpEntity = new HttpEntity<>(null, headers);
@@ -81,12 +81,16 @@ public class ServiceItemTask {
 	}
 	
 	public Long getItemTaskCountByTask(Long taskId) {
-		String url = "http://localhost:8085/api/item/task/"+taskId+"/count";
+		String url = "http://localhost:8085/api/item-task/"+taskId+"/count";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Long> httpEntity = new HttpEntity<>(null, headers);
 		ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<Long>() {});
 		Long count = responseEntity.getBody();
 		return count;
+	}
+
+	public List<ItemTask> download(Long idTask) {
+		return null;
 	}
 }
