@@ -1,22 +1,11 @@
 package com.fiveware.model;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
+import com.fiveware.model.user.IcaptorUser;
 import org.pojomatic.Pojomatic;
 
-import com.fiveware.model.user.IcaptorUser;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "task")
@@ -59,7 +48,14 @@ public class Task implements Serializable {
 	@JoinColumn(name = "id_status")
 	private StatuProcessTask statusProcess;
 
-	public Long getId() {
+	public Task() {
+	}
+
+	public Task(Long id) {
+		this.id=id;
+	}
+
+    public Long getId() {
 		return id;
 	}
 

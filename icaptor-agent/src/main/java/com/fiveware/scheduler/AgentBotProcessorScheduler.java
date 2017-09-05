@@ -11,11 +11,13 @@ import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
 import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.Bot;
+import com.fiveware.model.BotsMetric;
 import com.fiveware.model.message.MessageAgent;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.processor.ProcessBot;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
+import com.fiveware.service.ServiceSocket;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Sets;
 import org.slf4j.Logger;
@@ -27,8 +29,10 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 @Component
@@ -60,13 +64,54 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     @Qualifier("eventMessageProducer")
     private Producer<MessageAgent> producer;
 
+    private AtomicInteger atomicInteger = new AtomicInteger(0);
+
+    @Autowired
+    private ServiceSocket serviceSocket;
+
+    BotsMetric.BuilderBotsMetric builderBotsMetric = new BotsMetric.BuilderBotsMetric();
+
+
+
     @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
     public void process() throws RuntimeBotException {
+
+               builderBotsMetric.addAmount(100);
+
+            if(Objects.isNull(builderBotsMetric.get()) ||
+                    builderBotsMetric.get().getProcessed() != builderBotsMetric.get().getAmount()){
+
+                int metric = atomicInteger.addAndGet(10);
+
+            if (metric < 20)
+                builderBotsMetric.addSucess(metric);
+
+            if (metric >= 20)
+                builderBotsMetric.addError(metric);
+
+            builderBotsMetric.addProcessed(metric);
+
+
+            serviceSocket.sendMetric(builderBotsMetric.build());
+
+        }
+
+
+
         List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
         bots.forEach(this::accept);
     }
 
+    public static void main(String[] args) {
+         AtomicInteger atomicInteger = new AtomicInteger(0);
+
+        Float percent = Float.valueOf(atomicInteger.incrementAndGet()) / Float.valueOf(100);
+        System.out.println("percent = " + percent);
+
+    }
+
     private void accept(Bot bot) {
+
         String botName = bot.getNameBot();
         queueContext.setKey(botName);
         queueContext.setKeyValue(data.getAgentName());
@@ -74,7 +119,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
                                                       Sets.newHashSet());
             try {
                 queues.stream().
-                        forEach(queue -> {                        	
+                        forEach(queue -> {
                             pullMessage(botName, queue);
                         });
             } catch (RuntimeBotException exceptionBot) {
@@ -114,6 +159,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     public Optional<MessageBot> receiveMessage(String queueName) {
         return Optional.ofNullable(receiver.receive(queueName));
     }
+
 
     private void notifyServerPurgeQueues(String nameBot, String nameAgent) {
         Set<String> queues = queueContext.getTasksQueues(nameBot);
