@@ -19,7 +19,6 @@ public abstract class BrokerPulling<T> {
 			obj.ifPresent((T message) -> {
 				try {
 					processMessage(botName, message);
-
 				} catch (RuntimeBotException exceptionBot) {
 					throw exceptionBot;
 				}
