@@ -41,7 +41,11 @@ public class IcaptorMonitoringApplication implements CommandLineRunner {
 		while(true){
 			Thread.sleep(15000);
 			logger.info("Check Status Task and ItemTask");
-			taskResolver.process();
+			try{
+				taskResolver.process();
+			}catch (Exception e) {
+				logger.error("Error {}", e);
+			}			
 		}
 	}
 }

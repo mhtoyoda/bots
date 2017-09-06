@@ -40,7 +40,7 @@ public class TesteBot implements Automation<Endereco, Endereco> {
 	@IcaptorParameter(value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false, credential = false)
 	@IcaptorParameter(value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot", type = Endereco.class)
-	@InputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"}, separator = "|	", typeFileIn = "csv")
+	@InputDictionary(fields = {"cep"}, separator = "|	", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
 	public Endereco execute(Endereco endereco, ParameterValue parameters) throws RuntimeBotException,UnRecoverableException,RecoverableException, AuthenticationBotException {
@@ -51,7 +51,7 @@ public class TesteBot implements Automation<Endereco, Endereco> {
 //		throw new RecoverableException("Simulando bug RecoverableException");
 		logger.info("Dados de Endereco: {}",endereco.toString());
 		logger.info("Dados de Parametros: {}s",parameters.toString());
-		return endereco;
+		return getEndereco(endereco.getCep());
 	}
 
 	public Endereco getEndereco(String args) throws RuntimeBotException, UnRecoverableException, RecoverableException {

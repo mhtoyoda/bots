@@ -86,7 +86,7 @@ public class TaskManager {
 		ItemTask itemTask = itemServiceTask.getItemTaskById(itemTaskId);
 		itemTask.setStatusProcess(statusProcessItemTaskEnum.getStatuProcess());
 		
-		if (statusProcessItemTaskEnum.equals(StatusProcessTaskEnum.PROCESSING)) {
+		if (statusProcessItemTaskEnum.equals(StatusProcessItemTaskEnum.PROCESSING)) {
 			itemTask.setStartAt(new Date());
 			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
 			itemTask.setAttemptsCount(attemptsCount);
