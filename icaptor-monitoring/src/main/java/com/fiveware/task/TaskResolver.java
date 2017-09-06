@@ -28,8 +28,12 @@ public class TaskResolver {
 
 	@Autowired
 	private ParameterResolver parameterResolver;
-
+	
+	@Autowired
+	private SuspendedTask suspendedTask;
+	
 	public void process() {				
+		checkTaskSuspending();
 		checkTimeout();		
 		checkTaskProcessed();
 	}
@@ -92,5 +96,9 @@ public class TaskResolver {
 			return Integer.parseInt(parameter.getFieldValue());
 		}
 		return 15;
+	}
+	
+	private void checkTaskSuspending(){
+		suspendedTask.applyUpdateTaskSuspending();
 	}
 }
