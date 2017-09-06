@@ -22,7 +22,7 @@ public class ValidateMessageTask implements ValidateMessage {
 	
 	@Override
 	public boolean validateStatus() {
-		String[] values = this.queue.split(".");
+		String[] values = this.queue.split("\\.");
 		Long taskId = Long.parseLong(values[1]);
 		Task task = serviceTask.getTaskById(taskId);
 		if(null != task){
