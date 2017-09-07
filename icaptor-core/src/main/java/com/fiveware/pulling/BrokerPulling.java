@@ -12,6 +12,7 @@ public abstract class BrokerPulling<T> {
 	
 	public abstract Optional<T> receiveMessage(String queueName);
 
+
 	protected void pullMessage(String botName, String queue) throws RuntimeBotException {
 		if(canPullingMessage()){
 			Optional<T> obj = receiveMessage(queue);

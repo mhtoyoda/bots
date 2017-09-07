@@ -1,17 +1,5 @@
 package com.fiveware.scheduler;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.config.ServerConfig;
 import com.fiveware.exception.AuthenticationBotException;
 import com.fiveware.exception.RecoverableException;
@@ -32,6 +20,17 @@ import com.fiveware.service.ServiceServer;
 import com.fiveware.task.StatusProcessItemTaskEnum;
 import com.fiveware.task.StatusProcessTaskEnum;
 import com.fiveware.task.TaskManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
@@ -62,9 +61,11 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	
 	@Autowired
 	private ParameterResolver parameterResolver;
-	
+
+
 	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
 	public void process() {
+
 		List<Agent> agents = serviceServer.getAllAgent(serverConfig.getServer().getName());
 		agents.forEach(agent -> {
 			log.info("Pulling Message [Agent]: {}", agent.getNameAgent());
@@ -93,6 +94,8 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	public void processMessage(String botName, MessageBot messageBot) throws RuntimeBotException {
 		log.debug("Linha resultado: {}", messageBot.getLineResult());
 		int parameterRetry = getParameter(botName, "retry");
+
+
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof RecoverableException ){
 			verifyRetry(botName, messageBot, parameterRetry);

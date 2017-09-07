@@ -1,12 +1,12 @@
 package com.fiveware.io;
 
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 public class WorkerFile implements Runnable {
 
@@ -30,10 +30,12 @@ public class WorkerFile implements Runnable {
     @Override
     public void run() {
         try {
-            readInputFile.readFile(nameBot,files[0].getOriginalFilename(),files[0].getInputStream());
+            readInputFile.readFile(nameBot,files[0].getOriginalFilename(),
+                    files[0].getInputStream(),resultado);
         } catch (IOException e) {
             logger.error("{}",e);
+            resultado.setResult(ResponseEntity.badRequest().body("ERROR"));
         }
-        resultado.setResult(ResponseEntity.ok().body("OK"));
+
     }
 }

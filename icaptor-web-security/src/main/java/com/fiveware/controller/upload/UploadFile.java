@@ -1,7 +1,7 @@
 package com.fiveware.controller.upload;
 
+import com.fiveware.security.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +26,8 @@ public class UploadFile {
     @PostMapping(value = "/{nameBot}/upload")
     @PreAuthorize("hasAuthority('ROLE_AGENT_LIST') and #oauth2.hasScope('write')")
     public DeferredResult<ResponseEntity<String>> upload(@PathVariable String nameBot,
-                                                         @RequestParam("file") MultipartFile[] file) {
+                                                         @RequestParam("file") MultipartFile[] file,
+                                                         @RequestHeader("Authorization") String details) {
 
         String url = BASE_URL + "/" + nameBot;
 
@@ -39,9 +40,13 @@ public class UploadFile {
                 map.add("file", new FileSystemResource(file[0].getOriginalFilename()));
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+                headers.add("user", SpringSecurityUtil.decodeAuthorizationKey(details));
 
                 HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<LinkedMultiValueMap<String, Object>>(map, headers);
                 ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+
+                resultado.setResult(ResponseEntity.ok().body("OK"));
+
             }
         });
         thread.start();

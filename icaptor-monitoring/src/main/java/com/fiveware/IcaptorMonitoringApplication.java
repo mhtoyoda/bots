@@ -39,9 +39,13 @@ public class IcaptorMonitoringApplication implements CommandLineRunner {
 	@Override
 	public void run(String... arg0) throws Exception {
 		while(true){
-			Thread.sleep(20000);
+			Thread.sleep(15000);
 			logger.info("Check Status Task and ItemTask");
-			taskResolver.process();
+			try{
+				taskResolver.process();
+			}catch (Exception e) {
+				logger.error("Error {}", e);
+			}			
 		}
 	}
 }

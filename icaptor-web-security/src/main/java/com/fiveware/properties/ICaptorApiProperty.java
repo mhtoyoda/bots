@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("icaptor")
 public class ICaptorApiProperty {
 
-    private String originPermitida = "http://localhost:4200";
+    private String originPermitida;
 
     private final Seguranca seguranca = new Seguranca();
 
