@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fiveware.model.Task;
 import com.fiveware.repository.TaskRepository;
+import com.fiveware.repository.task.filter.TaskFilter;
 
 @RestController
 @RequestMapping("/api/task")
@@ -43,8 +44,8 @@ public class ResourceTask {
 	}
 
 	@GetMapping
-	public ResponseEntity<Iterable<Task>> findAll() {
-		return ResponseEntity.ok(taskRepository.findAll());
+	public List<Task> search(TaskFilter taskFilter) {
+		return taskRepository.filtrar(taskFilter);
 	}
 	
 	@GetMapping("/nameBot/{nameBot}")
