@@ -33,7 +33,7 @@ public class BotJS {
 	
 	public void scrollUp() {
 		JavascriptExecutor js = (JavascriptExecutor) driver;	
-		js.executeScript("window.scrollBy(0,-300)", "");
+		js.executeScript("window.scrollTo(250, 0)", "");
 	}
 	
 	public void scrollDown(int num) {
