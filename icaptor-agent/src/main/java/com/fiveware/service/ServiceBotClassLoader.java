@@ -7,10 +7,7 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 
 import org.slf4j.Logger;
@@ -38,35 +35,18 @@ import com.fiveware.task.StatusProcessTaskEnum;
  * Created by valdisnei on 29/05/17.
  */
 @Service
-public  class ServiceBotClassLoader<T> {
+public class ServiceBotClassLoader<T> {
 
     static Logger logger = LoggerFactory.getLogger(ServiceBotClassLoader.class);
 
     @Autowired
-    private ObjectMapper objectMapper;  
-    
+    private ObjectMapper objectMapper;
+
     @Autowired
     private ClassLoaderRunner classLoaderRunner;
 
     @Autowired
     private ClassLoaderConfig classLoaderConfig;
-
-    @Autowired
-    private MessageSource messageSource;
-
-
-
-    public OutTextRecord executeMainClass(String nameBot,String endpoint, T parameter) throws IOException,
-            ClassNotFoundException, InstantiationException, IllegalAccessException,
-            NoSuchMethodException, RuntimeBotException {
-        Optional<BotClassLoaderContext> botClassLoaderContext = classLoaderConfig.getPropertiesBot(nameBot);
-
-        if(!endpoint.equals(botClassLoaderContext.get().getEndpoint()))
-            throw new RuntimeBotException(messageSource.getMessage("endPoint.notFound",new Object[]{endpoint},null));
-
-        return getOutTextRecord(parameter, null);
-    }
-
 
     public OutTextRecord getOutTextRecord(T parameter, ProcessorFields processorFields)
             throws ClassNotFoundException, RuntimeBotException, IOException, InstantiationException, IllegalAccessException,
@@ -80,33 +60,33 @@ public  class ServiceBotClassLoader<T> {
         Class param = classLoader.loadClass(ParameterValue.class.getName());
         Class<?> aClass = o.newInstance().getClass();
         Class<?> paramClass = param.newInstance().getClass();
-        
+
         Method execute = clazz.getMethod(botClassLoaderContext.get().getMethod(), o, param);
 
         Object o1 = null;
-        if( null != parameter ){
+        if (null != parameter) {
             o1 = objectMapper.convertValue(parameter, aClass);
         }
-        
+
         Object o2 = null;
-        if( null != processorFields.getParameterValue() ){
+        if (null != processorFields.getParameterValue()) {
             o2 = objectMapper.convertValue(processorFields.getParameterValue(), paramClass);
         }
-        
+
         Object obj = null;
-        try{
-        	if( null != o1){
-        		obj =  execute.invoke(clazz.newInstance(), o1, o2);
-        	}else{
-        		obj =  execute.invoke(clazz.newInstance());
-        	}
+        try {
+            if (null != o1) {
+                obj = execute.invoke(clazz.newInstance(), o1, o2);
+            } else {
+                obj = execute.invoke(clazz.newInstance());
+            }
 
             processorFields.getMessageBot().setStatuProcessEnum(StatusProcessTaskEnum.SUCCESS);
             processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.SUCCESS);
 
             processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
 
-        }catch (InvocationTargetException e) {
+        } catch (InvocationTargetException e) {
 
             Predicate<Class> predicate = new Predicate<Class>() {
                 @Override
@@ -115,21 +95,21 @@ public  class ServiceBotClassLoader<T> {
                 }
             };
 
-            if (predicate.test(UnRecoverableException.class) ) {
+            if (predicate.test(UnRecoverableException.class)) {
                 processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
 
-                HashMap[] hashMaps = handleException(processorFields,  new UnRecoverableException(e.getCause()));
+                HashMap[] hashMaps = handleException(processorFields, new UnRecoverableException(e.getCause()));
 
                 return new OutTextRecord(hashMaps);
-            }else if (predicate.test(RecoverableException.class) ){
+            } else if (predicate.test(RecoverableException.class)) {
                 HashMap[] hashMaps = handleException(processorFields, new RecoverableException(e.getCause()));
 
                 return new OutTextRecord(hashMaps);
-            }else if(predicate.test(AuthenticationBotException.class)){
+            } else if (predicate.test(AuthenticationBotException.class)) {
                 HashMap[] hashMaps = handleException(processorFields, new AuthenticationBotException(e.getCause()));
 
                 return new OutTextRecord(hashMaps);
-            }else{
+            } else {
                 throw new RuntimeBotException(e.getTargetException().getMessage());
             }
         }
@@ -146,10 +126,10 @@ public  class ServiceBotClassLoader<T> {
     private HashMap[] handleException(ProcessorFields processorFields, Exception ex) {
         Map map = new HashMap();
         String fields = getOutputDictionary(processorFields);
-        map.put("ERROR",  fields+"|"+ex.getMessage());
+        map.put("ERROR", fields + "|" + ex.getMessage());
         HashMap[] hashMaps = {(HashMap) map};
 
-        processorFields.getMessageBot().setLineResult(fields+"|"+ex.getMessage());
+        processorFields.getMessageBot().setLineResult(fields + "|" + ex.getMessage());
         processorFields.getMessageBot().setException(ex);
 
         return hashMaps;
@@ -162,7 +142,7 @@ public  class ServiceBotClassLoader<T> {
     }
 
     protected ClassLoader getClassLoader(String pathJar) throws MalformedURLException {
-        ClassLoader classLoader = new URLClassLoader(new URL[] { getUrl(pathJar) });
+        ClassLoader classLoader = new URLClassLoader(new URL[]{getUrl(pathJar)});
         return classLoader;
     }
 

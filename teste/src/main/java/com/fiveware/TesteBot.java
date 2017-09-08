@@ -35,10 +35,10 @@ public class TesteBot implements Automation<Endereco, Endereco> {
 		logger.info("Resultado: {}", endereco);
 	}
 	
-	@IcaptorParameter(value = "maria:12345", nameTypeParameter = "login", exclusive = true, credential = true)
-	@IcaptorParameter(value = "joao:12345", nameTypeParameter = "login", exclusive = true, credential = true)
-	@IcaptorParameter(value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false, credential = false)
-	@IcaptorParameter(value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
+//	@IcaptorParameter(value = "maria:12345", nameTypeParameter = "login", exclusive = true, credential = true)
+//	@IcaptorParameter(value = "joao:12345", nameTypeParameter = "login", exclusive = true, credential = true)
+//	@IcaptorParameter(value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false, credential = false)
+//	@IcaptorParameter(value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot", type = Endereco.class)
 	@InputDictionary(fields = {"cep"}, separator = "|	", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"},
@@ -50,7 +50,7 @@ public class TesteBot implements Automation<Endereco, Endereco> {
 
 //		throw new RecoverableException("Simulando bug RecoverableException");
 		logger.info("Dados de Endereco: {}",endereco.toString());
-		logger.info("Dados de Parametros: {}s",parameters.toString());
+//		logger.info("Dados de Parametros: {}s",parameters.toString());
 		return getEndereco(endereco.getCep());
 	}
 

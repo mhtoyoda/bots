@@ -23,18 +23,6 @@ public class OutTextRecord {
 		return map;
 	}
 
-
-	public boolean isError() {
-
-		if (this.map==null || this.map[0] == null ||this.map[0].get(0)==null)
-			return false;
-
-		if (this.map[0].get(0).equals("ERROR"))
-			return true;
-
-		return false;
-	}
-
 	@Bean
 	public ArrayMapDeserializer arrayMapDeserializer(){
 		return new ArrayMapDeserializer();
