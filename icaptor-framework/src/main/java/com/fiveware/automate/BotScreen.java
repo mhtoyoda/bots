@@ -25,8 +25,7 @@ public class BotScreen {
 		return this;
 	}
 
-	public BotScreen openPage(String url) throws RuntimeBotException {
-		BotValidation.verifyUrl(url);
+	public BotScreen openPage(String url) throws RuntimeBotException {		
 		webDriver.get(url);
 		return this;
 	}
