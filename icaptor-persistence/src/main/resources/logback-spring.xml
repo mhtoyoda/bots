@@ -27,7 +27,9 @@
             <logger name="org.flywaydb" level="debug" additivity="false">
                 <appender-ref ref="CONSOLE" />
             </logger>
-
+            <logger name="org.springframework" level="info" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
         </else>
     </if>
 

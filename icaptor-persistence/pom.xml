@@ -9,7 +9,7 @@
 	<packaging>jar</packaging>
 
 	<name>icaptor-persistence</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Banco de dados Icaptor-Automation</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -137,6 +137,17 @@
 			<version>22.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.6.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.6.1</version>
+		</dependency>
 
 	</dependencies>
 </project>

@@ -10,25 +10,28 @@
     </appender>
 
 
-    <!--<if condition='"production".equals("${spring.profiles.active}")'>-->
-        <!--<then>-->
-            <!--<logger name="com.fiveware" level="INFO" additivity="false">-->
-                <!--<appender-ref ref="CONSOLE" />-->
-            <!--</logger>-->
-            <!--<logger name="org.apache.http" level="INFO" additivity="false">-->
-                <!--<appender-ref ref="CONSOLE" />-->
-            <!--</logger>-->
+    <if condition='"production".equals("${spring.profiles.active}")'>
+        <then>
+            <logger name="com.fiveware" level="INFO" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
+            <logger name="org.apache.http" level="INFO" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
 
-        <!--</then>-->
-        <!--<else>-->
-            <!--<logger name="com.fiveware" level="fail" additivity="false">-->
-                <!--<appender-ref ref="CONSOLE" />-->
-            <!--</logger>-->
-        <!--</else>-->
-    <!--</if>-->
+        </then>
+        <else>
+            <logger name="com.fiveware" level="debug" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
+            <logger name="org.hibernate.SQLQuery" level="debug" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
+        </else>
+    </if>
 
 
-    <root level="INFO">
+    <root level="error">
         <appender-ref ref="CONSOLE" />
     </root>
 
