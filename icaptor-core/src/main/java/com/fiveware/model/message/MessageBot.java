@@ -5,8 +5,8 @@ import java.io.Serializable;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
-import com.fiveware.task.StatusProcessItemTaskEnum;
-import com.fiveware.task.StatusProcessTaskEnum;
+import com.fiveware.model.StatusProcessItemTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
 
 @AutoProperty
 public class MessageBot implements Serializable {

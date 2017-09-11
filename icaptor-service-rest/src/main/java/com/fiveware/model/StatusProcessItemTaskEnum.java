@@ -1,4 +1,4 @@
-package com.fiveware.task;
+package com.fiveware.model;
 
 import com.fiveware.model.StatuProcessItemTask;
 

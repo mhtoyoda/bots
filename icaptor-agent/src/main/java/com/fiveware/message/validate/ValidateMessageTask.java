@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.model.Task;
 import com.fiveware.service.ServiceTask;
-import com.fiveware.task.StatusProcessTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
 
 @Component("validateMessageTask")
 public class ValidateMessageTask implements ValidateMessage {

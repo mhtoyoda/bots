@@ -1,7 +1,6 @@
 package com.fiveware.service;
 
-import java.util.List;
-
+import com.fiveware.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.ItemTask;
-import com.fiveware.model.StatuProcessItemTask;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ServiceItemTask {
@@ -20,6 +19,9 @@ public class ServiceItemTask {
 
 	@Autowired
 	private RestTemplate restTemplate;
+
+
+	private AtomicInteger atomicInteger = new AtomicInteger(0);
 
 	public ItemTask save(ItemTask item) {
 		String url = "http://localhost:8085/api/item-task";
@@ -86,8 +88,28 @@ public class ServiceItemTask {
 		Long count = responseEntity.getBody();
 		return count;
 	}
-
 	public List<ItemTask> download(Long idTask) {
 		return null;
 	}
+
+	public void metric(List<Task> tasks){
+		tasks.stream().forEach(task ->{
+			List<ItemTask> erros = getItemTaskByStatus(StatusProcessItemTaskEnum.ERROR.getName());
+			List<ItemTask> sucess = getItemTaskByStatus(StatusProcessItemTaskEnum.SUCCESS.getName());
+
+			Long itemTaskCountByTask = getItemTaskCountByTask(task.getId());
+
+			BotsMetric metrics = new BotsMetric.BuilderBotsMetric()
+					.addAmount(itemTaskCountByTask.intValue())
+					.addError(atomicInteger.addAndGet(1))
+					.addSucess(atomicInteger.addAndGet(1))
+					.addProcessed(atomicInteger.addAndGet(1) )
+					.build();
+
+			task.setBotsMetric(metrics);
+		});
+
+	}
+
+
 }

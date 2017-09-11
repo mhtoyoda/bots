@@ -13,7 +13,6 @@ import java.util.function.Predicate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,8 +27,8 @@ import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.OutputDictionaryContext;
 import com.fiveware.parameter.ParameterValue;
 import com.fiveware.processor.ProcessorFields;
-import com.fiveware.task.StatusProcessItemTaskEnum;
-import com.fiveware.task.StatusProcessTaskEnum;
+import com.fiveware.model.StatusProcessItemTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
 
 /**
  * Created by valdisnei on 29/05/17.

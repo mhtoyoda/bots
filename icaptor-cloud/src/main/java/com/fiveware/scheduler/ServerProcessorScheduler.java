@@ -17,8 +17,8 @@ import com.fiveware.parameter.ParameterResolver;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceServer;
-import com.fiveware.task.StatusProcessItemTaskEnum;
-import com.fiveware.task.StatusProcessTaskEnum;
+import com.fiveware.model.StatusProcessItemTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.task.TaskManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -93,6 +93,8 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Override
 	public void processMessage(String botName, MessageBot messageBot) throws RuntimeBotException {
 		log.debug("Linha resultado: {}", messageBot.getLineResult());
+
+
 		int parameterRetry = getParameter(botName, "retry");
 
 
@@ -150,6 +152,10 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 		Optional<ParameterInfo> optional = Optional.ofNullable(parameterByBot);
 		if(optional.isPresent()){
 			Parameter parameter = optional.get().getParameters().get(typeParameter);
+
+			if(Objects.isNull(parameter))
+				getParameterCloud(typeParameter);
+
 			return getValue(parameter);
 		}
 		return getParameterCloud(typeParameter);

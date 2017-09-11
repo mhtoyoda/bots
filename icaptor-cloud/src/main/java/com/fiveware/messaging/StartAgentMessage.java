@@ -16,7 +16,7 @@ import com.fiveware.model.message.MessageAgent;
 import com.fiveware.model.message.MessageTask;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceTask;
-import com.fiveware.task.StatusProcessTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
 
 @Component("START_AGENT")
 public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {

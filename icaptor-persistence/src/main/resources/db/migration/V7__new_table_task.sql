@@ -18,7 +18,7 @@ CREATE TABLE task (
   start_at	DATETIME NULL,
   end_at	DATETIME NULL,  
   schedule_to DATETIME NULL,
-  id_status BIGINT(20) NOT NULL,  
+  id_status BIGINT(20) NOT NULL,
   PRIMARY KEY (id),
   FOREIGN KEY (id_bot) REFERENCES bot(id),
   FOREIGN KEY (id_user) REFERENCES user(id),

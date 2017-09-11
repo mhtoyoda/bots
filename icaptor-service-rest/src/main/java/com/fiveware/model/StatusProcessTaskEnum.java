@@ -1,6 +1,4 @@
-package com.fiveware.task;
-
-import com.fiveware.model.StatuProcessTask;
+package com.fiveware.model;
 
 public enum StatusProcessTaskEnum {
 

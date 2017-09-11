@@ -1,24 +1,16 @@
 package com.fiveware.task;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import com.fiveware.model.Bot;
-import com.fiveware.model.ItemTask;
-import com.fiveware.model.Parameter;
-import com.fiveware.model.Task;
+import com.fiveware.model.*;
 import com.fiveware.parameter.ParameterInfo;
 import com.fiveware.parameter.ParameterResolver;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.*;
+import java.util.List;
+import java.util.Map;
 
 @Component
 public class TaskResolver {
@@ -31,8 +23,8 @@ public class TaskResolver {
 	
 	@Autowired
 	private SuspendedTask suspendedTask;
-	
-	public void process() {				
+
+	public void process() {
 		checkTaskSuspending();
 		checkTimeout();		
 		checkTaskProcessed();
@@ -73,7 +65,9 @@ public class TaskResolver {
 		Long itemTaskCountByTask = taskManager.getItemTaskCountByTask(task.getId());
 		return itemTaskCountByTask;
 	}
-	
+
+
+
 	private void checkTimeout() {
 		int timeout = getTimeoutParameter();
 		List<ItemTask> itemTaskProcessing = taskManager.allItemTaskProcessing(StatusProcessItemTaskEnum.PROCESSING.getName());
@@ -97,8 +91,10 @@ public class TaskResolver {
 		}
 		return 15;
 	}
-	
+
+
 	private void checkTaskSuspending(){
 		suspendedTask.applyUpdateTaskSuspending();
 	}
+
 }
