@@ -1,6 +1,5 @@
 package com.fiveware.resource.task;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +45,7 @@ public class ResourceTask {
 
 	@GetMapping
 	public List<Task> search(TaskFilter taskFilter) {
-	//	return taskRepository.filter(taskFilter);
-		return Collections.emptyList();
+		return taskRepository.filter(taskFilter);
 	}
 	
 	@GetMapping("/nameBot/{nameBot}")

@@ -9,7 +9,7 @@ public class TaskFilter {
 
 	private List<Long> taskStatusIds;
 
-	private List<String> botsNames;
+	private List<Long> botsIds;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate startedDate;
@@ -17,7 +17,7 @@ public class TaskFilter {
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private LocalDate finishedDate;
 
-	private Long userId;
+	private List<Long> usersIds;
 
 	public List<Long> getTaskStatusIds() {
 		return taskStatusIds;
@@ -27,12 +27,12 @@ public class TaskFilter {
 		this.taskStatusIds = taskStatusIds;
 	}
 
-	public List<String> getBotsNames() {
-		return botsNames;
+	public List<Long> getBotsIds() {
+		return botsIds;
 	}
 
-	public void setBotsNames(List<String> botsNames) {
-		this.botsNames = botsNames;
+	public void setBotsIds(List<Long> botsIds) {
+		this.botsIds = botsIds;
 	}
 
 	public LocalDate getStartedDate() {
@@ -51,12 +51,12 @@ public class TaskFilter {
 		this.finishedDate = finishedDate;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public List<Long> getUsersIds() {
+		return usersIds;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUsersIds(List<Long> usersIds) {
+		this.usersIds = usersIds;
 	}
 
 }

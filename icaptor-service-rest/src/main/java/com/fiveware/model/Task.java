@@ -1,19 +1,27 @@
 package com.fiveware.model;
 
-import com.fiveware.model.user.IcaptorUser;
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
 import org.pojomatic.Pojomatic;
 
-import javax.persistence.*;
-import java.io.Serializable;
-import java.util.Date;
+import com.fiveware.model.user.IcaptorUser;
 
 @Entity
 @Table(name = "task")
 public class Task implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -21,20 +29,20 @@ public class Task implements Serializable {
 	private Long id;
 
 	@Column(name = "load_time")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date loadTime;
+//	@Temporal(TemporalType.TIMESTAMP)
+	private LocalDate loadTime;
 
 	@Column(name = "start_at")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date startAt;
+//	@Temporal(TemporalType.TIMESTAMP)
+	private LocalDate startAt;
 
 	@Column(name = "end_at")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date endAt;
+//	@Temporal(TemporalType.TIMESTAMP)
+	private LocalDate endAt;
 
 	@Column(name = "schedule_to")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date scheduleTo;
+//	@Temporal(TemporalType.TIMESTAMP)
+	private LocalDate scheduleTo;
 
 	@ManyToOne
 	@JoinColumn(name = "id_bot")
@@ -52,10 +60,10 @@ public class Task implements Serializable {
 	}
 
 	public Task(Long id) {
-		this.id=id;
+		this.id = id;
 	}
 
-    public Long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -63,35 +71,35 @@ public class Task implements Serializable {
 		this.id = id;
 	}
 
-	public Date getLoadTime() {
+	public LocalDate getLoadTime() {
 		return loadTime;
 	}
 
-	public void setLoadTime(Date loadTime) {
+	public void setLoadTime(LocalDate loadTime) {
 		this.loadTime = loadTime;
 	}
 
-	public Date getStartAt() {
+	public LocalDate getStartAt() {
 		return startAt;
 	}
 
-	public void setStartAt(Date startAt) {
+	public void setStartAt(LocalDate startAt) {
 		this.startAt = startAt;
 	}
 
-	public Date getEndAt() {
+	public LocalDate getEndAt() {
 		return endAt;
 	}
 
-	public void setEndAt(Date endAt) {
+	public void setEndAt(LocalDate endAt) {
 		this.endAt = endAt;
 	}
 
-	public Date getScheduleTo() {
+	public LocalDate getScheduleTo() {
 		return scheduleTo;
 	}
 
-	public void setScheduleTo(Date scheduleTo) {
+	public void setScheduleTo(LocalDate scheduleTo) {
 		this.scheduleTo = scheduleTo;
 	}
 
