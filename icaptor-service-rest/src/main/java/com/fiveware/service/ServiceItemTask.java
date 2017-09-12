@@ -1,6 +1,7 @@
 package com.fiveware.service;
 
 import com.fiveware.model.*;
+import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,11 +71,11 @@ public class ServiceItemTask {
 	}
 	
 	public List<ItemTask> getItemTaskByListStatus(List<String> status, Long taskId) {
-		String url = "http://localhost:8085/api/item-task/"+taskId+"/status/list/" +status;
+		String url = "http://localhost:8085/api/item-task/"+taskId+"/status";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<ItemTask> httpEntity = new HttpEntity<>(null, headers);
-		ResponseEntity<List<ItemTask>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<List<ItemTask>>() {});
+		HttpEntity<List<String>> httpEntity = new HttpEntity<>(status, headers);
+		ResponseEntity<List<ItemTask>> responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, new ParameterizedTypeReference<List<ItemTask>>() {});
 		List<ItemTask> item = responseEntity.getBody();
 		return item;
 	}
@@ -94,16 +95,18 @@ public class ServiceItemTask {
 
 	public void metric(List<Task> tasks){
 		tasks.stream().forEach(task ->{
-			List<ItemTask> erros = getItemTaskByStatus(StatusProcessItemTaskEnum.ERROR.getName());
-			List<ItemTask> sucess = getItemTaskByStatus(StatusProcessItemTaskEnum.SUCCESS.getName());
+			long errors = getItemTaskByListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.ERROR.getName()), task.getId())
+									.stream().count();
+
+			long success = getItemTaskByListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.SUCCESS.getName()), task.getId())
+					.stream().count();
 
 			Long itemTaskCountByTask = getItemTaskCountByTask(task.getId());
 
 			BotsMetric metrics = new BotsMetric.BuilderBotsMetric()
-					.addAmount(itemTaskCountByTask.intValue())
-					.addError(atomicInteger.addAndGet(1))
-					.addSucess(atomicInteger.addAndGet(1))
-					.addProcessed(atomicInteger.addAndGet(1) )
+					.addAmount(itemTaskCountByTask)
+					.addError(errors)
+					.addSuccess(success)
 					.build();
 
 			task.setBotsMetric(metrics);

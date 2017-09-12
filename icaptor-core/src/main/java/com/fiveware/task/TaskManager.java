@@ -1,23 +1,18 @@
 package com.fiveware.task;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
+import com.fiveware.model.ItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
+import com.fiveware.model.Task;
+import com.fiveware.model.message.MessageBot;
+import com.fiveware.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.ItemTask;
-import com.fiveware.model.Task;
-import com.fiveware.model.message.MessageBot;
-import com.fiveware.service.ServiceBot;
-import com.fiveware.service.ServiceItemTask;
-import com.fiveware.service.ServiceStatusProcessTask;
-import com.fiveware.service.ServiceTask;
-import com.fiveware.service.ServiceUser;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Component
 public class TaskManager {
@@ -51,7 +46,7 @@ public class TaskManager {
 	public Task updateTask(Long taskId, StatusProcessTaskEnum statuProcessEnum) {
 		Task task = serviceTask.getTaskById(taskId);
 		task.setStatusProcess(statuProcessEnum.getStatuProcess());
-		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.SUCCESS)) {
+		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.PROCCESSED)) {
 			task.setEndAt(new Date());
 		}
 		task = serviceTask.save(task);

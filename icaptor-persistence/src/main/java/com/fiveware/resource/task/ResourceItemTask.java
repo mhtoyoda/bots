@@ -51,8 +51,8 @@ public class ResourceItemTask {
 		return ResponseEntity.ok(itemTaskRepository.findItemTaskbyStatusProcess(status));
 	}
 	
-	@GetMapping("/{taskId}/status/list/{status}")
-	public ResponseEntity<List<ItemTask>> findItemTaskbyListStatusProcess(@PathVariable("taskId") Long taskId, @PathVariable("status") List<String> status) {
+	@PostMapping("/{taskId}/status")
+	public ResponseEntity<List<ItemTask>> findItemTaskbyListStatusProcess(@PathVariable("taskId") Long taskId, @RequestBody List<String> status) {
 		return ResponseEntity.ok(itemTaskRepository.findItemTaskbyListStatusProcess(taskId, status));
 	}
 	

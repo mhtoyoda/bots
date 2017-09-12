@@ -83,7 +83,8 @@ public class ServiceTask {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);	
 		HttpEntity<Task> requestEntity = new HttpEntity<>(null, headers);
-		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Task>>() {});		
+		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+				new ParameterizedTypeReference<List<Task>>() {});
 		List<Task> tasks = responseEntity.getBody();
 		logger.debug("Loaded [{}] tasks for user id [{}]", tasks.size(), userId);
 		return tasks;

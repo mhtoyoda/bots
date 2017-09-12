@@ -1,9 +1,6 @@
 package com.fiveware;
 
-import com.fiveware.annotation.Icaptor;
-import com.fiveware.annotation.IcaptorMethod;
-import com.fiveware.annotation.InputDictionary;
-import com.fiveware.annotation.OutputDictionary;
+import com.fiveware.annotation.*;
 import com.fiveware.automate.BotScreen;
 import com.fiveware.exception.AuthenticationBotException;
 import com.fiveware.exception.RecoverableException;
@@ -36,7 +33,7 @@ public class TesteBot implements Automation<String, Endereco> {
 //	@IcaptorParameter(value = "maria:12345", nameTypeParameter = "login", exclusive = true, credential = true)
 //	@IcaptorParameter(value = "joao:12345", nameTypeParameter = "login", exclusive = true, credential = true)
 //	@IcaptorParameter(value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false, credential = false)
-//	@IcaptorParameter(value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
+	@IcaptorParameter(value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot", type = String.class)
 	@InputDictionary(fields = {"cep"}, separator = "|	", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"},
@@ -72,7 +69,7 @@ public class TesteBot implements Automation<String, Endereco> {
 
 		if ("DADOS NAO ENCONTRADOS".equalsIgnoreCase(resultado)){
 			logger.warn("DADOS NAO ENCONTRADOS");
-			throw new RecoverableException("DADOS NAO ENCONTRADOS");
+			throw new UnRecoverableException("DADOS NAO ENCONTRADOS");
 		}
 
 		String logradouro = telaConsultaCep.find()

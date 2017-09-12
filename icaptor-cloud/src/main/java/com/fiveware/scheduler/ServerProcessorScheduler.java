@@ -95,17 +95,19 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 		log.debug("Linha resultado: {}", messageBot.getLineResult());
 
 
-		int parameterRetry = getParameter(botName, "retry");
 
 
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof RecoverableException ){
+			int parameterRetry = getParameter(botName, "retry");
+
 			verifyRetry(botName, messageBot, parameterRetry);
 		}
 		
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof AuthenticationBotException ){
-			
+			int parameterRetry = getParameter(botName, "retry");
+
 			verifyRetry(botName, messageBot, parameterRetry);
 			invalidateParameterCredential(botName, messageBot);
 		}
@@ -151,6 +153,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 		ParameterInfo parameterByBot = parameterResolver.getParameterByBot(botName);
 		Optional<ParameterInfo> optional = Optional.ofNullable(parameterByBot);
 		if(optional.isPresent()){
+
 			Parameter parameter = optional.get().getParameters().get(typeParameter);
 
 			if(Objects.isNull(parameter))
