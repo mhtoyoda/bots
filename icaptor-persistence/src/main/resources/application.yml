@@ -18,6 +18,7 @@ spring:
   jackson:
     serialization.fail-on-empty-beans: false
     deserialization.fail-on-unknown-properties: true
+    date-format: dd/MM/yyyy
 
   data.rest.detection-strategy: annotated
 

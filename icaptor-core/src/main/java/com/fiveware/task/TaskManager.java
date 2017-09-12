@@ -1,5 +1,6 @@
 package com.fiveware.task;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -38,9 +39,9 @@ public class TaskManager {
 	public Task createTask(String nameBot, Long userId) {
 		Task task = new Task();
 		task.setBot(serviceBot.findByNameBot(nameBot).get());
-		task.setLoadTime(new Date());
+		task.setLoadTime(LocalDateTime.now());
 		task.setStatusProcess(serviceStatusProcessTask.getStatusProcessById(StatusProcessTaskEnum.CREATED.getId()));
-		task.setStartAt(new Date());
+		task.setStartAt(LocalDateTime.now());
 		task.setUsuario(serviceUser.getUserById(userId).get());
 		task = serviceTask.save(task);
 		return task;
@@ -50,7 +51,7 @@ public class TaskManager {
 		Task task = serviceTask.getTaskById(taskId);
 		task.setStatusProcess(statuProcessEnum.getStatuProcess());
 		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.SUCCESS)) {
-			task.setEndAt(new Date());
+			task.setEndAt(LocalDateTime.now());
 		}
 		task = serviceTask.save(task);
 		return task;

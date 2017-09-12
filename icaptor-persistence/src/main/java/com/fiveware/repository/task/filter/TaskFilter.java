@@ -1,6 +1,6 @@
 package com.fiveware.repository.task.filter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,10 +12,10 @@ public class TaskFilter {
 	private List<Long> botsIds;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private LocalDate startedDate;
+	private LocalDateTime startedDate;
 
 	@DateTimeFormat(pattern = "dd/MM/yyyy")
-	private LocalDate finishedDate;
+	private LocalDateTime finishedDate;
 
 	private List<Long> usersIds;
 
@@ -35,19 +35,19 @@ public class TaskFilter {
 		this.botsIds = botsIds;
 	}
 
-	public LocalDate getStartedDate() {
+	public LocalDateTime getStartedDate() {
 		return startedDate;
 	}
 
-	public void setStartedDate(LocalDate startedDate) {
+	public void setStartedDate(LocalDateTime startedDate) {
 		this.startedDate = startedDate;
 	}
 
-	public LocalDate getFinishedDate() {
+	public LocalDateTime getFinishedDate() {
 		return finishedDate;
 	}
 
-	public void setFinishedDate(LocalDate finishedDate) {
+	public void setFinishedDate(LocalDateTime finishedDate) {
 		this.finishedDate = finishedDate;
 	}
 

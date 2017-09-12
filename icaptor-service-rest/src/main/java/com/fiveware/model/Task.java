@@ -1,7 +1,7 @@
 package com.fiveware.model;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.pojomatic.Pojomatic;
 
@@ -29,20 +27,16 @@ public class Task implements Serializable {
 	private Long id;
 
 	@Column(name = "load_time")
-//	@Temporal(TemporalType.TIMESTAMP)
-	private LocalDate loadTime;
+	private LocalDateTime loadTime;
 
 	@Column(name = "start_at")
-//	@Temporal(TemporalType.TIMESTAMP)
-	private LocalDate startAt;
+	private LocalDateTime startAt;
 
 	@Column(name = "end_at")
-//	@Temporal(TemporalType.TIMESTAMP)
-	private LocalDate endAt;
+	private LocalDateTime endAt;
 
 	@Column(name = "schedule_to")
-//	@Temporal(TemporalType.TIMESTAMP)
-	private LocalDate scheduleTo;
+	private LocalDateTime scheduleTo;
 
 	@ManyToOne
 	@JoinColumn(name = "id_bot")
@@ -71,35 +65,35 @@ public class Task implements Serializable {
 		this.id = id;
 	}
 
-	public LocalDate getLoadTime() {
+	public LocalDateTime getLoadTime() {
 		return loadTime;
 	}
 
-	public void setLoadTime(LocalDate loadTime) {
+	public void setLoadTime(LocalDateTime loadTime) {
 		this.loadTime = loadTime;
 	}
 
-	public LocalDate getStartAt() {
+	public LocalDateTime getStartAt() {
 		return startAt;
 	}
 
-	public void setStartAt(LocalDate startAt) {
+	public void setStartAt(LocalDateTime startAt) {
 		this.startAt = startAt;
 	}
 
-	public LocalDate getEndAt() {
+	public LocalDateTime getEndAt() {
 		return endAt;
 	}
 
-	public void setEndAt(LocalDate endAt) {
+	public void setEndAt(LocalDateTime endAt) {
 		this.endAt = endAt;
 	}
 
-	public LocalDate getScheduleTo() {
+	public LocalDateTime getScheduleTo() {
 		return scheduleTo;
 	}
 
-	public void setScheduleTo(LocalDate scheduleTo) {
+	public void setScheduleTo(LocalDateTime scheduleTo) {
 		this.scheduleTo = scheduleTo;
 	}
 

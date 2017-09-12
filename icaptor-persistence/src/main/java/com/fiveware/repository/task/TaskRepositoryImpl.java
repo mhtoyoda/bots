@@ -45,15 +45,15 @@ public class TaskRepositoryImpl implements TaskRepositoryQuery {
 		}
 
 		if (filter.getBotsIds() != null) {
-			predicates.add(root.get("id_bot").in(filter.getBotsIds()));
+			predicates.add(root.get("bot").in(filter.getBotsIds()));
 		}
 
 		if (filter.getTaskStatusIds() != null && !filter.getTaskStatusIds().isEmpty()) {
-			predicates.add(root.get("id_status").in(filter.getTaskStatusIds()));
+			predicates.add(root.get("statusProcess").in(filter.getTaskStatusIds()));
 		}
 
 		if (filter.getUsersIds() != null) {
-			predicates.add(root.get("id_user").in(filter.getUsersIds()));
+			predicates.add(root.get("usuario").in(filter.getUsersIds()));
 		}
 
 		return predicates.toArray(new Predicate[predicates.size()]);
