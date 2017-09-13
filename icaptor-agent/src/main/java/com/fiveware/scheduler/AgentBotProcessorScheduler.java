@@ -19,7 +19,6 @@ import com.fiveware.context.QueueContext;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ParameterInvalidException;
 import com.fiveware.exception.RuntimeBotException;
-import com.fiveware.message.validate.ValidateMessage;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
@@ -61,10 +60,6 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     @Autowired
     @Qualifier("eventMessageProducer")
     private Producer<MessageAgent> producer;
-
-    @Autowired
-    @Qualifier("validateMessageTask")
-    private ValidateMessage validateMessage;
     
     @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
     public void process() throws RuntimeBotException {
@@ -81,7 +76,6 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
         try {                
         	queues.stream().                        
         	forEach(queue -> {
-        		validateMessage.setParameter(queue);
         		pullMessage(botName, queue);                        
         	});            
         } catch (RuntimeBotException exceptionBot) {        
@@ -94,7 +88,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
      */
     @Override
     public boolean canPullingMessage() {
-        return queueContext.hasTask() && validateMessage.validateStatus();
+        return queueContext.hasTask();
     }
 
     /**
