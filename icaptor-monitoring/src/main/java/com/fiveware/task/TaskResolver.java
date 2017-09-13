@@ -1,100 +1,47 @@
 package com.fiveware.task;
 
-import com.fiveware.model.*;
-import com.fiveware.parameter.ParameterInfo;
-import com.fiveware.parameter.ParameterResolver;
-import com.google.common.base.Optional;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.*;
-import java.util.List;
-import java.util.Map;
-
 @Component
 public class TaskResolver {
-
-	@Autowired
-	private TaskManager taskManager;
-
-	@Autowired
-	private ParameterResolver parameterResolver;
 	
 	@Autowired
 	private SuspendedTask suspendedTask;
+	
+	@Autowired
+	private ProcessingTask processingTask;
+	
+	@Autowired
+	private TimeoutItemTask timeoutItemTask;
 
+	@Autowired
+	private TaskProcessedTask taskProcessedTask;
+	
 	public void process() {
+		checkTaskProcessing();
 		checkTaskSuspending();
 		checkTimeout();		
 		checkTaskProcessed();
 	}
-
-	public void releaseAgentParameter(Task task){		
-		Bot bot = task.getBot();
-		ParameterInfo parameterInfo = parameterResolver.getParameterByBot(bot.getNameBot());
-		if(null != parameterInfo){
-			Map<String, List<Parameter>> credentials = parameterInfo.getCredentials();
-			for(Map.Entry<String, List<Parameter>> map: credentials.entrySet()){
-				map.getValue().forEach(p -> {
-					Parameter parameter = parameterResolver.getParameterById(p.getId());
-					parameterResolver.removeAgentParameter(parameterResolver.findAgentParameterByParameter(parameter));
-				});
-			}
-		}
-	}
 	
 	private void checkTaskProcessed() {
-		List<Task> taskProcessing = taskManager.allTaskProcessing(StatusProcessTaskEnum.PROCESSING.getName());
-		taskProcessing.stream().forEach(task ->{
-			Long countItemTask = countItemTask(task);
-			Long countItemTaskErrorOrSucess = countItemTaskProcessing(task);
-			if(countItemTask == countItemTaskErrorOrSucess){
-				taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCCESSED);				
-			}
-		});
+		Runnable taskProcessedThread = () -> {taskProcessedTask.checkTaskProcessed();};
+		new Thread(taskProcessedThread).start();
 	}
-
-	private Long countItemTaskProcessing(Task task){
-		List<String> status = Lists.newArrayList(StatusProcessItemTaskEnum.ERROR.getName(), StatusProcessItemTaskEnum.SUCCESS.getName());
-		List<ItemTask> itemTaskListStatus = taskManager.itemTaskListStatus(status, task.getId());
-		return itemTaskListStatus.stream().count();
-	}
-	
-	private Long countItemTask(Task task){
-		Long itemTaskCountByTask = taskManager.getItemTaskCountByTask(task.getId());
-		return itemTaskCountByTask;
-	}
-
-
 
 	private void checkTimeout() {
-		int timeout = getTimeoutParameter();
-		List<ItemTask> itemTaskProcessing = taskManager.allItemTaskProcessing(StatusProcessItemTaskEnum.PROCESSING.getName());
-		itemTaskProcessing.stream().forEach(item -> {
-			Instant instantStartAt = Instant.ofEpochMilli(item.getStartAt().getTime());
-			LocalTime startAt = LocalDateTime.ofInstant(instantStartAt, ZoneId.systemDefault()).toLocalTime();
-			LocalTime now = LocalTime.now();
-			long secondsDuration = Duration.between(startAt, now).getSeconds();
-			if (secondsDuration > timeout) {
-				taskManager.updateItemTask(item.getId(), StatusProcessItemTaskEnum.ERROR);
-			}
-		});
+		Runnable timeoutItemTaskThread = () -> {timeoutItemTask.checkTimeout();};
+		new Thread(timeoutItemTaskThread).start();		
 	}
-
-	private int getTimeoutParameter() {
-		Parameter parameterCloud = parameterResolver.getParameterCloud("timeout");
-		Optional<Parameter> optional = Optional.fromNullable(parameterCloud);
-		if (optional.isPresent()) {
-			Parameter parameter = optional.get();
-			return Integer.parseInt(parameter.getFieldValue());
-		}
-		return 15;
-	}
-
 
 	private void checkTaskSuspending(){
-		suspendedTask.applyUpdateTaskSuspending();
+		Runnable suspendingThread = () -> {suspendedTask.applyUpdateTaskSuspending();};
+		new Thread(suspendingThread).start();
 	}
-
+	
+	private void checkTaskProcessing(){
+		Runnable processingThread = () -> {processingTask.applyUpdateTaskProcessing();};
+		new Thread(processingThread).start();
+	}
 }

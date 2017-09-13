@@ -1,11 +1,10 @@
 package com.fiveware.task;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -14,7 +13,6 @@ import com.fiveware.messaging.BrokerManager;
 import com.fiveware.messaging.Producer;
 import com.fiveware.model.Agent;
 import com.fiveware.model.ItemTask;
-import com.fiveware.model.Record;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
@@ -23,40 +21,35 @@ import com.fiveware.model.message.MessageHeader;
 import com.fiveware.model.message.MessageTask;
 import com.fiveware.parameter.ParameterResolver;
 import com.fiveware.service.ServiceAgent;
-import com.fiveware.util.CsvConvertUtil;
 import com.google.common.collect.Lists;
 
 @Component
 public class ProcessingTask {
 
 	@Autowired
-	private CsvConvertUtil csvConvertUtil;
-
-	@Autowired
 	private TaskManager taskManager;
 
 	@Autowired
 	private BrokerManager brokerManager;
-	
-    @Autowired
-    private ServiceAgent serviceAgent;
 
-    @Autowired
-    private ParameterResolver parameterResolver;
-    
-    @Autowired
-    @Qualifier("eventBotProducer")
-    private Producer<MessageBot> producer;
-    
-    @Autowired
-    @Qualifier("eventTaskProducer")
-    private Producer<MessageTask> taskProducer;
-    
+	@Autowired
+	private ServiceAgent serviceAgent;
+
+	@Autowired
+	private ParameterResolver parameterResolver;
+
+	@Autowired
+	@Qualifier("eventBotProducer")
+	private Producer<MessageBot> producer;
+
+	@Autowired
+	@Qualifier("eventTaskProducer")
+	private Producer<MessageTask> taskProducer;
+
 	public void applyUpdateTaskProcessing() {
 		List<Task> tasks = taskManager.allTaskProcessing(StatusProcessTaskEnum.PROCESSING.getName());
 		tasks.stream().forEach(task -> {
-			String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
-			createQueueTaskIn(queueName);
+			String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());			
 			sentItemTaskToQueue(queueName, task);
 		});
 	}
@@ -64,41 +57,19 @@ public class ProcessingTask {
 	private void sentItemTaskToQueue(String queueName, Task task) {
 		List<String> statusList = Lists.newArrayList(StatusProcessItemTaskEnum.AVAILABLE.getName());
 		List<ItemTask> itemTaskList = taskManager.itemTaskListStatus(statusList, task.getId());
-		itemTaskList.stream().forEach(itemTask -> {
+		MessageHeader messageHeader = new MessageHeader.MessageHeaderBuilder("").timeStamp(System.currentTimeMillis()).build();
+		
+		if(CollectionUtils.isNotEmpty(itemTaskList)){
+			createQueueTaskIn(queueName);
+			itemTaskList.stream().forEach(itemTask -> {
+				String line = StringUtils.defaultIfBlank(itemTask.getDataIn(), "");
+				MessageBot messageBot = new MessageBot(task.getId(), itemTask.getId(), line, messageHeader);
+				producer.send(queueName, messageBot);
+				taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.INLINE);
+			});
 			
-			MessageBot messageBot = new MessageBot(task.getId(), itemTask.getId(), line, messageHeader);
-			producer.send(queueName, messageBot);
-			taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.INLINE);
-		});
-		taskManager.updateTask(task.getId(), StatusProcessTaskEnum.SUSPENDED);
-	}
-
-	private void sendListToQueue(Task task, List<Record> recordList, String path, String separatorFile) {
-		final List<String> lines = Lists.newArrayList();
-		String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());		
-		Consumer<List<Record>> consumer = records -> records.stream().map(Record::getRecordMap)
-				.collect(Collectors.toList()).stream().map(Map::values)
-				.forEach(csvConvertUtil.convertMapToCSVLine(lines, separatorFile));
-		consumer.accept(recordList);
-
-		MessageHeader messageHeader = new MessageHeader.MessageHeaderBuilder(path).timeStamp(System.currentTimeMillis())
-				.build();
-
-		if (CollectionUtils.isEmpty(lines)) {
-			ItemTask itemTask = taskManager.createItemTask(task, "");
-			MessageBot messageBot = new MessageBot(task.getId(), itemTask.getId(), "", messageHeader);
-			producer.send(queueName, messageBot);
-			taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.INLINE);
+			sendNotificationTaskCreated(queueName, task.getBot().getNameBot());			
 		}
-
-		lines.stream().forEach(line -> {
-			ItemTask itemTask = taskManager.createItemTask(task, line);
-			MessageBot messageBot = new MessageBot(task.getId(), itemTask.getId(), line, messageHeader);
-			producer.send(queueName, messageBot);
-			taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.INLINE);
-		});
-
-		sendNotificationTaskCreated(queueName, task.getBot().getNameBot());
 	}
 
 	private void createQueueTaskIn(String queueName) {
