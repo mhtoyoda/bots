@@ -36,4 +36,6 @@ public class IcaptorPlatformApplication {
 		return new RabbitManagementTemplate(uri, brokerConfig().getUser(), brokerConfig().getPass());
 	}
 
+
+
 }

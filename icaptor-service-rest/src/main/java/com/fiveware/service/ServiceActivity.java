@@ -1,7 +1,7 @@
 package com.fiveware.service;
 
-import java.util.List;
-
+import com.fiveware.config.ApiUrlPersistence;
+import com.fiveware.model.activity.RecentActivity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,18 +9,19 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.activity.RecentActivity;
+import java.util.List;
 
 @Service
 public class ServiceActivity {
 
-	private static final String BASE_URL = "http://localhost:8085/api/recent-activities";
+	@Autowired
+	private ApiUrlPersistence apiUrlPersistence;
 
 	@Autowired
 	private RestTemplate restTemplate;
 
 	public RecentActivity save(RecentActivity activity) {
-		String url = BASE_URL + "/new";
+		String url = apiUrlPersistence.endPoint("recent-activities","/new");
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -30,13 +31,15 @@ public class ServiceActivity {
 	}
 
 	public List<RecentActivity> findByUserId(Long userId) {
-		String url = BASE_URL + "/user/" + userId;
+		String url = apiUrlPersistence.endPoint("recent-activities","/user/" + userId);
 		return restTemplate.getForObject(url, List.class);
 	}
 
 	public List<RecentActivity> findByTaskId(Long taskId) {
-		String url = BASE_URL + "/task/" + taskId;
+		String url = apiUrlPersistence.endPoint("recent-activities","/task/" + taskId);
 		return restTemplate.getForObject(url, List.class);
 	}
+
+
 
 }

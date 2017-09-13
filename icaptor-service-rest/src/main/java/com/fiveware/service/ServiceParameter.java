@@ -1,22 +1,18 @@
 package com.fiveware.service;
 
-import java.util.List;
-
+import com.fiveware.config.ApiUrlPersistence;
+import com.fiveware.model.Parameter;
+import com.fiveware.model.ScopeParameter;
+import com.fiveware.model.TypeParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.Parameter;
-import com.fiveware.model.ScopeParameter;
-import com.fiveware.model.TypeParameter;
+import java.util.List;
 
 @Service
 public class ServiceParameter {
@@ -26,10 +22,14 @@ public class ServiceParameter {
 	static Logger logger = LoggerFactory.getLogger(ServiceParameter.class);
 
 	@Autowired
+	private ApiUrlPersistence apiUrlPersistence;
+
+	@Autowired
 	private RestTemplate restTemplate;
 
 	public Parameter save(Parameter parameter) {
-		String url = URL_API+"/parameter";
+		String url = apiUrlPersistence.endPoint("parameter","");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Parameter> entity = new HttpEntity<Parameter>(parameter, headers);
@@ -37,7 +37,8 @@ public class ServiceParameter {
 	}
 	
 	public void delete(Parameter parameter) {
-		String url = URL_API+"/parameter";
+		String url = apiUrlPersistence.endPoint("parameter","");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Parameter> entity = new HttpEntity<Parameter>(parameter, headers);		
@@ -45,7 +46,7 @@ public class ServiceParameter {
 	}
 	
 	public void delete(List<Parameter> parameters) {
-		String url = URL_API+"/parameter/all";
+		String url = apiUrlPersistence.endPoint("parameter","/all");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<List<Parameter>> entity = new HttpEntity<List<Parameter>>(parameters, headers);		
@@ -53,7 +54,8 @@ public class ServiceParameter {
 	}
 	
 	public TypeParameter saveTypeParameter(TypeParameter typeParameter) {
-		String url = URL_API+"/parameter/type";
+		String url = apiUrlPersistence.endPoint("parameter","/type");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<TypeParameter> entity = new HttpEntity<TypeParameter>(typeParameter, headers);
@@ -61,7 +63,8 @@ public class ServiceParameter {
 	}
 
 	public List<ScopeParameter> getScopeParameterAll() {
-		String url = URL_API+"/parameter/scope";
+		String url = apiUrlPersistence.endPoint("parameter","/scope");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<ScopeParameter> requestEntity = new HttpEntity<>(null, headers);
@@ -71,7 +74,8 @@ public class ServiceParameter {
 	}
 	
 	public ScopeParameter getScopeParameterById(Long id) {
-		String url = URL_API+"/parameter/scope/" +id;
+		String url = apiUrlPersistence.endPoint("parameter","/scope/"+id);
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		ScopeParameter scopeParameter = restTemplate.getForObject(url, ScopeParameter.class);
@@ -79,7 +83,8 @@ public class ServiceParameter {
 	}
 	
 	public Parameter getParameterById(Long id) {
-		String url = URL_API+"/parameter/" +id;
+		String url = apiUrlPersistence.endPoint("parameter/",id.toString());
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		Parameter parameter = restTemplate.getForObject(url, Parameter.class);
@@ -87,7 +92,8 @@ public class ServiceParameter {
 	}
 	
 	public List<TypeParameter> getTypeParameterAll() {
-		String url = URL_API+"/parameter/type";
+		String url = apiUrlPersistence.endPoint("parameter","/type");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<TypeParameter> requestEntity = new HttpEntity<>(null, headers);
@@ -97,7 +103,8 @@ public class ServiceParameter {
 	}
 	
 	public TypeParameter getTypeParameterById(Long id) {
-		String url = URL_API+"/parameter/type/" +id;
+		String url = apiUrlPersistence.endPoint("parameter","/type/"+id);
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		TypeParameter typeParameter = restTemplate.getForObject(url, TypeParameter.class);
@@ -105,7 +112,8 @@ public class ServiceParameter {
 	}
 	
 	public TypeParameter getTypeParameterByName(String name) {
-		String url = URL_API+"/parameter/type/name/" +name;
+		String url = apiUrlPersistence.endPoint("parameter","/type/name/"+name);
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		TypeParameter typeParameter = restTemplate.getForObject(url, TypeParameter.class);
@@ -113,7 +121,8 @@ public class ServiceParameter {
 	}
 	
 	public List<Parameter> getParameterByBot(String botName) {
-		String url = URL_API+"/parameter/bot/"+botName;
+		String url = apiUrlPersistence.endPoint("parameter","/bot/"+botName);
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Parameter> requestEntity = new HttpEntity<>(null, headers);
@@ -123,7 +132,8 @@ public class ServiceParameter {
 	}
 	
 	public List<Parameter> findParameterByScopeAndType(String nameScope, String nameType) {
-		String url = URL_API+"/parameter/bot/"+nameScope+"/"+nameType;
+		String url = apiUrlPersistence.endPoint("parameter","/bot/"+nameScope+"/"+nameType);
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Parameter> requestEntity = new HttpEntity<>(null, headers);

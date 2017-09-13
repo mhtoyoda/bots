@@ -1,6 +1,6 @@
 package com.fiveware.token;
 
-import com.fiveware.properties.ICaptorApiProperty;
+import com.fiveware.config.ICaptorApiProperty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;

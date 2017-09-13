@@ -1,6 +1,5 @@
 package com.fiveware.controller.upload;
 
-import com.fiveware.security.SpringSecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
@@ -11,6 +10,9 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fiveware.config.ICaptorApiProperty;
+import com.fiveware.security.SpringSecurityUtil;
+
 /**
  * Created by valdisnei on 29/08/2017.
  */
@@ -18,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/bot")
 public class UploadFile {
 
-    private static final String BASE_URL = "http://localhost:8082/api/upload";
+
+    @Autowired
+    private ICaptorApiProperty iCaptorApiProperty;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -29,7 +33,7 @@ public class UploadFile {
                                                          @RequestParam("file") MultipartFile[] file,
                                                          @RequestHeader("Authorization") String details) {
 
-        String url = BASE_URL + "/" + nameBot;
+        String url = String.format("%s/%s" ,iCaptorApiProperty.getDataSource().getHost(),nameBot) ;
 
         DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
 
@@ -53,4 +57,5 @@ public class UploadFile {
 
         return resultado;
     }
+
 }

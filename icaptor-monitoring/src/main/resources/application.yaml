@@ -14,3 +14,8 @@ io:
   worker.dir: ${HOME}/.icaptor-agent
   worker.file: ${HOME}/.icaptor-out-file
   file-read: ${HOME}/.icaptor-read-file
+
+
+icaptor:
+  data-source:
+    host: http://localhost:8015

@@ -17,6 +17,10 @@ io:
   file-read: ${HOME}/.icaptor-read-file
 
 retries: 5
+
+icaptor:
+  data-source:
+    host: http://localhost:8015
 ---
 server:
   name: icaptor-server
@@ -40,3 +44,8 @@ io:
 
 # temporario
 retries: 5
+
+
+icaptor:
+  data-source:
+    host: http://localhost:8015

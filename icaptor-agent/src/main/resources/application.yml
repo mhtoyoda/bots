@@ -10,6 +10,8 @@ icaptor:
     name: icaptor-server
     host: localhost:8082
     ip: 127.0.0.1
+  data-source:
+    host: http://localhost:8015
 
 broker:
   user: guest
@@ -22,6 +24,7 @@ io:
   worker.dir: ${HOME}/.icaptor-agent
   worker.file: ${HOME}/.icaptor-out-file
   file-read: ${HOME}/.icaptor-read-file
+
 
 ---
 server.port: ${PORT:${SERVER_PORT:0}}
@@ -39,6 +42,8 @@ icaptor:
     name: icaptor-server
     host: localhost:8082
     ip: 127.0.0.1
+    data-source:
+      host: http://localhost:8015
 
 broker:
   user: guest

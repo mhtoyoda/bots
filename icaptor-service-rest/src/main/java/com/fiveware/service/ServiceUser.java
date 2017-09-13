@@ -1,33 +1,31 @@
 package com.fiveware.service;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.fiveware.config.ApiUrlPersistence;
+import com.fiveware.model.user.IcaptorUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.fiveware.model.user.IcaptorUser;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ServiceUser {
 
 	private static Logger logger = LoggerFactory.getLogger(ServiceUser.class);
 
-	private static final String BASE_URL = "http://localhost:8085/api/usuario/";
+	@Autowired
+	private ApiUrlPersistence apiUrlPersistence;
 
 	@Autowired
 	private RestTemplate restTemplate;
 
 	public Optional<IcaptorUser> getUserById(Long id) {
+		String BASE_URL = apiUrlPersistence.endPoint("usuario/","");
 		String url = BASE_URL + id;
 
 		HttpHeaders headers = new HttpHeaders();
@@ -39,6 +37,7 @@ public class ServiceUser {
 	}
 
 	public Optional<IcaptorUser> getUserByEmail(String email) {
+		String BASE_URL = apiUrlPersistence.endPoint("usuario/","");
 		String url = BASE_URL + "email";
 
 		HttpHeaders headers = new HttpHeaders();
@@ -54,6 +53,7 @@ public class ServiceUser {
 	}
 
 	public List<IcaptorUser> getAll() {
+		String BASE_URL = apiUrlPersistence.endPoint("usuario/","");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		

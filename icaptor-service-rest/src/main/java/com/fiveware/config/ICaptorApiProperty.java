@@ -1,12 +1,14 @@
-package com.fiveware.properties;
+package com.fiveware.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("icaptor")
 public class ICaptorApiProperty {
 
-    private String originPermitida;
+    private final DataSource dataSource = new DataSource();
 
+    public DataSource getDataSource() {return dataSource;}
+    private String originPermitida;
     private final Seguranca seguranca = new Seguranca();
 
     public Seguranca getSeguranca() {
@@ -33,6 +35,29 @@ public class ICaptorApiProperty {
             this.enableHttps = enableHttps;
         }
 
+    }
+
+
+
+    public static class DataSource {
+        private String host;
+        private String port;
+
+        public String getHost() {
+            return host;
+        }
+
+        public void setHost(String host) {
+            this.host = host;
+        }
+
+        public String getPort() {
+            return port;
+        }
+
+        public void setPort(String port) {
+            this.port = port;
+        }
     }
 
 }

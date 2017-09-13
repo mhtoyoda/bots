@@ -1,5 +1,6 @@
 package com.fiveware.service;
 
+import com.fiveware.config.ApiUrlPersistence;
 import com.fiveware.model.StatuProcessTask;
 import com.fiveware.model.Task;
 import org.slf4j.Logger;
@@ -16,13 +17,18 @@ import java.util.List;
 public class ServiceTask {
 
 	private static Logger logger = LoggerFactory.getLogger(ServiceTask.class);
-	
-	private static final String BASE_URL = "http://localhost:8085/api/task";
+
+
+	@Autowired
+	private ApiUrlPersistence apiUrlPersistence;
+
+
 
 	@Autowired
 	private RestTemplate restTemplate;
 
 	public Task save(Task task) {
+		String BASE_URL = apiUrlPersistence.endPoint("task","");
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Task> entity = new HttpEntity<Task>(task, headers);
@@ -30,6 +36,8 @@ public class ServiceTask {
 	}
 
 	public List<Task> getAll() {
+		String BASE_URL = apiUrlPersistence.endPoint("task","");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Task> requestEntity = new HttpEntity<>(null, headers);
@@ -39,6 +47,8 @@ public class ServiceTask {
 	}
 
 	public Task getTaskById(Long id) {
+		String BASE_URL = apiUrlPersistence.endPoint("task","");
+
 		String url = BASE_URL + "/" + id;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -47,6 +57,8 @@ public class ServiceTask {
 	}
 
 	public Task updateStatus(Long id, StatuProcessTask status) {
+		String BASE_URL = apiUrlPersistence.endPoint("task","");
+
 		String url = BASE_URL + "/" + id + "/status";
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -59,6 +71,8 @@ public class ServiceTask {
 	}
 
 	public List<Task> getTaskByBot(String botName) {
+		String BASE_URL = apiUrlPersistence.endPoint("task","");
+
 		String url = BASE_URL + "/nameBot/" + botName;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -69,6 +83,8 @@ public class ServiceTask {
 	}
 
 	public List<Task> getTaskByStatus(String status) {
+		String BASE_URL = apiUrlPersistence.endPoint("task","");
+
 		String url = BASE_URL + "/status/" + status;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -79,6 +95,8 @@ public class ServiceTask {
 	}
 	
 	public List<Task> getTaskByUserIdOrderedByLoadTime(Long userId) {
+		String BASE_URL = apiUrlPersistence.endPoint("task","");
+
 		String url = BASE_URL + "/user/" + userId;
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);	

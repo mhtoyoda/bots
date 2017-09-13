@@ -129,7 +129,10 @@ public class ControlPanelController {
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
 	public String dowloand(@PathVariable Long idTask, HttpServletResponse response) {
 
-		List<byte[]> arrData = serviceItemTask.download(idTask).stream().map((itemTask) -> itemTask.getDataOut().getBytes()).collect(Collectors.toList());
+		List<byte[]> arrData = serviceItemTask.download(idTask)
+											 .stream()
+											 .map((itemTask) -> itemTask.getDataOut().getBytes())
+											 .collect(Collectors.toList());
 
 		try {
 			byte[] fileZip = Zip.zipBytes("saida.txt", arrData);

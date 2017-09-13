@@ -1,5 +1,6 @@
 package com.fiveware.service;
 
+import com.fiveware.config.ApiUrlPersistence;
 import com.fiveware.model.*;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class ServiceItemTask {
@@ -21,11 +21,15 @@ public class ServiceItemTask {
 	@Autowired
 	private RestTemplate restTemplate;
 
+	@Autowired
+	private ApiUrlPersistence apiUrlPersistence;
 
-	private AtomicInteger atomicInteger = new AtomicInteger(0);
+
+
 
 	public ItemTask save(ItemTask item) {
-		String url = "http://localhost:8085/api/item-task";
+		String url = apiUrlPersistence.endPoint("item-task","");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<ItemTask> entity = new HttpEntity<ItemTask>(item, headers);
@@ -33,7 +37,8 @@ public class ServiceItemTask {
 	}
 
 	public List<ItemTask> getAll() {
-		String url = "http://localhost:8085/api/item-task";
+		String url = apiUrlPersistence.endPoint("item-task","");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		List<ItemTask> itens = restTemplate.getForObject(url, List.class);
@@ -41,7 +46,8 @@ public class ServiceItemTask {
 	}
 	
 	public ItemTask getItemTaskById(Long id) {
-		String url = "http://localhost:8085/api/item-task/" +id;
+		String url = apiUrlPersistence.endPoint("item-task/",id.toString());
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		ItemTask item = restTemplate.getForObject(url, ItemTask.class);
@@ -49,7 +55,8 @@ public class ServiceItemTask {
 	}
 	
 	public ItemTask updateStatus(Long id, StatuProcessItemTask status) {
-		String url = "http://localhost:8085/api/item-task/" +id+"/status";
+		String url = apiUrlPersistence.endPoint("item-task/",id+"/status");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		ItemTask itemTask = new ItemTask();
@@ -61,7 +68,8 @@ public class ServiceItemTask {
 	}
 
 	public List<ItemTask> getItemTaskByStatus(String status) {
-		String url = "http://localhost:8085/api/item-task/status/" +status;
+		String url = apiUrlPersistence.endPoint("item-task/","status/" +status);
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<ItemTask> httpEntity = new HttpEntity<>(null, headers);
@@ -71,7 +79,8 @@ public class ServiceItemTask {
 	}
 	
 	public List<ItemTask> getItemTaskByListStatus(List<String> status, Long taskId) {
-		String url = "http://localhost:8085/api/item-task/"+taskId+"/status";
+		String url = apiUrlPersistence.endPoint("item-task/",taskId+"/status");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<List<String>> httpEntity = new HttpEntity<>(status, headers);
@@ -81,7 +90,8 @@ public class ServiceItemTask {
 	}
 	
 	public Long getItemTaskCountByTask(Long taskId) {
-		String url = "http://localhost:8085/api/item-task/"+taskId+"/count";
+		String url = apiUrlPersistence.endPoint("item-task/",taskId+"/count");
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Long> httpEntity = new HttpEntity<>(null, headers);
@@ -89,8 +99,9 @@ public class ServiceItemTask {
 		Long count = responseEntity.getBody();
 		return count;
 	}
+
 	public List<ItemTask> download(Long idTask) {
-		return null;
+		return getItemTaskByListStatus(Lists.newArrayList(StatusProcessTaskEnum.PROCCESSED.getName()),idTask);
 	}
 
 	public void metric(List<Task> tasks){
