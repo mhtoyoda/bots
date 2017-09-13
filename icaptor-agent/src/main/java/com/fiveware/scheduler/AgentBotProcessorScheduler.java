@@ -19,6 +19,7 @@ import com.fiveware.context.QueueContext;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ParameterInvalidException;
 import com.fiveware.exception.RuntimeBotException;
+import com.fiveware.messaging.BrokerManager;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
@@ -61,6 +62,9 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     @Qualifier("eventMessageProducer")
     private Producer<MessageAgent> producer;
     
+    @Autowired
+    private BrokerManager brokerManager;
+    
     @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
     public void process() throws RuntimeBotException {
         List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
@@ -76,6 +80,9 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
         try {                
         	queues.stream().                        
         	forEach(queue -> {
+        		if(notExistQueue(botName, queue, data.getAgentName())){
+        			return;
+        		}
         		pullMessage(botName, queue);                        
         	});            
         } catch (RuntimeBotException exceptionBot) {        
@@ -129,8 +136,16 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
         queues.forEach(new Consumer<String>() {
             @Override
             public void accept(String nameQueue) {
-                queueContext.removeQueueInContext(nameBot, nameQueue);
+                queueContext.removeQueueInContext(nameBot, nameAgent, nameQueue);
             }
         });
+    }
+    
+    private boolean notExistQueue(String nameBot, String queueName, String nameAgent){
+    	if(brokerManager.notExistQueue(queueName)){
+    		queueContext.removeQueueInContext(nameBot, nameAgent, queueName);
+    		return true;
+    	}
+    	return false;
     }
 }

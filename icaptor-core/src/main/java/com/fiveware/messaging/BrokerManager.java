@@ -43,7 +43,7 @@ public class BrokerManager {
 		return rabbitAdmin.deleteQueue(queueName);
 	}
 
-	private boolean notExistQueue(String queue){
+	public boolean notExistQueue(String queue){
 		List<Queue> queues = amqpManagementOperations.getQueues().stream()
 				.filter(q -> queue.equals(q.getName()))
 				.collect(Collectors.toList());

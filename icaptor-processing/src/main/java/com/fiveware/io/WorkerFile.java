@@ -30,8 +30,7 @@ public class WorkerFile implements Runnable {
     @Override
     public void run() {
         try {
-            readInputFile.readFile(nameBot,files[0].getOriginalFilename(),
-                    files[0].getInputStream(),resultado);
+            readInputFile.readFile(nameBot, files[0].getOriginalFilename(), files[0].getInputStream(), resultado);
         } catch (IOException e) {
             logger.error("{}",e);
             resultado.setResult(ResponseEntity.badRequest().body("ERROR"));

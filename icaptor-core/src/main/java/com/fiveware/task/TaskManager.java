@@ -46,7 +46,7 @@ public class TaskManager {
 	public Task updateTask(Long taskId, StatusProcessTaskEnum statuProcessEnum) {
 		Task task = serviceTask.getTaskById(taskId);
 		task.setStatusProcess(statuProcessEnum.getStatuProcess());
-		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.PROCCESSED)) {
+		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.PROCCESSED) || statuProcessEnum.equals(StatusProcessTaskEnum.REJECTED)) {
 			task.setEndAt(new Date());
 		}
 		task = serviceTask.save(task);
