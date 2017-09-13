@@ -20,7 +20,7 @@ retries: 5
 
 icaptor:
   data-source:
-    host: http://localhost:8015
+    host: http://localhost:8085
 ---
 server:
   name: icaptor-server
@@ -48,4 +48,4 @@ retries: 5
 
 icaptor:
   data-source:
-    host: http://localhost:8015
+    host: http://localhost:8085
