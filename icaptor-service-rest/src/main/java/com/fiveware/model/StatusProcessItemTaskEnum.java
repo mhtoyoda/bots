@@ -1,7 +1,5 @@
 package com.fiveware.model;
 
-import com.fiveware.model.StatuProcessItemTask;
-
 public enum StatusProcessItemTaskEnum {
 	
 	AVAILABLE(1L, "Available"),

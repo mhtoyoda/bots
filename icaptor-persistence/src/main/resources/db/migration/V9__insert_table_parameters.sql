@@ -15,7 +15,7 @@ insert into status_process_task(id, name) values(2, 'Validating');
 insert into status_process_task(id, name) values(3, 'Rejected');
 insert into status_process_task(id, name) values(4, 'Scheduled');
 insert into status_process_task(id, name) values(5, 'Processing');
-insert into status_process_task(id, name) values(6, 'Proccessed');
+insert into status_process_task(id, name) values(6, 'Processed');
 insert into status_process_task(id, name) values(7, 'Suspending');
 insert into status_process_task(id, name) values(8, 'Suspended');
 insert into status_process_task(id, name) values(9, 'Success');

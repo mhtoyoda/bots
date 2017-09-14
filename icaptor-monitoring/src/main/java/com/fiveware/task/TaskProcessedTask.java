@@ -28,7 +28,7 @@ public class TaskProcessedTask {
 			Long countItemTaskErrorOrSucess = countItemTaskProcessing(task);
 			if (countItemTask == countItemTaskErrorOrSucess) {
 				String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
-				taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCCESSED);
+				taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCESSED);
 				brokerManager.deleteQueue(queueName);
 			}
 		});

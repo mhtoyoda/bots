@@ -101,7 +101,7 @@ public class ServiceItemTask {
 	}
 
 	public List<ItemTask> download(Long idTask) {
-		return getItemTaskByListStatus(Lists.newArrayList(StatusProcessTaskEnum.PROCCESSED.getName()),idTask);
+		return getItemTaskByListStatus(Lists.newArrayList(StatusProcessTaskEnum.PROCESSED.getName()),idTask);
 	}
 
 	public void metric(List<Task> tasks){

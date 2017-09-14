@@ -7,7 +7,7 @@ public enum StatusProcessTaskEnum {
 	REJECTED(3L, "Rejected"),
 	SCHEDULED(4L, "Scheduled"),	
 	PROCESSING(5L, "Processing"),
-	PROCCESSED(6L, "Proccessed"),
+	PROCESSED(6L, "Processed"),
 	SUSPENDING(7L, "Suspending"),
 	SUSPENDED(8L, "Suspended"),
 	SUCCESS(9L, "Success"),
