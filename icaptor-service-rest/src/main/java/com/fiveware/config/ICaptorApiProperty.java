@@ -37,8 +37,6 @@ public class ICaptorApiProperty {
 
     }
 
-
-
     public static class DataSource {
         private String host;
         private String port;
@@ -58,6 +56,10 @@ public class ICaptorApiProperty {
         public void setPort(String port) {
             this.port = port;
         }
+    }
+
+    public static class Server {
+        private String host;
     }
 
 }

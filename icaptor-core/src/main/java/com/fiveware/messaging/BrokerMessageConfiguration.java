@@ -1,6 +1,8 @@
 package com.fiveware.messaging;
 
 import com.fiveware.exception.RuntimeBotException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -19,23 +21,25 @@ import java.util.concurrent.atomic.AtomicReference;
 @Configuration
 public class BrokerMessageConfiguration {
 
+	static Logger logger = LoggerFactory.getLogger(BrokerMessageConfiguration.class);
+
 	@Value("${broker.user}")
 	private String brokerUser;
-	
+
 	@Value("${broker.pass}")
 	private String brokerPass;
-	
+
 	@Value("${broker.host}")
 	private String brokerHost;
-	
+
 	@Bean
-	public ConnectionFactory connectionFactory() {		
+	public ConnectionFactory connectionFactory() {
 		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(brokerHost);
 		connectionFactory.setUsername(brokerUser);
 		connectionFactory.setPassword(brokerPass);
 		return connectionFactory;
 	}
-	
+
 	@Bean
 	public Queue queue() {
 		return new Queue(QueueName.EVENTS.name(), true);
@@ -70,9 +74,7 @@ public class BrokerMessageConfiguration {
 		rabbitTemplate.setConfirmCallback( new RabbitTemplate.ConfirmCallback() {
 			@Override
 			public void confirm(CorrelationData corData, boolean ack, String cause ) {
-				System.out.println( "devconfig.rabbitTemplate(...).new ConfirmCallback() {...}.confirm()"+corData );
-				System.out.println( "devconfig.rabbitTemplate(...).new ConfirmCallback() {...}.confirm()"+ack );
-
+//				logger.debug("correlationData = {} - ack = {}",corData,ack);
 			}
 		} );
 

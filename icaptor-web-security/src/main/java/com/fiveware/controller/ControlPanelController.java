@@ -93,9 +93,9 @@ public class ControlPanelController {
 		return ResponseEntity.ok(converted);
 	}
 
-	@PutMapping("/pause")
+	@PutMapping("/{taskId}/pause")
 	@PreAuthorize("hasAuthority('ROLE_TASK_PAUSE') and #oauth2.hasScope('write')")
-	public ResponseEntity<Object> pauseTask(@RequestBody Long taskId) {
+	public ResponseEntity<Object> pauseTask(@PathVariable Long taskId) {
 		StatuProcessTask statusTask = new StatuProcessTask();
 		statusTask.setId(7l);
 		statusTask.setName("Suspending");
@@ -105,9 +105,9 @@ public class ControlPanelController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PutMapping("/resume")
+	@PutMapping("/{taskId}/resume")
 	@PreAuthorize("hasAuthority('ROLE_TASK_RESUME') and #oauth2.hasScope('write')")
-	public ResponseEntity<Object> resumeTask(@RequestBody Long taskId) {
+	public ResponseEntity<Object> resumeTask(@PathVariable Long taskId) {
 		StatuProcessTask statusTask = statusTaskService.getStatusProcessById(5l);
 
 		changeTaskStatus(taskId, statusTask);
@@ -115,17 +115,17 @@ public class ControlPanelController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PutMapping("/cancel")
+	@PutMapping("/{taskId}/cancel")
 	@PreAuthorize("hasAuthority('ROLE_TASK_CANCEL') and #oauth2.hasScope('write')")
-	public ResponseEntity<Object> cancelTask(@RequestBody Long taskId) {
-		StatuProcessTask statusTask = statusTaskService.getStatusProcessById(10l);
+	public ResponseEntity<Object> cancelTask(@PathVariable Long taskId) {
+		StatuProcessTask statusTask = statusTaskService.getStatusProcessById(11l);
 
 		changeTaskStatus(taskId, statusTask);
 
 		return ResponseEntity.ok().build();
 	}
 
-	@GetMapping("/download/{idTask}")
+	@GetMapping("/{idTask}/download")
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
 	public String dowloand(@PathVariable Long idTask, HttpServletResponse response) {
 
