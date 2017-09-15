@@ -6,7 +6,8 @@ public enum StatusProcessItemTaskEnum {
 	INLINE(2L, "InLine"),
 	PROCESSING(3L, "Processing"),
 	SUCCESS(4L, "Success"),
-	ERROR(5l, "Error");
+	ERROR(5l, "Error"),
+	CANCELED(6l, "Canceled");
 
 	private StatusProcessItemTaskEnum(Long id, String name) {
 		this.id = id;

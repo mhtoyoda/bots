@@ -27,3 +27,4 @@ insert into status_process_item_task(id, name) values(2, 'InLine');
 insert into status_process_item_task(id, name) values(3, 'Processing');
 insert into status_process_item_task(id, name) values(4, 'Success');
 insert into status_process_item_task(id, name) values(5, 'Error');
+insert into status_process_item_task(id, name) values(6, 'Canceled');

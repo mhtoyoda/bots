@@ -24,9 +24,11 @@ public class CanceledTask {
 	public void applyUpdateTaskCanceled() {
 		List<Task> tasks = taskManager.allTaskProcessing(StatusProcessTaskEnum.CANCELED.getName());
 		tasks.stream().forEach(task -> {
-			String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
-			deleteQueueCanceled(queueName);
-			updateItemTaskCanceled(task);
+			if(null == task.getEndAt()){
+				String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
+				deleteQueueCanceled(queueName);
+				updateItemTaskCanceled(task);
+			}	
 		});
 	}
 
@@ -34,13 +36,12 @@ public class CanceledTask {
 		List<String> statusList = Lists.newArrayList(StatusProcessItemTaskEnum.INLINE.getName());
 		List<ItemTask> itemTaskList = taskManager.itemTaskListStatus(statusList, task.getId());
 		itemTaskList.stream().forEach(itemTask -> {
-			taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.AVAILABLE);
+			taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.CANCELED);
 		});
+		taskManager.updateTask(task.getId(), StatusProcessTaskEnum.CANCELED);
 	}
 	
-	private void deleteQueueCanceled(String queueName){
-		if(!brokerManager.notExistQueue(queueName)){
-			brokerManager.deleteQueue(queueName);
-		}
+	private void deleteQueueCanceled(String queueName){			
+		brokerManager.deleteQueue(queueName);
 	}
 }
