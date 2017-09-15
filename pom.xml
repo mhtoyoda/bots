@@ -20,6 +20,7 @@
         <module>icaptor-agent</module>
         <module>icaptor-web-security</module>
         <module>icaptor-monitoring</module>
+        <module>icaptor-workflow</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
