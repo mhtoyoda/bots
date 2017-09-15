@@ -24,9 +24,6 @@ public class ServiceItemTask {
 	@Autowired
 	private ApiUrlPersistence apiUrlPersistence;
 
-
-
-
 	public ItemTask save(ItemTask item) {
 		String url = apiUrlPersistence.endPoint("item-task","");
 
@@ -124,6 +121,4 @@ public class ServiceItemTask {
 		});
 
 	}
-
-
 }

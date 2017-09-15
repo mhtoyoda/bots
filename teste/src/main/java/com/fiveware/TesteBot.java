@@ -35,7 +35,7 @@ public class TesteBot implements Automation<String, Endereco> {
 //	@IcaptorParameter(value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false, credential = false)
 	@IcaptorParameter(value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot", type = String.class)
-	@InputDictionary(fields = {"cep"}, separator = "|	", typeFileIn = "csv")
+	@InputDictionary(fields = {"cep"}, separator = "|", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
 	public Endereco execute(String endereco, ParameterValue parameters) throws RuntimeBotException,UnRecoverableException,
