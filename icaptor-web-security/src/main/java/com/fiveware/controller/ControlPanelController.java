@@ -6,7 +6,7 @@ import com.fiveware.model.StatuProcessTask;
 import com.fiveware.model.Task;
 import com.fiveware.model.activity.RecentActivity;
 import com.fiveware.model.user.IcaptorUser;
-import com.fiveware.security.SpringSecurityUtil;
+import com.fiveware.security.util.SpringSecurityUtil;
 import com.fiveware.service.*;
 import com.fiveware.util.Zip;
 import org.slf4j.Logger;

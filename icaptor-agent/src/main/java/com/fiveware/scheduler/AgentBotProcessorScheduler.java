@@ -65,7 +65,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     @Autowired
     private BrokerManager brokerManager;
     
-    @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
+    @Scheduled(fixedDelayString = "${icaptor.broker.queue-send-schedular-time}")
     public void process() throws RuntimeBotException {
         List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
         bots.forEach(this::accept);

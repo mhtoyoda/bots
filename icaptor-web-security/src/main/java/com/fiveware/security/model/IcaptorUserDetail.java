@@ -1,4 +1,4 @@
-package com.fiveware.security;
+package com.fiveware.security.model;
 
 import com.fiveware.model.user.IcaptorUser;
 import org.springframework.security.core.GrantedAuthority;

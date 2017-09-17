@@ -1,4 +1,4 @@
-package com.fiveware.security;
+package com.fiveware.security.util;
 
 import org.apache.commons.codec.binary.Base64;
 import org.codehaus.jackson.JsonParseException;

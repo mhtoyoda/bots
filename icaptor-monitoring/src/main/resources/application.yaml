@@ -3,13 +3,6 @@ server:
   host: localhost
   port: 8090
 
-broker:
-  user: guest
-  pass: guest
-  host: 34.231.45.229
-  port: 30001
-  queue.send.schedularTime: 5000 #milli second
-
 io:
   worker.dir: ${HOME}/.icaptor-agent
   worker.file: ${HOME}/.icaptor-out-file
@@ -19,28 +12,32 @@ io:
 icaptor:
   data-source:
     host: http://localhost:8085
+  broker:
+    user: guest
+    pass: guest
+    host: 34.231.45.229
+    port: 30001
+    queue-send-schedular-time: 5000 #milli second
 ---
 spring:
   profiles:
     active: dev
 server:
   name: icaptor-monitoring
-  host: localhost
+  host: 192.168.0.14
   port: 8090
-
-broker:
-  user: guest
-  pass: guest
-  host: localhost
-  port: 30001
-  queue.send.schedularTime: 5000 #milli second
 
 io:
   worker.dir: ${HOME}/.icaptor-agent
   worker.file: ${HOME}/.icaptor-out-file
   file-read: ${HOME}/.icaptor-read-file
 
-
 icaptor:
   data-source:
-    host: http://localhost:8085
+    host: http://192.168.0.14:8085
+  broker:
+    user: guest
+    pass: guest
+    host: 192.168.0.14
+    port: 30001
+    queue-send-schedular-time: 5000 #milli second

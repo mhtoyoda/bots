@@ -1,10 +1,19 @@
+icaptor:
+  server:
+    name: icaptor-server
+    host: 192.168.0.14:8082
+    ip: 192.168.0.14
+    data-source:
+      host: http://192.168.0.14:8085
+  broker:
+    user: guest
+    pass: guest
+    host: 192.168.0.14
+    port: 30001
+    queue-send-schedular-time: 5000 #milli second
+
 io:
   extension.input.file: .csv
   bot.extension.file: .jar
 
-broker:
-  user: guest
-  pass: guest
-  host: 34.231.45.229
-  port: 30001
-  queue.send.schedularTime: 5000 #milli second
+

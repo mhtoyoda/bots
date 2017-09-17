@@ -17,8 +17,6 @@ import java.util.List;
 @Service
 public class ServiceParameter {
 
-	private static final String URL_API = "http://localhost:8085/api";
-
 	static Logger logger = LoggerFactory.getLogger(ServiceParameter.class);
 
 	@Autowired

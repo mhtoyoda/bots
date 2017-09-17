@@ -1,6 +1,7 @@
-package com.fiveware.security;
+package com.fiveware.security.service;
 
 import com.fiveware.model.user.IcaptorUser;
+import com.fiveware.security.model.IcaptorUserDetail;
 import com.fiveware.service.ServiceUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,9 +27,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
 		return  icaptorUserDetail;
 	}
-
-
-
 
 	protected String createLoginFailMessage(String email) {
 		StringBuilder sb = new StringBuilder();

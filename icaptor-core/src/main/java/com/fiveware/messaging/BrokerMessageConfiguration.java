@@ -1,5 +1,6 @@
 package com.fiveware.messaging;
 
+import com.fiveware.config.ICaptorApiProperty;
 import com.fiveware.exception.RuntimeBotException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler;
 import org.springframework.amqp.rabbit.listener.exception.ListenerExecutionFailedException;
 import org.springframework.amqp.rabbit.support.CorrelationData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,20 +25,15 @@ public class BrokerMessageConfiguration {
 
 	static Logger logger = LoggerFactory.getLogger(BrokerMessageConfiguration.class);
 
-	@Value("${broker.user}")
-	private String brokerUser;
+	@Autowired
+	private ICaptorApiProperty iCaptorApiProperty;
 
-	@Value("${broker.pass}")
-	private String brokerPass;
-
-	@Value("${broker.host}")
-	private String brokerHost;
 
 	@Bean
 	public ConnectionFactory connectionFactory() {
-		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(brokerHost);
-		connectionFactory.setUsername(brokerUser);
-		connectionFactory.setPassword(brokerPass);
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(iCaptorApiProperty.getBroker().getHost());
+		connectionFactory.setUsername(iCaptorApiProperty.getBroker().getUser());
+		connectionFactory.setPassword(iCaptorApiProperty.getBroker().getPass());
 		return connectionFactory;
 	}
 

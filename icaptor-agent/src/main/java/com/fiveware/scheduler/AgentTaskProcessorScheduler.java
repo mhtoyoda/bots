@@ -36,7 +36,7 @@ public class AgentTaskProcessorScheduler {
 	@Autowired
 	private ServiceAgent serviceAgent;
 	
-	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
+	@Scheduled(fixedDelayString = "${icaptor.broker.queue-send-schedular-time}")
 	public void process() {
 		String queueName = String.format("tasks.%s.in", StringUtils.trim(data.getAgentName()));
 		List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());

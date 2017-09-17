@@ -8,17 +8,16 @@ spring.http:
 icaptor:
   server:
     name: icaptor-server
-    host: localhost:8082
+    host: http://localhost:8082
     ip: 127.0.0.1
   data-source:
     host: http://localhost:8085
-
-broker:
-  user: guest
-  pass: guest
-  host: 34.231.45.229
-  port: 30001
-  queue.send.schedularTime: 5000 #milli second
+  broker:
+    user: guest
+    pass: guest
+    host: 34.231.45.229
+    port: 30001
+    queue-send-schedular-time: 5000 #milli second
 
 io:
   worker.dir: ${HOME}/.icaptor-agent
@@ -40,21 +39,20 @@ spring:
 icaptor:
   server:
     name: icaptor-server
-    host: localhost:8082
-    ip: 127.0.0.1
+    host: 192.168.0.14:8082
+    ip: 192.168.0.14
     data-source:
-      host: http://localhost:8085
-
-broker:
-  user: guest
-  pass: guest
-  host: localhost
-  queue.send.schedularTime: 5000 #milli second
+      host: http://192.168.0.14:8085
+  broker:
+    user: guest
+    pass: guest
+    host: 192.168.0.14
+    queue-send-schedular-time: 5000 #milli second
 
 io:
-  worker.dir: ${HOME}/.icaptor-agent
-  worker.file: ${HOME}/.icaptor-out-file
-  file-read: ${HOME}/.icaptor-read-file
+  worker.dir: ${user.home}/.icaptor-agent
+  worker.file: ${user.home}/.icaptor-out-file
+  file-read: ${user.home}/.icaptor-read-file
 
 
 

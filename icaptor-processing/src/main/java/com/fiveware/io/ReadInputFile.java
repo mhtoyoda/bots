@@ -47,7 +47,7 @@ public class ReadInputFile {
     
     private Long userId = 1L;
     
-    public void readFile(final String nameBot, final String path, InputStream file, DeferredResult<ResponseEntity<String>> resultado) throws IOException {
+    public void readFile(final String nameBot, InputStream file, DeferredResult<ResponseEntity<String>> resultado) throws IOException {
         Task task = createTask(nameBot, userId);
         Bot bot = task.getBot();
         String separatorFile = bot.getSeparatorFile();

@@ -37,9 +37,6 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 
 	private static Logger log = LoggerFactory.getLogger(ServerProcessorScheduler.class);
 
-	@Value("${retries}")
-	private int retries;
-
 	@Autowired
 	@Qualifier("eventBotReceiver")
 	private Receiver<MessageBot> receiver;
@@ -63,7 +60,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	private ParameterResolver parameterResolver;
 
 
-	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
+	@Scheduled(fixedDelayString = "${icaptor.broker.queue-send-schedular-time}")
 	public void process() {
 
 		List<Agent> agents = serviceServer.getAllAgent(serverConfig.getServer().getName());

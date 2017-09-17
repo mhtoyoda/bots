@@ -50,12 +50,12 @@ public class PlatFormConfig implements Lifecycle {
 		}		
 	}
 	
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(fixedDelay = 10000)
 	public void keepAliveNotification() {
 		try {
 			sendMessage(TypeMessage.KEEP_ALIVE, "Keep Alive!");
 		} catch (Exception e) {
-			logger.info("Error while Starting Agent Host:{}", data.getHost());
+			logger.info("Error while Starting Agent Host:{} IP: {}", data.getHost(),data.getIp());
 		}
 	}
 	
