@@ -1,12 +1,12 @@
 package com.fiveware;
 
+import com.fiveware.config.ICaptorApiProperty;
 import org.springframework.amqp.core.AmqpManagementOperations;
 import org.springframework.amqp.rabbit.core.RabbitManagementTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import com.fiveware.messaging.BrokerConfig;
 
 @SpringBootApplication
 public class IcaptorWorkflowApplication {
@@ -15,14 +15,13 @@ public class IcaptorWorkflowApplication {
 		SpringApplication.run(IcaptorWorkflowApplication.class, args);
 	}
 
-	@Bean
-	public BrokerConfig brokerConfig(){
-		return new BrokerConfig();
-	}
+
+	@Autowired
+	private ICaptorApiProperty iCaptorApiProperty;
 	
 	@Bean
 	public AmqpManagementOperations amqpManagementOperations(){
-		String uri = String.format("http://%s:%d/api/", brokerConfig().getHost(), brokerConfig().getPort());
-		return new RabbitManagementTemplate(uri, brokerConfig().getUser(), brokerConfig().getPass());
+		String uri = String.format("http://%s:%d/api/", iCaptorApiProperty.getBroker().getHost(), iCaptorApiProperty.getBroker().getPort());
+		return new RabbitManagementTemplate(uri, iCaptorApiProperty.getBroker().getUser(), iCaptorApiProperty.getBroker().getPass());
 	}
 }
