@@ -39,14 +39,14 @@ spring:
 icaptor:
   server:
     name: icaptor-server
-    host: 192.168.0.14:8082
-    ip: 192.168.0.14
+    host: localhost:8082
+    ip: localhost
     data-source:
-      host: http://192.168.0.14:8085
+      host: http://localhost:8085
   broker:
     user: guest
     pass: guest
-    host: 192.168.0.14
+    host: localhost
     queue-send-schedular-time: 5000 #milli second
 
 io:

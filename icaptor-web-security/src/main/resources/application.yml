@@ -1,6 +1,6 @@
 server:
   name: icaptor-web-server
-  host: 192.168.0.14
+  host: localhost
   port: 8014
 
 
@@ -9,7 +9,7 @@ icaptor:
     enable-https: false
   origin-permitida: http://localhost:4200
   data-source:
-    host: http://192.168.0.14:8085
+    host: http://localhost:8085
   server:
-    host: http://192.168.0.14:8082
+    host: http://localhost:8082
 

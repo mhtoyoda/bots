@@ -24,7 +24,7 @@ spring:
     active: dev
 server:
   name: icaptor-monitoring
-  host: 192.168.0.14
+  host: localhost
   port: 8090
 
 io:
@@ -34,10 +34,10 @@ io:
 
 icaptor:
   data-source:
-    host: http://192.168.0.14:8085
+    host: http://localhost:8085
   broker:
     user: guest
     pass: guest
-    host: 192.168.0.14
+    host: localhost
     port: 30001
     queue-send-schedular-time: 5000 #milli second
