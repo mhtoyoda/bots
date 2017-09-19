@@ -9,7 +9,7 @@ services:
       - "8085:8085"
     environment:
       - spring.profiles.active=dev
-      - spring.datasource.url=jdbc:mysql://192.168.0.27:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false
+      - spring.datasource.url=jdbc:mysql://34.235.186.255:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false
       - spring.datasource.username=root
       - spring.datasource.password=root
       - spring.datasource.driverClassname=com.mysql.jdbc.Driver
@@ -24,8 +24,8 @@ services:
 #    network_mode: bridge
 #    environment:
 #      - spring.profiles.active=dev
-#      - icaptor.data-source.host=http://192.168.0.27:8085
-#      - icaptor.broker.host=192.168.0.27
+#      - icaptor.data-source.host=http://34.235.186.255:8085
+#      - icaptor.broker.host=34.235.186.255
 #    links:
 #      - icaptor-data
 
@@ -36,8 +36,8 @@ services:
 #  icaptor-agent:
 #    build: icaptor-agent/.
 #    environment:
-#      - icaptor.data-source=http://192.168.0.27:8085
-#      - icaptor.server.host=192.168.0.27:8082
+#      - icaptor.data-source=http://34.235.186.255:8085
+#      - icaptor.server.host=34.235.186.255:8082
 #    links:
 #      - icaptor-cloud
 #      - icaptor-data
@@ -47,8 +47,8 @@ services:
 #    ports:
 #      - "8014:8014"
 #    environment:
-#      - icaptor.data-source=http://192.168.0.27:8085
-#      - icaptor.server.host=192.168.0.27:8082
+#      - icaptor.data-source=http://34.235.186.255:8085
+#      - icaptor.server.host=34.235.186.255:8082
 #    links:
 #      - icaptor-data
 
