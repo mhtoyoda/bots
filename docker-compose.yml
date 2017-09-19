@@ -2,45 +2,72 @@ version: '2'
 
 services:
 
-#  icaptor-api:
-#    build: icaptor-web-security/.
+#  icaptor-data:
+#    build: icaptor-persistence/.
+#    container_name: icaptor-data
 #    ports:
-#      - "8014:8014"
+#      - "8085:8085"
 #    environment:
-#      - icaptor.data-source=http://192.168.0.27:8085
-#      - icaptor.server.host=192.168.0.27:8082
-#
-#  icaptor-agent:
-#    build: icaptor-agent/.
-#    environment:
-#      - icaptor.data-source=http://192.168.0.27:8085
-#      - icaptor.server.host=192.168.0.27:8082
-#
-#  icaptor-cloud:
-#    build: icaptor-cloud/.
-#    ports:
-#      - "8082:8082"
-#    environment:
-#      - icaptor.data-source=http://192.168.0.27:8085
-#      - icaptor.broker.host=192.168.0.27
+#      - spring.profiles.active=dev
+#      - spring.datasource.url=jdbc:mysql://192.168.0.27:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false
+#      - spring.datasource.username=root
+#      - spring.datasource.password=root
+#      - spring.datasource.driverClassname=com.mysql.jdbc.Driver
 
-  icaptor-data:
-    build: icaptor-persistence/.
+  icaptor-cloud:
+    build: icaptor-cloud/.
+    container_name: icaptor-cloud
     ports:
-      - "8085:8085"
+      - "8082:8082"
     environment:
       - spring.profiles.active=dev
-      - db.host=192.168.0.27
+      - icaptor.data-source.host=http://192.168.0.27:8085
+      - icaptor.broker.host=192.168.0.27
+
+#  icaptor-agent:
+#    build: icaptor-agent/.
+#    container_name: icaptor-agent
+#    environment:
+#      - spring.profiles.active=dev
+#      - icaptor.data-source.host=http://192.168.0.27:8085
+#      - icaptor.server.host=192.168.0.27:8082
+#      - icaptor.broker.host=192.168.0.27
+#    depends_on:
+#      - icaptor-cloud
+
+
+  icaptor-api:
+    build: icaptor-web-security/.
+    container_name: icaptor-api
+    ports:
+      - "8014:8014"
+    environment:
+      - icaptor.data-source.host=http://192.168.0.27:8085
+      - icaptor.server.host=192.168.0.27:8082
+      - icaptor.origin-permitida=http://192.168.0.27:4200
+
+
+  icaptor-monitoring:
+    build: icaptor-monitoring/.
+    container_name: icaptor-monitoring
+    ports:
+      - "8090:8090"
+    environment:
+      - icaptor.data-source.host=http://192.168.0.27:8085
+      - icaptor.broker.host=192.168.0.27
+
+
 #    links:
 #      - mysqldbserver
 
-#  icaptor-ui:
-#    image: icaptor-ui
+#  icaptor-mysql:
+#    image: mysql/mysql-server
 #    ports:
-#      - "4200:4200"
-#    links:
-#      - icaptor-api
+#      - "3306:3306"
 #    environment:
+#      - MYSQL_USER=root
 #      - MYSQL_ROOT_PASSWORD=root
 #      - MYSQL_DATABASE=icaptor
+
+
 

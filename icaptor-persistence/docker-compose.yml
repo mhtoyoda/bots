@@ -1,0 +1,69 @@
+version: '2'
+
+services:
+
+  icaptor-data:
+    build: .
+    container_name: icaptor-data
+    ports:
+      - "8085:8085"
+    environment:
+      - spring.profiles.active=dev
+      - spring.datasource.url=jdbc:mysql://192.168.0.27:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false
+      - spring.datasource.username=root
+      - spring.datasource.password=root
+      - spring.datasource.driverClassname=com.mysql.jdbc.Driver
+
+#  icaptor-cloud:
+#    build: icaptor-cloud/.
+#    container_name: icaptor-cloud
+#    ports:
+#      - "8082:8082"
+#    depends_on:
+#      - icaptor-data
+#    network_mode: bridge
+#    environment:
+#      - spring.profiles.active=dev
+#      - icaptor.data-source.host=http://192.168.0.27:8085
+#      - icaptor.broker.host=192.168.0.27
+#    links:
+#      - icaptor-data
+
+
+
+
+
+#  icaptor-agent:
+#    build: icaptor-agent/.
+#    environment:
+#      - icaptor.data-source=http://192.168.0.27:8085
+#      - icaptor.server.host=192.168.0.27:8082
+#    links:
+#      - icaptor-cloud
+#      - icaptor-data
+#
+#  icaptor-api:
+#    build: icaptor-web-security/.
+#    ports:
+#      - "8014:8014"
+#    environment:
+#      - icaptor.data-source=http://192.168.0.27:8085
+#      - icaptor.server.host=192.168.0.27:8082
+#    links:
+#      - icaptor-data
+
+
+#    links:
+#      - mysqldbserver
+
+#  icaptor-mysql:
+#    image: mysql/mysql-server
+#    ports:
+#      - "3306:3306"
+#    environment:
+#      - MYSQL_USER=root
+#      - MYSQL_ROOT_PASSWORD=root
+#      - MYSQL_DATABASE=icaptor
+
+
+
