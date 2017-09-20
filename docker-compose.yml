@@ -41,6 +41,7 @@ services:
     container_name: icaptor-api
     ports:
       - "8014:8014"
+      - "5005:5005"
     environment:
       - icaptor.data-source.host=http://18.231.58.173:8085
       - icaptor.server.host=18.231.58.173:8082
