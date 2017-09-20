@@ -42,6 +42,3 @@ endpoints:
   info:
     enabled: true
     id: information
-
-
-
