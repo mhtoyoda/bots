@@ -7,5 +7,5 @@ import com.fiveware.repository.task.filter.TaskFilter;
 
 public interface TaskRepositoryQuery {
 
-	public List<Task> filtrar(TaskFilter filter);
+	public List<Task> filter(TaskFilter filter);
 }

@@ -1,4 +1,4 @@
-FROM frolvlad/alpine-oraclejdk8:slim
+FROM anapsix/alpine-java
 VOLUME target
 ADD target/icaptor-web-security-0.0.1-SNAPSHOT.jar app.jar
 RUN sh -c 'touch /app.jar'

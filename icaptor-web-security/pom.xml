@@ -3,7 +3,13 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>icaptor-web-security</groupId>
 	<artifactId>icaptor-web-security</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>icaptor-web-securityt</name>
+	<description>Api Icaptor</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
