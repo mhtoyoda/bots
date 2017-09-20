@@ -22,7 +22,7 @@ services:
     environment:
       - spring.profiles.active=dev
       - icaptor.data-source.host=http://18.231.58.173:8085
-      - icaptor.broker.host=18.231.58.173
+      - icaptor.broker.host=34.235.186.255
 
 #  icaptor-agent:
 #    build: icaptor-agent/.
@@ -54,7 +54,7 @@ services:
       - "8090:8090"
     environment:
       - icaptor.data-source.host=http://18.231.58.173:8085
-      - icaptor.broker.host=18.231.58.173
+      - icaptor.broker.host=34.235.186.255
 
 
 #    links:
