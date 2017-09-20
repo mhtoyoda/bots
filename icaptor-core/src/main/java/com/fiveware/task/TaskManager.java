@@ -1,5 +1,6 @@
 package com.fiveware.task;
 
+
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.model.ItemTask;
+import com.fiveware.model.StatusProcessItemTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.service.ServiceBot;
@@ -50,6 +53,7 @@ public class TaskManager {
 	public Task updateTask(Long taskId, StatusProcessTaskEnum statuProcessEnum) {
 		Task task = serviceTask.getTaskById(taskId);
 		task.setStatusProcess(statuProcessEnum.getStatuProcess());
+
 		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.SUCCESS)) {
 			task.setEndAt(LocalDateTime.now());
 		}

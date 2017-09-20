@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.model.message.MessageTaskAgent;
-import com.fiveware.task.StatusProcessItemTaskEnum;
+import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.task.TaskManager;
 
 @Component("ITEM_TASK_PROCESSING")

@@ -17,8 +17,8 @@ import com.fiveware.parameter.ParameterResolver;
 import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceServer;
-import com.fiveware.task.StatusProcessItemTaskEnum;
-import com.fiveware.task.StatusProcessTaskEnum;
+import com.fiveware.model.StatusProcessItemTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.task.TaskManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,9 +36,6 @@ import java.util.Optional;
 public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 
 	private static Logger log = LoggerFactory.getLogger(ServerProcessorScheduler.class);
-
-	@Value("${retries}")
-	private int retries;
 
 	@Autowired
 	@Qualifier("eventBotReceiver")
@@ -63,7 +60,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	private ParameterResolver parameterResolver;
 
 
-	@Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
+	@Scheduled(fixedDelayString = "${icaptor.broker.queue-send-schedular-time}")
 	public void process() {
 
 		List<Agent> agents = serviceServer.getAllAgent(serverConfig.getServer().getName());
@@ -93,17 +90,21 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Override
 	public void processMessage(String botName, MessageBot messageBot) throws RuntimeBotException {
 		log.debug("Linha resultado: {}", messageBot.getLineResult());
-		int parameterRetry = getParameter(botName, "retry");
+
+
 
 
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof RecoverableException ){
+			int parameterRetry = getParameter(botName, "retry");
+
 			verifyRetry(botName, messageBot, parameterRetry);
 		}
 		
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof AuthenticationBotException ){
-			
+			int parameterRetry = getParameter(botName, "retry");
+
 			verifyRetry(botName, messageBot, parameterRetry);
 			invalidateParameterCredential(botName, messageBot);
 		}
@@ -149,7 +150,12 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 		ParameterInfo parameterByBot = parameterResolver.getParameterByBot(botName);
 		Optional<ParameterInfo> optional = Optional.ofNullable(parameterByBot);
 		if(optional.isPresent()){
+
 			Parameter parameter = optional.get().getParameters().get(typeParameter);
+
+			if(Objects.isNull(parameter))
+				getParameterCloud(typeParameter);
+
 			return getValue(parameter);
 		}
 		return getParameterCloud(typeParameter);

@@ -1,15 +1,17 @@
 package com.fiveware.service;
 
+import com.fiveware.config.ApiUrlPersistence;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Server;
-import com.google.common.base.MoreObjects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
-import java.util.function.Supplier;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static java.util.Arrays.asList;
 
@@ -22,8 +24,12 @@ public class ServiceServer {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private ApiUrlPersistence apiUrlPersistence;
+
     public Server save(Server server){
-        String url = "http://localhost:8085/api/server";
+        String url = apiUrlPersistence.endPoint("server","");
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity entity = new HttpEntity(server,headers);
@@ -33,7 +39,8 @@ public class ServiceServer {
     }
 
     public Optional<Server> findByName(String nameServer) {
-        String url = "http://localhost:8085/api/server/"+nameServer+"/name";
+        String url = apiUrlPersistence.endPoint("server/",nameServer+"/name");
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -42,7 +49,8 @@ public class ServiceServer {
     }
 
     public List<Agent> getAllAgent(String name) {
-        String url = "http://localhost:8085/api/server/agents/"+name+"/name";
+        String url = apiUrlPersistence.endPoint("server","/agents/"+name+"/name");
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -52,7 +60,7 @@ public class ServiceServer {
     }
 
     public Optional<List<Agent>> getAllAgentsByBotName(String serverName, String nameBot, String endpoint) {
-        String url = "http://localhost:8085/api/server/nameServer/"+serverName+"/nameBot/"+nameBot+"/endPoint/"+endpoint;
+        String url = apiUrlPersistence.endPoint("server","/nameServer/"+serverName+"/nameBot/"+nameBot+"/endPoint/"+endpoint);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 

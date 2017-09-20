@@ -19,7 +19,7 @@ import com.fiveware.context.QueueContext;
 import com.fiveware.exception.AttributeLoadException;
 import com.fiveware.exception.ParameterInvalidException;
 import com.fiveware.exception.RuntimeBotException;
-import com.fiveware.message.validate.ValidateMessage;
+import com.fiveware.messaging.BrokerManager;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.Receiver;
@@ -61,12 +61,11 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     @Autowired
     @Qualifier("eventMessageProducer")
     private Producer<MessageAgent> producer;
-
-    @Autowired
-    @Qualifier("validateMessageTask")
-    private ValidateMessage validateMessage;
     
-    @Scheduled(fixedDelayString = "${broker.queue.send.schedularTime}")
+    @Autowired
+    private BrokerManager brokerManager;
+    
+    @Scheduled(fixedDelayString = "${icaptor.broker.queue-send-schedular-time}")
     public void process() throws RuntimeBotException {
         List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
         bots.forEach(this::accept);
@@ -81,7 +80,9 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
         try {                
         	queues.stream().                        
         	forEach(queue -> {
-        		validateMessage.setParameter(queue);
+        		if(notExistQueue(botName, queue, data.getAgentName())){
+        			return;
+        		}
         		pullMessage(botName, queue);                        
         	});            
         } catch (RuntimeBotException exceptionBot) {        
@@ -94,7 +95,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
      */
     @Override
     public boolean canPullingMessage() {
-        return queueContext.hasTask() && validateMessage.validateStatus();
+        return queueContext.hasTask();
     }
 
     /**
@@ -135,8 +136,16 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
         queues.forEach(new Consumer<String>() {
             @Override
             public void accept(String nameQueue) {
-                queueContext.removeQueueInContext(nameBot, nameQueue);
+                queueContext.removeQueueInContext(nameBot, nameAgent, nameQueue);
             }
         });
+    }
+    
+    private boolean notExistQueue(String nameBot, String queueName, String nameAgent){
+    	if(brokerManager.notExistQueue(queueName)){
+    		queueContext.removeQueueInContext(nameBot, nameAgent, queueName);
+    		return true;
+    	}
+    	return false;
     }
 }

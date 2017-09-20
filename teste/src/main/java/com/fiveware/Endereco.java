@@ -23,6 +23,8 @@ public class Endereco implements Serializable {
 	private String cep;
 
 	public Endereco(){}
+
+
 	public Endereco(String logradouro, String bairro, String localidade, String cep) {
 		this.logradouro = logradouro;
 		this.bairro = bairro;

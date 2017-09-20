@@ -1,4 +1,5 @@
 server:
+  host: localhost
   port: 8085
 
 spring:
@@ -26,3 +27,67 @@ spring:
 flyway:
     enabled: "true"
     validateOnMigrate: true
+
+management:
+  security.enabled: false
+  context-path: /management
+
+
+info.app:
+  name: @project.name@
+  description: @project.description@
+  build: @project.version@
+  java.version: @java.specification.version@
+
+endpoints:
+  info:
+    enabled: true
+    id: information
+
+---
+server:
+  host: localhost
+  port: 8085
+spring:
+  datasource:
+    url: jdbc:mysql://${db.host}:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+  hikari:
+    connection-timeout: 60000
+    maximum-pool-size: 5
+  jpa:
+    hibernate:
+      dialect: org.hibernate.dialect.MySQLDialect
+      show-sql: false
+
+  jackson:
+    serialization.fail-on-empty-beans: false
+    deserialization.fail-on-unknown-properties: true
+
+  data.rest.detection-strategy: annotated
+  profiles:
+    active: dev
+
+
+flyway:
+    enabled: "true"
+    validateOnMigrate: true
+
+management:
+  security.enabled: false
+  context-path: /management
+
+
+info.app:
+  name: @project.name@
+  description: @project.description@
+  build: @project.version@
+  java.version: @java.specification.version@
+
+endpoints:
+  info:
+    enabled: true
+    id: information
+

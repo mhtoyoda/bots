@@ -1,19 +1,18 @@
 package com.fiveware.loader;
 
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.InputDictionaryContext;
 import com.fiveware.model.Record;
 import com.fiveware.validate.Validate;
 import com.google.common.collect.Lists;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class ParameterClassLoader {
@@ -32,6 +31,11 @@ public class ParameterClassLoader {
 		Object instance = typeParameter.newInstance();
 		InputDictionaryContext inputDictionary = botClassLoaderContext.getInputDictionary();
 		String[] fields = inputDictionary.getFields();
+
+		if (instance instanceof String)
+			return recordMap.get(fields[0]);
+
+
 		for(String field : fields){
 			Field declaredField = instance.getClass().getDeclaredField(field);
 			boolean accessible = declaredField.isAccessible();

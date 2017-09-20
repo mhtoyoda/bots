@@ -1,24 +1,18 @@
 package com.fiveware.controller.helper;
 
-import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
-import static org.apache.commons.lang3.StringUtils.startsWith;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import com.fiveware.model.Bot;
+import com.fiveware.model.user.IcaptorUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.Bot;
-import com.fiveware.model.user.IcaptorUser;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
+import static org.apache.commons.lang3.StringUtils.startsWith;
 
 @Component
 public class WebModelUtil {
@@ -64,7 +58,8 @@ public class WebModelUtil {
 	}
 
 	protected Optional<Method> findGetMethodForField(Field field, List<Method> methods) {
-		Optional<Method> getMethod = methods.stream().filter(m -> startsWith(m.getName(), "get") && equalsIgnoreCase(m.getName().substring(3), field.getName())).findAny();
+		Optional<Method> getMethod = methods.stream().filter(m -> startsWith(m.getName(), "get")
+				&& equalsIgnoreCase(m.getName().substring(3), field.getName())).findAny();
 		return getMethod;
 	}
 

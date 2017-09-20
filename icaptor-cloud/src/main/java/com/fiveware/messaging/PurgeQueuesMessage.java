@@ -10,8 +10,8 @@ import com.fiveware.model.message.MessageAgent;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.service.ServiceItemTask;
 import com.fiveware.service.ServiceTask;
-import com.fiveware.task.StatusProcessItemTaskEnum;
-import com.fiveware.task.StatusProcessTaskEnum;
+import com.fiveware.model.StatusProcessItemTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
 
 @Component("PURGE_QUEUES")
 public class PurgeQueuesMessage implements ConsumerTypeMessage<MessageAgent> {

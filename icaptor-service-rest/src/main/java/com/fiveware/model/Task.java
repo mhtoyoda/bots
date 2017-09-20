@@ -50,6 +50,10 @@ public class Task implements Serializable {
 	@JoinColumn(name = "id_status")
 	private StatuProcessTask statusProcess;
 
+
+	@Transient
+	private BotsMetric botsMetric;
+
 	public Task() {
 	}
 
@@ -120,6 +124,12 @@ public class Task implements Serializable {
 	public void setStatusProcess(StatuProcessTask statusProcess) {
 		this.statusProcess = statusProcess;
 	}
+
+	public BotsMetric getBotsMetric() {
+		return botsMetric;
+	}
+
+	public void setBotsMetric(BotsMetric botsMetric) {this.botsMetric = botsMetric;}
 
 	@Override
 	public String toString() {

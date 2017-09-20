@@ -1,5 +1,6 @@
 package com.fiveware;
 
+import com.fiveware.config.ICaptorApiProperty;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -17,4 +18,10 @@ public class IcaptorServiceRestApplication {
 	public RestTemplate restTemplate(){
 		return new RestTemplate();
 	}
+
+	@Bean
+	public ICaptorApiProperty iCaptorApiProperty(){
+		return new ICaptorApiProperty();
+	}
+
 }

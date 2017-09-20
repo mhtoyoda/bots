@@ -1,41 +1,40 @@
 package com.fiveware.messaging;
 
+import com.fiveware.config.ICaptorApiProperty;
 import com.fiveware.exception.RuntimeBotException;
-import org.springframework.amqp.core.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.amqp.core.Binding;
+import org.springframework.amqp.core.BindingBuilder;
+import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.ConditionalRejectingErrorHandler;
 import org.springframework.amqp.rabbit.listener.exception.ListenerExecutionFailedException;
-import org.springframework.amqp.rabbit.support.CorrelationData;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 @Configuration
 public class BrokerMessageConfiguration {
 
-	@Value("${broker.user}")
-	private String brokerUser;
-	
-	@Value("${broker.pass}")
-	private String brokerPass;
-	
-	@Value("${broker.host}")
-	private String brokerHost;
-	
+	static Logger logger = LoggerFactory.getLogger(BrokerMessageConfiguration.class);
+
+	@Autowired
+	private ICaptorApiProperty iCaptorApiProperty;
+
+
 	@Bean
-	public ConnectionFactory connectionFactory() {		
-		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(brokerHost);
-		connectionFactory.setUsername(brokerUser);
-		connectionFactory.setPassword(brokerPass);
+	public ConnectionFactory connectionFactory() {
+		CachingConnectionFactory connectionFactory = new CachingConnectionFactory(iCaptorApiProperty.getBroker().getHost());
+		connectionFactory.setUsername(iCaptorApiProperty.getBroker().getUser());
+		connectionFactory.setPassword(iCaptorApiProperty.getBroker().getPass());
 		return connectionFactory;
 	}
-	
+
 	@Bean
 	public Queue queue() {
 		return new Queue(QueueName.EVENTS.name(), true);
@@ -57,35 +56,33 @@ public class BrokerMessageConfiguration {
 	}
 
 	@Bean
-	public RabbitTemplate rabbitTemplate(){
-//		return new RabbitAdmin(connectionFactory());
+	public RabbitAdmin rabbitTemplate(){
+		return new RabbitAdmin(connectionFactory());
 
-		final AtomicReference<CorrelationData> confirmCD = new AtomicReference<CorrelationData>();
-
-
-		RabbitTemplate rabbitTemplate = new RabbitTemplate( connectionFactory() );
-		((CachingConnectionFactory)rabbitTemplate.getConnectionFactory()).setPublisherConfirms( true );
-		((CachingConnectionFactory)rabbitTemplate.getConnectionFactory()).setPublisherReturns( true );
-
-		rabbitTemplate.setConfirmCallback( new RabbitTemplate.ConfirmCallback() {
-			@Override
-			public void confirm(CorrelationData corData, boolean ack, String cause ) {
-				System.out.println( "devconfig.rabbitTemplate(...).new ConfirmCallback() {...}.confirm()"+corData );
-				System.out.println( "devconfig.rabbitTemplate(...).new ConfirmCallback() {...}.confirm()"+ack );
-
-			}
-		} );
+//		final AtomicReference<CorrelationData> confirmCD = new AtomicReference<CorrelationData>();
 
 
-		rabbitTemplate.setReturnCallback(new RabbitTemplate.ReturnCallback() {
-			@Override
-			public void returnedMessage(Message message, int i, String s, String s1, String s2) {
-				System.out.println("message = " + message);
-			}
-		});
+//		RabbitTemplate rabbitTemplate = new RabbitTemplate( connectionFactory() );
+//		((CachingConnectionFactory)rabbitTemplate.getConnectionFactory()).setPublisherConfirms( true );
+//		((CachingConnectionFactory)rabbitTemplate.getConnectionFactory()).setPublisherReturns( true );
+//
+//		rabbitTemplate.setConfirmCallback( new RabbitTemplate.ConfirmCallback() {
+//			@Override
+//			public void confirm(CorrelationData corData, boolean ack, String cause ) {
+////				logger.debug("correlationData = {} - ack = {}",corData,ack);
+//			}
+//		} );
+//
+//
+//		rabbitTemplate.setReturnCallback(new RabbitTemplate.ReturnCallback() {
+//			@Override
+//			public void returnedMessage(Message message, int i, String s, String s1, String s2) {
+//				System.out.println("message = " + message);
+//			}
+//		});
 
 
-		return rabbitTemplate;
+//		return rabbitTemplate;
 
 	}
 
