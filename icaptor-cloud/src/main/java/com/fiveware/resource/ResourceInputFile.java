@@ -18,7 +18,7 @@ import java.io.InputStream;
  * Created by valdisnei on 06/06/17.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/bot")
 public class ResourceInputFile {
 
     static Logger logger = LoggerFactory.getLogger(ResourceInputFile.class);
@@ -41,7 +41,7 @@ public class ResourceInputFile {
         return "DOWN";
     }
 
-    @PostMapping(value = "/upload/{nameBot}",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{nameBot}/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public DeferredResult<ResponseEntity<String>> upload(@PathVariable String nameBot,
                                                          @RequestParam("file") MultipartFile file, HttpServletRequest httpRequest){
 

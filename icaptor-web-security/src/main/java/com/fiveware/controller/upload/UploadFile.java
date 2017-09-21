@@ -24,7 +24,7 @@ import java.io.IOException;
  * Created by valdisnei on 29/08/2017.
  */
 @RestController
-@RequestMapping("/bot")
+@RequestMapping("/api/bot")
 public class UploadFile {
 
     static Logger logger = LoggerFactory.getLogger(UploadFile.class);
@@ -48,7 +48,7 @@ public class UploadFile {
         Thread[] thread = new Thread[file.length];
 
         for (int i = 0; i < file.length; i++) {
-            thread[i] = new Thread(getTarget(file, details, url, resultado));
+            thread[i] = new Thread(getTarget(file[i], details, url, resultado));
         }
         for (int i = 0; i < file.length; i++) {
             thread[i].start();
@@ -56,38 +56,21 @@ public class UploadFile {
         return resultado;
     }
 
-    private Runnable getTarget(@RequestParam("file") MultipartFile[] file,
+    private Runnable getTarget(@RequestParam("file") MultipartFile file,
                                @RequestHeader("Authorization") String details,
                                String url, DeferredResult<ResponseEntity<String>> resultado) {
         return new Runnable() {
             @Override
             public void run() {
                 String tempFileName = null;
-                try {
-                    tempFileName = "/tmp/" + file[0].getOriginalFilename() +"_"+Thread.currentThread().getName();
-                    FileOutputStream fo = new FileOutputStream(tempFileName);
-                    fo.write(file[0].getBytes());
-                    fo.close();
-
-                    MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-                    map.add("file", new FileSystemResource(tempFileName));
+                    LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+                    map.add("file", new FileSystemResource(file.getOriginalFilename()));
                     HttpHeaders headers = new HttpHeaders();
                     headers.setContentType(MediaType.MULTIPART_FORM_DATA);
                     headers.add("user", SpringSecurityUtil.decodeAuthorizationKey(details));
 
-                    HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<MultiValueMap<String, Object>>(map, headers);
+                    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<LinkedMultiValueMap<String, Object>>(map, headers);
                     ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } finally {
-                        File f = new File(tempFileName);
-                        logger.debug("deleting temp file {}",tempFileName);
-                        f.delete();
-                    resultado.setResult(ResponseEntity.ok().body("OK"));
-                }
             }
         };
     }

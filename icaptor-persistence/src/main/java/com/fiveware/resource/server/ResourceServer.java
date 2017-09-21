@@ -6,6 +6,8 @@ import java.util.Set;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,7 @@ import com.fiveware.repository.ServerRepository;
 /**
  * Created by valdisnei on 13/07/17.
  */
+@EnableCaching
 @RestController
 @RequestMapping("/api/server")
 public class ResourceServer {

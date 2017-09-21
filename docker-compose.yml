@@ -2,18 +2,6 @@ version: '2'
 
 services:
 
-#  icaptor-data:
-#    build: icaptor-persistence/.
-#    container_name: icaptor-data
-#    ports:
-#      - "8085:8085"
-#    environment:
-#      - spring.profiles.active=dev
-#      - spring.datasource.url=jdbc:mysql://18.231.58.173:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false
-#      - spring.datasource.username=root
-#      - spring.datasource.password=root
-#      - spring.datasource.driverClassname=com.mysql.jdbc.Driver
-
   icaptor-cloud:
     build: icaptor-cloud/.
     container_name: icaptor-cloud
