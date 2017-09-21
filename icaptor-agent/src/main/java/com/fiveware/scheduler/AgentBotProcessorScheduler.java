@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.bot.BotContext;
 import com.fiveware.config.agent.AgentConfigProperties;
 import com.fiveware.config.agent.AgentListener;
 import com.fiveware.context.QueueContext;
@@ -29,7 +30,6 @@ import com.fiveware.model.message.MessageAgent;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.processor.ProcessBot;
 import com.fiveware.pulling.BrokerPulling;
-import com.fiveware.service.ServiceAgent;
 import com.google.common.base.MoreObjects;
 import com.google.common.collect.Sets;
 
@@ -45,8 +45,8 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     @Qualifier("eventBotReceiver")
     private Receiver<MessageBot> receiver;
 
-    @Autowired
-    private ServiceAgent serviceAgent;
+	@Autowired	
+	private BotContext botContext;
 
     @Autowired
     @Qualifier("processBotCSV")
@@ -67,10 +67,10 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
     
     @Scheduled(fixedDelayString = "${icaptor.broker.queue-send-schedular-time}")
     public void process() throws RuntimeBotException {
-        List<Bot> bots = serviceAgent.findBotsByAgent(data.getAgentName());
+        List<Bot> bots = botContext.bots();
         bots.forEach(this::accept);
     }
-
+    
     private void accept(Bot bot) {        
     	String botName = bot.getNameBot();
         queueContext.setKey(botName);
@@ -86,7 +86,7 @@ public class AgentBotProcessorScheduler extends BrokerPulling<MessageBot> {
         		pullMessage(botName, queue);                        
         	});            
         } catch (RuntimeBotException exceptionBot) {        
-        	notifyServerPurgeQueues(bot.getNameBot(), data.getAgentName());    
+        	notifyServerPurgeQueues(botName, data.getAgentName());    
         }
     }
 
