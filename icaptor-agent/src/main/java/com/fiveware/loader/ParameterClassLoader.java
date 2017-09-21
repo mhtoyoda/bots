@@ -1,18 +1,21 @@
 package com.fiveware.loader;
 
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.IntStream;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.InputDictionaryContext;
 import com.fiveware.model.Record;
 import com.fiveware.validate.Validate;
 import com.google.common.collect.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
-import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 @Component
 public class ParameterClassLoader {
@@ -30,11 +33,12 @@ public class ParameterClassLoader {
 		Class<?> typeParameter = botClassLoaderContext.getTypeParameter();
 		Object instance = typeParameter.newInstance();
 		InputDictionaryContext inputDictionary = botClassLoaderContext.getInputDictionary();
-		String[] fields = inputDictionary.getFields();
-
-		if (instance instanceof String)
-			return recordMap.get(fields[0]);
-
+		String[] fields = getFields(inputDictionary.getFields()[0]);
+		
+		if (instance instanceof String || instance instanceof Integer || instance instanceof Double
+			|| instance instanceof Long){
+			return recordMap.get(fields[0]);			
+		}
 
 		for(String field : fields){
 			Field declaredField = instance.getClass().getDeclaredField(field);
@@ -55,5 +59,17 @@ public class ParameterClassLoader {
 			return validate;
 		}
 		return objectValidate;
+	}
+	
+	private String[] getFields(String inputFields){
+		String[] values = inputFields.split(",");
+		List<String> list = Lists.newArrayList(values);
+		String[] fields = new String[list.size()];
+		
+		IntStream.range(0, list.size()).forEach(index -> {
+			fields[index] = StringUtils.trim(list.get(index));
+		});				
+				
+		return fields;
 	}
 }
