@@ -66,7 +66,7 @@ public enum IcaptorMetaInfo {
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List<IcaptorPameterContext> getValueAtributeParameter(Class clazz, String typeAnnotation) throws AttributeLoadException {
+	public List<IcaptorPameterContext> getValueAtributeParameters(Class clazz, String typeAnnotation) throws AttributeLoadException {
 		List<IcaptorPameterContext> list = Lists.newArrayList();
 		for (Method method : clazz.getDeclaredMethods()) {
 			for (Annotation annotation : method.getAnnotations()) {
