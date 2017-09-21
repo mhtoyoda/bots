@@ -1,17 +1,27 @@
 package com.fiveware.service;
 
-import com.fiveware.config.ApiUrlPersistence;
-import com.fiveware.model.*;
-import com.google.common.collect.Lists;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import com.fiveware.config.ApiUrlPersistence;
+import com.fiveware.model.BotsMetric;
+import com.fiveware.model.ItemTask;
+import com.fiveware.model.StatuProcessItemTask;
+import com.fiveware.model.StatusProcessItemTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
+import com.fiveware.model.Task;
+import com.google.common.collect.Lists;
 
 @Service
 public class ServiceItemTask {
@@ -81,7 +91,7 @@ public class ServiceItemTask {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<List<String>> httpEntity = new HttpEntity<>(status, headers);
-		ResponseEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, (HttpEntity<?>) httpEntity, List.class);
+		ResponseEntity<List<ItemTask>> exchange = restTemplate.exchange(url, HttpMethod.POST, (HttpEntity<?>) httpEntity, new ParameterizedTypeReference<List<ItemTask>>() {});
 		List<ItemTask> item = exchange.getBody();
 		return item;
 	}
