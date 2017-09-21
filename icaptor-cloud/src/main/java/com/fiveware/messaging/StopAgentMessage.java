@@ -28,7 +28,7 @@ public class StopAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 		serviceAgent.remove(agent);
 		String queueName = String.format("tasks.%s.in", StringUtils.trim(message.getAgent()));
 		brokerManager.deleteQueue(queueName);
-		brokerManager.deleteQueue("parameter_"+message.getAgent());
+		brokerManager.deleteQueue("parameter."+message.getAgent());
 	}
 
 }
