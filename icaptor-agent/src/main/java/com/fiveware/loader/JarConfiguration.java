@@ -10,6 +10,7 @@ import java.net.URLClassLoader;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
@@ -25,11 +26,13 @@ import com.fiveware.helpers.BotClassloaderContextBuilder;
 import com.fiveware.helpers.FieldsDictionary;
 import com.fiveware.helpers.InputDictionaryContextBuilder;
 import com.fiveware.helpers.OutputDictionaryContextBuilder;
+import com.fiveware.helpers.ParameterContextBuilder;
 import com.fiveware.metadata.IcaptorMetaInfo;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.IcaptorPameterContext;
 import com.fiveware.model.InputDictionaryContext;
 import com.fiveware.model.OutputDictionaryContext;
+import com.google.common.collect.Lists;
 
 @Component
 public class JarConfiguration {
@@ -41,7 +44,7 @@ public class JarConfiguration {
 
 	@SuppressWarnings("rawtypes")
 	public void saveConfigurations(String pathJar) throws MalformedURLException, AttributeLoadException {
-		String nameBot = null, classLoaderInfo = null, nameJar = null;
+		String nameBot = null, classLoaderInfo = null, nameJar = null, version = null;
 		ClassLoader classLoader = getClassLoader(pathJar);
 
 		Set<Class<? extends Automation>> subTypesOf = getSubTypes(classLoader);
@@ -58,6 +61,7 @@ public class JarConfiguration {
 							classLoaderInfo = (String) getValue(annotation, annotationType,
 									IcaptorMetaInfo.CLASSLOADER.getValue());
 							nameJar = StringUtils.substringAfterLast(pathJar, "/");
+							version = (String) getValue(annotation, annotationType, IcaptorMetaInfo.VERSION.getValue());
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
 								| InvocationTargetException e) {
 							logger.error("Problema rotina saveconfiguration: ", e);
@@ -71,11 +75,17 @@ public class JarConfiguration {
 						"IcaptorMethod");
 				InputDictionaryContext inputDictionaryContext = getInputDictionaryAttributes(automationClass);
 				OutputDictionaryContext outputDictionaryContext = getOutputDictionaryAttributes(automationClass);
-				List<IcaptorPameterContext> pameterContext = getIcaptorPameterContextAttributes(automationClass);
-				
+				List<IcaptorPameterContext> parameterContext = getIcaptorPametersContextAttributes(automationClass);
+				if(CollectionUtils.isEmpty(parameterContext)){
+					parameterContext = Lists.newArrayList();
+					IcaptorPameterContext icaptorPameterContext = getIcaptorPameterContextAttributes(automationClass);
+					if(null != icaptorPameterContext){
+						parameterContext.add(icaptorPameterContext);						
+					}
+				}
 				BotClassLoaderContext botClassLoaderContext = getBotClassLoaderContext(nameBot, classLoaderInfo,
-						nameJar, method, endpoint, inputDictionaryContext, outputDictionaryContext, getUrl(pathJar),
-						typeParameter, pameterContext);
+						nameJar, version, method, endpoint, inputDictionaryContext, outputDictionaryContext, getUrl(pathJar),
+						typeParameter, parameterContext);
 				saveAttributesClassLoader(botClassLoaderContext);
 			} catch (ClassNotFoundException | AttributeLoadException e) {
 				throw new AttributeLoadException(e.getMessage());
@@ -88,12 +98,12 @@ public class JarConfiguration {
 	}
 
 	private BotClassLoaderContext getBotClassLoaderContext(String nameBot, String classLoaderInfo, String nameJar,
-			String method, String endpoint, InputDictionaryContext inputDictionaryContext,
+			String version, String method, String endpoint, InputDictionaryContext inputDictionaryContext,
 			OutputDictionaryContext outputDictionaryContext, URL url, Class<?> typeParameter, List<IcaptorPameterContext> pameterContexts) {
 
 		BotClassloaderContextBuilder builder = new BotClassloaderContextBuilder(inputDictionaryContext,
 				outputDictionaryContext, pameterContexts);
-		return builder.nameBot(nameBot).classLoader(classLoaderInfo).nameJar(nameJar).method(method).endpoint(endpoint)
+		return builder.nameBot(nameBot).classLoader(classLoaderInfo).nameJar(nameJar).versionJar(version).method(method).endpoint(endpoint)
 				.url(url).typeParameter(typeParameter).build();
 	}
 
@@ -119,10 +129,28 @@ public class JarConfiguration {
 		return builder.typeFileIn(typeFileIn).separator(separator).build();
 	}
 	
-	private List<IcaptorPameterContext> getIcaptorPameterContextAttributes(Class<?> automationClass) throws AttributeLoadException {
-		List<IcaptorPameterContext> parameters = IcaptorMetaInfo.VALUE.getValueAtributeParameter(automationClass, "IcaptorParameters");
+	private List<IcaptorPameterContext> getIcaptorPametersContextAttributes(Class<?> automationClass) throws AttributeLoadException {
+		List<IcaptorPameterContext> parameters = IcaptorMetaInfo.VALUE.getValueAtributeParameters(automationClass, "IcaptorParameters");
 		return parameters;
 	}
+	
+	private IcaptorPameterContext getIcaptorPameterContextAttributes(Class<?> automationClass) throws AttributeLoadException {
+		String value  = (String) IcaptorMetaInfo.VALUE.getValueAtribute(automationClass, "IcaptorParameter");
+		if(null != value){
+			String regexValidate  = (String) IcaptorMetaInfo.REGEXVALIDATE.getValueAtribute(automationClass, "IcaptorParameter");
+			String nameTypeParameter  = (String) IcaptorMetaInfo.NAMETYPEPARAMETER.getValueAtribute(automationClass, "IcaptorParameter");
+			boolean exclusive = (Boolean) IcaptorMetaInfo.EXCLUSIVE.getValueAtribute(automationClass, "IcaptorParameter");
+			boolean credential = (Boolean) IcaptorMetaInfo.CREDENTIAL.getValueAtribute(automationClass, "IcaptorParameter");
+			
+			ParameterContextBuilder builder = new ParameterContextBuilder();
+			IcaptorPameterContext icaptorPameterContext = builder.value(value)
+					.regexValidate(regexValidate).nameTypeParameter(nameTypeParameter)
+					.exclusive(exclusive).credential(credential).build();
+			return icaptorPameterContext;
+		}
+		return null;
+	}
+	
 	protected Object getValue(Annotation annotation, Class<? extends Annotation> annotationType, String attribute)
 			throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
 		Method methodTarget = annotationType.getMethod(attribute);

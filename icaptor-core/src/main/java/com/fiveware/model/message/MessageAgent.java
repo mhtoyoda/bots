@@ -4,9 +4,11 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-import com.fiveware.messaging.TypeMessage;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
+
+import com.fiveware.messaging.TypeMessage;
+import com.google.common.collect.Lists;
 
 @AutoProperty
 public class MessageAgent implements Serializable {
@@ -93,7 +95,14 @@ public class MessageAgent implements Serializable {
 	public void setMessageAgentBots(List<MessageAgentBot> messageAgentBots) {
 		this.messageAgentBots = messageAgentBots;
 	}
-
+	
+	public void addMessageAgentBots(MessageAgentBot messageAgentBot) {
+		if( null == messageAgentBots){
+			messageAgentBots = Lists.newArrayList();
+		}
+		messageAgentBots.add(messageAgentBot);
+	}
+	
 	public void setNameQueues(Set<String> nameQueues) {this.nameQueues = nameQueues;}
 
 	public Set<String> getNameQueues() {return nameQueues;}
