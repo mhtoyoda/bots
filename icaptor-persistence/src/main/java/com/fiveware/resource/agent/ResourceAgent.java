@@ -70,6 +70,9 @@ public class ResourceAgent {
         		agent1.setServer(server);                	
         	}        	
         }
+        if(null != agent.getBots() && agent.getBots().size() > 0){
+        	agent1.setBots(agent.getBots());
+        }
         agentRepository.save(agent1);
 
         return agent1;
