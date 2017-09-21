@@ -15,7 +15,9 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
 
+@AutoProperty
 @Entity
 @Table(name = "item_task")
 public class ItemTask implements Serializable {

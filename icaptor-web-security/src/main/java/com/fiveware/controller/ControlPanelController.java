@@ -12,6 +12,8 @@ import com.fiveware.util.Zip;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
@@ -24,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@EnableCaching
 @RestController
 @RequestMapping("/controlpanel")
 public class ControlPanelController {
@@ -72,6 +75,7 @@ public class ControlPanelController {
 		return ResponseEntity.ok(activities);
 	}
 
+	@Cacheable("status")
 	@GetMapping("/tasks-filter")
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST') and #oauth2.hasScope('read')")
 	public ResponseEntity<Object> loadFilterOptions() {

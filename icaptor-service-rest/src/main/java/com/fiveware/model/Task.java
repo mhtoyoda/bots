@@ -13,10 +13,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.pojomatic.Pojomatic;
 
 import com.fiveware.model.user.IcaptorUser;
+import org.pojomatic.annotations.AutoProperty;
 
+@AutoProperty
 @Entity
 @Table(name = "task")
 public class Task implements Serializable {
@@ -27,12 +30,16 @@ public class Task implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	@Column(name = "load_time")
 	private LocalDateTime loadTime;
 
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	@Column(name = "start_at")
 	private LocalDateTime startAt;
 
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	@Column(name = "end_at")
 	private LocalDateTime endAt;
 

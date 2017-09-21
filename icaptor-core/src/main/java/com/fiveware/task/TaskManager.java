@@ -63,6 +63,7 @@ public class TaskManager {
 
 	public ItemTask createItemTask(Task task, String recordLine) {
 		ItemTask itemTask = new ItemTask();
+		itemTask.setEndAt(new Date());
 		itemTask.setTask(task);		
 		itemTask.setDataIn(recordLine);
 		itemTask.setStatusProcess(serviceStatusProcessTask.getStatusProcessItemTaskById(StatusProcessItemTaskEnum.AVAILABLE.getId()));

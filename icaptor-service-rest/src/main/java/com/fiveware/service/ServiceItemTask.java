@@ -81,8 +81,8 @@ public class ServiceItemTask {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<List<String>> httpEntity = new HttpEntity<>(status, headers);
-		ResponseEntity<List<ItemTask>> responseEntity = restTemplate.exchange(url, HttpMethod.POST, httpEntity, new ParameterizedTypeReference<List<ItemTask>>() {});
-		List<ItemTask> item = responseEntity.getBody();
+		ResponseEntity<List> exchange = restTemplate.exchange(url, HttpMethod.POST, (HttpEntity<?>) httpEntity, List.class);
+		List<ItemTask> item = exchange.getBody();
 		return item;
 	}
 	

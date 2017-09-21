@@ -91,12 +91,6 @@
 			<version>3.0.6</version>
 		</dependency>
 
-		<!--<dependency> -->
-		<!--<groupId>org.hibernate</groupId> -->
-		<!--<artifactId>hibernate-java8</artifactId> -->
-		<!--<version>5.0.3.Final</version> -->
-		<!--</dependency> -->
-
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
@@ -119,16 +113,22 @@
 			<artifactId>pojomatic</artifactId>
 			<version>2.0.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>5.2.4.Final</version>
-		</dependency>
+		<!--<dependency>-->
+			<!--<groupId>org.hibernate</groupId>-->
+			<!--<artifactId>hibernate-core</artifactId>-->
+			<!--<version>5.2.4.Final</version>-->
+		<!--</dependency>-->
 
 		<!-- Hibernate Java 8 Support -->
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-java8</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>19.0</version>
 		</dependency>
 
 		<!-- Suporte do Jackson para as datas do Java 8 -->
@@ -147,11 +147,7 @@
 			<artifactId>icaptor-service-rest</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>22.0</version>
-		</dependency>
+
 
 		<dependency>
 			<groupId>io.springfox</groupId>
@@ -164,6 +160,5 @@
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.6.1</version>
 		</dependency>
-
 	</dependencies>
 </project>
