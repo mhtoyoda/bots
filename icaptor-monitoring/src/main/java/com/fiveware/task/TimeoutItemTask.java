@@ -1,20 +1,16 @@
 package com.fiveware.task;
 
-import java.time.Duration;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.ZoneId;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.Parameter;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.parameter.ParameterResolver;
 import com.google.common.base.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.Duration;
+import java.time.LocalTime;
+import java.util.List;
 
 @Component
 public class TimeoutItemTask {
@@ -29,8 +25,7 @@ public class TimeoutItemTask {
 		int timeout = getTimeoutParameter();
 		List<ItemTask> itemTaskProcessing = taskManager.allItemTaskProcessing(StatusProcessItemTaskEnum.PROCESSING.getName());
 		itemTaskProcessing.stream().forEach(item -> {
-			Instant instantStartAt = Instant.ofEpochMilli(item.getStartAt().getTime());
-			LocalTime startAt = LocalDateTime.ofInstant(instantStartAt, ZoneId.systemDefault()).toLocalTime();
+			LocalTime startAt = item.getStartAt().toLocalTime();
 			LocalTime now = LocalTime.now();
 			long secondsDuration = Duration.between(startAt, now).getSeconds();
 			if (secondsDuration > timeout) {

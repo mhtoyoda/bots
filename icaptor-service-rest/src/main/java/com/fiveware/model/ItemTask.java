@@ -1,6 +1,7 @@
 package com.fiveware.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -32,12 +33,10 @@ public class ItemTask implements Serializable {
 	private Long id;
 
 	@Column(name = "start_at")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date startAt;
+	private LocalDateTime startAt;
 
 	@Column(name = "end_at")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date endAt;
+	private LocalDateTime endAt;
 
 	@Column(name = "attempts_count")
 	private Integer attemptsCount;
@@ -64,19 +63,19 @@ public class ItemTask implements Serializable {
 		this.id = id;
 	}
 
-	public Date getStartAt() {
+	public LocalDateTime getStartAt() {
 		return startAt;
 	}
 
-	public void setStartAt(Date startAt) {
+	public void setStartAt(LocalDateTime startAt) {
 		this.startAt = startAt;
 	}
 
-	public Date getEndAt() {
+	public LocalDateTime getEndAt() {
 		return endAt;
 	}
 
-	public void setEndAt(Date endAt) {
+	public void setEndAt(LocalDateTime endAt) {
 		this.endAt = endAt;
 	}
 

@@ -1,25 +1,20 @@
 package com.fiveware.task;
 
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
 import com.fiveware.model.message.MessageBot;
-import com.fiveware.service.ServiceBot;
-import com.fiveware.service.ServiceItemTask;
-import com.fiveware.service.ServiceStatusProcessTask;
-import com.fiveware.service.ServiceTask;
-import com.fiveware.service.ServiceUser;
+import com.fiveware.service.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 @Component
 public class TaskManager {
@@ -63,7 +58,7 @@ public class TaskManager {
 
 	public ItemTask createItemTask(Task task, String recordLine) {
 		ItemTask itemTask = new ItemTask();
-		itemTask.setEndAt(new Date());
+		itemTask.setEndAt(LocalDateTime.now());
 		itemTask.setTask(task);		
 		itemTask.setDataIn(recordLine);
 		itemTask.setStatusProcess(serviceStatusProcessTask.getStatusProcessItemTaskById(StatusProcessItemTaskEnum.AVAILABLE.getId()));
@@ -78,7 +73,7 @@ public class TaskManager {
 			itemTask.setDataOut(dataOut);
 		}
 		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.SUCCESS)) {
-			itemTask.setEndAt(new Date());
+			itemTask.setEndAt(LocalDateTime.now());
 		}
 		if (statuProcessEnum.equals(StatusProcessTaskEnum.PROCESSING)) {
 			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
@@ -93,7 +88,7 @@ public class TaskManager {
 		itemTask.setStatusProcess(statusProcessItemTaskEnum.getStatuProcess());
 		
 		if (statusProcessItemTaskEnum.equals(StatusProcessItemTaskEnum.PROCESSING)) {
-			itemTask.setStartAt(new Date());
+			itemTask.setStartAt(LocalDateTime.now());
 			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
 			itemTask.setAttemptsCount(attemptsCount);
 		}		
@@ -112,7 +107,7 @@ public class TaskManager {
 
 			if (StatusProcessItemTaskEnum.ERROR.equals(messageBot.getStatusProcessItemTaskEnum()) ||
 					StatusProcessItemTaskEnum.SUCCESS.equals(messageBot.getStatusProcessItemTaskEnum())) {
-				itemTask.setEndAt(new Date());
+				itemTask.setEndAt(LocalDateTime.now());
 
 			}
 			if (messageBot.getStatusProcessItemTaskEnum().equals(StatusProcessItemTaskEnum.PROCESSING)) {
