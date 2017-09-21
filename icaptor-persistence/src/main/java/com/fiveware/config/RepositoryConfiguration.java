@@ -1,8 +1,8 @@
 package com.fiveware.config;
 
-import com.fiveware.model.Bot;
-import com.fiveware.model.ScopeParameter;
-import com.fiveware.model.TypeParameter;
+import com.fiveware.model.*;
+import com.fiveware.model.activity.RecentActivity;
+import com.fiveware.model.user.IcaptorUser;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
@@ -15,6 +15,18 @@ public class RepositoryConfiguration extends RepositoryRestConfigurerAdapter {
         config.exposeIdsFor(ScopeParameter.class);
         config.exposeIdsFor(TypeParameter.class);
         config.exposeIdsFor(Bot.class);
+        config.exposeIdsFor(Task.class);
+        config.exposeIdsFor(ItemTask.class);
+        config.exposeIdsFor(Agent.class);
+        config.exposeIdsFor(Server.class);
+        config.exposeIdsFor(Parameter.class);
+        config.exposeIdsFor(ItemTask.class);
+        config.exposeIdsFor(AgentParameter.class);
+        config.exposeIdsFor(StatuProcessTask.class);
+        config.exposeIdsFor(StatuProcessItemTask.class);
+        config.exposeIdsFor(RecentActivity.class);
+        config.exposeIdsFor(IcaptorUser.class);
+
 
     }
 }
