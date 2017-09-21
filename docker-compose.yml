@@ -33,7 +33,7 @@ services:
     environment:
       - icaptor.data-source.host=http://18.231.58.173:8085
       - icaptor.server.host=18.231.58.173:8082
-      - icaptor.origin-permitida=http://18.231.58.173:4200,http://191.178.200.180:4200
+      - icaptor.origin-permitida=http://18.231.58.173:4200
 
 
   icaptor-monitoring:
