@@ -50,7 +50,7 @@ public class PlatFormConfig implements Lifecycle {
 		}		
 	}
 	
-	@Scheduled(fixedDelay = 10000)
+	@Scheduled(fixedDelay = 180000)
 	public void keepAliveNotification() {
 		try {
 			sendMessage(TypeMessage.KEEP_ALIVE, "Keep Alive!");
