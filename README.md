@@ -9,7 +9,7 @@ Start DataBase (icaptor-persistence)
 
 Start Server (icaptor-cloud)
 -  ```cd icaptor-cloud``` 
--  ```java -jar -Dspring.profiles.active=dev target/icaptor-agent-0.0.1-SNAPSHOT.jar``` 
+-  ```java -jar -Dspring.profiles.active=dev target/icaptor-cloud-0.0.1-SNAPSHOT.jar``` 
 
 start client (icaptor-agent)
 - ```cd icaptor-agent```
