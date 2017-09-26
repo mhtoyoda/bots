@@ -11,6 +11,7 @@ import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
 import com.fiveware.task.TaskManager;
+import com.fiveware.workflow.exception.TaskCreateException;
 import com.fiveware.workflow.model.WorkflowBot;
 import com.fiveware.workflow.model.WorkflowBotStep;
 import com.google.common.collect.Lists;
@@ -22,11 +23,15 @@ public class ProcessWorkflowTask implements WorkflowSequence {
 	private TaskManager taskManager;
 	
 	@Override
-	public Long createTask(WorkflowBotStep workflowBotStep) {
-		Task createTask = taskManager.createTask(workflowBotStep.getBotSource(), 1L);
-		taskManager.createItemTask(createTask, "");
-		taskManager.updateTask(createTask.getId(), StatusProcessTaskEnum.PROCESSING);
-		return createTask.getId();
+	public Long createTask(WorkflowBotStep workflowBotStep) throws TaskCreateException {
+		try{
+			Task createTask = taskManager.createTask(workflowBotStep.getBotSource(), 1L);
+			taskManager.createItemTask(createTask, "");
+			taskManager.updateTask(createTask.getId(), StatusProcessTaskEnum.PROCESSING);
+			return createTask.getId();			
+		}catch (Exception e) {
+			throw new TaskCreateException(e.getMessage());
+		}
 	}
 	
 	@Override

@@ -13,10 +13,9 @@ public class TaskWorkflow {
 	@Autowired
 	private CreateWorkflowTask createWorkflowTask; 
 	
-//	@Scheduled(cron = "0 0 7 15,21,28 * ?")
-	@Scheduled(fixedDelay = 60000)
+	@Scheduled(cron = "0 30 13 * * *")
 	public void createWorkFlowTaskCron(){
-		createWorkflowTask.createWorkflowsCron();
+		createWorkflowTask.createWorkflows();
 	}
 
 	@Scheduled(fixedDelay = 180000)
