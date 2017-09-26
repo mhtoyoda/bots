@@ -2,6 +2,7 @@ package com.fiveware.task;
 
 import java.util.List;
 
+import com.fiveware.service.ServiceElasticSearch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,8 @@ public class TaskProcessedTask {
 	
 	@Autowired
 	private BrokerManager brokerManager;
+	@Autowired
+	private ServiceElasticSearch serviceElasticSearch;
 	
 	public void checkTaskProcessed() {
 		List<Task> taskProcessing = taskManager.allTaskProcessing(StatusProcessTaskEnum.PROCESSING.getName());
@@ -29,6 +32,7 @@ public class TaskProcessedTask {
 			if (countItemTask == countItemTaskErrorOrSucess) {
 				String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
 				taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCESSED);
+				serviceElasticSearch.log(task);
 				brokerManager.deleteQueue(queueName);
 			}
 		});

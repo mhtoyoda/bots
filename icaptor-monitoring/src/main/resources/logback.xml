@@ -9,6 +9,37 @@
         </encoder>
     </appender>
 
+    <!--<appender name="AMQP" class="org.springframework.amqp.rabbit.logback.AmqpAppender">-->
+        <!--<layout>-->
+            <!--<pattern>-->
+                <!--{-->
+                <!--"time": "%date{ISO8601}",-->
+                <!--"thread": "%thread",-->
+                <!--"level": "%level",-->
+                <!--"class": "%logger{36}",-->
+                <!--"message": "%message"-->
+                <!--}-->
+            <!--</pattern>-->
+        <!--</layout>-->
+
+        <!--&lt;!&ndash; RabbitMQ connection &ndash;&gt;-->
+        <!--<host>54.232.16.190</host>-->
+        <!--<port>15672</port>-->
+        <!--<username>guest</username>-->
+        <!--<password>guest</password>-->
+
+        <!--<applicationId>api-service-4</applicationId>-->
+        <!--<routingKeyPattern>api-service-4</routingKeyPattern>-->
+        <!--<declareExchange>true</declareExchange>-->
+        <!--<exchangeType>direct</exchangeType>-->
+        <!--<exchangeName>ex_logstash</exchangeName>-->
+
+        <!--<generateId>true</generateId>-->
+        <!--<charset>UTF-8</charset>-->
+        <!--<durable>true</durable>-->
+        <!--<deliveryMode>PERSISTENT</deliveryMode>-->
+    <!--</appender>-->
+
 
     <if condition='"production".equals("${spring.profiles.active}")'>
         <then>
@@ -19,15 +50,23 @@
         <else>
             <logger name="com.fiveware" level="fail" additivity="false">
                 <appender-ref ref="CONSOLE" />
+                <!--<appender-ref ref="AMQP" />-->
+            </logger>
+            <logger name="org.hibernate.SQL" level="debug" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
+            <logger name="org.flywaydb" level="debug" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
+            <logger name="org.springframework" level="info" additivity="false">
+                <appender-ref ref="CONSOLE" />
             </logger>
         </else>
     </if>
 
-
-
-
     <root level="INFO">
         <appender-ref ref="CONSOLE" />
+        <!--<appender-ref ref="AMQP" />-->
     </root>
 
 </configuration>

@@ -37,7 +37,8 @@ icaptor:
   broker:
     user: guest
     pass: guest
-    host: localhost
+    host: 54.232.16.190
+    port: 15672
     queue-send-schedular-time: 5000 #milli second
 
 

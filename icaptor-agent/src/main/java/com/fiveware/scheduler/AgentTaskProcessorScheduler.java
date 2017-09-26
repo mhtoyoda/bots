@@ -3,6 +3,7 @@ package com.fiveware.scheduler;
 import java.util.List;
 import java.util.Optional;
 
+import com.google.common.base.Strings;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +39,9 @@ public class AgentTaskProcessorScheduler {
 	
 	@Scheduled(fixedDelayString = "${icaptor.broker.queue-send-schedular-time}")
 	public void process() {
+		if (Strings.isNullOrEmpty(data.getAgentName()))
+			return;
+
 		String queueName = String.format("tasks.%s.in", StringUtils.trim(data.getAgentName()));
 		List<Bot> bots = botContext.bots();
 		Optional<MessageTask> obj = receiveMessage(queueName);

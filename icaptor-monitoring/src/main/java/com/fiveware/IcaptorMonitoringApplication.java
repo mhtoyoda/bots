@@ -10,32 +10,32 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class IcaptorMonitoringApplication implements CommandLineRunner {
-	
-	static final Logger logger = LoggerFactory.getLogger(IcaptorMonitoringApplication.class);
-	
-	@Autowired
-	private TaskResolver taskResolver;
+
+    static final Logger logger = LoggerFactory.getLogger(IcaptorMonitoringApplication.class);
+    private static final String QUEUE_NAME = "q_logstash";
+
+    @Autowired
+    private TaskResolver taskResolver;
 
 
-	public static void main(String[] args) {
-		SpringApplication.run(IcaptorMonitoringApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(IcaptorMonitoringApplication.class, args);
+    }
 
 
+    @Override
+    public void run(String... arg0) throws Exception {
+        while (true) {
+            Thread.sleep(5000);
+            logger.info("Check Status Task and ItemTask");
+            try {
 
-	@Override
-	public void run(String... arg0) throws Exception {
-		while(true){
-			Thread.sleep(5000);
-			logger.info("Check Status Task and ItemTask");
-			try{
-				taskResolver.process();
-			}catch (Exception e) {
-				logger.error("Error {}", e);
-			}			
-		}
-	}
-
+                taskResolver.process();
+            } catch (Exception e) {
+                logger.error("Error {}", e);
+            }
+        }
+    }
 
 
 

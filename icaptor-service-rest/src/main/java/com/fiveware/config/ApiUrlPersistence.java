@@ -16,4 +16,11 @@ public class ApiUrlPersistence {
         // @formatter:off
     }
 
+    public String endPointElasticSearch(String baseUrl, String endpoint){
+        // @formatter:on
+        return String.format("%s/%s",
+                "http://".concat(iCaptorApiProperty.getBroker().getHost()).concat(":9200")
+                ,baseUrl.concat(endpoint));
+        // @formatter:off
+    }
 }

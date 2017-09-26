@@ -53,7 +53,8 @@ public class TaskManager {
 		Task task = serviceTask.getTaskById(taskId);
 		task.setStatusProcess(statuProcessEnum.getStatuProcess());
 
-		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.SUCCESS)) {
+		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.SUCCESS)
+				|| statuProcessEnum.equals(StatusProcessTaskEnum.PROCESSED)) {
 			task.setEndAt(LocalDateTime.now());
 		}
 		task = serviceTask.save(task);
