@@ -9,20 +9,8 @@ services:
       - "8082:8082"
     environment:
       - spring.profiles.active=dev
-      - icaptor.data-source.host=http://18.231.58.173:8085
+      - icaptor.data-source.host=http://54.232.16.190:8085
       - icaptor.broker.host=34.235.186.255
-
-#  icaptor-agent:
-#    build: icaptor-agent/.
-#    container_name: icaptor-agent
-#    environment:
-#      - spring.profiles.active=dev
-#      - icaptor.data-source.host=http://18.231.58.173:8085
-#      - icaptor.server.host=18.231.58.173:8082
-#      - icaptor.broker.host=18.231.58.173
-#    depends_on:
-#      - icaptor-cloud
-
 
   icaptor-api:
     build: icaptor-web-security/.
@@ -31,10 +19,9 @@ services:
       - "8014:8014"
       - "5005:5005"
     environment:
-      - icaptor.data-source.host=http://18.231.58.173:8085
-      - icaptor.server.host=18.231.58.173:8082
-      - icaptor.origin-permitida=http://18.231.58.173:4200
-
+      - icaptor.data-source.host=http://54.232.16.190:8085
+      - icaptor.server.host=54.232.16.190:8082
+      - icaptor.origin-permitida=http://54.232.16.190:4200
 
   icaptor-monitoring:
     build: icaptor-monitoring/.
@@ -42,21 +29,9 @@ services:
     ports:
       - "8090:8090"
     environment:
-      - icaptor.data-source.host=http://18.231.58.173:8085
+      - icaptor.data-source.host=http://54.232.16.190:8085
       - icaptor.broker.host=34.235.186.255
 
-
-#    links:
-#      - mysqldbserver
-
-#  icaptor-mysql:
-#    image: mysql/mysql-server
-#    ports:
-#      - "3306:3306"
-#    environment:
-#      - MYSQL_USER=root
-#      - MYSQL_ROOT_PASSWORD=root
-#      - MYSQL_DATABASE=icaptor
 
 
 
