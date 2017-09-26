@@ -65,7 +65,7 @@ public class ProcessingTask {
 			String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
 			logger.info("{}",task);
 			if ("dev".equalsIgnoreCase(profile))
-					serviceElasticSearch.log(task);
+					serviceElasticSearch.indexer(task);
 
 			sentItemTaskToQueue(queueName, task);
 		});
@@ -86,7 +86,7 @@ public class ProcessingTask {
 				producer.send(queueName, messageBot);
 				taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.INLINE);
 				if ("dev".equalsIgnoreCase(profile))
-					serviceElasticSearch.log(itemTask);
+					serviceElasticSearch.indexer(itemTask);
 			});
 			
 			sendNotificationTaskCreated(queueName, task.getBot().getNameBot());			
