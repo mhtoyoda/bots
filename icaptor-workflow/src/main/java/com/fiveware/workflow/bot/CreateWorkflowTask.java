@@ -1,7 +1,6 @@
 package com.fiveware.workflow.bot;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -11,12 +10,13 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.model.Parameter;
+import com.fiveware.service.ServiceParameter;
+import com.fiveware.workflow.exception.TaskCreateException;
 import com.fiveware.workflow.model.StatusWorkflow;
 import com.fiveware.workflow.model.Workflow;
 import com.fiveware.workflow.model.WorkflowBot;
-import com.fiveware.workflow.model.WorkflowBotCron;
 import com.fiveware.workflow.model.WorkflowBotStep;
-import com.fiveware.workflow.repository.WorkFlowBotCronRepository;
 import com.fiveware.workflow.repository.WorkFlowBotRepository;
 import com.fiveware.workflow.repository.WorkFlowBotStepRepository;
 import com.fiveware.workflow.repository.WorkFlowRepository;
@@ -29,7 +29,7 @@ public class CreateWorkflowTask {
 	private WorkFlowRepository workFlowRepository;
 	
 	@Autowired
-	private WorkFlowBotCronRepository workFlowBotCronRepository;
+	private ServiceParameter serviceParameter;
 	
 	@Autowired
 	private WorkFlowBotStepRepository workFlowBotStepRepository;
@@ -40,30 +40,39 @@ public class CreateWorkflowTask {
 	@Autowired
 	private ProcessWorkflowTask processWorkflowTask;
 	
-	public void createWorkflowsCron() {
+	public void createWorkflows() {
 		Optional<Iterable<Workflow>> list = Optional.ofNullable(workFlowRepository.findAll());
 		if(list.isPresent()){
-			LocalDateTime localDateTime = LocalDateTime.now();
+			LocalDate localDate = LocalDate.now();
 			List<Workflow> workflows = Lists.newArrayList(list.get()).stream().filter(workflow -> workflow.getActive()).collect(Collectors.toList());
-			workflows.forEach(workflow -> {
-				Integer dayExecution = day(localDateTime);
-				LocalTime timeExecution = hour(localDateTime);
-				Optional<WorkflowBotCron> optional = workFlowBotCronRepository.findWorkflowIntTime(workflow.getId(), dayExecution, timeExecution);
-				if(optional.isPresent()){
+			workflows.forEach(workflow -> {										
+				Optional<Parameter> parameterTimeExecution = getParameterTimeExecution(workflow.getName(), day(localDate));
+				if(parameterTimeExecution.isPresent()){
 					List<WorkflowBotStep> workflowBotSteps = workflowBotStepList();
 					Collections.sort(workflowBotSteps, Comparator.comparing(WorkflowBotStep::getSequence));
 					workflowBotSteps.forEach(step -> {
-						createWorkflowStep(step);
+						try {
+							createWorkflow(step);
+						} catch (TaskCreateException e) {
+							throw new RuntimeException("Error create task workflow");
+						}
 					});
 				}
 			});
 		}
 	}
 	
-	private void createWorkflowStep(WorkflowBotStep workflowBotStep){
+	private Optional<Parameter> getParameterTimeExecution(String workflowName, Integer dayExecution){
+		List<Parameter> parameters = serviceParameter.findParameterByScopeAndType("cloud", "time_execution");
+		String fieldValue = String.format("%s:%d", workflowName, dayExecution);
+		Optional<Parameter> parameter = parameters.stream().filter(p -> p.getFieldValue().equals(fieldValue )).findFirst();
+		return parameter;
+	}
+	
+	private void createWorkflow(WorkflowBotStep workflowBotStep) throws TaskCreateException{
 		WorkflowBot workflowBot = new WorkflowBot();
 		workflowBot.setCountTry(0);
-		workflowBot.setDateCreated(LocalDateTime.now());
+		workflowBot.setDateCreated(LocalDate.now());
 		if(workflowBotStep.getSequence() == 1){
 			Long taskId = processWorkflowTask.createTask(workflowBotStep);
 			workflowBot.setTaskId(taskId);
@@ -79,12 +88,7 @@ public class CreateWorkflowTask {
 		return Lists.newArrayList(workFlowBotStepRepository.findAll());
 	}
 	
-	private int day(LocalDateTime localDateTime){
-		return localDateTime.getDayOfMonth();
+	private int day(LocalDate localDate){
+		return localDate.getDayOfMonth();
 	}
-	
-	private LocalTime hour(LocalDateTime localDateTime){
-		return LocalTime.of(localDateTime.getHour(), localDateTime.getMinute());		
-	}
-
 }

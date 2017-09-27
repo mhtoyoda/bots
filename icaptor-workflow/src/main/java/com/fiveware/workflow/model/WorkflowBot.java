@@ -1,7 +1,7 @@
 package com.fiveware.workflow.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,10 +37,10 @@ public class WorkflowBot implements Serializable{
 	private Integer countTry;
 
 	@Column(name = "date_created")
-	private LocalDateTime dateCreated;
+	private LocalDate dateCreated;
 
 	@Column(name = "date_updated")
-	private LocalDateTime dateUpdated;
+	private LocalDate dateUpdated;
 
 	public Long getId() {
 		return id;
@@ -82,19 +82,19 @@ public class WorkflowBot implements Serializable{
 		this.countTry = countTry;
 	}
 
-	public LocalDateTime getDateCreated() {
+	public LocalDate getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(LocalDateTime dateCreated) {
+	public void setDateCreated(LocalDate dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
-	public LocalDateTime getDateUpdated() {
+	public LocalDate getDateUpdated() {
 		return dateUpdated;
 	}
 
-	public void setDateUpdated(LocalDateTime dateUpdated) {
+	public void setDateUpdated(LocalDate dateUpdated) {
 		this.dateUpdated = dateUpdated;
 	}
 

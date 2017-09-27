@@ -24,6 +24,9 @@ public class WorkflowBotStep implements Serializable{
 	private String botTarget;
 	
 	private Integer sequence;
+
+	@Column(name = "field_verify")
+	private String fieldVerify;
 	
 	public Long getId() {
 		return id;
@@ -56,5 +59,13 @@ public class WorkflowBotStep implements Serializable{
 	public void setSequence(Integer sequence) {
 		this.sequence = sequence;
 	}
-	
+
+	public String getFieldVerify() {
+		return fieldVerify;
+	}
+
+	public void setFieldVerify(String fieldVerify) {
+		this.fieldVerify = fieldVerify;
+	}
+
 }

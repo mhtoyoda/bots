@@ -15,7 +15,6 @@ public class IcaptorWorkflowApplication {
 		SpringApplication.run(IcaptorWorkflowApplication.class, args);
 	}
 
-
 	@Autowired
 	private ICaptorApiProperty iCaptorApiProperty;
 	
