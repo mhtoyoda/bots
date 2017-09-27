@@ -31,8 +31,8 @@ server.port: ${PORT:${SERVER_PORT:0}}
 
 spring.http:
     multipart:
-        max-file-size: 1024MB
-        max-request-size: 1024MB
+        max-file-size: 4024MB
+        max-request-size: 4024MB
 spring:
   profiles: dev
 
@@ -46,8 +46,8 @@ icaptor:
   broker:
     user: guest
     pass: guest
-    host: 54.232.16.190
-    port: 15672
+    host: localhost
+    port: 30001
     queue-send-schedular-time: 5000 #milli second
 
 io:

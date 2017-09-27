@@ -10,6 +10,7 @@ import java.net.URLClassLoader;
 import java.util.*;
 import java.util.function.Predicate;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +86,25 @@ public class ServiceBotClassLoader<T> {
 
             processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
 
+
+            if (obj instanceof List)
+                return new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
+
+            if (botClassLoaderContext.get().getOutputDictionary().getFields().length==1
+                    && "listJson".equalsIgnoreCase(botClassLoaderContext.get().getOutputDictionary().getFields()[0])) {
+                List<Map<String, Object>> myObjects = objectMapper.readValue(new String(((String) obj).getBytes()),
+                                                            new TypeReference<ArrayList<HashMap<String, Object>>>() {});
+                Map[] objects = myObjects.toArray(new HashMap[myObjects.size()]);
+                return new OutTextRecord(objects);
+            }
+
+
+
+            Map map = objectMapper.convertValue(obj, Map.class);
+            HashMap[] hashMaps = {(HashMap) map};
+
+            return new OutTextRecord(hashMaps);
+
         } catch (InvocationTargetException e) {
 
             Predicate<Class> predicate = new Predicate<Class>() {
@@ -113,13 +133,7 @@ public class ServiceBotClassLoader<T> {
             }
         }
 
-        if (obj instanceof List)
-            return new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
 
-        Map map = objectMapper.convertValue(obj, Map.class);
-        HashMap[] hashMaps = {(HashMap) map};
-
-        return new OutTextRecord(hashMaps);
     }
 
     private HashMap[] handleException(ProcessorFields processorFields, Exception ex) {

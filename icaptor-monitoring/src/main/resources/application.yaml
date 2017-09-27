@@ -35,9 +35,10 @@ io:
 icaptor:
   data-source:
     host: http://localhost:8085
+  elasticSearch: http://54.232.16.190:9200
   broker:
     user: guest
     pass: guest
-    host: 54.232.16.190
-    port: 15672
+    host: localhost
+    port: 30001
     queue-send-schedular-time: 5000 #milli second

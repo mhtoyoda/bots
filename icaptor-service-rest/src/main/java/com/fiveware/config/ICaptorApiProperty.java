@@ -11,6 +11,8 @@ public class ICaptorApiProperty {
     private String originPermitida;
     private Broker broker = new Broker();
 
+    private String elasticSearch;
+
 
     public DataSource getDataSource() {return dataSource;}
     public Seguranca getSeguranca() {
@@ -25,6 +27,13 @@ public class ICaptorApiProperty {
     public Server getServer() {return server;}
     public Broker getBroker() {return broker;}
 
+    public String getElasticSearch() {
+        return elasticSearch;
+    }
+
+    public void setElasticSearch(String elasticSearch) {
+        this.elasticSearch = elasticSearch;
+    }
 
     public static class Seguranca {
 

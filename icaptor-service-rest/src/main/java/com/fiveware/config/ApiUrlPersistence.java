@@ -9,18 +9,16 @@ public class ApiUrlPersistence {
     private ICaptorApiProperty iCaptorApiProperty;
 
 
-    public String endPoint(String baseUrl, String endpoint){
+    public String endPoint(String baseUrl, String endpoint) {
         // @formatter:on
-        return String.format("%s/api/%s",iCaptorApiProperty.getDataSource().getHost()
-                ,baseUrl.concat(endpoint));
+        return String.format("%s/api/%s", iCaptorApiProperty.getDataSource().getHost()
+                , baseUrl.concat(endpoint));
         // @formatter:off
     }
 
-    public String endPointElasticSearch(String baseUrl, String endpoint){
+    public String endPointElasticSearch(String baseUrl, String endpoint) {
         // @formatter:on
-        return String.format("%s/%s",
-                "http://".concat(iCaptorApiProperty.getBroker().getHost()).concat(":9200")
-                ,baseUrl.concat(endpoint));
+        return String.format("%s/%s", iCaptorApiProperty.getElasticSearch(), baseUrl.concat(endpoint));
         // @formatter:off
     }
 }

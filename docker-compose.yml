@@ -31,6 +31,8 @@ services:
     environment:
       - icaptor.data-source.host=http://54.232.16.190:8085
       - icaptor.broker.host=54.232.16.190
+      - icaptor.elasticSearch=http://54.232.16.190:9200
+
 
 
 
