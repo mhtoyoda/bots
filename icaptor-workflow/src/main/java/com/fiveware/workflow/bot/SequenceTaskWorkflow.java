@@ -1,13 +1,5 @@
 package com.fiveware.workflow.bot;
 
-import java.time.LocalDate;
-import java.util.List;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
@@ -18,6 +10,13 @@ import com.fiveware.workflow.model.WorkflowBot;
 import com.fiveware.workflow.repository.WorkFlowBotRepository;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Component
 public class SequenceTaskWorkflow {
@@ -35,7 +34,7 @@ public class SequenceTaskWorkflow {
 		Optional<WorkflowBot> optional = Optional.fromNullable(workFlowBotRepository.findByStatus(StatusWorkflow.WAITING));
 		if (optional.isPresent()) {
 			WorkflowBot workflowBot = optional.get();
-			Task task = taskManager.getTask(workflowBot.getId());
+			Task task = taskManager.getTask(workflowBot.getTaskId());
 			if (canContinueTaskWorkflow(task, workflowBot)) {
 				if (null != workflowBot.getWorkflowBotStep() && StringUtils.isNotBlank(workflowBot.getWorkflowBotStep().getBotTarget())) {
 					Long taskId = processWorkflowTask.createTaskByWorkflow(workflowBot);
