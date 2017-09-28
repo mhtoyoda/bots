@@ -22,4 +22,7 @@ public interface WorkFlowBotRepository extends CrudRepository<WorkflowBot, Long>
 	
 	@Query("FROM WorkflowBot WHERE dateCreated = :dateCreated")
 	List<WorkflowBot> findByDateCreated(@Param("dateCreated") LocalDate dateCreated);
+	
+	@Query("FROM WorkflowBot WHERE workflowBotStep.botSource = :bot")
+	WorkflowBot findWorkflowBotStepBySource(@Param("bot") String bot);
 }

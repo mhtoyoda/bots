@@ -87,7 +87,10 @@ public class CreateWorkflowTask {
 	}
 	
 	private void createWorkflow(WorkflowBotStep workflowBotStep) throws TaskCreateException{
-		WorkflowBot workflowBot = new WorkflowBot();
+		WorkflowBot workflowBot = workFlowBotRepository.findWorkflowBotStepBySource(workflowBotStep.getBotSource());
+		if(workflowBot == null){
+			workflowBot = new WorkflowBot();
+		}		
 		workflowBot.setCountTry(0);
 		workflowBot.setDateCreated(LocalDate.now());
 		if(workflowBotStep.getSequence() == 1){
