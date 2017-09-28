@@ -33,6 +33,16 @@ services:
       - icaptor.broker.host=54.232.16.190
       - icaptor.elasticSearch=http://54.232.16.190:9200
 
+  icaptor-workflow:
+    build: icaptor-workflow/.
+    container_name: icaptor-workflow
+    ports:
+      - "8020:8020"
+    environment:
+      - icaptor.data-source.host=http://54.232.16.190:8085
+      - icaptor.broker.host=54.232.16.190
+      - icaptor.elasticSearch=http://54.232.16.190:9200
+
 
 
 
