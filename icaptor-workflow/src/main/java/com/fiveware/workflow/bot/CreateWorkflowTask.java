@@ -1,6 +1,7 @@
 package com.fiveware.workflow.bot;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -46,27 +47,43 @@ public class CreateWorkflowTask {
 			LocalDate localDate = LocalDate.now();
 			List<Workflow> workflows = Lists.newArrayList(list.get()).stream().filter(workflow -> workflow.getActive()).collect(Collectors.toList());
 			workflows.forEach(workflow -> {										
-				Optional<Parameter> parameterTimeExecution = getParameterTimeExecution(workflow.getName(), day(localDate));
-				if(parameterTimeExecution.isPresent()){
-					List<WorkflowBotStep> workflowBotSteps = workflowBotStepList();
-					Collections.sort(workflowBotSteps, Comparator.comparing(WorkflowBotStep::getSequence));
-					workflowBotSteps.forEach(step -> {
-						try {
-							createWorkflow(step);
-						} catch (TaskCreateException e) {
-							throw new RuntimeException("Error create task workflow");
-						}
-					});
+				Optional<Parameter> parameterDayExecution = getParameterDayExecution(workflow.getName(), day(localDate));
+				if(parameterDayExecution.isPresent()){
+					String localTime = localDateTime();
+					Optional<Parameter> parameterTimeExecution = getParameterTimeExecution(workflow.getName(), localTime);
+					if(parameterTimeExecution.isPresent()){
+						List<WorkflowBotStep> workflowBotSteps = workflowBotStepList();
+						Collections.sort(workflowBotSteps, Comparator.comparing(WorkflowBotStep::getSequence));
+						workflowBotSteps.forEach(step -> {
+							try {
+								createWorkflow(step);
+							} catch (TaskCreateException e) {
+								throw new RuntimeException("Error create task workflow");
+							}
+						});						
+					}
 				}
 			});
 		}
 	}
 	
-	private Optional<Parameter> getParameterTimeExecution(String workflowName, Integer dayExecution){
-		List<Parameter> parameters = serviceParameter.findParameterByScopeAndType("cloud", "time_execution");
+	private Optional<Parameter> getParameterDayExecution(String workflowName, Integer dayExecution){
+		List<Parameter> parameters = serviceParameter.findParameterByScopeAndType("cloud", "day_execution");
 		String fieldValue = String.format("%s:%d", workflowName, dayExecution);
 		Optional<Parameter> parameter = parameters.stream().filter(p -> p.getFieldValue().equals(fieldValue )).findFirst();
 		return parameter;
+	}
+	
+	private Optional<Parameter> getParameterTimeExecution(String workflowName, String timeExecution){
+		List<Parameter> parameters = serviceParameter.findParameterByScopeAndType("cloud", "time_execution");
+		String fieldValue = String.format("%s:%s", workflowName, timeExecution);
+		Optional<Parameter> parameter = parameters.stream().filter(p -> p.getFieldValue().equals(fieldValue )).findFirst();
+		return parameter;
+	}
+	
+	private String localDateTime(){
+		LocalTime localTime = LocalTime.now();
+		return String.valueOf(localTime.getHour())+String.valueOf(localTime.getMinute());
 	}
 	
 	private void createWorkflow(WorkflowBotStep workflowBotStep) throws TaskCreateException{
