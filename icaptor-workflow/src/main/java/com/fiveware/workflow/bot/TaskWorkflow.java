@@ -13,12 +13,13 @@ public class TaskWorkflow {
 	@Autowired
 	private CreateWorkflowTask createWorkflowTask; 
 	
-	@Scheduled(cron = "0 30 13 * * *")
+	@Scheduled(cron = "0 23 16 * * *")
+//	@Scheduled(cron = "0 0/30 * * * ?")
 	public void createWorkFlowTaskCron(){
 		createWorkflowTask.createWorkflows();
 	}
 
-	@Scheduled(fixedDelay = 180000)
+	@Scheduled(cron = "0 0/5 * * * ?")
 	public void sequenceTask(){
 		sequenceTaskWorkflow.sequenceTask();
 	}

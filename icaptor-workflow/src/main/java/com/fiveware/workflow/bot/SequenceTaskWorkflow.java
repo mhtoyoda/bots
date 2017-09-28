@@ -48,7 +48,7 @@ public class SequenceTaskWorkflow {
 					}
 				}
 			}else if(!verifyTaskNotProcessingWorkflow(task)){			
-				List<ItemTask> list = taskManager.itemTaskListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.SUCCESS.getName()), workflowBot.getTaskId());
+				List<ItemTask> list = taskManager.itemTaskListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.ERROR.getName()), workflowBot.getTaskId());
 				java.util.Optional<ItemTask> findFirst = list.stream().findFirst();
 				if(findFirst.isPresent()){
 					ItemTask itemTask = findFirst.get();
