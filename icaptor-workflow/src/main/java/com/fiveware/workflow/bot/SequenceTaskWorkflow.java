@@ -17,6 +17,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Component
 public class SequenceTaskWorkflow {
@@ -67,7 +69,9 @@ public class SequenceTaskWorkflow {
 			if(CollectionUtils.isNotEmpty(list)){
 				ItemTask itemTask = list.get(0);
 				String dataOut = itemTask.getDataOut();
-				boolean matches = dataOut.matches(fieldVerify);
+				Pattern compile = Pattern.compile(fieldVerify);
+				Matcher matcher = compile.matcher(dataOut);
+				boolean matches = matcher.find();
 				return matches;
 			}
 		}
