@@ -7,6 +7,6 @@ CREATE TABLE Workflow_Bot(id INTEGER auto_increment Primary key, workflow_bot_st
 					
 INSERT INTO Workflow(id, name, active) VALUES(1, 'Votorantim', 1);
 INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(1, 'votorantimRC', 'votorantimCP', 1, '"numeroRC":"(\d+)"');
-INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(2, 'votorantimCP', 'votorantimSap', 2, '"numeroPC":"(\d+)"');
-INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(3, 'votorantimSap', 'votorantimCAP', 3, '"aprovadoPC":"(\true)"');
+INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(2, 'votorantimCP', 'votorantimSap', 2, '\\"numeroPC\\":\\"(\d+)\\"');
+INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(3, 'votorantimSap', 'votorantimCAP', 3, '\\"aprovadoPC\\":\\"(\true)\\"');
 INSERT INTO Workflow_Bot_Step(id, bot_source, sequence) VALUES(4, 'votorantimCAP', 4);
