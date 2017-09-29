@@ -1,11 +1,5 @@
 package com.fiveware.workflow.bot;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
@@ -15,6 +9,11 @@ import com.fiveware.workflow.exception.TaskCreateException;
 import com.fiveware.workflow.model.WorkflowBot;
 import com.fiveware.workflow.model.WorkflowBotStep;
 import com.google.common.collect.Lists;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ProcessWorkflowTask implements WorkflowSequence {
@@ -41,7 +40,9 @@ public class ProcessWorkflowTask implements WorkflowSequence {
 		if(findFirst.isPresent()){
 			ItemTask itemTask = findFirst.get();
 			Task createTask = taskManager.createTask(workflowBot.getWorkflowBotStep().getBotTarget(), 1L);
-			taskManager.createItemTask(createTask, itemTask.getDataOut());
+			String dataOut = itemTask.getDataOut();
+			dataOut = dataOut.replaceAll("\"", "");
+			taskManager.createItemTask(createTask, dataOut);
 			taskManager.updateTask(createTask.getId(), StatusProcessTaskEnum.PROCESSING);
 			return createTask.getId();
 		}
