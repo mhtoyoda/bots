@@ -40,9 +40,7 @@ public class ProcessWorkflowTask implements WorkflowSequence {
 		if(findFirst.isPresent()){
 			ItemTask itemTask = findFirst.get();
 			Task createTask = taskManager.createTask(workflowBot.getWorkflowBotStep().getBotTarget(), 1L);
-			String dataOut = itemTask.getDataOut();
-			dataOut = dataOut.replaceAll("\"", "");
-			taskManager.createItemTask(createTask, dataOut);
+			taskManager.createItemTask(createTask, itemTask.getDataOut());
 			taskManager.updateTask(createTask.getId(), StatusProcessTaskEnum.PROCESSING);
 			return createTask.getId();
 		}
