@@ -44,6 +44,7 @@ public class SequenceTaskWorkflow {
 						WorkflowBot workflowBotStepByStatus = workFlowBotRepository.findWorkflowBotStepByStatus(workflowBot.getWorkflowBotStep().getBotTarget(), StatusWorkflow.NEW);
 						if (null != workflowBotStepByStatus) {
 							updateWorkFlowBotStatus(workflowBot, StatusWorkflow.COMPLETE);
+							workflowBotStepByStatus.setTaskId(taskId);
 							updateWorkFlowBotStatus(workflowBotStepByStatus, StatusWorkflow.WAITING);
 						}
 					}
@@ -56,6 +57,8 @@ public class SequenceTaskWorkflow {
 					Task actualTask = taskManager.createTask(workflowBot.getWorkflowBotStep().getBotSource(), 1L);
 					taskManager.createItemTask(actualTask, itemTask.getDataOut());
 					taskManager.updateTask(actualTask.getId(), StatusProcessTaskEnum.PROCESSING);
+					workflowBot.setTaskId(actualTask.getId());
+					updateWorkFlowBotStatus(workflowBot, StatusWorkflow.WAITING);
 				}
 			}
 		}
