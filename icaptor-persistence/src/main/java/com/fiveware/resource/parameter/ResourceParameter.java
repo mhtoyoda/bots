@@ -68,6 +68,12 @@ public class ResourceParameter {
 		parameter = parameterRepository.save(parameter);
 		return ResponseEntity.status(HttpStatus.CREATED).body(parameter);
 	}
+	
+	@PostMapping("/several")
+	public ResponseEntity<Object> save(@RequestBody List<Parameter> parameters) {
+		Iterable<Parameter> parameter = parameterRepository.save(parameters);
+		return ResponseEntity.status(HttpStatus.CREATED).body(parameter);
+	}
 
 	@DeleteMapping
 	public ResponseEntity<Void> delete(@RequestBody Parameter parameter) {

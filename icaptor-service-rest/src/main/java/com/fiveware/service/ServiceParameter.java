@@ -39,6 +39,16 @@ public class ServiceParameter {
 		return restTemplate.postForObject(url, entity, Parameter.class);
 	}
 
+	public List<Parameter> save(List<Parameter> parameters) {
+		String url = apiUrlPersistence.endPoint("parameter", "/several");
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<List<Parameter>> entity = new HttpEntity<List<Parameter>>(parameters, headers);
+		ResponseEntity<List<Parameter>> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, new ParameterizedTypeReference<List<Parameter>>() {});
+		return exchange.getBody();
+	}
+
 	public void delete(Parameter parameter) {
 		String url = apiUrlPersistence.endPoint("parameter", "");
 
@@ -160,10 +170,10 @@ public class ServiceParameter {
 		List<Parameter> parameters = responseEntity.getBody();
 		return parameters;
 	}
-	
+
 	public List<Parameter> getParametersByBotAndUserId(String botName, Long userId) {
 		String url = apiUrlPersistence.endPoint("parameter", "/bot-user/" + botName + "/" + userId);
-		
+
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Parameter> requestEntity = new HttpEntity<>(null, headers);
