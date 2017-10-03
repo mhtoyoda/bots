@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,6 +32,13 @@ public class ParameterController {
 		List<Parameter> parameters = parameterService.getParametersByBotAndScopeName(botName, scopeName);
 		return ResponseEntity.ok(parameters);
 	}
+	
+	@PostMapping
+	public ResponseEntity<Parameter> save(@RequestBody Parameter parameter) {
+		Parameter saved = parameterService.save(parameter);
+		return ResponseEntity.ok(saved);
+	}
+	
 	
 	@GetMapping("/load/{botName}/{userId}")
 	public ResponseEntity<Object> loadUserParametes(@PathVariable String botName, @PathVariable Long userId){
