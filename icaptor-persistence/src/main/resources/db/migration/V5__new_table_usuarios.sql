@@ -71,6 +71,10 @@ INSERT INTO permission (name) VALUES ('ROLE_USER_LIST');
 INSERT INTO permission (name) VALUES ('ROLE_USER_UPDATE');
 INSERT INTO permission (name) VALUES ('ROLE_USER_DELETE');
 
+INSERT INTO permission (name) VALUES ('ROLE_PARAMETER_ADD');
+INSERT INTO permission (name) VALUES ('ROLE_PARAMETER_LIST');
+INSERT INTO permission (name) VALUES ('ROLE_PARAMETER_UPDATE');
+INSERT INTO permission (name) VALUES ('ROLE_PARAMETER_DELETE');
 
 INSERT INTO company_grupo (id_company, id_grupo) VALUES (1,1);
 INSERT INTO company_grupo (id_company, id_grupo) VALUES (1,2);
@@ -92,6 +96,10 @@ INSERT INTO grupo_permission (id_grupo, id_permission) VALUES (1,10);
 INSERT INTO grupo_permission (id_grupo, id_permission) VALUES (1,11);
 INSERT INTO grupo_permission (id_grupo, id_permission) VALUES (1,12);
 INSERT INTO grupo_permission (id_grupo, id_permission) VALUES (1,13);
+INSERT INTO grupo_permission (id_grupo, id_permission) VALUES (1,14);
+INSERT INTO grupo_permission (id_grupo, id_permission) VALUES (1,15);
+INSERT INTO grupo_permission (id_grupo, id_permission) VALUES (1,16);
+INSERT INTO grupo_permission (id_grupo, id_permission) VALUES (1,17);
 
 # User Dev
 INSERT INTO grupo_permission (id_grupo, id_permission) VALUES (2,2);

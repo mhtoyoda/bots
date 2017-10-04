@@ -14,7 +14,7 @@ icaptor:
     user: guest
     pass: guest
     host: 34.231.45.229
-    port: 30001
+    port: 15762
     queue-send-schedular-time: 5000 #milli second
 ---
 server:
@@ -38,7 +38,7 @@ icaptor:
     user: guest
     pass: guest
     host: localhost
-    port: 30001
+    port: 15672
     queue-send-schedular-time: 5000 #milli second
 
 
