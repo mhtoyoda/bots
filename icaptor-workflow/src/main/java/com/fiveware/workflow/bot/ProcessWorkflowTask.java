@@ -1,5 +1,11 @@
 package com.fiveware.workflow.bot;
 
+import java.util.List;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
@@ -9,11 +15,6 @@ import com.fiveware.workflow.exception.TaskCreateException;
 import com.fiveware.workflow.model.WorkflowBot;
 import com.fiveware.workflow.model.WorkflowBotStep;
 import com.google.common.collect.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
 
 @Component
 public class ProcessWorkflowTask implements WorkflowSequence {
@@ -35,13 +36,14 @@ public class ProcessWorkflowTask implements WorkflowSequence {
 	
 	@Override
 	public Long createTaskByWorkflow(WorkflowBot workflowBot) {		
+		Task createTask = null;
 		List<ItemTask> list = taskManager.itemTaskListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.SUCCESS.getName()), workflowBot.getTaskId());
-		Optional<ItemTask> findFirst = list.stream().findFirst();
-		if(findFirst.isPresent()){
-			ItemTask itemTask = findFirst.get();
-			Task createTask = taskManager.createTask(workflowBot.getWorkflowBotStep().getBotTarget(), 1L);
-			taskManager.createItemTask(createTask, itemTask.getDataOut());
-			taskManager.updateTask(createTask.getId(), StatusProcessTaskEnum.PROCESSING);
+		if(CollectionUtils.isNotEmpty(list)){
+			createTask = taskManager.createTask(workflowBot.getWorkflowBotStep().getBotTarget(), 1L);			
+			for (ItemTask itemTask : list) {									
+				taskManager.createItemTask(createTask, itemTask.getDataOut());			
+			}
+			createTask = taskManager.updateTask(createTask.getId(), StatusProcessTaskEnum.PROCESSING);
 			return createTask.getId();
 		}
 		return null;

@@ -123,7 +123,6 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(processorFields, parameterClassLoader));
 				List<String> resultSuccess = Lists.newArrayList();
 				listJoin.joinRecord(separatorInput, outTextRecord.get(), resultSuccess);
-
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());
 				if (e.getCause() instanceof RuntimeBotException) {
