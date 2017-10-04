@@ -1,23 +1,18 @@
 package com.fiveware.service;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
 import com.fiveware.config.ApiUrlPersistence;
 import com.fiveware.model.Parameter;
 import com.fiveware.model.ScopeParameter;
 import com.fiveware.model.TypeParameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Service
 public class ServiceParameter {
@@ -182,4 +177,17 @@ public class ServiceParameter {
 		List<Parameter> parameters = responseEntity.getBody();
 		return parameters;
 	}
+
+	public List<Parameter> listParametersByScope(String nameScope) {
+		String url = apiUrlPersistence.endPoint("parameter", "/scope-parameter/"+nameScope );
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Parameter> requestEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<Parameter>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Parameter>>() {
+		});
+		List<Parameter> parameters = responseEntity.getBody();
+		return parameters;
+	}
+
 }

@@ -1,21 +1,14 @@
 package com.fiveware.controller;
 
-import java.util.List;
-
+import com.fiveware.model.Parameter;
+import com.fiveware.service.ServiceParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.fiveware.model.Parameter;
-import com.fiveware.service.ServiceParameter;
+import java.util.List;
 
 @RestController
 @RequestMapping("/parameter")
@@ -33,6 +26,15 @@ public class ParameterController {
 		List<Parameter> parameters = parameterService.getParametersByBotAndScopeName(botName, scopeName);
 		return ResponseEntity.ok(parameters);
 	}
+
+	@GetMapping("/scope-parameter/{scopeName}")
+	public ResponseEntity<Object> listParametersByScope(@PathVariable String scopeName) {
+		logger.info("Carregando os parametros");
+
+		List<Parameter> parameters = parameterService.listParametersByScope(scopeName);
+		return ResponseEntity.ok(parameters);
+	}
+
 
 	@GetMapping("/load-by-user/{botName}/{userId}")
 	public ResponseEntity<Object> loadUserParametes(@PathVariable String botName, @PathVariable Long userId) {

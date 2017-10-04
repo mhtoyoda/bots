@@ -23,4 +23,6 @@ public interface ParameterRepository extends CrudRepository<Parameter, Long> {
 	
 	@Query("FROM Parameter p WHERE p.bot.nameBot = :botName AND p.scopeParameter.name = :nameScope")
 	List<Parameter> findParametersByBotNameAndPriority(@Param("botName") String botName, @Param("nameScope") String nameScope);
+
+    List<Parameter> findParameterByScopeParameterName(String name);
 }

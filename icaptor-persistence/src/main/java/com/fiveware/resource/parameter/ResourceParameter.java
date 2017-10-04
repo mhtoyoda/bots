@@ -1,24 +1,17 @@
 package com.fiveware.resource.parameter;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.fiveware.model.Parameter;
 import com.fiveware.model.ScopeParameter;
 import com.fiveware.model.TypeParameter;
 import com.fiveware.repository.ParameterRepository;
 import com.fiveware.repository.ScopeParameterRepository;
 import com.fiveware.repository.TypeParameterRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/parameter")
@@ -109,9 +102,15 @@ public class ResourceParameter {
 		return ResponseEntity.ok(parameters);
 	}
 
-	@GetMapping("/bot-scope/{botName}/{nameScope}")
+	@GetMapping("/bot-scope/{botName}/{scopeName}")
 	public ResponseEntity<List<Parameter>> findParametersByBotAndScope(@PathVariable("botName") String botName, @PathVariable("scopeName") String scopeName) {
 		List<Parameter> parameters = parameterRepository.findParametersByBotNameAndPriority(botName, scopeName);
+		return ResponseEntity.ok(parameters);
+	}
+
+	@GetMapping("/scope-parameter/{scopeName}")
+	public ResponseEntity<List<Parameter>> listParametersByScope(@PathVariable("scopeName") String scopeName) {
+		List<Parameter> parameters = parameterRepository.findParameterByScopeParameterName(scopeName);
 		return ResponseEntity.ok(parameters);
 	}
 }
