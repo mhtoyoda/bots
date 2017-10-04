@@ -1,15 +1,38 @@
-version: '2'
+version: '3'
 
 services:
 
+  icaptor-mysql:
+    image: mysql/mysql-server
+    networks:
+      - interna
+    ports:
+      - "3306:3306"
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      - MYSQL_DATABASE=icaptor
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+
   icaptor-data:
-    build: .
-    container_name: icaptor-data
+    image: icaptor-data
+    networks:
+      - interna
     ports:
       - "8085:8085"
+    depends_on:
+      - icaptor-mysql
+    deploy:
+      mode: replicated
+      replicas: 2	
     environment:
       - spring.profiles.active=dev
-      - spring.datasource.url=jdbc:mysql://54.232.96.63:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false
+      - spring.datasource.url=jdbc:mysql://icaptor-mysql:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false
       - spring.datasource.username=root
       - spring.datasource.password=root
       - spring.datasource.driverClassname=com.mysql.jdbc.Driver
+
+networks:
+  interna:
