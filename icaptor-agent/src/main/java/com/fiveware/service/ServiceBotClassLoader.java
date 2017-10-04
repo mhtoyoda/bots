@@ -83,9 +83,7 @@ public class ServiceBotClassLoader<T> {
 
             processorFields.getMessageBot().setStatuProcessEnum(StatusProcessTaskEnum.SUCCESS);
             processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.SUCCESS);
-
             processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
-
 
             if (obj instanceof List)
                 return new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
@@ -97,8 +95,6 @@ public class ServiceBotClassLoader<T> {
                 Map[] objects = myObjects.toArray(new HashMap[myObjects.size()]);
                 return new OutTextRecord(objects);
             }
-
-
 
             Map map = objectMapper.convertValue(obj, Map.class);
             HashMap[] hashMaps = {(HashMap) map};
@@ -151,7 +147,6 @@ public class ServiceBotClassLoader<T> {
     private String getOutputDictionary(ProcessorFields processorFields) {
         OutputDictionaryContext outputDictionary = processorFields.getContext().get().getOutputDictionary();
         return outputDictionary.fieldsToLine();
-
     }
 
     protected ClassLoader getClassLoader(String pathJar) throws MalformedURLException {

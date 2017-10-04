@@ -1,5 +1,15 @@
 package com.fiveware.workflow.bot;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
@@ -10,15 +20,6 @@ import com.fiveware.workflow.model.WorkflowBot;
 import com.fiveware.workflow.repository.WorkFlowBotRepository;
 import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Component
 public class SequenceTaskWorkflow {
@@ -37,7 +38,7 @@ public class SequenceTaskWorkflow {
 		if (optional.isPresent()) {
 			WorkflowBot workflowBot = optional.get();
 			Task task = taskManager.getTask(workflowBot.getTaskId());
-			if (canContinueTaskWorkflow(task, workflowBot)) {
+			if (verifyTaskWorkflowProcessed(task)) {
 				if (null != workflowBot.getWorkflowBotStep() && StringUtils.isNotBlank(workflowBot.getWorkflowBotStep().getBotTarget())) {
 					Long taskId = processWorkflowTask.createTaskByWorkflow(workflowBot);
 					if (null != taskId) {
@@ -65,7 +66,7 @@ public class SequenceTaskWorkflow {
 	}
 
 	private boolean canContinueTaskWorkflow(Task task, WorkflowBot workflowBot){
-		if(verifyTaskWorkflow(task)){
+		if(verifyTaskWorkflowProcessed(task)){
 			String fieldVerify = workflowBot.getWorkflowBotStep().getFieldVerify();
 			List<String> status = Lists.newArrayList(StatusProcessItemTaskEnum.SUCCESS.getName());
 			List<ItemTask> list = taskManager.itemTaskListStatus(status , task.getId());
@@ -81,7 +82,7 @@ public class SequenceTaskWorkflow {
 		return false;
 	}
 	
-	private boolean verifyTaskWorkflow(Task task) {
+	private boolean verifyTaskWorkflowProcessed(Task task) {
 		return null != task && task.getStatusProcess().getName().equals(StatusProcessTaskEnum.PROCESSED.getName());
 	}
 	
