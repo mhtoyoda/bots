@@ -26,11 +26,19 @@ public class ParameterController {
 	@Autowired
 	private ServiceParameter parameterService;
 
-	@GetMapping("/load/{botName}/{scopeName}")
+	@GetMapping("/load-by-scope/{botName}/{scopeName}")
 	public ResponseEntity<Object> loadParametesForAllUser(@PathVariable String botName, @PathVariable String scopeName) {
 		logger.info("Carregando os parametros");
 
 		List<Parameter> parameters = parameterService.getParametersByBotAndScopeName(botName, scopeName);
+		return ResponseEntity.ok(parameters);
+	}
+
+	@GetMapping("/load-by-user/{botName}/{userId}")
+	public ResponseEntity<Object> loadUserParametes(@PathVariable String botName, @PathVariable Long userId) {
+		logger.info("Carregando os parametros");
+
+		List<Parameter> parameters = parameterService.getParametersByBotAndUserId(botName, userId);
 		return ResponseEntity.ok(parameters);
 	}
 
@@ -52,23 +60,9 @@ public class ParameterController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PostMapping("/delete-several")
+	@DeleteMapping("/delete-several")
 	public ResponseEntity<List<Parameter>> delete(@RequestBody List<Parameter> parameters) {
 		parameterService.delete(parameters);
-		return ResponseEntity.ok().build();
-	}
-
-	@GetMapping("/load/{botName}/{userId}")
-	public ResponseEntity<Object> loadUserParametes(@PathVariable String botName, @PathVariable Long userId) {
-		logger.info("Carregando os parametros");
-
-		List<Parameter> parameters = parameterService.getParametersByBotAndUserId(botName, userId);
-		return ResponseEntity.ok(parameters);
-	}
-
-	@GetMapping("/save")
-	public ResponseEntity<Object> saveParametes() {
-		logger.info("Gravando os parametros");
 		return ResponseEntity.ok().build();
 	}
 
