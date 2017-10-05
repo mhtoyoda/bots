@@ -38,7 +38,7 @@ public class SequenceTaskWorkflow {
 		if (optional.isPresent()) {
 			WorkflowBot workflowBot = optional.get();
 			Task task = taskManager.getTask(workflowBot.getTaskId());
-			if (verifyTaskWorkflowProcessed(task)) {
+			if (canContinueTaskWorkflow(task, workflowBot)) {
 				if (null != workflowBot.getWorkflowBotStep() && StringUtils.isNotBlank(workflowBot.getWorkflowBotStep().getBotTarget())) {
 					Long taskId = processWorkflowTask.createTaskByWorkflow(workflowBot);
 					if (null != taskId) {
