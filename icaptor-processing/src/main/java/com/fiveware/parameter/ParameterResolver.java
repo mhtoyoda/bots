@@ -102,7 +102,7 @@ public class ParameterResolver {
 			}
 			return agentParameter == null ? null : agentParameter.getParameter();
 		}else{
-			return iterator.next();
+			return iterator.hasNext() ? iterator.next() : null;
 		}
 	}
 	
