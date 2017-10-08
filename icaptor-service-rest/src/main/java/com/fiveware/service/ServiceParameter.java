@@ -44,13 +44,13 @@ public class ServiceParameter {
 		return exchange.getBody();
 	}
 
-	public void delete(Parameter parameter) {
-		String url = apiUrlPersistence.endPoint("parameter", "");
+	public void delete(Long parameter) {
+		String url = apiUrlPersistence.endPoint("parameter/", parameter.toString());
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<Parameter> entity = new HttpEntity<Parameter>(parameter, headers);
-		restTemplate.exchange(url, HttpMethod.DELETE, entity, Parameter.class);
+		HttpEntity<Long> entity = new HttpEntity<Long>(parameter, headers);
+		restTemplate.exchange(url, HttpMethod.DELETE, entity, Long.class);
 	}
 
 	public void delete(List<Parameter> parameters) {
@@ -188,6 +188,18 @@ public class ServiceParameter {
 		});
 		List<Parameter> parameters = responseEntity.getBody();
 		return parameters;
+	}
+
+	public Iterable<Parameter> getParametersAll() {
+		String url = apiUrlPersistence.endPoint("parameter", "");
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Parameter> requestEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<Iterable<Parameter>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<Iterable<Parameter>>() {
+		});
+		Iterable<Parameter> scopeParameters = responseEntity.getBody();
+		return scopeParameters;
 	}
 
 }

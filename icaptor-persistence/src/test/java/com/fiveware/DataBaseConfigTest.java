@@ -1,5 +1,6 @@
-package com.fiveware.config;
+package com.fiveware;
 
+import com.fiveware.repository.Parameters;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
@@ -50,10 +51,10 @@ public class DataBaseConfigTest {
     private HikariConfig mysql() {
         HikariConfig config = new HikariConfig();
         config.setMaximumPoolSize(10);
-        config.setDriverClassName(driverClassName);
-        config.setJdbcUrl(url);
-        config.setUsername(userName);
-        config.setPassword(password);
+        config.setDriverClassName("com.mysql.jdbc.Driver");
+        config.setJdbcUrl("jdbc:mysql://localhost:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false");
+        config.setUsername("root");
+        config.setPassword("root");
         return config;
     }
 
@@ -90,6 +91,12 @@ public class DataBaseConfigTest {
         properties.setProperty("hibernate.dialect", dialeto);
 
         return properties;
+    }
+
+
+    @Bean
+    public Parameters parameters(){
+        return new Parameters();
     }
 
 }

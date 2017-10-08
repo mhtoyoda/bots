@@ -1,6 +1,7 @@
 package com.fiveware.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,8 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
 
+@AutoProperty
 @Entity
 @Table(name = "type_parameter")
 public class TypeParameter implements Serializable {
@@ -68,5 +72,10 @@ public class TypeParameter implements Serializable {
 	@Override
 	public String toString() {
 		return Pojomatic.toString(this);
+	}
+
+	@JsonIgnore
+	public boolean isNew() {
+		return Objects.isNull(this.id);
 	}
 }

@@ -10,7 +10,10 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
+import org.springframework.beans.factory.annotation.Autowired;
 
+@AutoProperty
 @Entity
 @Table(name = "scope_parameter")
 public class ScopeParameter implements Serializable {

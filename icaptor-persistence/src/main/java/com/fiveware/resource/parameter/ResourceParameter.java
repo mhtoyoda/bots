@@ -4,6 +4,7 @@ import com.fiveware.model.Parameter;
 import com.fiveware.model.ScopeParameter;
 import com.fiveware.model.TypeParameter;
 import com.fiveware.repository.ParameterRepository;
+import com.fiveware.repository.Parameters;
 import com.fiveware.repository.ScopeParameterRepository;
 import com.fiveware.repository.TypeParameterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/parameter")
@@ -19,6 +21,9 @@ public class ResourceParameter {
 
 	@Autowired
 	private ParameterRepository parameterRepository;
+
+	@Autowired
+	private Parameters parametersMerge;
 
 	@Autowired
 	private ScopeParameterRepository scopeParameterRepository;
@@ -58,14 +63,26 @@ public class ResourceParameter {
 
 	@PostMapping
 	public ResponseEntity<Parameter> save(@RequestBody Parameter parameter) {
-		parameter = parameterRepository.save(parameter);
+		final TypeParameter[] type = {parameter.getTypeParameter()};
+		Optional<Parameter> parameterOptional = Optional.ofNullable(parameterRepository.
+				findParameterByTypeParameterNameAndScopeParameterName(parameter.getTypeParameter().getName(),
+																	  parameter.getScopeParameter().getName()));
+		parameterOptional.ifPresent( (param) ->{
+				type[0] = param.getTypeParameter();
+		});
+		parameter.setTypeParameter(type[0]);
+		if (parameter.getTypeParameter().isNew())
+			parameter = parameterRepository.save(parameter);
+		else
+			parameter = parametersMerge.save(parameter);
+
 		return ResponseEntity.status(HttpStatus.CREATED).body(parameter);
 	}
 	
 	@PostMapping("/several")
 	public ResponseEntity<Object> save(@RequestBody List<Parameter> parameters) {
-		Iterable<Parameter> parameter = parameterRepository.save(parameters);
-		return ResponseEntity.status(HttpStatus.CREATED).body(parameter);
+		parameters.stream().forEach((param) -> save(param));
+		return ResponseEntity.status(HttpStatus.CREATED).body(parameters);
 	}
 
 	@DeleteMapping
@@ -93,7 +110,7 @@ public class ResourceParameter {
 
 	@GetMapping("/bot/{nameScope}/{nameType}")
 	public ResponseEntity<List<Parameter>> findParameterByScopeAndType(@PathVariable("nameScope") String nameScope, @PathVariable("nameType") String nameType) {
-		return ResponseEntity.ok(parameterRepository.findParameterByScopeAndType(nameScope, nameType));
+		return ResponseEntity.ok(parameterRepository.findParameterByScopeParameterNameAndTypeParameterName(nameScope, nameType));
 	}
 
 	@GetMapping("/bot-user/{botName}/{userId}")
@@ -111,6 +128,12 @@ public class ResourceParameter {
 	@GetMapping("/scope-parameter/{scopeName}")
 	public ResponseEntity<List<Parameter>> listParametersByScope(@PathVariable("scopeName") String scopeName) {
 		List<Parameter> parameters = parameterRepository.findParameterByScopeParameterName(scopeName);
+		return ResponseEntity.ok(parameters);
+	}
+
+	@GetMapping
+	public ResponseEntity<Iterable<Parameter>> findAll() {
+		Iterable<Parameter> parameters = parameterRepository.findAll();
 		return ResponseEntity.ok(parameters);
 	}
 }

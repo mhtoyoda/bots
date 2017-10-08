@@ -3,6 +3,8 @@ package com.fiveware.config;
 import com.fiveware.model.*;
 import com.fiveware.model.activity.RecentActivity;
 import com.fiveware.model.user.IcaptorUser;
+import com.fiveware.repository.Parameters;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurerAdapter;
@@ -29,4 +31,12 @@ public class RepositoryConfiguration extends RepositoryRestConfigurerAdapter {
 
 
     }
+
+    @Bean
+    public Parameters parameters(){
+        return new Parameters();
+    }
+
+
+
 }

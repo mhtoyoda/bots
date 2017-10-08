@@ -44,6 +44,15 @@ public class ParameterController {
 		return ResponseEntity.ok(parameters);
 	}
 
+	@GetMapping
+	public ResponseEntity<Object> getParametersAll() {
+		logger.info("Carregando os parametros");
+
+		Iterable<Parameter> parameters = parameterService.getParametersAll();
+		return ResponseEntity.ok(parameters);
+	}
+
+
 	@PostMapping("/save-single")
 	public ResponseEntity<Parameter> save(@RequestBody Parameter parameter) {
 		Parameter saved = parameterService.save(parameter);
@@ -56,9 +65,9 @@ public class ParameterController {
 		return ResponseEntity.ok(saved);
 	}
 
-	@DeleteMapping("/delete-single")
-	public ResponseEntity<Parameter> delete(@RequestBody Parameter parameter) {
-		parameterService.delete(parameter);
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Parameter> delete(@PathVariable Long id) {
+		parameterService.delete(id);
 		return ResponseEntity.ok().build();
 	}
 

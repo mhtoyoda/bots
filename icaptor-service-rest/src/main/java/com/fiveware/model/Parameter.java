@@ -2,19 +2,15 @@ package com.fiveware.model;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import org.hibernate.annotations.Cascade;
 import org.pojomatic.Pojomatic;
 
 import com.fiveware.model.user.IcaptorUser;
+import org.pojomatic.annotations.AutoProperty;
 
+@AutoProperty
 @Entity
 @Table(name = "parameter")
 public class Parameter implements Serializable {
@@ -50,7 +46,7 @@ public class Parameter implements Serializable {
 	@JoinColumn(name = "id_scope_parameter")
 	private ScopeParameter scopeParameter;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "id_type_parameter")
 	private TypeParameter typeParameter;
 
