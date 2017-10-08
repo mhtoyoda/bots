@@ -6,7 +6,8 @@ CREATE TABLE Workflow_Bot(id INTEGER auto_increment Primary key, workflow_bot_st
 					FOREIGN KEY(workflow_bot_step_id) REFERENCES Workflow_Bot_Step(id));
 					
 INSERT INTO Workflow(id, name, active) VALUES(1, 'Votorantim', 1);
-INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(1, 'votorantimRC', 'consultaSap', 1, '"numeroRC":"(\d+)"');
-INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(2, 'consultaSap', 'votorantimCP', 3, '\\"aprovadoRC\\":\\"(\true)\\"');
-INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(3, 'votorantimCP', 'votorantimCAP', 2, '\\"numeroPC\\":\\"(\d+)\\"');
-INSERT INTO Workflow_Bot_Step(id, bot_source, sequence) VALUES(4, 'votorantimCAP', 4);
+INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(1, 'votorantimFaturas', 'votorantimRC', 1, '"path":"(\S+)"');
+INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(2, 'votorantimRC', 'consultaSap', 2, '\\"numeroRC\\":\\"(\d+)\\"');
+INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(3, 'consultaSap', 'votorantimCP', 3, '\\"aprovadoRC\\":\\"(\true)\\"');
+INSERT INTO Workflow_Bot_Step(id, bot_source, bot_target, sequence, field_verify) VALUES(4, 'votorantimCP', 'votorantimCAP', 4, '\\"numeroPC\\":\\"(\d+)\\"');
+INSERT INTO Workflow_Bot_Step(id, bot_source, sequence) VALUES(5, 'votorantimCAP', 5);

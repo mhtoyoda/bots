@@ -11,7 +11,7 @@ io:
 
 icaptor:
   data-source:
-    host: http://localhost:8085
+    host: http://localhost:8085  
   broker:
     user: guest
     pass: guest
@@ -35,7 +35,7 @@ io:
 icaptor:
   data-source:
     host: http://localhost:8085
-  elasticSearch: http://54.232.16.190:9200
+  elasticSearch: http://54.232.96.63:9200
   broker:
     user: guest
     pass: guest

@@ -1,14 +1,12 @@
 package com.fiveware.resource.agent;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -142,7 +140,7 @@ public class ResourceAgent {
     @Transactional(readOnly = false)
     @PostMapping("/parameter")
     public AgentParameter save(@RequestBody AgentParameter agentParameter){
-    	agentParameter.setUseDate(new Date());
+    	agentParameter.setUseDate(LocalDateTime.now());
     	return agentParameterRepository.save(agentParameter);    	
     }
     

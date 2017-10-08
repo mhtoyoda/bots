@@ -7,29 +7,32 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Predicate;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiveware.exception.AuthenticationBotException;
 import com.fiveware.exception.RecoverableException;
 import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
-import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.OutTextRecord;
 import com.fiveware.model.OutputDictionaryContext;
-import com.fiveware.parameter.ParameterValue;
-import com.fiveware.processor.ProcessorFields;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
+import com.fiveware.parameter.ParameterValue;
+import com.fiveware.processor.ProcessorFields;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -44,9 +47,6 @@ public class ServiceBotClassLoader<T> {
 
     @Autowired
     private ClassLoaderRunner classLoaderRunner;
-
-    @Autowired
-    private ClassLoaderConfig classLoaderConfig;
 
     public OutTextRecord getOutTextRecord(T parameter, ProcessorFields processorFields)
             throws ClassNotFoundException, RuntimeBotException, IOException, InstantiationException, IllegalAccessException,
@@ -75,17 +75,11 @@ public class ServiceBotClassLoader<T> {
 
         Object obj = null;
         try {
-            if (null != o1) {
-                obj = execute.invoke(clazz.newInstance(), o1, o2);
-            } else {
-                obj = execute.invoke(clazz.newInstance());
-            }
+        	obj = execute.invoke(clazz.newInstance(), o1, o2);            
 
             processorFields.getMessageBot().setStatuProcessEnum(StatusProcessTaskEnum.SUCCESS);
             processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.SUCCESS);
-
             processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
-
 
             if (obj instanceof List)
                 return new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
@@ -97,8 +91,6 @@ public class ServiceBotClassLoader<T> {
                 Map[] objects = myObjects.toArray(new HashMap[myObjects.size()]);
                 return new OutTextRecord(objects);
             }
-
-
 
             Map map = objectMapper.convertValue(obj, Map.class);
             HashMap[] hashMaps = {(HashMap) map};
@@ -151,7 +143,6 @@ public class ServiceBotClassLoader<T> {
     private String getOutputDictionary(ProcessorFields processorFields) {
         OutputDictionaryContext outputDictionary = processorFields.getContext().get().getOutputDictionary();
         return outputDictionary.fieldsToLine();
-
     }
 
     protected ClassLoader getClassLoader(String pathJar) throws MalformedURLException {

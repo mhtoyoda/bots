@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +123,6 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 				Future<OutTextRecord> outTextRecord = executorService.submit(new ProcessorRunnable(processorFields, parameterClassLoader));
 				List<String> resultSuccess = Lists.newArrayList();
 				listJoin.joinRecord(separatorInput, outTextRecord.get(), resultSuccess);
-
 			} catch (Exception e) {
 				logger.error("Unprocessed Record - Cause: " + e.getMessage());
 				if (e.getCause() instanceof RuntimeBotException) {
@@ -142,8 +141,21 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		if(parameterResolver.hasNecessaryParameterFromBot(botName)){		
 			MessageParameterAgent messageParameterAgent = waitParameterMessage(botName, data.getAgentName(), taskId);
 			if(null != messageParameterAgent){
-				String[] values = messageParameterAgent.getFieldValue().split(":");
-				parameterValue = new ParameterValue(values[0], values[1]);
+				parameterValue = new ParameterValue();
+				List<String> fieldValues = messageParameterAgent.getFieldValue();
+				for(String field: fieldValues){
+					String[] values = field.split(":");
+					if(values[0].toString().equals("credential")){
+						parameterValue.add(values[1].toString(), values[2].toString(), values[3].toString());
+					}
+					else{
+						if(values.length == 4){
+							parameterValue.add(values[1].toString(), values[2].toString(), values[3].toString());
+						}else if(values.length == 3){
+							parameterValue.add(values[1].toString(), values[1].toString(), values[2].toString());
+						}												
+					}
+				}
 			}
 		}
 		return parameterValue;
@@ -168,7 +180,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 			}
 		}
 		
-		if(StringUtils.isEmpty(parameter.getFieldValue())){	
+		if(CollectionUtils.isEmpty(parameter.getFieldValue())){	
 			String queueName = String.format("%s.%s.IN", botName, taskId);
 			queueContext.removeQueueInContext(botName, nameAgent, queueName);
 			throw new ParameterInvalidException();					

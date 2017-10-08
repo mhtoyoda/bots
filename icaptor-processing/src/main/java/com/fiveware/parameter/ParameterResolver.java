@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class ParameterResolver {
 	
 	public Boolean hasNecessaryParameterFromBot(String botName){		
 		List<Parameter> list = serviceParameter.getParameterByBot(botName);
-		return list.stream().anyMatch(p -> p.getTypeParameter().getCredential());		
+		return CollectionUtils.isNotEmpty(list);		
 	}
 	
 	public int countParameterCredential(String botName){		
@@ -101,7 +102,7 @@ public class ParameterResolver {
 			}
 			return agentParameter == null ? null : agentParameter.getParameter();
 		}else{
-			return iterator.next();
+			return iterator.hasNext() ? iterator.next() : null;
 		}
 	}
 	

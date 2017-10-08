@@ -1,6 +1,7 @@
 package com.fiveware.model.message;
 
 import java.io.Serializable;
+import java.util.List;
 
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
@@ -12,7 +13,7 @@ public class MessageParameterAgent extends MessageAgent implements Serializable 
 	private Long taskId;
 	private Long itemTaskId;
 	private Boolean credential;
-	private String fieldValue;
+	private List<String> fieldValue;
 	
 	public String getNameBot() {
 		return nameBot;
@@ -30,11 +31,11 @@ public class MessageParameterAgent extends MessageAgent implements Serializable 
 		return credential;
 	}
 
-	public String getFieldValue() {
+	public List<String> getFieldValue() {
 		return fieldValue;
 	}
 	
-	public void setFieldValue(String fieldValue) {
+	public void setFieldValue(List<String> fieldValue) {
 		this.fieldValue = fieldValue;
 	}
 	

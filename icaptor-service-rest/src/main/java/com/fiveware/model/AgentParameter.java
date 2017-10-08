@@ -1,7 +1,7 @@
 package com.fiveware.model;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "agent_parameter")
@@ -30,9 +30,9 @@ public class AgentParameter implements Serializable {
 	@JoinColumn(name = "id_parameter")
 	private Parameter parameter;
 
+	@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
 	@Column(name = "use_date")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date useDate;
+	private LocalDateTime useDate;
 
 	public Long getId() {
 		return id;
@@ -58,11 +58,11 @@ public class AgentParameter implements Serializable {
 		this.parameter = parameter;
 	}
 
-	public Date getUseDate() {
+	public LocalDateTime getUseDate() {
 		return useDate;
 	}
 
-	public void setUseDate(Date useDate) {
+	public void setUseDate(LocalDateTime useDate) {
 		this.useDate = useDate;
 	}
 }
