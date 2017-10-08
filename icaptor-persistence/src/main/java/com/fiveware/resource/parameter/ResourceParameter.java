@@ -85,9 +85,9 @@ public class ResourceParameter {
 		return ResponseEntity.status(HttpStatus.CREATED).body(parameters);
 	}
 
-	@DeleteMapping
-	public ResponseEntity<Void> delete(@RequestBody Parameter parameter) {
-		parameterRepository.delete(parameter);
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@RequestBody Long id) {
+		parameterRepository.delete(id);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 

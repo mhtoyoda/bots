@@ -43,12 +43,14 @@ public class TesteBot implements Automation<String, Endereco> {
 																				RecoverableException, AuthenticationBotException {
 		ParameterIcaptor login = parameters.getByType("login");
 		logger.info("LOGIN {}{}", login.getField(), login.getValue());
-//		throw new AuthenticationBotException("Simulando Exception Authentication");
-//		throw new RuntimeBotException("Simulando bug ");
 
-//		throw new RecoverableException("Simulando bug RecoverableException");
+		ParameterIcaptor url = parameters.getByType("retry");
+		logger.info("Cloud-Bot: {}{}", login.getField(), login.getValue());
+
+
+
+
 		logger.info("Dados de Endereco: {}",endereco.toString());
-//		logger.info("Dados de Parametros: {}s",parameters.toString());
 		return getEndereco(endereco);
 	}
 

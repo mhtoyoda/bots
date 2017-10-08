@@ -66,9 +66,8 @@ public class ParameterController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Parameter> delete(@PathVariable Long id) {
+	public void delete(@PathVariable Long id) {
 		parameterService.delete(id);
-		return ResponseEntity.ok().build();
 	}
 
 	@DeleteMapping("/delete-several")
