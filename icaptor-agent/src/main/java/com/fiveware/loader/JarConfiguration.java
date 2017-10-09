@@ -38,7 +38,7 @@ public class JarConfiguration {
 	private ClassLoaderConfig classLoaderConfig;
 
 	@SuppressWarnings("rawtypes")
-	public void saveConfigurations(String pathJar) throws MalformedURLException, AttributeLoadException {
+	public void saveConfigurations(String pathJar) throws MalformedURLException, AttributeLoadException, IllegalAccessException {
 		String nameBot = null, classLoaderInfo = null, nameJar = null, version = null;
 		ClassLoader classLoader = getClassLoader(pathJar);
 
@@ -164,14 +164,14 @@ public class JarConfiguration {
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected Set<Class<? extends Automation>> getSubTypes(ClassLoader classLoader) throws MalformedURLException {
+	protected Set<Class<? extends Automation>> getSubTypes(ClassLoader classLoader) throws MalformedURLException, IllegalAccessException {
 		ConfigurationBuilder config = new ConfigurationBuilder().setUrls(ClasspathHelper.forClassLoader(classLoader))
 				.addClassLoader(classLoader);
 		Reflections reflections = new Reflections(config);
 		Set<Class<? extends Automation>> subTypesOf = reflections.getSubTypesOf(Automation.class);
 		if (subTypesOf.size()==0){
 			logger.error("Classe Automation não encontrada!");
-			throw new RuntimeException("Classe Automation não encontrada!");
+			throw new IllegalAccessException("Classe Automation não encontrada!");
 		}
 
 		return subTypesOf;

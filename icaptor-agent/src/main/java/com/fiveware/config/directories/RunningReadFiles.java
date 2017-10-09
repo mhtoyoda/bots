@@ -28,7 +28,7 @@ public class RunningReadFiles extends RunningWatchServiceRecursive {
     private AgentConfig agentConfig;
 
     @Override
-    public void includeAction(Path path) throws IOException, AttributeLoadException {
+    public void includeAction(Path path) throws IOException, AttributeLoadException, IllegalAccessException {
         if (isValidTypeFile(path)) {
             jarConfiguration.saveConfigurations(path.toFile().getAbsoluteFile().getPath());
             agentConfig.initAgent();
