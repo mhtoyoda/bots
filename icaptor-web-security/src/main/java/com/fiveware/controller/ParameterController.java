@@ -1,6 +1,7 @@
 package com.fiveware.controller;
 
 import com.fiveware.model.Parameter;
+import com.fiveware.model.TypeParameter;
 import com.fiveware.service.ServiceParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,14 @@ public class ParameterController {
 		logger.info("Carregando os parametros");
 
 		List<Parameter> parameters = parameterService.listParametersByScope(scopeName);
+		return ResponseEntity.ok(parameters);
+	}
+
+	@GetMapping("/type")
+	public ResponseEntity<Object> getTypeParameterAll() {
+		logger.info("Carregando os TypeParameters");
+
+		List<TypeParameter> parameters = parameterService.getTypeParameterAll();
 		return ResponseEntity.ok(parameters);
 	}
 
