@@ -1,15 +1,14 @@
 package com.fiveware.loader;
 
-import java.io.File;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.List;
-import java.util.Set;
-
+import com.fiveware.Automation;
+import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.helpers.*;
+import com.fiveware.metadata.IcaptorMetaInfo;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.IcaptorPameterContext;
+import com.fiveware.model.InputDictionaryContext;
+import com.fiveware.model.OutputDictionaryContext;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
@@ -20,19 +19,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.Automation;
-import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.helpers.BotClassloaderContextBuilder;
-import com.fiveware.helpers.FieldsDictionary;
-import com.fiveware.helpers.InputDictionaryContextBuilder;
-import com.fiveware.helpers.OutputDictionaryContextBuilder;
-import com.fiveware.helpers.ParameterContextBuilder;
-import com.fiveware.metadata.IcaptorMetaInfo;
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.IcaptorPameterContext;
-import com.fiveware.model.InputDictionaryContext;
-import com.fiveware.model.OutputDictionaryContext;
-import com.google.common.collect.Lists;
+import java.io.File;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class JarConfiguration {
@@ -174,6 +169,11 @@ public class JarConfiguration {
 				.addClassLoader(classLoader);
 		Reflections reflections = new Reflections(config);
 		Set<Class<? extends Automation>> subTypesOf = reflections.getSubTypesOf(Automation.class);
+		if (subTypesOf.size()==0){
+			logger.error("Classe Automation não encontrada!");
+			throw new RuntimeException("Classe Automation não encontrada!");
+		}
+
 		return subTypesOf;
 	}
 
