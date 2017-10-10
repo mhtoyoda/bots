@@ -39,7 +39,7 @@ public class Bot implements Serializable {
 	private String separatorFile;
 
 	@Column(name ="version")
-	private String vesion;
+	private String version;
 	
 	@Column(name ="classloader")
 	private String classloader;
@@ -111,12 +111,12 @@ public class Bot implements Serializable {
 		this.separatorFile = separatorFile;
 	}
 
-	public String getVesion() {
-		return vesion;
+	public String getVersion() {
+		return version;
 	}
 
-	public void setVesion(String vesion) {
-		this.vesion = vesion;
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	public String getClassloader() {

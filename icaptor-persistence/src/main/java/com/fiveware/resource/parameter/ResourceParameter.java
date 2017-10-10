@@ -63,18 +63,18 @@ public class ResourceParameter {
 
 	@PostMapping
 	public ResponseEntity<Parameter> save(@RequestBody Parameter parameter) {
-		final TypeParameter[] type = {parameter.getTypeParameter()};
-		Optional<Parameter> parameterOptional = Optional.ofNullable(parameterRepository.
-				findParameterByTypeParameterNameAndScopeParameterName(parameter.getTypeParameter().getName(),
-																	  parameter.getScopeParameter().getName()));
-		parameterOptional.ifPresent( (param) ->{
-				type[0] = param.getTypeParameter();
-		});
-		parameter.setTypeParameter(type[0]);
-		if (parameter.getTypeParameter().isNew())
+//		final TypeParameter[] type = {parameter.getTypeParameter()};
+//		Optional<Parameter> parameterOptional = Optional.ofNullable(parameterRepository.
+//				findParameterByTypeParameterNameAndScopeParameterName(parameter.getTypeParameter().getName(),
+//																	  parameter.getScopeParameter().getName()));
+//		parameterOptional.ifPresent( (param) ->{
+//				type[0] = param.getTypeParameter();
+//		});
+//		parameter.setTypeParameter(type[0]);
+//		if (parameter.getTypeParameter().isNew())
 			parameter = parameterRepository.save(parameter);
-		else
-			parameter = parametersMerge.save(parameter);
+//		else
+//			parameter = parametersMerge.save(parameter);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(parameter);
 	}
