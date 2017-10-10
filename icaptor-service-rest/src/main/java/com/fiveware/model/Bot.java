@@ -37,6 +37,9 @@ public class Bot implements Serializable {
 	
 	@Column(name ="separator_file")
 	private String separatorFile;
+
+	@Column(name ="version")
+	private String vesion;
 	
 	public Long getId() {
 		return id;
@@ -101,4 +104,13 @@ public class Bot implements Serializable {
 	public void setSeparatorFile(String separatorFile) {
 		this.separatorFile = separatorFile;
 	}
+
+	public String getVesion() {
+		return vesion;
+	}
+
+	public void setVesion(String vesion) {
+		this.vesion = vesion;
+	}
+	
 }

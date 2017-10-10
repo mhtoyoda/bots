@@ -63,7 +63,8 @@ public class AgentConfig {
 					bot.setFieldsInput(StringUtils.join(botClassLoader.getInputDictionary().getFields(), ","));
 					bot.setFieldsOutput(StringUtils.join(botClassLoader.getOutputDictionary().getFields(), ","));
 					bot.setSeparatorFile(botClassLoader.getInputDictionary().getSeparator());
-					bot.setTypeFileIn(botClassLoader.getInputDictionary().getTypeFileIn());					
+					bot.setTypeFileIn(botClassLoader.getInputDictionary().getTypeFileIn());	
+					bot.setVersion(botClassLoader.getVersion());
 					bot = saveParametersBot(botClassLoader.getParameterContexts(), bot);
 					message.addMessageAgentBots(bot);
 				});

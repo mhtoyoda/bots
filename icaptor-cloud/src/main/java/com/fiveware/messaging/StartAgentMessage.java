@@ -97,7 +97,7 @@ public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 				bot.setFieldsOutput(botMessage.getFieldsOutput());
 				bot.setSeparatorFile(botMessage.getSeparatorFile());
 				bot.setTypeFileIn(botMessage.getTypeFileIn());
-				
+				bot.setVesion(botMessage.getVersion());
 				if (bot.getId() == null) {
 					bot = serviceBot.save(bot);
 				}

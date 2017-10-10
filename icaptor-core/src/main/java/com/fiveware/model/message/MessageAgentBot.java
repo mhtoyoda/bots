@@ -14,6 +14,7 @@ public class MessageAgentBot implements Serializable{
 	private String fieldsOutput;
 	private String typeFileIn;
 	private String separatorFile;
+	private String version;
 	private List<MessageParameterAgentBot> parameters;
 	
 	public String getNameBot() {
@@ -70,6 +71,14 @@ public class MessageAgentBot implements Serializable{
 
 	public void setSeparatorFile(String separatorFile) {
 		this.separatorFile = separatorFile;
+	}
+	
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	public List<MessageParameterAgentBot> getParameters() {
