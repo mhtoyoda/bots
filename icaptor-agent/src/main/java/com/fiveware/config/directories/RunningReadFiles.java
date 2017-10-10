@@ -44,7 +44,10 @@ public class RunningReadFiles extends RunningWatchServiceRecursive {
 	protected void excludeAction(Path path) throws IOException, AttributeLoadException {
 		if (isValidTypeFile(path)) {
 			jarConfiguration.removeBot(path.toString());
-        }
-		
+        }	
+	}
+	
+	public boolean validateClassLoader(String classLoader){
+		return true;
 	}
 }

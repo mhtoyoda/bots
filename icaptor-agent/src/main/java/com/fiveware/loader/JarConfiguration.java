@@ -1,14 +1,15 @@
 package com.fiveware.loader;
 
-import com.fiveware.Automation;
-import com.fiveware.exception.AttributeLoadException;
-import com.fiveware.helpers.*;
-import com.fiveware.metadata.IcaptorMetaInfo;
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.IcaptorPameterContext;
-import com.fiveware.model.InputDictionaryContext;
-import com.fiveware.model.OutputDictionaryContext;
-import com.google.common.collect.Lists;
+import java.io.File;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
@@ -19,15 +20,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.List;
-import java.util.Set;
+import com.fiveware.Automation;
+import com.fiveware.exception.AttributeLoadException;
+import com.fiveware.helpers.BotClassloaderContextBuilder;
+import com.fiveware.helpers.FieldsDictionary;
+import com.fiveware.helpers.InputDictionaryContextBuilder;
+import com.fiveware.helpers.OutputDictionaryContextBuilder;
+import com.fiveware.helpers.ParameterContextBuilder;
+import com.fiveware.metadata.IcaptorMetaInfo;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.IcaptorPameterContext;
+import com.fiveware.model.InputDictionaryContext;
+import com.fiveware.model.OutputDictionaryContext;
+import com.google.common.collect.Lists;
 
 @Component
 public class JarConfiguration {
@@ -55,6 +60,7 @@ public class JarConfiguration {
 							nameBot = (String) getValue(annotation, annotationType, IcaptorMetaInfo.VALUE.getValue());
 							classLoaderInfo = (String) getValue(annotation, annotationType,
 									IcaptorMetaInfo.CLASSLOADER.getValue());
+							assertClassLoaderBot(classLoaderInfo, clazz.getCanonicalName());
 							nameJar = StringUtils.substringAfterLast(pathJar, "/");
 							version = (String) getValue(annotation, annotationType, IcaptorMetaInfo.VERSION.getValue());
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
@@ -82,9 +88,17 @@ public class JarConfiguration {
 						nameJar, version, method, endpoint, inputDictionaryContext, outputDictionaryContext, getUrl(pathJar),
 						typeParameter, parameterContext);
 				saveAttributesClassLoader(botClassLoaderContext);
-			} catch (ClassNotFoundException | AttributeLoadException e) {
+			} catch (ClassNotFoundException e) {
+				logger.error("Error load jar bot: {}", e.getMessage());
+			} catch ( AttributeLoadException e) {
 				throw new AttributeLoadException(e.getMessage());
 			}
+		}
+	}
+
+	private void assertClassLoaderBot(String classLoaderInfo, String className) throws ClassNotFoundException {
+		if(!classLoaderInfo.equals(className)){
+			throw new ClassNotFoundException("ClassLoader ["+className+"] - Error Name Configuration: "+classLoaderInfo);
 		}
 	}
 
