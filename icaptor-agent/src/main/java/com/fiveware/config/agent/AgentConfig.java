@@ -65,6 +65,8 @@ public class AgentConfig {
 					bot.setSeparatorFile(botClassLoader.getInputDictionary().getSeparator());
 					bot.setTypeFileIn(botClassLoader.getInputDictionary().getTypeFileIn());	
 					bot.setVersion(botClassLoader.getVersion());
+					bot.setDescription(botClassLoader.getDescription());
+					bot.setClassloader(botClassLoader.getClassLoader());
 					bot = saveParametersBot(botClassLoader.getParameterContexts(), bot);
 					message.addMessageAgentBots(bot);
 				});

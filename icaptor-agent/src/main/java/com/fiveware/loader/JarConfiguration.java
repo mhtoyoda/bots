@@ -44,7 +44,7 @@ public class JarConfiguration {
 
 	@SuppressWarnings("rawtypes")
 	public void saveConfigurations(String pathJar) throws MalformedURLException, AttributeLoadException, IllegalAccessException {
-		String nameBot = null, classLoaderInfo = null, nameJar = null, version = null;
+		String nameBot = null, classLoaderInfo = null, nameJar = null, version = null, description = null;
 		ClassLoader classLoader = getClassLoader(pathJar);
 
 		Set<Class<? extends Automation>> subTypesOf = getSubTypes(classLoader);
@@ -63,6 +63,7 @@ public class JarConfiguration {
 							assertClassLoaderBot(classLoaderInfo, clazz.getCanonicalName());
 							nameJar = StringUtils.substringAfterLast(pathJar, "/");
 							version = (String) getValue(annotation, annotationType, IcaptorMetaInfo.VERSION.getValue());
+							description = (String) getValue(annotation, annotationType, IcaptorMetaInfo.DESCRIPTION.getValue());
 						} catch (NoSuchMethodException | SecurityException | IllegalAccessException
 								| InvocationTargetException e) {
 							logger.error("Problema rotina saveconfiguration: ", e);
@@ -85,7 +86,7 @@ public class JarConfiguration {
 					}
 				}
 				BotClassLoaderContext botClassLoaderContext = getBotClassLoaderContext(nameBot, classLoaderInfo,
-						nameJar, version, method, endpoint, inputDictionaryContext, outputDictionaryContext, getUrl(pathJar),
+						nameJar, version, method, endpoint, description, inputDictionaryContext, outputDictionaryContext, getUrl(pathJar),
 						typeParameter, parameterContext);
 				saveAttributesClassLoader(botClassLoaderContext);
 			} catch (ClassNotFoundException e) {
@@ -107,13 +108,13 @@ public class JarConfiguration {
 	}
 
 	private BotClassLoaderContext getBotClassLoaderContext(String nameBot, String classLoaderInfo, String nameJar,
-			String version, String method, String endpoint, InputDictionaryContext inputDictionaryContext,
+			String version, String method, String endpoint, String description, InputDictionaryContext inputDictionaryContext,
 			OutputDictionaryContext outputDictionaryContext, URL url, Class<?> typeParameter, List<IcaptorPameterContext> pameterContexts) {
 
 		BotClassloaderContextBuilder builder = new BotClassloaderContextBuilder(inputDictionaryContext,
 				outputDictionaryContext, pameterContexts);
 		return builder.nameBot(nameBot).classLoader(classLoaderInfo).nameJar(nameJar).versionJar(version).method(method).endpoint(endpoint)
-				.url(url).typeParameter(typeParameter).build();
+				.description(description).url(url).typeParameter(typeParameter).build();
 	}
 
 	private OutputDictionaryContext getOutputDictionaryAttributes(Class<?> automationClass)

@@ -41,6 +41,12 @@ public class Bot implements Serializable {
 	@Column(name ="version")
 	private String vesion;
 	
+	@Column(name ="classloader")
+	private String classloader;
+	
+	@Column(name ="description")
+	private String description;
+	
 	public Long getId() {
 		return id;
 	}
@@ -112,5 +118,21 @@ public class Bot implements Serializable {
 	public void setVesion(String vesion) {
 		this.vesion = vesion;
 	}
-	
+
+	public String getClassloader() {
+		return classloader;
+	}
+
+	public void setClassloader(String classloader) {
+		this.classloader = classloader;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }

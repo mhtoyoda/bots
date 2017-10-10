@@ -15,6 +15,8 @@ public class MessageAgentBot implements Serializable{
 	private String typeFileIn;
 	private String separatorFile;
 	private String version;
+	private String description;
+	private String classloader;
 	private List<MessageParameterAgentBot> parameters;
 	
 	public String getNameBot() {
@@ -79,6 +81,22 @@ public class MessageAgentBot implements Serializable{
 
 	public void setVersion(String version) {
 		this.version = version;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getClassloader() {
+		return classloader;
+	}
+
+	public void setClassloader(String classloader) {
+		this.classloader = classloader;
 	}
 
 	public List<MessageParameterAgentBot> getParameters() {
