@@ -20,9 +20,12 @@ public class WorkerFile implements Runnable {
 
     private String nameBot;
 
-    public WorkerFile(String nameBot, MultipartFile file, ReadInputFile readInputFile,
+	private Long userId;
+
+    public WorkerFile(Long userId, String nameBot, MultipartFile file, ReadInputFile readInputFile,
                       DeferredResult<ResponseEntity<String>> resultado) {
-        this.file = file;
+        this.userId = userId;
+    	this.file = file;
         this.resultado = resultado;
         this.readInputFile = readInputFile;
         this.nameBot = nameBot;
@@ -31,7 +34,7 @@ public class WorkerFile implements Runnable {
     @Override
     public void run() {
         try {
-            readInputFile.readFile(nameBot, file.getInputStream(), resultado);
+            readInputFile.readFile(userId, nameBot, file.getInputStream(), resultado);
         } catch (IOException e) {
             logger.error("{}", e);
             resultado.setResult(ResponseEntity.badRequest().body("ERROR"));
