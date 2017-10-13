@@ -36,12 +36,8 @@ public class TaskRepositoryImpl implements TaskRepositoryQuery {
 	private Predicate[] createPredicates(TaskFilter filter, CriteriaBuilder builder, Root<Task> root) {
 		List<Predicate> predicates = new ArrayList<>();
 
-		if (filter.getStartedDate() != null) {
-			predicates.add(builder.greaterThanOrEqualTo(root.get("startAt"), filter.getStartedDate()));
-		}
-
-		if (filter.getFinishedDate() != null) {
-			predicates.add(builder.lessThanOrEqualTo(root.get("endAt"), filter.getFinishedDate()));
+		if (filter.getStartedDate() != null && filter.getFinishedDate() != null) {
+			predicates.add(builder.between(root.get("loadTime"), filter.getStartedDate(), filter.getFinishedDate()));
 		}
 
 		if (filter.getBotsIds() != null) {

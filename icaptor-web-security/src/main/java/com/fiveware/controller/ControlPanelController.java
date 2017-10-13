@@ -1,14 +1,13 @@
 package com.fiveware.controller;
 
-import com.fiveware.controller.helper.WebModelUtil;
-import com.fiveware.model.Bot;
-import com.fiveware.model.StatuProcessTask;
-import com.fiveware.model.Task;
-import com.fiveware.model.activity.RecentActivity;
-import com.fiveware.model.user.IcaptorUser;
-import com.fiveware.security.util.SpringSecurityUtil;
-import com.fiveware.service.*;
-import com.fiveware.util.Zip;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +15,28 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import com.fiveware.controller.helper.WebModelUtil;
+import com.fiveware.model.Bot;
+import com.fiveware.model.StatuProcessTask;
+import com.fiveware.model.Task;
+import com.fiveware.model.activity.RecentActivity;
+import com.fiveware.model.user.IcaptorUser;
+import com.fiveware.security.util.SpringSecurityUtil;
+import com.fiveware.service.ServiceActivity;
+import com.fiveware.service.ServiceBot;
+import com.fiveware.service.ServiceItemTask;
+import com.fiveware.service.ServiceStatusProcessTask;
+import com.fiveware.service.ServiceTask;
+import com.fiveware.service.ServiceUser;
+import com.fiveware.util.Zip;
 
 @EnableCaching
 @RestController
@@ -42,9 +54,6 @@ public class ControlPanelController {
 	@Autowired
 	private ServiceActivity activityService;
 
-	@Autowired
-	private JwtAccessTokenConverter accessTokenConverter;
-	
 	@Autowired
 	private ServiceBot botService;
 
@@ -65,6 +74,17 @@ public class ControlPanelController {
 
 		serviceItemTask.metric(tasks);
 
+		return ResponseEntity.ok(tasks);
+	}
+
+	@GetMapping("/filter-tasks")
+	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
+	public ResponseEntity<List<Task>> filterTast(@RequestParam(required = false) List<String> status, @RequestParam(required = false) String bot,
+			@RequestParam(value = "initial_date", required = false) String initialDate, @RequestParam(value = "final_date", required = false) String finalDate,
+			@RequestParam(required = false) List<String> usersId) {
+		List<Task> tasks = taskService.searchForTaskWithFilters(status, bot, initialDate, finalDate, usersId);
+
+		serviceItemTask.metric(tasks);
 
 		return ResponseEntity.ok(tasks);
 	}
@@ -133,10 +153,7 @@ public class ControlPanelController {
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
 	public String dowloand(@PathVariable Long idTask, HttpServletResponse response) {
 
-		List<byte[]> arrData = serviceItemTask.download(idTask)
-											 .stream()
-											 .map((itemTask) -> itemTask.getDataOut().getBytes())
-											 .collect(Collectors.toList());
+		List<byte[]> arrData = serviceItemTask.download(idTask).stream().map((itemTask) -> itemTask.getDataOut().getBytes()).collect(Collectors.toList());
 
 		try {
 			byte[] fileZip = Zip.zipBytes("saida.txt", arrData);
