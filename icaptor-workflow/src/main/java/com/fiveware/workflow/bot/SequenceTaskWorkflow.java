@@ -51,13 +51,13 @@ public class SequenceTaskWorkflow {
 					}
 				}
 			}else if(!verifyTaskNotProcessingWorkflow(task)){			
-				List<ItemTask> list = taskManager.itemTaskListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.ERROR.getName()), workflowBot.getTaskId());
-				java.util.Optional<ItemTask> findFirst = list.stream().findFirst();
-				if(findFirst.isPresent()){
-					ItemTask itemTask = findFirst.get();
+				List<ItemTask> list = taskManager.itemTaskListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.ERROR.getName()), workflowBot.getTaskId());				
+				if(CollectionUtils.isNotEmpty(list)){
 					Task actualTask = taskManager.createTask(workflowBot.getWorkflowBotStep().getBotSource(), 1L);
-					taskManager.createItemTask(actualTask, itemTask.getDataOut());
-					taskManager.updateTask(actualTask.getId(), StatusProcessTaskEnum.PROCESSING);
+					for (ItemTask itemTask : list) {
+						taskManager.createItemTask(actualTask, itemTask.getDataOut());
+					}
+					taskManager.updateTask(actualTask.getId(), StatusProcessTaskEnum.PROCESSING);						
 					workflowBot.setTaskId(actualTask.getId());
 					updateWorkFlowBotStatus(workflowBot, StatusWorkflow.WAITING);
 				}
@@ -71,12 +71,15 @@ public class SequenceTaskWorkflow {
 			List<String> status = Lists.newArrayList(StatusProcessItemTaskEnum.SUCCESS.getName());
 			List<ItemTask> list = taskManager.itemTaskListStatus(status , task.getId());
 			if(CollectionUtils.isNotEmpty(list)){
-				ItemTask itemTask = list.get(0);
-				String dataOut = itemTask.getDataOut();
-				Pattern compile = Pattern.compile(fieldVerify);
-				Matcher matcher = compile.matcher(dataOut);
-				boolean matches = matcher.find();
-				return matches;
+				for(ItemTask itemTask : list){
+					String dataOut = itemTask.getDataOut();
+					Pattern compile = Pattern.compile(fieldVerify);
+					Matcher matcher = compile.matcher(dataOut);
+					boolean matches = matcher.find();
+					if(matches){
+						return matches;						
+					}
+				}
 			}
 		}
 		return false;
