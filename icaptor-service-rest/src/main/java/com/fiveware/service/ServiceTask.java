@@ -29,6 +29,9 @@ public class ServiceTask {
 	private ApiUrlPersistence apiUrlPersistence;
 
 	@Autowired
+	private ServiceActivity activityService;
+
+	@Autowired
 	private RestTemplate restTemplate;
 
 	public Task save(Task task) {
@@ -36,7 +39,9 @@ public class ServiceTask {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Task> entity = new HttpEntity<Task>(task, headers);
-		return restTemplate.postForObject(BASE_URL, entity, Task.class);
+		Task taskSaved = restTemplate.postForObject(BASE_URL, entity, Task.class);
+		activityService.save("task.created", new Object[] { taskSaved.getId() }, taskSaved.getUsuario().getId());
+		return taskSaved;
 	}
 
 	public List<Task> getAll() {
@@ -45,8 +50,9 @@ public class ServiceTask {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Task> requestEntity = new HttpEntity<>(null, headers);
-		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(BASE_URL, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Task>>() {
-		});
+		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(BASE_URL, HttpMethod.GET, requestEntity,
+				new ParameterizedTypeReference<List<Task>>() {
+				});
 		List<Task> tasks = responseEntity.getBody();
 		return tasks;
 	}
@@ -72,7 +78,11 @@ public class ServiceTask {
 		HttpEntity<Task> entity = new HttpEntity<Task>(task, headers);
 
 		ResponseEntity<Task> exchange = restTemplate.exchange(url, HttpMethod.PUT, entity, Task.class);
-		return exchange.getBody();
+		Task taskUpdated = exchange.getBody();
+
+		activityService.save("task.status.updated", new Object[] { taskUpdated.getId(), taskUpdated.getStatusProcess().getName() }, taskUpdated.getUsuario().getId());
+
+		return taskUpdated;
 	}
 
 	public List<Task> getTaskByBot(String botName) {
@@ -82,8 +92,9 @@ public class ServiceTask {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Task> requestEntity = new HttpEntity<>(null, headers);
-		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Task>>() {
-		});
+		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+				new ParameterizedTypeReference<List<Task>>() {
+				});
 		List<Task> tasks = responseEntity.getBody();
 		return tasks;
 	}
@@ -95,8 +106,9 @@ public class ServiceTask {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Task> httpEntity = new HttpEntity<>(null, headers);
-		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<List<Task>>() {
-		});
+		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity,
+				new ParameterizedTypeReference<List<Task>>() {
+				});
 		List<Task> tasks = responseEntity.getBody();
 		return tasks;
 	}
@@ -108,14 +120,16 @@ public class ServiceTask {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		HttpEntity<Task> requestEntity = new HttpEntity<>(null, headers);
-		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Task>>() {
-		});
+		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity,
+				new ParameterizedTypeReference<List<Task>>() {
+				});
 		List<Task> tasks = responseEntity.getBody();
 		logger.debug("Loaded [{}] tasks for user id [{}]", tasks.size(), userId);
 		return tasks;
 	}
 
-	public List<Task> searchForTaskWithFilters(List<String> status, String botId, String dataInicial, String dataFinal, List<String> usersId) {
+	public List<Task> searchForTaskWithFilters(List<String> status, String botId, String dataInicial, String dataFinal,
+			List<String> usersId) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 

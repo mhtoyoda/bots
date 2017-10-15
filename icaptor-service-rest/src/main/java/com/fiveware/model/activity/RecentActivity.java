@@ -1,11 +1,18 @@
 package com.fiveware.model.activity;
 
-import com.fiveware.model.Task;
-import com.fiveware.model.user.IcaptorUser;
-
-import javax.persistence.*;
-import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.Size;
+
+import com.fiveware.model.user.IcaptorUser;
 
 @Entity
 @Table(name = "recent_activity")
@@ -16,18 +23,24 @@ public class RecentActivity {
 	private Long id;
 
 	@Size(max = 50)
-	private String description;
+	private String message;
 
 	@Column(name = "creation_time")
 	private LocalDateTime creationTime;
 
 	@ManyToOne
-	@JoinColumn(name = "task_id")
-	private Task task;
-
-	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private IcaptorUser user;
+
+	public RecentActivity(String message, Long user) {
+		this.message = message;
+		this.user = new IcaptorUser();
+		this.user.setId(user);
+		this.creationTime = LocalDateTime.now();
+	}
+
+	public RecentActivity() {
+	}
 
 	public Long getId() {
 		return id;
@@ -37,12 +50,12 @@ public class RecentActivity {
 		this.id = id;
 	}
 
-	public String getDescription() {
-		return description;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setDescription(String description) {
-		this.description = description;
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 	public LocalDateTime getCreationTime() {
@@ -51,14 +64,6 @@ public class RecentActivity {
 
 	public void setCreationTime(LocalDateTime creationTime) {
 		this.creationTime = creationTime;
-	}
-
-	public Task getTask() {
-		return task;
-	}
-
-	public void setTask(Task task) {
-		this.task = task;
 	}
 
 	public IcaptorUser getUser() {
