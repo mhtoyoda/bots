@@ -45,9 +45,7 @@ public class ReadInputFile {
 	@Autowired
 	private CsvConvertUtil csvConvertUtil;
     
-    private Long userId = 1L;
-    
-    public void readFile(final String nameBot, InputStream file, DeferredResult<ResponseEntity<String>> resultado) throws IOException {
+    public void readFile(final Long userId, final String nameBot, InputStream file, DeferredResult<ResponseEntity<String>> resultado) throws IOException {
         Task task = createTask(nameBot, userId);
         Bot bot = task.getBot();
         String separatorFile = bot.getSeparatorFile();

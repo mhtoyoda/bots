@@ -1,24 +1,31 @@
 package com.fiveware.controller.upload;
 
-import com.fiveware.config.ICaptorApiProperty;
-import com.fiveware.security.util.SpringSecurityUtil;
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.*;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import com.fiveware.config.ICaptorApiProperty;
+import com.fiveware.security.util.SpringSecurityUtil;
 
 /**
  * Created by valdisnei on 29/08/2017.
@@ -41,10 +48,10 @@ public class UploadFile {
                                                          @RequestParam("file") MultipartFile[] file,
                                                          @RequestHeader("Authorization") String details) {
 
-        String url = String.format("%s/api/upload/%s" ,iCaptorApiProperty.getServer().getHost(),nameBot) ;
+        String url = String.format("%s/api/bot/%s/upload" ,iCaptorApiProperty.getServer().getHost(),nameBot) ;
 
         DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
-
+        resultado.setResult(ResponseEntity.ok().body("OK"));
         Thread[] thread = new Thread[file.length];
 
         for (int i = 0; i < file.length; i++) {
@@ -61,16 +68,24 @@ public class UploadFile {
                                String url, DeferredResult<ResponseEntity<String>> resultado) {
         return new Runnable() {
             @Override
-            public void run() {
-                String tempFileName = null;
-                    LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-                    map.add("file", new FileSystemResource(file.getOriginalFilename()));
-                    HttpHeaders headers = new HttpHeaders();
-                    headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-                    headers.add("user", SpringSecurityUtil.decodeAuthorizationKey(details));
-
-                    HttpEntity<LinkedMultiValueMap<String, Object>> requestEntity = new HttpEntity<LinkedMultiValueMap<String, Object>>(map, headers);
-                    ResponseEntity<String> result = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+            public void run() {                    
+            	LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();                                	 
+            	try {					
+            		ByteArrayResource bytes = new ByteArrayResource(file.getBytes()) {					 
+            			@Override					    
+            			public String getFilename() {					            
+            				return file.getOriginalFilename();					        
+            			}					    
+            		};
+					map.add("file", bytes);                                     
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+            	HttpHeaders headers = new HttpHeaders();                
+            	headers.setContentType(MediaType.MULTIPART_FORM_DATA);                
+            	headers.add("user", SpringSecurityUtil.decodeAuthorizationKey(details));
+            	HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);               
+            	restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
             }
         };
     }

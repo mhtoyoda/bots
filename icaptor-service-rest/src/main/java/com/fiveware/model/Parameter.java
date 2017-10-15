@@ -46,7 +46,7 @@ public class Parameter implements Serializable {
 	@JoinColumn(name = "id_scope_parameter")
 	private ScopeParameter scopeParameter;
 
-	@ManyToOne(cascade = CascadeType.PERSIST)
+	@ManyToOne
 	@JoinColumn(name = "id_type_parameter")
 	private TypeParameter typeParameter;
 

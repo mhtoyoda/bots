@@ -128,11 +128,12 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 				if (e.getCause() instanceof RuntimeBotException) {
 					throw new RuntimeBotException(e.getMessage());
 				}
+			}finally {
+				executorService.shutdown();				
 			}
 		
 		obj.setNameAgent(data.getAgentName());
 		producer.send("task.out", obj);
-		executorService.shutdown();
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
 
