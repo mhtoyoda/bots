@@ -1,7 +1,6 @@
 package com.fiveware.service;
 
 import com.fiveware.config.ApiUrlPersistence;
-import com.fiveware.model.Log;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -41,7 +40,7 @@ public class ServiceElasticSearchTest {
 
     @Test
     public void log() throws Exception {
-        class Test implements Log {
+        class Test {
             private String nome;
             private String email;
 

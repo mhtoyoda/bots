@@ -1,24 +1,5 @@
 package com.fiveware.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.function.Predicate;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiveware.exception.AuthenticationBotException;
@@ -26,13 +7,23 @@ import com.fiveware.exception.RecoverableException;
 import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.loader.ClassLoaderRunner;
-import com.fiveware.model.BotClassLoaderContext;
-import com.fiveware.model.OutTextRecord;
-import com.fiveware.model.OutputDictionaryContext;
-import com.fiveware.model.StatusProcessItemTaskEnum;
-import com.fiveware.model.StatusProcessTaskEnum;
+import com.fiveware.model.*;
 import com.fiveware.parameter.ParameterValue;
 import com.fiveware.processor.ProcessorFields;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.*;
+import java.util.function.Predicate;
 
 /**
  * Created by valdisnei on 29/05/17.
@@ -47,6 +38,9 @@ public class ServiceBotClassLoader<T> {
 
     @Autowired
     private ClassLoaderRunner classLoaderRunner;
+
+    @Autowired
+    private ServiceElasticSearch serviceElasticSearch;
 
     public OutTextRecord getOutTextRecord(T parameter, ProcessorFields processorFields)
             throws ClassNotFoundException, RuntimeBotException, IOException, InstantiationException, IllegalAccessException,
@@ -75,6 +69,9 @@ public class ServiceBotClassLoader<T> {
 
         Object obj = null;
         try {
+
+
+
         	obj = execute.invoke(clazz.newInstance(), o1, o2);            
 
             processorFields.getMessageBot().setStatuProcessEnum(StatusProcessTaskEnum.SUCCESS);
@@ -91,6 +88,10 @@ public class ServiceBotClassLoader<T> {
                 Map[] objects = myObjects.toArray(new HashMap[myObjects.size()]);
                 return new OutTextRecord(objects);
             }
+
+            serviceElasticSearch.log(o1); // arquivo de entrada
+            serviceElasticSearch.log(o2); // parameters
+            serviceElasticSearch.log(obj); //arquivo de saida
 
             Map map = objectMapper.convertValue(obj, Map.class);
             HashMap[] hashMaps = {(HashMap) map};
@@ -111,16 +112,23 @@ public class ServiceBotClassLoader<T> {
 
                 HashMap[] hashMaps = handleException(processorFields, new UnRecoverableException(e.getCause()));
 
+                serviceElasticSearch.error(e);
+
                 return new OutTextRecord(hashMaps);
             } else if (predicate.test(RecoverableException.class)) {
                 HashMap[] hashMaps = handleException(processorFields, new RecoverableException(e.getCause()));
+
+                serviceElasticSearch.error(e);
 
                 return new OutTextRecord(hashMaps);
             } else if (predicate.test(AuthenticationBotException.class)) {
                 HashMap[] hashMaps = handleException(processorFields, new AuthenticationBotException(e.getCause()));
 
+                serviceElasticSearch.error(e);
+
                 return new OutTextRecord(hashMaps);
             } else {
+                serviceElasticSearch.error(e);
                 throw new RuntimeBotException(e.getTargetException().getMessage());
             }
         }

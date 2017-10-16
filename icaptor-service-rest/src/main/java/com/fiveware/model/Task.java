@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AutoProperty
 @Entity
 @Table(name = "task")
-public class Task implements Log,Serializable {
+public class Task implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

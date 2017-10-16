@@ -1,7 +1,6 @@
 package com.fiveware.service;
 
 import com.fiveware.config.ApiUrlPersistence;
-import com.fiveware.model.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,8 @@ public class ServiceElasticSearch {
         this.restTemplate = restTemplate;
     }
 
-    public String log(Log task) {
-        String url = apiUrlPersistence.endPointElasticSearch("icaptor-automation", task.getClass().getSimpleName());
+    public String log(Object task) {
+        String url = apiUrlPersistence.endPointElasticSearch("icaptor-automation/", task.getClass().getSimpleName());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -62,7 +61,7 @@ public class ServiceElasticSearch {
         restTemplate.postForEntity(url, entity, Object.class);
     }
 
-    public int delete(Log task, String id) {
+    public int delete(Object task, String id) {
         String url = apiUrlPersistence.endPointElasticSearch("icaptor-automation",
                 task.getClass().getSimpleName().toString()
                         .concat("/")

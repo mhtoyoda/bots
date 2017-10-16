@@ -8,7 +8,6 @@ import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.parameter.ParameterIcaptor;
 import com.fiveware.parameter.ParameterValue;
-import com.fiveware.service.AutomationLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,9 +49,6 @@ public class TesteBot implements Automation<String, Endereco> {
 
 		logger.info("Dados de Endereco: {}",endereco.toString());
 		Endereco endereco1 = getEndereco(endereco);
-
-		AutomationLog automationLog = new AutomationLog();
-		automationLog.info(endereco1);
 
 		return endereco1;
 	}
