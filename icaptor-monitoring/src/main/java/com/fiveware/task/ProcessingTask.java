@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import com.fiveware.service.ServiceElasticSearch;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.pojomatic.annotations.AutoProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +64,7 @@ public class ProcessingTask {
 			String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
 			logger.info("{}",task);
 			if ("dev".equalsIgnoreCase(profile))
-					serviceElasticSearch.indexer(task);
+					serviceElasticSearch.log(task);
 
 			sentItemTaskToQueue(queueName, task);
 		});
@@ -86,7 +85,7 @@ public class ProcessingTask {
 				producer.send(queueName, messageBot);
 				taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.INLINE);
 				if ("dev".equalsIgnoreCase(profile))
-					serviceElasticSearch.indexer(itemTask);
+					serviceElasticSearch.log(itemTask);
 			});
 			
 			sendNotificationTaskCreated(queueName, task.getBot().getNameBot());			

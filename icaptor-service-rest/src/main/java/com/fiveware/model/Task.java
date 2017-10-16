@@ -22,7 +22,7 @@ import org.pojomatic.annotations.AutoProperty;
 @AutoProperty
 @Entity
 @Table(name = "task")
-public class Task implements Serializable {
+public class Task implements Log, Serializable {
 
 	private static final long serialVersionUID = 1L;
 

@@ -32,7 +32,7 @@ public class TaskProcessedTask {
 			if (countItemTask == countItemTaskErrorOrSucess) {
 				String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
 				taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCESSED);
-				serviceElasticSearch.indexer(task);
+				serviceElasticSearch.log(task);
 				brokerManager.deleteQueue(queueName);
 			}
 		});

@@ -21,7 +21,7 @@ import org.pojomatic.annotations.AutoProperty;
 @AutoProperty
 @Entity
 @Table(name = "item_task")
-public class ItemTask implements Serializable {
+public class ItemTask implements Log, Serializable {
 
 	/**
 	 * 

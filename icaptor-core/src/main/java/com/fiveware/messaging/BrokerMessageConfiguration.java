@@ -76,7 +76,7 @@ public class BrokerMessageConfiguration {
 //
 //		rabbitTemplate.setReturnCallback(new RabbitTemplate.ReturnCallback() {
 //			@Override
-//			public void returnedMessage(Message message, int i, String s, String s1, String s2) {
+//			public void returnedMessage(Error message, int i, String s, String s1, String s2) {
 //				System.out.println("message = " + message);
 //			}
 //		});

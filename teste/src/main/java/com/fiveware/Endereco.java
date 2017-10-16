@@ -2,13 +2,14 @@ package com.fiveware;
 
 import java.io.Serializable;
 
+import com.fiveware.service.IcaptorLog;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
 import com.fiveware.annotation.Field;
 
 @AutoProperty
-public class Endereco implements Serializable {
+public class Endereco implements IcaptorLog, Serializable {
 	/**
 	 * 
 	 */
