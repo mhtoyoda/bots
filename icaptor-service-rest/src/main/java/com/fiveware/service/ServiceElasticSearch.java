@@ -49,7 +49,9 @@ public class ServiceElasticSearch {
 
     public void error(Exception e) {
         Error message = new Error(e.getStackTrace(), e.getCause(), e.getMessage());
-        String url = "http://54.232.96.63:9200/icaptor-automation/error";
+        String url = apiUrlPersistence.endPointElasticSearch("icaptor-automation", "/error");
+
+//        String url = "http://54.232.96.63:9200/icaptor-automation/error";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

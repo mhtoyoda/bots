@@ -1,28 +1,18 @@
 package com.fiveware.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fiveware.model.user.IcaptorUser;
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.pojomatic.Pojomatic;
-
-import com.fiveware.model.user.IcaptorUser;
-import org.pojomatic.annotations.AutoProperty;
 
 @AutoProperty
 @Entity
 @Table(name = "task")
-public class Task implements Log, Serializable {
+public class Task implements Log,Serializable {
 
 	private static final long serialVersionUID = 1L;
 
