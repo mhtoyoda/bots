@@ -41,7 +41,7 @@ public class CloudParameterMessage implements ConsumerTypeMessage<MessageParamet
 		Map<String, Parameter> parameters = parameterInfo.getParameters();
 		if(null != parameters){
 			for(Map.Entry<String, Parameter> parameter : parameters.entrySet()){			 
-				String param = "parameter:"+parameter.getKey()+":"+parameter.getValue().getFieldValue();			 
+				String param = "parameter|"+parameter.getKey()+"|"+parameter.getValue().getFieldValue();			 
 				list.add(param);
 			}
 		}
