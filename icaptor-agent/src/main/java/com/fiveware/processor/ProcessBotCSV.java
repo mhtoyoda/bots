@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -129,7 +130,12 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 					throw new RuntimeBotException(e.getMessage());
 				}
 			}finally {
-				executorService.shutdown();				
+				executorService.shutdown();
+				try {
+					executorService.awaitTermination(60, TimeUnit.SECONDS);
+				} catch (InterruptedException e) {					
+					e.printStackTrace();
+				}
 			}
 		
 		obj.setNameAgent(data.getAgentName());
@@ -150,10 +156,11 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 						parameterValue.add(values[1].toString(), values[2].toString(), values[3].toString());
 					}
 					else{
-						if(values.length == 4){
-							parameterValue.add(values[1].toString(), values[2].toString(), values[3].toString());
-						}else if(values.length == 3){
-							parameterValue.add(values[1].toString(), values[1].toString(), values[2].toString());
+						String[] valuesParameters = field.split("\\|");
+						if(valuesParameters.length == 4){
+							parameterValue.add(valuesParameters[1].toString(), valuesParameters[2].toString(), valuesParameters[3].toString());
+						}else if(valuesParameters.length == 3){
+							parameterValue.add(valuesParameters[1].toString(), valuesParameters[1].toString(), valuesParameters[2].toString());
 						}												
 					}
 				}
