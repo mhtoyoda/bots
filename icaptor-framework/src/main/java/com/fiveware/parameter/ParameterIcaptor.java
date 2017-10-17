@@ -15,6 +15,8 @@ public class ParameterIcaptor implements Serializable {
 	private String field;
 	private String value;
 
+	public ParameterIcaptor(){}
+	
 	@JsonCreator
 	public ParameterIcaptor(@JsonProperty("type") String type, @JsonProperty("field") String field, @JsonProperty("value") String value) {
 		this.type = type;
