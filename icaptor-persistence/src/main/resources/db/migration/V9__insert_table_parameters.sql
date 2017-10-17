@@ -11,6 +11,14 @@ insert into type_parameter(name, exclusive, credential) values('smtp-user', 0, 0
 insert into type_parameter(name, exclusive, credential) values('smtp-password', 0, 0);
 insert into type_parameter(name, exclusive, credential) values('smtp-subject', 0, 0);
 
+insert into type_parameter(name, exclusive, credential) values('day_execution',0,0);
+insert into type_parameter(name, exclusive, credential) values('time_execution',0,0);
+insert into type_parameter(name, exclusive, credential) values('pathDriverChrome',0,0);
+insert into type_parameter(name, exclusive, credential) values('urlpath',0,0);
+
+# Todo remover esta linha apos apresentacao da votorantim
+insert into type_parameter(name, exclusive, credential) values('pathFaturas',0,0);
+
 insert into scope_parameter(id, name, priority) values(1, 'cloud', 0);
 insert into scope_parameter(id, name, priority) values(2, 'bot', 1);
 insert into scope_parameter(id, name, priority) values(3, 'cloud_bot', 2);
