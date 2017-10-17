@@ -33,11 +33,20 @@ public class ServerRegister {
 	
 	@PostConstruct
 	public void register() {
-		ServerInfo server = serverConfig.getServer();
-		log.info("Init Server Host: {} - Port: {}", server.getHost(), server.getPort());
-		registerServer();
-		createQueueTaskOut();
-		createTopicAgents();
+		boolean serverOff = true;
+		while(serverOff){
+			try{
+				Thread.sleep(10000);
+				ServerInfo server = serverConfig.getServer();
+				log.info("Init Server Host: {} - Port: {}", server.getHost(), server.getPort());
+				registerServer();
+				createQueueTaskOut();
+				createTopicAgents();
+				serverOff = false;
+			}catch (Exception e) {		
+				log.error("Error while Init Server: {}", e.getMessage());
+			}			
+		}
 	}
 
 	private void registerServer() {
