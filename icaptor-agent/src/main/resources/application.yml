@@ -10,8 +10,8 @@ icaptor:
     name: icaptor-server
     host: http://localhost:8082
     ip: 127.0.0.1
-    data-source:
-      host: http://localhost:8085
+  data-source:
+    host: http://localhost:8085
   elasticSearch: http://54.232.96.63:9200
   broker:
     user: guest
@@ -42,8 +42,8 @@ icaptor:
     name: icaptor-server
     host: localhost:8082
     ip: localhost
-    data-source:
-      host: http://localhost:8085
+  data-source:
+    host: http://localhost:8085
   elasticSearch: http://54.232.96.63:9200
 
   broker:
