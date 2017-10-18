@@ -78,8 +78,13 @@ public class ServiceBotClassLoader<T> {
             processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.SUCCESS);
             processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
 
-            if (obj instanceof List)
-                return new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
+            if (obj instanceof List){
+                OutTextRecord outTextRecord = new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
+                serviceElasticSearch.log(o1); // arquivo de entrada
+                serviceElasticSearch.log(o2); // parameters
+                serviceElasticSearch.log(obj); //arquivo de saida
+                return outTextRecord;
+            }
 
             if (botClassLoaderContext.get().getOutputDictionary().getFields().length==1
                     && "listJson".equalsIgnoreCase(botClassLoaderContext.get().getOutputDictionary().getFields()[0])) {
