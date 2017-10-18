@@ -1,9 +1,15 @@
 package com.fiveware.task;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.fiveware.messaging.BrokerManager;
+import com.fiveware.messaging.Producer;
+import com.fiveware.model.*;
+import com.fiveware.model.message.MessageBot;
+import com.fiveware.model.message.MessageHeader;
+import com.fiveware.model.message.MessageTask;
+import com.fiveware.parameter.ParameterResolver;
+import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceElasticSearch;
+import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -13,19 +19,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.messaging.BrokerManager;
-import com.fiveware.messaging.Producer;
-import com.fiveware.model.Agent;
-import com.fiveware.model.ItemTask;
-import com.fiveware.model.StatusProcessItemTaskEnum;
-import com.fiveware.model.StatusProcessTaskEnum;
-import com.fiveware.model.Task;
-import com.fiveware.model.message.MessageBot;
-import com.fiveware.model.message.MessageHeader;
-import com.fiveware.model.message.MessageTask;
-import com.fiveware.parameter.ParameterResolver;
-import com.fiveware.service.ServiceAgent;
-import com.google.common.collect.Lists;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ProcessingTask {
@@ -64,7 +59,7 @@ public class ProcessingTask {
 			String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
 			logger.info("{}",task);
 			if ("dev".equalsIgnoreCase(profile))
-					serviceElasticSearch.log(task);
+					serviceElasticSearch.log(task,task.getId());
 
 			sentItemTaskToQueue(queueName, task);
 		});
@@ -85,7 +80,7 @@ public class ProcessingTask {
 				producer.send(queueName, messageBot);
 				taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.INLINE);
 				if ("dev".equalsIgnoreCase(profile))
-					serviceElasticSearch.log(itemTask);
+					serviceElasticSearch.log(itemTask,itemTask.getId());
 			});
 			
 			sendNotificationTaskCreated(queueName, task.getBot().getNameBot());			

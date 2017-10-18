@@ -29,19 +29,16 @@ public class ServiceElasticSearch {
         this.restTemplate = restTemplate;
     }
 
-    public String log(Object task) {
-        String url = apiUrlPersistence.endPointElasticSearch("icaptor-automation/", task.getClass().getSimpleName());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+    public String log(Object log) {
+        String url = apiUrlPersistence.endPointElasticSearch("icaptor-automation/", log.getClass().getSimpleName());
+        return send(log, url);
+    }
 
-        HttpEntity<Object> entity = new HttpEntity<Object>(task, headers);
-        try {
-            ResponseEntity<Map<String, Object>> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, new ParameterizedTypeReference<Map<String, Object>>() {
-            });
-            return exchange.getBody().get("_id").toString();
-        }catch (Exception e){
-            error(e);
-        }
+    public String log(Object log,Object id) {
+        String url = apiUrlPersistence.endPointElasticSearch("icaptor-automation/",
+                                                log.getClass().getSimpleName().concat("/").concat(id.toString()));
+        String exchange = send(log, url);
+        if (exchange != null) return exchange;
         return null;
     }
 
@@ -49,8 +46,6 @@ public class ServiceElasticSearch {
     public void error(Exception e) {
         Error message = new Error(e.getStackTrace(), e.getCause(), e.getMessage());
         String url = apiUrlPersistence.endPointElasticSearch("icaptor-automation", "/error");
-
-//        String url = "http://54.232.96.63:9200/icaptor-automation/error";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -73,6 +68,22 @@ public class ServiceElasticSearch {
         restTemplate.exchange(url, HttpMethod.DELETE, entity, Object.class);
 
         return 1;
+    }
+
+
+    private String send(Object log, String url) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Object> entity = new HttpEntity<Object>(log, headers);
+        try {
+            ResponseEntity<Map<String, Object>> exchange = restTemplate.exchange(url, HttpMethod.POST, entity, new ParameterizedTypeReference<Map<String, Object>>() {
+            });
+            return exchange.getBody().get("_id").toString();
+        }catch (Exception e){
+            error(e);
+        }
+        return null;
     }
 
 
