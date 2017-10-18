@@ -55,7 +55,7 @@ public class SequenceTaskWorkflow {
 				if(CollectionUtils.isNotEmpty(list)){
 					Task actualTask = taskManager.createTask(workflowBot.getWorkflowBotStep().getBotSource(), 1L);
 					for (ItemTask itemTask : list) {
-						taskManager.createItemTask(actualTask, itemTask.getDataOut());
+						taskManager.createItemTask(actualTask, itemTask.getDataIn());
 					}
 					taskManager.updateTask(actualTask.getId(), StatusProcessTaskEnum.PROCESSING);						
 					workflowBot.setTaskId(actualTask.getId());
