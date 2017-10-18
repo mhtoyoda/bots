@@ -4,6 +4,7 @@ import com.fiveware.model.ItemTask;
 import com.fiveware.model.Parameter;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.parameter.ParameterResolver;
+import com.fiveware.service.ServiceElasticSearch;
 import com.google.common.base.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,9 @@ public class TimeoutItemTask {
 	@Autowired
 	private ParameterResolver parameterResolver;
 
+	@Autowired
+	private ServiceElasticSearch serviceElasticSearch;
+
 	public void checkTimeout() {
 		int timeout = getTimeoutParameter();
 		List<ItemTask> itemTaskProcessing = taskManager.allItemTaskProcessing(StatusProcessItemTaskEnum.PROCESSING.getName());
@@ -30,6 +34,7 @@ public class TimeoutItemTask {
 			long secondsDuration = Duration.between(startAt, now).getSeconds();
 			if (secondsDuration > timeout) {
 				taskManager.updateItemTask(item.getId(), StatusProcessItemTaskEnum.ERROR);
+				serviceElasticSearch.log(item,item.getId());
 			}
 		});
 	}
