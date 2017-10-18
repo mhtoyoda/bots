@@ -53,12 +53,20 @@ public class SequenceTaskWorkflow {
 			}else if(!verifyTaskNotProcessingWorkflow(task)){			
 				List<ItemTask> list = taskManager.itemTaskListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.ERROR.getName()), workflowBot.getTaskId());				
 				if(CollectionUtils.isNotEmpty(list)){
+					if(null != workflowBot && workflowBot.getCountTry() >= 3){
+						for (ItemTask itemTask : list) {
+							taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.CANCELED);
+						}
+						return;
+					}
 					Task actualTask = taskManager.createTask(workflowBot.getWorkflowBotStep().getBotSource(), 1L);
 					for (ItemTask itemTask : list) {
 						taskManager.createItemTask(actualTask, itemTask.getDataIn());
 					}
 					taskManager.updateTask(actualTask.getId(), StatusProcessTaskEnum.PROCESSING);						
 					workflowBot.setTaskId(actualTask.getId());
+					Integer countTry = workflowBot.getCountTry()+1;
+					workflowBot.setCountTry(countTry);
 					updateWorkFlowBotStatus(workflowBot, StatusWorkflow.WAITING);
 				}
 			}
