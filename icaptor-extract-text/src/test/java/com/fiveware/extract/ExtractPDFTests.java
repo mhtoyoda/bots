@@ -2,6 +2,7 @@ package com.fiveware.extract;
 
 import com.fiveware.dsl.TypeSearch;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.fiveware.dsl.pdf.Helpers.helpers;
 import static org.junit.Assert.assertEquals;
@@ -97,6 +99,23 @@ public class ExtractPDFTests {
 				.open(testArquivoICms)
 				.search("ICMS ",  TypeSearch.PERCENT)
 				.list();
+
+		assertEquals("30,00%",icms.get(2));
+	}
+
+	@Test
+	@Ignore
+	public void lineICMS(){
+		List<String> icms = helpers().pdf()
+				.open(testArquivoICms)
+				.search("(ICMS)+\\s([0-9]\\d).+")
+				.list();
+
+		List<String[]> valor_icms = icms.stream()
+				.map((s) -> s.split("Valor ICMS")[0].split("%"))
+				.collect(Collectors.toList());
+
+		System.out.println("valor_icms = " + valor_icms);
 
 		assertEquals("30,00%",icms.get(2));
 	}
