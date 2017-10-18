@@ -2,6 +2,7 @@ package com.fiveware.service;
 
 import com.fiveware.config.ApiUrlPersistence;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -12,6 +13,7 @@ import java.util.Objects;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 
+@Ignore
 public class ServiceElasticSearchTest {
 
     @Mock

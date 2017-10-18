@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
@@ -18,13 +19,16 @@ public class ExtractPDFTests {
 	String outPathFile;
 	String rootDir;
 
+	String testArquivoICms;
+
 	@Before
 	public void setup(){
-		rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
+		Path resourceDirectory = Paths.get("src/test/resources");
+		rootDir = resourceDirectory.normalize().toString();
 		path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
-
-
 		outPathFile = rootDir + File.separator +"out.pdf";
+
+		testArquivoICms = rootDir + File.separator + "1.pdf";
 	}
 
 	@Test
@@ -84,6 +88,17 @@ public class ExtractPDFTests {
 				.build();
 
 		assertEquals("R$ 0,11",pis);
+	}
+
+
+	@Test
+	public void icmsList(){
+		List<String> icms = helpers().pdf()
+				.open(testArquivoICms)
+				.search("ICMS ",  TypeSearch.PERCENT)
+				.list();
+
+		assertEquals("30,00%",icms.get(2));
 	}
 
 	@Test

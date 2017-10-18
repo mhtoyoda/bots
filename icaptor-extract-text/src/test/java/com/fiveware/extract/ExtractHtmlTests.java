@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.InvalidParameterException;
 
@@ -25,7 +26,8 @@ public class ExtractHtmlTests {
 
 	@Before
 	public void setup() throws MalformedURLException {
-		String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
+		Path resourceDirectory = Paths.get("src/test/resources");
+		String rootDir = resourceDirectory.normalize().toString();
 		outPathFile = rootDir + File.separator +"out.pdf";
 		fileHtml=rootDir + File.separator + "cartaExemplo.html";
 		url = new URL("https://www.uol.com.br");

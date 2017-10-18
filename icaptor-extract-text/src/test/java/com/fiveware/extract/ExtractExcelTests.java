@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static com.fiveware.dsl.excel.IExcel.Formula;
@@ -18,7 +19,8 @@ public class ExtractExcelTests {
 	String fileExcel;
 	@Before
 	public void setup() throws IOException, IllegalAccessException, InstantiationException {
-		String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
+		Path resourceDirectory = Paths.get("src/test/resources");
+		String rootDir = resourceDirectory.normalize().toString();
 		fileExcel=rootDir + File.separator + "excel.xls";
 
 	}

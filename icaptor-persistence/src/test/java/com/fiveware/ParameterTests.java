@@ -7,6 +7,7 @@ import com.fiveware.repository.ParameterRepository;
 import com.fiveware.repository.Parameters;
 import com.fiveware.repository.user.UserRepository;
 import com.google.common.collect.Lists;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.util.List;
 @Transactional
 @Rollback(true)
 @RunWith(SpringJUnit4ClassRunner.class)
+@Ignore
 public class ParameterTests {
 
 //	@LocalServerPort

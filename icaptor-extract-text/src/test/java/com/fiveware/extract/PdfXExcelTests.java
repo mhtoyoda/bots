@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +36,8 @@ public class PdfXExcelTests {
 
     @Before
     public void setup(){
-
-        String rootDir = Paths.get(".").toAbsolutePath().normalize().toString();
+        Path resourceDirectory = Paths.get("src/test/resources");
+        String rootDir = resourceDirectory.normalize().toString();
         fileExcel=rootDir + File.separator + "excel.xls";
         path =rootDir + File.separator + "VOTORANTIM_ENERGIA_LTDA_0282682038_03-2017.pdf";
         pathFile2 =rootDir + File.separator + "VOTENER-VOTORANTIM COMERCIALIZADORA_0292026574_03-2017.pdf";
