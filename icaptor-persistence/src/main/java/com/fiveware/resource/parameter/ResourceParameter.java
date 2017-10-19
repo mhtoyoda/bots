@@ -3,6 +3,7 @@ package com.fiveware.resource.parameter;
 import com.fiveware.model.Parameter;
 import com.fiveware.model.ScopeParameter;
 import com.fiveware.model.TypeParameter;
+import com.fiveware.model.user.IcaptorUser;
 import com.fiveware.repository.ParameterRepository;
 import com.fiveware.repository.Parameters;
 import com.fiveware.repository.ScopeParameterRepository;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -62,28 +64,23 @@ public class ResourceParameter {
 	}
 
 	@PostMapping
-	public ResponseEntity<Parameter> save(@RequestBody Parameter parameter) {
-//		final TypeParameter[] type = {parameter.getTypeParameter()};
-//		Optional<Parameter> parameterOptional = Optional.ofNullable(parameterRepository.
-//				findParameterByTypeParameterNameAndScopeParameterName(parameter.getTypeParameter().getName(),
-//																	  parameter.getScopeParameter().getName()));
-//		parameterOptional.ifPresent( (param) ->{
-//				type[0] = param.getTypeParameter();
-//		});
-//		parameter.setTypeParameter(type[0]);
-//		if (parameter.getTypeParameter().isNew())
-			parameter = parameterRepository.save(parameter);
-//		else
-//			parameter = parametersMerge.save(parameter);
+	public ResponseEntity<Parameter> save(@RequestBody Parameter parameter, Long id) {
+
+		if (!Objects.isNull(id))
+			parameter.setUsuario(new IcaptorUser(id));
+
+		parameter = parameterRepository.save(parameter);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(parameter);
 	}
 	
-	@PostMapping("/several")
-	public ResponseEntity<Object> save(@RequestBody List<Parameter> parameters) {
-		parameters.stream().forEach((param) -> save(param));
+	@PostMapping({"/several","/several/user/{id}"})
+	public ResponseEntity<Object> save(@RequestBody List<Parameter> parameters,@PathVariable Long id) {
+		parameters.stream().forEach((param) -> save(param,id));
 		return ResponseEntity.status(HttpStatus.CREATED).body(parameters);
 	}
+
+
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@RequestBody Long id) {
@@ -131,9 +128,21 @@ public class ResourceParameter {
 		return ResponseEntity.ok(parameters);
 	}
 
+	@GetMapping({"/","/user/{id}"})
+	public ResponseEntity<Iterable<Parameter>> findAll(@PathVariable Long id) {
+		Iterable<Parameter> parameters = null;
+		if (!Objects.isNull(id))
+			parameters = parameterRepository.findByUsuarioId(id);
+		else
+			parameters = parameterRepository.findAll();
+
+		return ResponseEntity.ok(parameters);
+	}
+
 	@GetMapping
 	public ResponseEntity<Iterable<Parameter>> findAll() {
-		Iterable<Parameter> parameters = parameterRepository.findAll();
+		Iterable<Parameter> parameters =  parameterRepository.findAll();
+
 		return ResponseEntity.ok(parameters);
 	}
 }

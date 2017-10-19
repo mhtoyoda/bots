@@ -2,6 +2,7 @@ package com.fiveware.controller;
 
 import com.fiveware.model.Parameter;
 import com.fiveware.model.TypeParameter;
+import com.fiveware.security.util.SpringSecurityUtil;
 import com.fiveware.service.ServiceParameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,14 +54,21 @@ public class ParameterController {
 		return ResponseEntity.ok(parameters);
 	}
 
+	@GetMapping("/session")
+	public ResponseEntity<Object> getParametersSession(@RequestHeader("Authorization") String details) {
+		logger.info("Carregando os parametros");
+		Integer idUser = (Integer) SpringSecurityUtil.decodeAuthorizationKey(details, "idUser");
+
+		Iterable<Parameter> parameters = parameterService.getParametersAll(new Long(idUser));
+		return ResponseEntity.ok(parameters);
+	}
 	@GetMapping
 	public ResponseEntity<Object> getParametersAll() {
 		logger.info("Carregando os parametros");
 
-		Iterable<Parameter> parameters = parameterService.getParametersAll();
+		Iterable<Parameter> parameters = parameterService.getParametersAll(null);
 		return ResponseEntity.ok(parameters);
 	}
-
 
 	@PostMapping("/save-single")
 	public ResponseEntity<Parameter> save(@RequestBody Parameter parameter) {
@@ -70,7 +78,17 @@ public class ParameterController {
 
 	@PostMapping("/save-several")
 	public ResponseEntity<List<Parameter>> save(@RequestBody List<Parameter> parameters) {
-		List<Parameter> saved = parameterService.save(parameters);
+		List<Parameter> saved = parameterService.save(parameters,null);
+		return ResponseEntity.ok(saved);
+	}
+
+	@PostMapping("/session")
+	public ResponseEntity<List<Parameter>> saveSession(@RequestBody List<Parameter> parameters, @RequestHeader("Authorization") String details) {
+
+		Integer idUser = (Integer) SpringSecurityUtil.decodeAuthorizationKey(details, "idUser");
+
+
+		List<Parameter> saved = parameterService.save(parameters,idUser.longValue());
 		return ResponseEntity.ok(saved);
 	}
 

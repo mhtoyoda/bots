@@ -26,4 +26,6 @@ public interface ParameterRepository extends CrudRepository<Parameter, Long> {
     List<Parameter> findParameterByScopeParameterName(String name);
 
 	Parameter findParameterByTypeParameterNameAndScopeParameterName(@Param("nameScope") String nameScope, @Param("nameType") String nameType);
+
+    Iterable<Parameter> findByUsuarioId(Long id);
 }

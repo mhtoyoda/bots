@@ -56,7 +56,14 @@ public class IcaptorUser implements Serializable {
 	@JoinTable(name = "grupo_user", joinColumns = @JoinColumn(name = "id_user"), inverseJoinColumns = @JoinColumn(name = "id_grupo"))
 	private List<Group> grupos;
 
-	public Long getId() {
+	public IcaptorUser() {
+	}
+
+	public IcaptorUser(Long id) {
+		this.id = id;
+	}
+
+    public Long getId() {
 		return id;
 	}
 
