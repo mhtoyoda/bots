@@ -78,7 +78,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	 */
 	@Override
 	public void processMessage(String botName, MessageBot messageBot) throws RuntimeBotException {
-		log.debug("Linha resultado: {}", messageBot.getLineResult());
+		log.debug("Linha resultado: {}", messageBot);
 		botName = messageBot.getBotName();
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof RecoverableException ){
