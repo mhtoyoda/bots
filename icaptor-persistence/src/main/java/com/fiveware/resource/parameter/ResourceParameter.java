@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/parameter")
@@ -74,12 +73,16 @@ public class ResourceParameter {
 		return ResponseEntity.status(HttpStatus.CREATED).body(parameter);
 	}
 	
-	@PostMapping({"/several","/several/user/{id}"})
-	public ResponseEntity<Object> save(@RequestBody List<Parameter> parameters,@PathVariable Long id) {
+	@PostMapping("/several")
+	public ResponseEntity<Object> save(@RequestBody List<Parameter> parameters,Long id) {
 		parameters.stream().forEach((param) -> save(param,id));
 		return ResponseEntity.status(HttpStatus.CREATED).body(parameters);
 	}
 
+	@PostMapping("/several/user/{id}")
+	public ResponseEntity<Object> saveByUser(@RequestBody List<Parameter> parameters,@PathVariable Long id) {
+		return save(parameters,id);
+	}
 
 
 	@DeleteMapping("/{id}")
