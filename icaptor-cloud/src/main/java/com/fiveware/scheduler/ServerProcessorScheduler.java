@@ -140,7 +140,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 			Parameter parameter = optional.get().getParameters().get(typeParameter);
 
 			if(Objects.isNull(parameter))
-				getParameterCloud(typeParameter);
+				return getParameterCloud(typeParameter);
 
 			return getValue(parameter);
 		}
