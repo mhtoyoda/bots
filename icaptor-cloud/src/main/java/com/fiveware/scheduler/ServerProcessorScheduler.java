@@ -1,29 +1,12 @@
 package com.fiveware.scheduler;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.config.ServerConfig;
 import com.fiveware.exception.AuthenticationBotException;
 import com.fiveware.exception.RecoverableException;
 import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.Receiver;
-import com.fiveware.model.Agent;
-import com.fiveware.model.AgentParameter;
-import com.fiveware.model.Bot;
-import com.fiveware.model.Parameter;
-import com.fiveware.model.StatusProcessItemTaskEnum;
-import com.fiveware.model.StatusProcessTaskEnum;
-import com.fiveware.model.Task;
+import com.fiveware.model.*;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.parameter.ParameterInfo;
 import com.fiveware.parameter.ParameterResolver;
@@ -31,6 +14,16 @@ import com.fiveware.pulling.BrokerPulling;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.ServiceServer;
 import com.fiveware.task.TaskManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Component
 public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
@@ -66,12 +59,8 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 		List<Agent> agents = serviceServer.getAllAgent(serverConfig.getServer().getName());
 		agents.forEach(agent -> {
 			log.info("Pulling Error [Agent]: {}", agent.getNameAgent());
-			List<Bot> bots = serviceAgent.findBotsByAgent(agent.getNameAgent());
-			bots.forEach(bot -> {
-				String botName = bot.getNameBot();
-				String nameQueue = "task.out";
-				pullMessage(botName, nameQueue);
-			});
+			String nameQueue = "task.out";
+			pullMessage("", nameQueue);
 		});
 	}
 
@@ -90,7 +79,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 	@Override
 	public void processMessage(String botName, MessageBot messageBot) throws RuntimeBotException {
 		log.debug("Linha resultado: {}", messageBot.getLineResult());
-
+		botName = messageBot.getBotName();
 		if (!Objects.isNull(messageBot.getException()) &&
 				messageBot.getException() instanceof RecoverableException ){
 			int parameterRetry = getParameter(botName, "retry");

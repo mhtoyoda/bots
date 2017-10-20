@@ -1,21 +1,5 @@
 package com.fiveware.processor;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.collections4.CollectionUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.MessageSource;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.config.agent.AgentConfigProperties;
 import com.fiveware.context.QueueContext;
 import com.fiveware.exception.AttributeLoadException;
@@ -43,6 +27,21 @@ import com.fiveware.util.LineUtil;
 import com.fiveware.util.ListJoinUtil;
 import com.fiveware.validate.Validate;
 import com.google.common.collect.Lists;
+import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 @Component("processBotCSV")
 public class ProcessBotCSV implements ProcessBot<MessageBot> {
@@ -139,6 +138,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 			}
 		
 		obj.setNameAgent(data.getAgentName());
+		obj.setBotName(botName);
 		producer.send("task.out", obj);
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
