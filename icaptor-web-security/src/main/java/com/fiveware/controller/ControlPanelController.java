@@ -80,8 +80,11 @@ public class ControlPanelController {
 	}
 
 	@GetMapping("/recent-activities/user/{id}")
-	public ResponseEntity<Object> loadRecentActivities(@PathVariable Long id) {
-		List<RecentActivity> activities = activityService.findByUserId(id);
+	public ResponseEntity<Object> loadRecentActivities(@PathVariable Long id, @RequestHeader("Authorization") String details) {
+
+		Integer idUser = (Integer) SpringSecurityUtil.decodeAuthorizationKey(details, "idUser");
+
+		List<RecentActivity> activities = activityService.findByUserId(new Long(idUser));
 		return ResponseEntity.ok(activities);
 	}
 
