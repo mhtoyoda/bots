@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class ServiceElasticSearch {
@@ -30,6 +31,7 @@ public class ServiceElasticSearch {
     }
 
     public String log(Object log) {
+        if(Objects.isNull(log)) return null;
         String url = apiUrlPersistence.endPointElasticSearch("icaptor-automation/", log.getClass().getSimpleName());
         return send(log, url);
     }
