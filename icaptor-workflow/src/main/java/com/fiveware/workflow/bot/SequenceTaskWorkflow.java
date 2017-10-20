@@ -54,26 +54,25 @@ public class SequenceTaskWorkflow {
 						}
 					}
 				}
-			}else if(!verifyTaskNotProcessingWorkflow(task)){			
-				List<ItemTask> list = taskManager.itemTaskListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.ERROR.getName()), workflowBot.getTaskId());				
-				if(CollectionUtils.isNotEmpty(list)){
-					if(null != workflowBot && workflowBot.getCountTry() >= 1){
-						for (ItemTask itemTask : list) {
-							taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.CANCELED);
-						}
-						return;
-					}
-					Task actualTask = taskManager.createTask(workflowBot.getWorkflowBotStep().getBotSource(), 1L);
-					for (ItemTask itemTask : list) {
-						taskManager.createItemTask(actualTask, itemTask.getDataIn());
-					}
-					taskManager.updateTask(actualTask.getId(), StatusProcessTaskEnum.PROCESSING);						
-					workflowBot.setTaskId(actualTask.getId());
-					Integer countTry = workflowBot.getCountTry()+1;
-					workflowBot.setCountTry(countTry);
-					updateWorkFlowBotStatus(workflowBot, StatusWorkflow.WAITING);
-				}
 			}
+//			else if(!verifyTaskNotProcessingWorkflow(task)){			
+//				List<ItemTask> list = taskManager.itemTaskListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.ERROR.getName()), workflowBot.getTaskId());				
+//				if(CollectionUtils.isNotEmpty(list)){
+//					if(null != workflowBot && workflowBot.getCountTry() > 2){
+//						for (ItemTask itemTask : list) {
+//							taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.CANCELED);
+//						}
+//						return;
+//					}					
+//					for (ItemTask itemTask : list) {
+//						taskManager.createItemTask(task, itemTask.getDataIn());
+//					}
+//					taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCESSING);
+//					Integer countTry = workflowBot.getCountTry()+1;
+//					workflowBot.setCountTry(countTry);
+//					updateWorkFlowBotStatus(workflowBot, StatusWorkflow.WAITING);
+//				}
+//			}
 		}
 	}
 
@@ -102,9 +101,9 @@ public class SequenceTaskWorkflow {
 		return null != task && task.getStatusProcess().getName().equals(StatusProcessTaskEnum.PROCESSED.getName());
 	}
 	
-	private boolean verifyTaskNotProcessingWorkflow(Task task) {
-		return null != task && task.getStatusProcess().getName().equals(StatusProcessTaskEnum.PROCESSING.getName());
-	}
+//	private boolean verifyTaskNotProcessingWorkflow(Task task) {
+//		return null != task && task.getStatusProcess().getName().equals(StatusProcessTaskEnum.PROCESSING.getName());
+//	}
 
 	private WorkflowBot updateWorkFlowBotStatus(WorkflowBot workflowBot, StatusWorkflow statusWorkflow) {
 		if (statusWorkflow == StatusWorkflow.COMPLETE) {
