@@ -1,24 +1,19 @@
 package com.fiveware.task;
 
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
 import com.fiveware.model.message.MessageBot;
-import com.fiveware.service.ServiceBot;
-import com.fiveware.service.ServiceItemTask;
-import com.fiveware.service.ServiceStatusProcessTask;
-import com.fiveware.service.ServiceTask;
-import com.fiveware.service.ServiceUser;
+import com.fiveware.service.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
 
 @Component
 public class TaskManager {
@@ -38,6 +33,9 @@ public class TaskManager {
 	@Autowired
 	private ServiceBot serviceBot;
 
+	@Autowired
+	private ServiceElasticSearch serviceElasticSearch;
+
 	public Task createTask(String nameBot, Long userId) {
 		Task task = new Task();
 		task.setBot(serviceBot.findByNameBot(nameBot).get());
@@ -46,6 +44,7 @@ public class TaskManager {
 		task.setStartAt(LocalDateTime.now());
 		task.setUsuario(serviceUser.getUserById(userId).get());
 		task = serviceTask.save(task);
+		serviceElasticSearch.log(task,task.getId());
 		return task;
 	}
 
@@ -57,6 +56,7 @@ public class TaskManager {
 				|| statuProcessEnum.equals(StatusProcessTaskEnum.PROCESSED)) {
 			task.setEndAt(LocalDateTime.now());
 		}
+		serviceElasticSearch.log(task,task.getId());
 		task = serviceTask.save(task);
 		return task;
 	}
@@ -97,6 +97,8 @@ public class TaskManager {
 			itemTask.setAttemptsCount(attemptsCount);
 		}		
 		itemTask = itemServiceTask.save(itemTask);
+
+		serviceElasticSearch.log(itemTask,itemTask.getId());
 		return itemTask;
 	}
 

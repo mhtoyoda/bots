@@ -21,16 +21,13 @@ public class SuspendedTask {
 	@Autowired
 	private BrokerManager brokerManager;
 
-	@Autowired
-	private ServiceElasticSearch serviceElasticSearch;
-	
+
 	public void applyUpdateTaskSuspending() {
 		List<Task> tasks = taskManager.allTaskProcessing(StatusProcessTaskEnum.SUSPENDING.getName());
 		tasks.stream().forEach(task -> {
 			String queueName = String.format("%s.%s.IN", task.getBot().getNameBot(), task.getId());
 			deleteQueueSuspending(queueName);
 			updateItemTaskSuspended(task);
-			serviceElasticSearch.log(task,task.getId());
 		});
 	}
 

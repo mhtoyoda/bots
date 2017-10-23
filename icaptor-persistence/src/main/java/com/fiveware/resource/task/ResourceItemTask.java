@@ -28,8 +28,8 @@ public class ResourceItemTask {
 	}
 
 	@GetMapping("/task/{id}")
-	public ResponseEntity<List<ItemTask>> findAllByTask(Long id) {
-		return ResponseEntity.ok(itemTaskRepository.findByTask(new Task(id)));
+	public ResponseEntity<List<ItemTask>> findAllByTask(@PathVariable Long id) {
+		return ResponseEntity.ok(itemTaskRepository.findByTaskId(id));
 	}
 
 	@PostMapping

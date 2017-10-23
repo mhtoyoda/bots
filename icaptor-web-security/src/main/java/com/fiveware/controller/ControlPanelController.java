@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import com.fiveware.model.ItemTask;
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,13 +155,17 @@ public class ControlPanelController {
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
 	public String dowloand(@PathVariable Long idTask, HttpServletResponse response) {
 
-		List<byte[]> arrData = serviceItemTask.download(idTask).stream().map((itemTask) -> itemTask.getDataOut().getBytes()).collect(Collectors.toList());
+		List<byte[]> arrData = serviceItemTask.getItemTaskes(idTask).stream()
+				.filter(ServiceItemTask::dataOutIsNotNullOrNotEmpty)
+				.map(
+						(itemTask) -> itemTask.getDataOut().getBytes())
+				.collect(Collectors.toList());
 
 		try {
-			byte[] fileZip = Zip.zipBytes("saida.txt", arrData);
+			byte[] fileZip = Zip.zipBytes("saida", arrData);
 
 			response.setContentType("application/x-octet-stream");
-			response.setHeader("Content-Disposition", "attachment;filename=Entrada.zip");
+			response.setHeader("Content-Disposition", "attachment;filename=Saida.zip");
 
 			writeOut(response, fileZip);
 
