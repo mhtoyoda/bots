@@ -53,9 +53,9 @@ public class ControlPanelController {
 	@Autowired
 	private ServiceItemTask serviceItemTask;
 
-	@GetMapping("/loadTasks/user/{id}")
+	@GetMapping("/loadTasks")
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
-	public ResponseEntity<Object> loadTasks(@PathVariable Long id, @RequestHeader("Authorization") String details) {
+	public ResponseEntity<Object> loadTasks(@RequestHeader("Authorization") String details) {
 		logger.debug("Loading all tasks for user [{}]", SpringSecurityUtil.decodeAuthorizationKey(details));
 
 		Integer idUser = (Integer) SpringSecurityUtil.decodeAuthorizationKey(details, "idUser");
