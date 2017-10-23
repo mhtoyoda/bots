@@ -113,6 +113,7 @@ public class ServiceBotClassLoader<T> {
             };
 
             processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
+
             if (predicate.test(UnRecoverableException.class)) {
 
                 HashMap[] hashMaps = handleException(processorFields, new UnRecoverableException(e.getCause()));
@@ -121,7 +122,10 @@ public class ServiceBotClassLoader<T> {
 
                 return new OutTextRecord(hashMaps);
             } else if (predicate.test(RecoverableException.class)) {
+                processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.AVAILABLE);
+
                 HashMap[] hashMaps = handleException(processorFields, new RecoverableException(e.getCause()));
+
 
                 serviceElasticSearch.error(e);
 
