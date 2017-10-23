@@ -15,7 +15,10 @@ public class TaskWorkflow {
 	private SequenceTaskWorkflow sequenceTaskWorkflow;
 	
 	@Autowired
-	private CreateWorkflowTask createWorkflowTask; 
+	private CreateWorkflowTask createWorkflowTask;
+	
+	@Autowired
+	private ScheduledTaskWorkflow scheduledTaskWorkflow;
 	
 	@Scheduled(cron = "*/60 * * * * *")
 	public void createWorkFlowTaskCron(){
@@ -28,4 +31,12 @@ public class TaskWorkflow {
 		log.info("Execute sequenceTask");
 		sequenceTaskWorkflow.sequenceTask();
 	}
+	
+	@Scheduled(cron = "0 0/5 * * * ?")
+	public void scheduledTask(){
+		log.info("Execute scheduledTask");
+		scheduledTaskWorkflow.scheduledTask();
+	}
 }
+
+
