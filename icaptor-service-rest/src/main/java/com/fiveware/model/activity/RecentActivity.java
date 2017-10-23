@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
+import com.fiveware.model.Bot;
+import com.fiveware.model.Task;
 import com.fiveware.model.user.IcaptorUser;
 
 @Entity
@@ -31,6 +33,16 @@ public class RecentActivity {
 	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private IcaptorUser user;
+
+	@ManyToOne
+	@JoinColumn(name = "task_id")
+	private Task task;
+
+	@ManyToOne
+	@JoinColumn(name = "bot_id")
+	private Bot bot;
+
+	private Boolean visualized = new Boolean(false);
 
 	public RecentActivity(String message, Long user) {
 		this.message = message;
@@ -72,6 +84,35 @@ public class RecentActivity {
 
 	public void setUser(IcaptorUser user) {
 		this.user = user;
+	}
+
+	public Task getTask() {
+		return task;
+	}
+
+	public void setTask(Task task) {
+		this.task = task;
+	}
+	public Bot getBot() {
+		return bot;
+	}
+	
+	public void setBot(Bot bot) {
+		this.bot = bot;
+	}
+
+	public Boolean getVisualized() {
+		return visualized;
+	}
+
+	public void setVisualized(Boolean visualized) {
+		this.visualized = visualized;
+	}
+
+	@Override
+	public String toString() {
+		return "RecentActivity [id=" + id + ", message=" + message + ", creationTime=" + creationTime + ", user=" + user + ", task=" + task + ", bot=" + bot + ", visualized="
+				+ visualized + "]";
 	}
 
 }

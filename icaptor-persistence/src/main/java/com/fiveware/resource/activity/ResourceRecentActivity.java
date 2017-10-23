@@ -23,10 +23,16 @@ public class ResourceRecentActivity {
 	@Autowired
 	private RecentActivityRepository repository;
 
-	@PostMapping("/new")
+	@PostMapping("/new-activity")
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public void save(@RequestBody RecentActivity activity) {
 		repository.save(activity);
+	}
+
+	@PostMapping("/new-activities")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public void save(@RequestBody List<RecentActivity> activities) {
+		repository.save(activities);
 	}
 
 	@GetMapping("/user/{userId}")
@@ -40,5 +46,7 @@ public class ResourceRecentActivity {
 		List<RecentActivity> activities = repository.findAllByUserId(taskId);
 		return ResponseEntity.ok(activities);
 	}
+	
+	
 
 }
