@@ -112,8 +112,8 @@ public class ServiceBotClassLoader<T> {
                 }
             };
 
+            processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
             if (predicate.test(UnRecoverableException.class)) {
-                processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
 
                 HashMap[] hashMaps = handleException(processorFields, new UnRecoverableException(e.getCause()));
 

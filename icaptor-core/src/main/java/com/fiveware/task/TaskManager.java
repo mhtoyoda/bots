@@ -76,10 +76,10 @@ public class TaskManager {
 		if (StringUtils.isNotBlank(dataOut)) {
 			itemTask.setDataOut(dataOut);
 		}
-		if (statuProcessEnum.equals(StatusProcessTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessTaskEnum.SUCCESS)) {
+		if (statuProcessEnum.equals(StatusProcessItemTaskEnum.ERROR) || statuProcessEnum.equals(StatusProcessItemTaskEnum.SUCCESS)) {
 			itemTask.setEndAt(LocalDateTime.now());
 		}
-		if (statuProcessEnum.equals(StatusProcessTaskEnum.PROCESSING)) {
+		if (statuProcessEnum.equals(StatusProcessItemTaskEnum.PROCESSING)) {
 			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
 			itemTask.setAttemptsCount(attemptsCount);
 		}
@@ -95,7 +95,10 @@ public class TaskManager {
 			itemTask.setStartAt(LocalDateTime.now());
 			int attemptsCount = itemTask.getAttemptsCount() == null ? 0 : itemTask.getAttemptsCount() + 1;
 			itemTask.setAttemptsCount(attemptsCount);
-		}		
+		}
+		if (statusProcessItemTaskEnum.equals(StatusProcessItemTaskEnum.ERROR) || statusProcessItemTaskEnum.equals(StatusProcessItemTaskEnum.SUCCESS)) {
+			itemTask.setEndAt(LocalDateTime.now());
+		}
 		itemTask = itemServiceTask.save(itemTask);
 
 		serviceElasticSearch.log(itemTask,itemTask.getId());

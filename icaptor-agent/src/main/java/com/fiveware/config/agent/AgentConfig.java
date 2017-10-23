@@ -43,11 +43,13 @@ public class AgentConfig {
     private Producer<MessageAgent> producer;
 		
 	public void initAgent() {
-		data.setAgentName("Agent-"+agentListener.getAgentPort());
-		bindQueueAgenteInTaskTopic("topic-exchange",
-				Lists.newArrayList(data.getAgentName()));
-		createQueueParameter();
-		notifyServerUpAgent();
+		if(agentListener.getAgentPort() != 0){
+			data.setAgentName("Agent-"+agentListener.getAgentPort());
+			bindQueueAgenteInTaskTopic("topic-exchange",
+					Lists.newArrayList(data.getAgentName()));
+			createQueueParameter();
+			notifyServerUpAgent();			
+		}
 	}
 
 	private MessageAgent addBots(MessageAgent message) {		

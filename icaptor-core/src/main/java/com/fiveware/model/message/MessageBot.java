@@ -1,12 +1,11 @@
 package com.fiveware.model.message;
 
-import java.io.Serializable;
-
+import com.fiveware.model.StatusProcessItemTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
-import com.fiveware.model.StatusProcessItemTaskEnum;
-import com.fiveware.model.StatusProcessTaskEnum;
+import java.io.Serializable;
 
 @AutoProperty
 public class MessageBot implements Serializable {
@@ -21,6 +20,7 @@ public class MessageBot implements Serializable {
 	private Exception exception;
 	private int attemptsCount;
 	private String nameAgent;
+	private String botName;
 
 	public MessageBot(Long taskId, Long itemTaskId, String line, MessageHeader messageHeader) {
 		this.taskId = taskId;
@@ -82,6 +82,14 @@ public class MessageBot implements Serializable {
 
 	public void setNameAgent(String nameAgent) {
 		this.nameAgent = nameAgent;
+	}
+
+	public String getBotName() {
+		return botName;
+	}
+
+	public void setBotName(String botName) {
+		this.botName = botName;
 	}
 
 	@Override

@@ -82,7 +82,7 @@ services:
     environment:
       - icaptor.data-source.host=http://icaptor-data:8085
       - icaptor.server.host=icaptor-cloud:8082
-      - icaptor.origin-permitida=http://54.232.96.63:4200
+      - icaptor.origin-permitida=http://localhost:4200
 
   icaptor-monitoring:
     image: fiveware/icaptor-monitoring

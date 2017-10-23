@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,8 @@ import com.google.common.collect.Lists;
 @Component
 public class SequenceTaskWorkflow {
 
+	private final Logger logger = LoggerFactory.getLogger(SequenceTaskWorkflow.class);
+	
 	@Autowired
 	private TaskManager taskManager;
 
@@ -50,26 +54,25 @@ public class SequenceTaskWorkflow {
 						}
 					}
 				}
-			}else if(!verifyTaskNotProcessingWorkflow(task)){			
-				List<ItemTask> list = taskManager.itemTaskListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.ERROR.getName()), workflowBot.getTaskId());				
-				if(CollectionUtils.isNotEmpty(list)){
-					if(null != workflowBot && workflowBot.getCountTry() >= 3){
-						for (ItemTask itemTask : list) {
-							taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.CANCELED);
-						}
-						return;
-					}
-					Task actualTask = taskManager.createTask(workflowBot.getWorkflowBotStep().getBotSource(), 1L);
-					for (ItemTask itemTask : list) {
-						taskManager.createItemTask(actualTask, itemTask.getDataIn());
-					}
-					taskManager.updateTask(actualTask.getId(), StatusProcessTaskEnum.PROCESSING);						
-					workflowBot.setTaskId(actualTask.getId());
-					Integer countTry = workflowBot.getCountTry()+1;
-					workflowBot.setCountTry(countTry);
-					updateWorkFlowBotStatus(workflowBot, StatusWorkflow.WAITING);
-				}
 			}
+//			else if(!verifyTaskNotProcessingWorkflow(task)){			
+//				List<ItemTask> list = taskManager.itemTaskListStatus(Lists.newArrayList(StatusProcessItemTaskEnum.ERROR.getName()), workflowBot.getTaskId());				
+//				if(CollectionUtils.isNotEmpty(list)){
+//					if(null != workflowBot && workflowBot.getCountTry() > 2){
+//						for (ItemTask itemTask : list) {
+//							taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.CANCELED);
+//						}
+//						return;
+//					}					
+//					for (ItemTask itemTask : list) {
+//						taskManager.createItemTask(task, itemTask.getDataIn());
+//					}
+//					taskManager.updateTask(task.getId(), StatusProcessTaskEnum.PROCESSING);
+//					Integer countTry = workflowBot.getCountTry()+1;
+//					workflowBot.setCountTry(countTry);
+//					updateWorkFlowBotStatus(workflowBot, StatusWorkflow.WAITING);
+//				}
+//			}
 		}
 	}
 
@@ -85,6 +88,7 @@ public class SequenceTaskWorkflow {
 					Matcher matcher = compile.matcher(dataOut);
 					boolean matches = matcher.find();
 					if(matches){
+						logger.info("Matcher - field - {} - task id: {}",fieldVerify, itemTask.getId());
 						return matches;						
 					}
 				}
@@ -97,9 +101,9 @@ public class SequenceTaskWorkflow {
 		return null != task && task.getStatusProcess().getName().equals(StatusProcessTaskEnum.PROCESSED.getName());
 	}
 	
-	private boolean verifyTaskNotProcessingWorkflow(Task task) {
-		return null != task && task.getStatusProcess().getName().equals(StatusProcessTaskEnum.PROCESSING.getName());
-	}
+//	private boolean verifyTaskNotProcessingWorkflow(Task task) {
+//		return null != task && task.getStatusProcess().getName().equals(StatusProcessTaskEnum.PROCESSING.getName());
+//	}
 
 	private WorkflowBot updateWorkFlowBotStatus(WorkflowBot workflowBot, StatusWorkflow statusWorkflow) {
 		if (statusWorkflow == StatusWorkflow.COMPLETE) {
