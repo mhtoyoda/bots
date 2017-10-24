@@ -15,18 +15,26 @@
             <logger name="com.fiveware" level="INFO" additivity="false">
                 <appender-ref ref="CONSOLE" />
             </logger>
+
         </then>
         <else>
             <logger name="com.fiveware" level="fail" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
+            <logger name="org.hibernate.SQL" level="debug" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
+            <logger name="org.flywaydb" level="debug" additivity="false">
+                <appender-ref ref="CONSOLE" />
+            </logger>
+            <logger name="org.springframework" level="info" additivity="false">
                 <appender-ref ref="CONSOLE" />
             </logger>
         </else>
     </if>
 
 
-
-
-    <root level="INFO">
+    <root level="error">
         <appender-ref ref="CONSOLE" />
     </root>
 

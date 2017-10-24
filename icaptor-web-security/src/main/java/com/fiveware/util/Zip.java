@@ -50,7 +50,7 @@ public class Zip {
 		ZipOutputStream zos = new ZipOutputStream(baos);
 
 		for (int i = 0; i < input.size(); i++) {
-			ZipEntry entry = new ZipEntry(filename);
+			ZipEntry entry = new ZipEntry(filename+"_"+i+".txt");
 			entry.setSize(input.get(i).length);
 			zos.putNextEntry(entry);
 			zos.write(input.get(i));

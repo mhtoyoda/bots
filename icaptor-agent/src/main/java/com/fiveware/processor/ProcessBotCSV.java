@@ -91,19 +91,19 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 	private ParameterClassLoader parameterClassLoader;
 	
 	@SuppressWarnings("rawtypes")
-	public void execute(String botName, MessageBot obj)
+	public void execute(String botName, MessageBot messageBot)
 			throws IOException, AttributeLoadException, ClassNotFoundException, RuntimeBotException, ParameterInvalidException {
 
 		logger.info("Init Import File - [BOT]: {}", botName);
 		Optional<BotClassLoaderContext> context = classLoaderConfig.getPropertiesBot(botName);
-		ParameterValue parameterValue =	validateParameterCredential(botName, obj.getTaskId());		
+		ParameterValue parameterValue =	validateParameterCredential(botName, messageBot.getTaskId());
 		InputDictionaryContext inputDictionary = context.get().getInputDictionary();
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
-		String line = obj.getLine();
+		String line = messageBot.getLine();
 		Record record = lineUtil.linesFrom(line, fieldsInput, separatorInput);
 		Class classLoader = classLoaderRunner.loadClass(botName);
-		sendNotificationItemTaskProcessing(obj.getTaskId(), obj.getItemTaskId());
+		sendNotificationItemTaskProcessing(messageBot.getTaskId(), messageBot.getItemTaskId());
 
 		ExecutorService executorService = Executors.newFixedThreadPool(2);
 			try {
@@ -115,7 +115,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 															.record(record)
 															.validate(validate)
 															.messageSource(messageSource)
-															.messageBot(obj)
+															.messageBot(messageBot)
 															.context(context)
 															.parameter(parameterValue)
 															.build();
@@ -137,9 +137,9 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 				}
 			}
 		
-		obj.setNameAgent(data.getAgentName());
-		obj.setBotName(botName);
-		producer.send("task.out", obj);
+		messageBot.setNameAgent(data.getAgentName());
+		messageBot.setBotName(botName);
+		producer.send("task.out", messageBot);
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
 

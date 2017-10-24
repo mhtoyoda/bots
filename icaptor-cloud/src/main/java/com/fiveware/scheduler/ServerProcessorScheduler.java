@@ -58,7 +58,7 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 
 		List<Agent> agents = serviceServer.getAllAgent(serverConfig.getServer().getName());
 		agents.forEach(agent -> {
-			log.info("Pulling Error [Agent]: {}", agent.getNameAgent());
+			log.info("Pulling Info [Agent]: {}", agent.getNameAgent());
 			String nameQueue = "task.out";
 			pullMessage("", nameQueue);
 		});

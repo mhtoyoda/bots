@@ -2,6 +2,7 @@ package com.fiveware.service;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,11 @@ public class ServiceItemTask {
 
 	@Autowired
 	private ApiUrlPersistence apiUrlPersistence;
+
+
+	public static boolean dataOutIsNotNullOrNotEmpty(ItemTask itemTask) {
+		return !Strings.isNullOrEmpty(itemTask.getDataOut());
+	}
 
 	public ItemTask save(ItemTask item) {
 		String url = apiUrlPersistence.endPoint("item-task","");
@@ -95,6 +101,16 @@ public class ServiceItemTask {
 		List<ItemTask> item = exchange.getBody();
 		return item;
 	}
+
+	public List<ItemTask> getItemTaskes(Long taskId) {
+		String url = apiUrlPersistence.endPoint("item-task","/task/"+taskId);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		ResponseEntity<List<ItemTask>> exchange = restTemplate.exchange(url, HttpMethod.GET,null, new ParameterizedTypeReference<List<ItemTask>>() {});
+		List<ItemTask> item = exchange.getBody();
+		return item;
+	}
 	
 	public Long getItemTaskCountByTask(Long taskId) {
 		String url = apiUrlPersistence.endPoint("item-task/",taskId+"/count");
@@ -107,9 +123,6 @@ public class ServiceItemTask {
 		return count;
 	}
 
-	public List<ItemTask> download(Long idTask) {
-		return getItemTaskByListStatus(Lists.newArrayList(StatusProcessTaskEnum.PROCESSED.getName()),idTask);
-	}
 
 	public void metric(List<Task> tasks){
 		tasks.stream().forEach(task ->{

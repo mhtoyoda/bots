@@ -7,6 +7,7 @@ import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.OutTextRecord;
+import com.fiveware.parameter.ParameterIcaptor;
 import com.fiveware.parameter.ParameterValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,13 @@ public class ResourceBot {
         Object obj = null;
         try {
             Object o1 = objectMapper.convertValue(parameter, o);
-            obj = execute.invoke(clazz.newInstance(), o1, null);
+
+            Method listParam = param.getMethod("getParameterList");
+
+            ParameterValue parameterValue = new ParameterValue();
+            parameterValue.setParameterList((List<ParameterIcaptor>) listParam.invoke(param.newInstance()));
+
+            obj = execute.invoke(clazz.newInstance(), o1, parameterValue);
         } catch (IllegalArgumentException e){
             throw new RuntimeBotException(messageSource.getMessage("endPoint.illegalArgument",
                     new Object[]{parameter,nameBot}, null));

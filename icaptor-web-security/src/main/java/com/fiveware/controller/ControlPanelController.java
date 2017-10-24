@@ -61,9 +61,9 @@ public class ControlPanelController {
 	@Autowired
 	private ServiceItemTask serviceItemTask;
 
-	@GetMapping("/loadTasks/user/{id}")
+	@GetMapping("/loadTasks")
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
-	public ResponseEntity<Object> loadTasks(@PathVariable Long id, @RequestHeader("Authorization") String details) {
+	public ResponseEntity<Object> loadTasks(@RequestHeader("Authorization") String details) {
 		logger.debug("Loading all tasks for user [{}]", SpringSecurityUtil.decodeAuthorizationKey(details));
 
 		Integer idUser = (Integer) SpringSecurityUtil.decodeAuthorizationKey(details, "idUser");
@@ -145,13 +145,17 @@ public class ControlPanelController {
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
 	public String dowloand(@PathVariable Long idTask, HttpServletResponse response) {
 
-		List<byte[]> arrData = serviceItemTask.download(idTask).stream().map((itemTask) -> itemTask.getDataOut().getBytes()).collect(Collectors.toList());
+		List<byte[]> arrData = serviceItemTask.getItemTaskes(idTask).stream()
+				.filter(ServiceItemTask::dataOutIsNotNullOrNotEmpty)
+				.map(
+						(itemTask) -> itemTask.getDataOut().getBytes())
+				.collect(Collectors.toList());
 
 		try {
-			byte[] fileZip = Zip.zipBytes("saida.txt", arrData);
+			byte[] fileZip = Zip.zipBytes("saida", arrData);
 
 			response.setContentType("application/x-octet-stream");
-			response.setHeader("Content-Disposition", "attachment;filename=Entrada.zip");
+			response.setHeader("Content-Disposition", "attachment;filename=Saida.zip");
 
 			writeOut(response, fileZip);
 

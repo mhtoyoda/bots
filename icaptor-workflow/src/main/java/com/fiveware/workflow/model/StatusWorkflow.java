@@ -5,5 +5,6 @@ public enum StatusWorkflow {
 	NEW,
 	WAITING,
 	INCOMPLETE,
+	SCHEDULED,
 	COMPLETE;
 }

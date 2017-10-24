@@ -77,6 +77,7 @@ public class ServiceBotClassLoader<T> {
             processorFields.getMessageBot().setStatuProcessEnum(StatusProcessTaskEnum.SUCCESS);
             processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.SUCCESS);
             processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
+            processorFields.getMessageBot().setException(null);
 
             if (obj instanceof List){
                 OutTextRecord outTextRecord = new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
@@ -113,6 +114,7 @@ public class ServiceBotClassLoader<T> {
             };
 
             processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
+
             if (predicate.test(UnRecoverableException.class)) {
 
                 HashMap[] hashMaps = handleException(processorFields, new UnRecoverableException(e.getCause()));
@@ -121,7 +123,10 @@ public class ServiceBotClassLoader<T> {
 
                 return new OutTextRecord(hashMaps);
             } else if (predicate.test(RecoverableException.class)) {
+                processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.PROCESSING);
+
                 HashMap[] hashMaps = handleException(processorFields, new RecoverableException(e.getCause()));
+
 
                 serviceElasticSearch.error(e);
 

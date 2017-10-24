@@ -21,5 +21,5 @@ public interface ItemTaskRepository extends CrudRepository<ItemTask, Long>{
 	@Query("SELECT COUNT(i) FROM ItemTask i WHERE i.task.id = :taskId")
 	Long countItemTask(@Param("taskId") Long taskId);
 
-	List<ItemTask> findByTask(Task task);
+	List<ItemTask> findByTaskId(Long id);
 }

@@ -1,11 +1,14 @@
 package com.fiveware.parameter;
 
+import com.google.common.collect.Lists;
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
-import com.google.common.collect.Lists;
-
+@AutoProperty
 public class ParameterValue implements Serializable {
 
 	private List<ParameterIcaptor> parameterList;
@@ -30,5 +33,10 @@ public class ParameterValue implements Serializable {
 
 	public void setParameterList(List<ParameterIcaptor> parameterList) {
 		this.parameterList = parameterList;
+	}
+
+	@Override
+	public String toString() {
+		return Pojomatic.toString(this);
 	}
 }

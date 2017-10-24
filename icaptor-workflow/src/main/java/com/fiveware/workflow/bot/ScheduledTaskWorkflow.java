@@ -24,9 +24,9 @@ import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
 
 @Component
-public class SequenceTaskWorkflow {
+public class ScheduledTaskWorkflow {
 
-	private final Logger logger = LoggerFactory.getLogger(SequenceTaskWorkflow.class);
+	private final Logger logger = LoggerFactory.getLogger(ScheduledTaskWorkflow.class);
 	
 	@Autowired
 	private TaskManager taskManager;
@@ -37,10 +37,11 @@ public class SequenceTaskWorkflow {
 	@Autowired
 	private ProcessWorkflowTask processWorkflowTask;
 
-	public void sequenceTask() {
-		Optional<WorkflowBot> optional = Optional.fromNullable(workFlowBotRepository.findByStatus(StatusWorkflow.WAITING));
-		if (optional.isPresent()) {
+	public void scheduledTask() {
+		Optional<WorkflowBot> optional = Optional.fromNullable(workFlowBotRepository.findByStatus(StatusWorkflow.SCHEDULED));
+		if (optional.isPresent()) {			
 			WorkflowBot workflowBot = optional.get();
+			logger.info("Consultando workflow {}", workflowBot.getWorkflowBotStep().getBotSource());
 			Task task = taskManager.getTask(workflowBot.getTaskId());
 			if (canContinueTaskWorkflow(task, workflowBot)) {
 				if (null != workflowBot.getWorkflowBotStep() && StringUtils.isNotBlank(workflowBot.getWorkflowBotStep().getBotTarget())) {
@@ -50,11 +51,7 @@ public class SequenceTaskWorkflow {
 						if (null != workflowBotStepByStatus) {
 							updateWorkFlowBotStatus(workflowBot, StatusWorkflow.COMPLETE);
 							workflowBotStepByStatus.setTaskId(taskId);
-							if(workflowBotStepByStatus.getWorkflowBotStep().getBotSource().equals("consultaSap")){
-								updateWorkFlowBotStatus(workflowBotStepByStatus, StatusWorkflow.SCHEDULED);
-							}else{
-								updateWorkFlowBotStatus(workflowBotStepByStatus, StatusWorkflow.WAITING);								
-							}
+							updateWorkFlowBotStatus(workflowBotStepByStatus, StatusWorkflow.WAITING);							
 						}
 					}
 				}
@@ -63,6 +60,8 @@ public class SequenceTaskWorkflow {
 	}
 
 	private boolean canContinueTaskWorkflow(Task task, WorkflowBot workflowBot){
+		boolean hasTaksPendents = false;
+		Long taskId = null;
 		if(verifyTaskWorkflowProcessed(task)){
 			String fieldVerify = workflowBot.getWorkflowBotStep().getFieldVerify();
 			List<String> status = Lists.newArrayList(StatusProcessItemTaskEnum.SUCCESS.getName());
@@ -73,10 +72,18 @@ public class SequenceTaskWorkflow {
 					Pattern compile = Pattern.compile(fieldVerify);
 					Matcher matcher = compile.matcher(dataOut);
 					boolean matches = matcher.find();
-					if(matches){
-						logger.info("Matcher - field - {} - task id: {}",fieldVerify, itemTask.getId());
-						return matches;						
+					if(!matches){
+						logger.info("RC não aprovada da Item Task Id: {}",itemTask.getId());
+						hasTaksPendents = true;
+						taskId = itemTask.getTask().getId();
+						taskManager.updateItemTask(itemTask.getId(), StatusProcessItemTaskEnum.AVAILABLE);						
 					}
+				}
+				if(hasTaksPendents){
+					taskManager.updateTask(taskId, StatusProcessTaskEnum.PROCESSING);
+					return false;
+				}else{
+					return true;
 				}
 			}
 		}
