@@ -10,7 +10,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -33,58 +32,56 @@ public class ServiceActivity {
 		String message = messageSource.getMessage(messageSourceName, messagePrams, LocaleContextHolder.getLocale());
 		return this.save(new RecentActivity(message, userId));
 	}
-	
-	public List<RecentActivity> save(List<RecentActivity> activities){
+
+	public List<RecentActivity> save(List<RecentActivity> activities) {
 		String url = apiUrlPersistence.endPoint("recent-activities", "/new-activities");
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		HttpEntity<List<RecentActivity>> entity = new HttpEntity<List<RecentActivity>>(activities, headers);
-		ResponseEntity<List<RecentActivity>> response = restTemplate.exchange(url, HttpMethod.POST, entity, new ParameterizedTypeReference<List<RecentActivity>>() {
-		});
-		return response.getBody();
+		return restTemplate.exchange(url, HttpMethod.POST, getCommonEntity(activities), getParameterizedList()).getBody();
 	}
 
 	public RecentActivity save(RecentActivity activity) {
 		String url = apiUrlPersistence.endPoint("recent-activities", "/new-activity");
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-
-		HttpEntity<RecentActivity> entity = new HttpEntity<RecentActivity>(activity, headers);
-		return restTemplate.postForObject(url, entity, RecentActivity.class);
+		return restTemplate.exchange(url, HttpMethod.POST, getCommonEntity(activity), getParameterizedType()).getBody();
 	}
 
+	public void updateVisualedActivities(List<Long> activitiesIds) {
+		String url = apiUrlPersistence.endPoint("recent-activities", "/mark-seen");
+		restTemplate.exchange(url, HttpMethod.PUT, getCommonEntity(activitiesIds), getParameterizedType()).getBody();
+	}
 
-	public List<RecentActivity> findByUserId(Long userId) {
+	public List<RecentActivity> getAllNonVisualizedActivities(Long userId) {
+		String url = apiUrlPersistence.endPoint("recent-activities", "/load-unseen/" + userId);
+		return restTemplate.exchange(url, HttpMethod.GET, getCommonEntity(null), getParameterizedList()).getBody();
+	}
+
+	public Long countNonSeenByUser(Long userId) {
+		String url = apiUrlPersistence.endPoint("recent-activities", "/count-unseen/" + userId);
+		return restTemplate.exchange(url, HttpMethod.GET, getCommonEntity(null), Long.class).getBody();
+	}
+
+	public List<RecentActivity> findAllActivitiesForUser(Long userId) {
 		String url = apiUrlPersistence.endPoint("recent-activities", "/user/" + userId);
-		
-		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<Object> entity = new HttpEntity<>(headers);
-		
-		ResponseEntity<List<RecentActivity>> response = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<List<RecentActivity>>() {
-		});
-		return response.getBody();
+		return restTemplate.exchange(url, HttpMethod.GET, getCommonEntity(null), getParameterizedList()).getBody();
 	}
 
-	public List<RecentActivity> findByTaskId(Long taskId) {
-		String url = apiUrlPersistence.endPoint("recent-activities", "/task/" + taskId);
-		
+	private HttpEntity<Object> getCommonEntity(Object body) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<Object> entity = new HttpEntity<>(headers);
 
-		ResponseEntity<List<RecentActivity>> response = restTemplate.exchange(url, HttpMethod.GET, entity, new ParameterizedTypeReference<List<RecentActivity>>() {
-		});
-		return response.getBody();
+		if (body == null) {
+			return new HttpEntity<>(headers);
+		} else {
+			return new HttpEntity<>(body, headers);
+		}
 	}
 
-	
-	public List<RecentActivity> updateVisualedActivities(){
-		String url = apiUrlPersistence.endPoint("recent-activities", "/new-activities");
-		return null;
+	private ParameterizedTypeReference<List<RecentActivity>> getParameterizedList() {
+		return new ParameterizedTypeReference<List<RecentActivity>>() {
+		};
+	}
+
+	private ParameterizedTypeReference<RecentActivity> getParameterizedType() {
+		return new ParameterizedTypeReference<RecentActivity>() {
+		};
 	}
 
 }
