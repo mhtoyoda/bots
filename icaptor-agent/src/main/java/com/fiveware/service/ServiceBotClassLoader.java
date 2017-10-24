@@ -122,7 +122,7 @@ public class ServiceBotClassLoader<T> {
 
                 return new OutTextRecord(hashMaps);
             } else if (predicate.test(RecoverableException.class)) {
-                processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.AVAILABLE);
+                processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.PROCESSING);
 
                 HashMap[] hashMaps = handleException(processorFields, new RecoverableException(e.getCause()));
 
