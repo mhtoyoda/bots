@@ -47,6 +47,4 @@ public class ResourceRecentActivity {
 		return ResponseEntity.ok(activities);
 	}
 	
-	
-
 }
