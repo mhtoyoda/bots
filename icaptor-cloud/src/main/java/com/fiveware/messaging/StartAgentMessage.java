@@ -124,7 +124,7 @@ public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 					typeParameter = new TypeParameter();
 					typeParameter.setName(parameter.getTypeParameterName());
 					typeParameter.setExclusive(parameter.getTypeParameterExclusive());
-					typeParameter.setCredential(parameter.getTypeParameterExclusive());
+					typeParameter.setCredential(parameter.getTypeParameterCredential());
 					typeParameter = serviceParameter.saveTypeParameter(typeParameter);
 				}
 				Parameter param = new Parameter();

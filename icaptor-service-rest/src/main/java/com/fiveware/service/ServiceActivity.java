@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -31,24 +33,55 @@ public class ServiceActivity {
 		return this.save(new RecentActivity(message, userId));
 	}
 
-	public RecentActivity save(RecentActivity activity) {
-		String url = apiUrlPersistence.endPoint("recent-activities", "/new");
+	public List<RecentActivity> save(List<RecentActivity> activities) {
+		String url = apiUrlPersistence.endPoint("recent-activities", "/new-activities");
+		return restTemplate.exchange(url, HttpMethod.POST, getCommonEntity(activities), getParameterizedList()).getBody();
+	}
 
+	public RecentActivity save(RecentActivity activity) {
+		String url = apiUrlPersistence.endPoint("recent-activities", "/new-activity");
+		return restTemplate.exchange(url, HttpMethod.POST, getCommonEntity(activity), getParameterizedType()).getBody();
+	}
+
+	public void updateVisualedActivities(List<Long> activitiesIds) {
+		String url = apiUrlPersistence.endPoint("recent-activities", "/mark-seen");
+		restTemplate.exchange(url, HttpMethod.PUT, getCommonEntity(activitiesIds), getParameterizedType()).getBody();
+	}
+
+	public List<RecentActivity> getAllNonVisualizedActivities(Long userId) {
+		String url = apiUrlPersistence.endPoint("recent-activities", "/load-unseen/" + userId);
+		return restTemplate.exchange(url, HttpMethod.GET, getCommonEntity(null), getParameterizedList()).getBody();
+	}
+
+	public Long countNonSeenByUser(Long userId) {
+		String url = apiUrlPersistence.endPoint("recent-activities", "/count-unseen/" + userId);
+		return restTemplate.exchange(url, HttpMethod.GET, getCommonEntity(null), Long.class).getBody();
+	}
+
+	public List<RecentActivity> findAllActivitiesForUser(Long userId) {
+		String url = apiUrlPersistence.endPoint("recent-activities", "/user/" + userId);
+		return restTemplate.exchange(url, HttpMethod.GET, getCommonEntity(null), getParameterizedList()).getBody();
+	}
+
+	private HttpEntity<Object> getCommonEntity(Object body) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		HttpEntity<RecentActivity> entity = new HttpEntity<RecentActivity>(activity, headers);
-		return restTemplate.postForObject(url, entity, RecentActivity.class);
+		if (body == null) {
+			return new HttpEntity<>(headers);
+		} else {
+			return new HttpEntity<>(body, headers);
+		}
 	}
 
-	public List<RecentActivity> findByUserId(Long userId) {
-		String url = apiUrlPersistence.endPoint("recent-activities", "/user/" + userId);
-		return restTemplate.getForObject(url, List.class);
+	private ParameterizedTypeReference<List<RecentActivity>> getParameterizedList() {
+		return new ParameterizedTypeReference<List<RecentActivity>>() {
+		};
 	}
 
-	public List<RecentActivity> findByTaskId(Long taskId) {
-		String url = apiUrlPersistence.endPoint("recent-activities", "/task/" + taskId);
-		return restTemplate.getForObject(url, List.class);
+	private ParameterizedTypeReference<RecentActivity> getParameterizedType() {
+		return new ParameterizedTypeReference<RecentActivity>() {
+		};
 	}
 
 }
