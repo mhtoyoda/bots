@@ -1,14 +1,16 @@
 insert into type_parameter(name, exclusive, credential) values('credential', 0, 1);
 insert into type_parameter(name, exclusive, credential) values('retry', 0, 0);
 insert into type_parameter(name, exclusive, credential) values('timeout', 0, 0);
-insert into type_parameter(name, exclusive, credential) values('login', 0, 0);
+insert into type_parameter(name, exclusive, credential) values('login', 0, 1);
 insert into type_parameter(name, exclusive, credential) values('url', 0, 0);
+
 insert into type_parameter(name, exclusive, credential) values('email-from', 0, 0);
 insert into type_parameter(name, exclusive, credential) values('email-to', 0, 0);
 insert into type_parameter(name, exclusive, credential) values('email-cc', 0, 0);
+insert into type_parameter(name, exclusive, credential) values('email-body', 0, 0);
 insert into type_parameter(name, exclusive, credential) values('smtp-server', 0, 0);
 insert into type_parameter(name, exclusive, credential) values('smtp-user', 0, 0);
-insert into type_parameter(name, exclusive, credential) values('smtp-password', 0, 0);
+insert into type_parameter(name, exclusive, credential) values('smtp-password', 0, 1);
 insert into type_parameter(name, exclusive, credential) values('smtp-subject', 0, 0);
 
 insert into type_parameter(name, exclusive, credential) values('day_execution',0,0);
