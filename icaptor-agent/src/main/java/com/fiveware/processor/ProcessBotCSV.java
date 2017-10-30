@@ -96,7 +96,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 
 		logger.info("Init Import File - [BOT]: {}", botName);
 		Optional<BotClassLoaderContext> context = classLoaderConfig.getPropertiesBot(botName);
-		ParameterValue parameterValue =	validateParameterCredential(botName, messageBot.getTaskId());
+		ParameterValue parameterValue =	getParameters(botName, messageBot.getTaskId());
 		InputDictionaryContext inputDictionary = context.get().getInputDictionary();
 		String separatorInput = inputDictionary.getSeparator();
 		String[] fieldsInput = inputDictionary.getFields();
@@ -143,7 +143,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 		logger.info("End Import File - [BOT]: {}", botName);
 	}
 
-	private ParameterValue validateParameterCredential(String botName, Long taskId) throws ParameterInvalidException {
+	private ParameterValue getParameters(String botName, Long taskId) throws ParameterInvalidException {
 		ParameterValue parameterValue = null;
 		if(parameterResolver.hasNecessaryParameterFromBot(botName)){		
 			MessageParameterAgent messageParameterAgent = waitParameterMessage(botName, data.getAgentName(), taskId);
