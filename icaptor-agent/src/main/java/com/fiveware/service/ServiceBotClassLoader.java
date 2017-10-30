@@ -83,7 +83,8 @@ public class ServiceBotClassLoader<T> {
                 OutTextRecord outTextRecord = new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
                 serviceElasticSearch.log(o1); // arquivo de entrada
                 serviceElasticSearch.log(o2); // parameters
-                serviceElasticSearch.log(obj); //arquivo de saida
+                //Todo implementar para enviar cada item da lista para o elasticSearch
+                //serviceElasticSearch.log(obj); //arquivo de saida
                 return outTextRecord;
             }
 
