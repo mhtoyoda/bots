@@ -10,8 +10,12 @@ public class PageNotFoundException implements ErrorRandom {
 
 	@Override
 	public void throwError() throws RecoverableException, UnRecoverableException, RuntimeBotException {
-		String baseUrl = "https://xpto2222222.com.br";
-		Web().driver(PHANTOM).openPage(baseUrl);		
+		try{
+			String baseUrl = "https://xpto2222222.com.br";
+			Web().driver(PHANTOM).openPage(baseUrl);					
+		}catch (Exception e) {
+			throw new UnRecoverableException(e);
+		}
 	}
 
 }

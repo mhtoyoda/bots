@@ -11,7 +11,12 @@ public class ErrorStatusException implements ErrorRandom {
 
 	@Override
 	public void throwError() throws RecoverableException, UnRecoverableException, RuntimeBotException {
-		String baseUrl = "https://www.google.com:81/";
-		Web().driver(PHANTOM).openPage(baseUrl);	
+		try{
+			String baseUrl = "https://www.google.com:81/";			
+			Web().driver(PHANTOM).openPage(baseUrl);
+			throw new RecoverableException("Erro status");
+		}catch (Exception e) {
+			throw new RuntimeBotException(e);
+		}
 	}
 }

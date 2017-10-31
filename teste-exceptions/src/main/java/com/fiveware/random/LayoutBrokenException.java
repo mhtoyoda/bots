@@ -12,9 +12,13 @@ public class LayoutBrokenException implements ErrorRandom {
 
 	@Override
 	public void throwError() throws RecoverableException, UnRecoverableException, RuntimeBotException {
-		String baseUrl = "https://www.google.com.br/";
-		BotScreen screen = Web().driver(PHANTOM).openPage(baseUrl);
-		screen.windowMaximize();
-		screen.find().elementBy().id("qualquer_coisa").sendKeys("Teste");
+		try{			
+			String baseUrl = "https://www.google.com.br/";
+			BotScreen screen = Web().driver(PHANTOM).openPage(baseUrl);
+			screen.windowMaximize();
+			screen.find().elementBy().id("qualquer_coisa").sendKeys("Teste");
+		}catch (Exception e) {
+			throw new UnRecoverableException(e);
+		}
 	}
 }
