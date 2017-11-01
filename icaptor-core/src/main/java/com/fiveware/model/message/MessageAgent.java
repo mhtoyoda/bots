@@ -26,6 +26,7 @@ public class MessageAgent implements Serializable {
 	private String description;
 	private List<MessageAgentBot> messageAgentBots;
 	private Set<String> nameQueues;
+	private String addressAgent;
 
 	public MessageAgent(){}
 	
@@ -39,7 +40,15 @@ public class MessageAgent implements Serializable {
 		this.typeMessage = typeMessage;
 		this.description = description;
 	}
-	
+
+	public String getAddressAgent() {
+		return addressAgent;
+	}
+
+	public void setAddressAgent(String addressAgent) {
+		this.addressAgent = addressAgent;
+	}
+
 	public String getHost() {
 		return host;
 	}

@@ -79,7 +79,12 @@ public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 	private void saveAgentServerBots(MessageAgent message) {
 		Agent agent = serviceAgent.findByNameAgent(message.getAgent());
 		if (null == agent) {
-			agent = new Agent.BuilderAgent().nameAgent(message.getAgent()).ip(message.getIp()).port(message.getPort()).server(getServer()).build();
+			agent = new Agent.BuilderAgent().nameAgent(message.getAgent())
+											.ip(message.getIp())
+											.port(message.getPort())
+											.server(getServer())
+											.addressHost(message.getAddressAgent())
+											.build();
 			agent = serviceAgent.save(agent);
 		}
 		addBots(message, agent);
