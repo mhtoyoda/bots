@@ -145,4 +145,15 @@ public class ServiceAgent {
 	        HttpEntity<AgentParameter> entity = new HttpEntity<AgentParameter>(agentParameter, headers);
 	        restTemplate.exchange(url, HttpMethod.DELETE, entity, AgentParameter.class);        		
 		}
+
+    public List<Agent> findAll() {
+        String url = apiUrlPersistence.endPoint("agent","");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        Agent[] objects = restTemplate.getForObject(url, Agent[].class);
+        List<Agent> forObject = Arrays.asList(objects);
+
+        return forObject;
+    }
 }

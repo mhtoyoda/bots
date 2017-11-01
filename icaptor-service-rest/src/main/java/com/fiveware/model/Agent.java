@@ -41,16 +41,28 @@ public class Agent implements Serializable {
 			   inverseJoinColumns = {@JoinColumn(name = "id_bot") })
 	private List<Bot> bots;
 
-	public Agent() {
-	}
+	@Column(name = "address_host")
+	private String addressHost;
 
-	protected Agent(Long id, String nameAgent, int port, String ip, Server server, List<Bot> bots) {
+	public Agent(){}
+
+	public Agent(Long id, String nameAgent, int port, String ip, Server server, List<Bot> bots, String addressHost) {
 		this.id=id;
 		this.nameAgent=nameAgent;
 		this.port=port;
 		this.ip=ip;
 		this.server=server;
 		this.bots=bots;
+		this.addressHost=addressHost;
+	}
+
+
+	public String getAddressHost() {
+		return addressHost;
+	}
+
+	public void setAddressHost(String addressHost) {
+		this.addressHost = addressHost;
 	}
 
 	public Long getId() {
@@ -108,6 +120,7 @@ public class Agent implements Serializable {
 		private int port;
 		private Server server;
 		private List<Bot> bots;
+		private String addressHost;
 
 		public BuilderAgent() {
 		}
@@ -140,8 +153,13 @@ public class Agent implements Serializable {
 			return this;
 		}
 
+		public BuilderAgent addressHost(String addressHost){
+			this.addressHost = addressHost;
+			return this;
+		}
+
 		public Agent build(){
-			return new Agent(this.id,this.nameAgent,this.port,this.ip,this.server,this.bots);
+			return new Agent(this.id,this.nameAgent,this.port,this.ip,this.server,this.bots,this.addressHost);
 		}
 	}
 

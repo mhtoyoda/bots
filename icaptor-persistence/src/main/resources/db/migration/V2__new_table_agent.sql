@@ -5,5 +5,6 @@ create table agent
   name_agent varchar(255) null,
   port_agent int null,
   id_server bigint null,
+  address_host varchar(255) null,
   FOREIGN KEY (id_server) REFERENCES server(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
