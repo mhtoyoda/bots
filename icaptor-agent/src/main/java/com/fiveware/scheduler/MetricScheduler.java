@@ -15,9 +15,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Consumer;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 @Component
 public class MetricScheduler {
@@ -40,6 +37,8 @@ public class MetricScheduler {
 	public void process() {
 		Optional<List<Agent>> all = Optional.ofNullable(serviceAgent.findAll());
 		all.orElse(Lists.newArrayList())
+				.stream()
+				.filter((agent)->agent.getPort()==port)
 				.forEach((agent -> {
 					Map<String, Object> metrics = serviceAgentInfra.metrics(agent);
 					log.debug("{}", metrics);
