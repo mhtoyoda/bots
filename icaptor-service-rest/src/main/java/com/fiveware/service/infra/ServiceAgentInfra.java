@@ -3,21 +3,14 @@ package com.fiveware.service.infra;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fiveware.config.ApiUrlPersistence;
 import com.fiveware.model.Agent;
-import com.fiveware.model.activity.RecentActivity;
-import com.fiveware.util.UtilService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
-import java.util.List;
 import java.util.Map;
 
 
@@ -42,12 +35,8 @@ public class ServiceAgentInfra {
 
     public Map<String, Object> metrics(Agent agent) {
         String uri = null;
-        try {
-            uri = "http://".concat(Inet4Address.getLocalHost().getHostAddress()).concat(":").concat(String.valueOf(agent.getPort()))
-                    .concat("/management/metrics");
-        } catch (UnknownHostException e) {
-            logger.error("{}", e);
-        }
+        uri = "http://localhost".concat(":").concat(String.valueOf(agent.getPort()))
+                .concat("/management/metrics");
 
         logger.debug(uri);
 

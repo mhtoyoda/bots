@@ -111,7 +111,7 @@ services:
       - "8006:8006"
     environment:
       - icaptor.data-source.host=http://icaptor-data:8085
-      - icaptor.server.host=icaptor-cloud:8082
+      - icaptor.server.host=http://icaptor-cloud:8082
       - icaptor.origin-permitida=http://localhost:4200
       - icaptor.redis=http://icaptor-redis:8086
 
@@ -125,7 +125,7 @@ services:
     environment:
       - icaptor.data-source.host=http://icaptor-data:8085
       - icaptor.broker.host=icaptor-broker
-      - icaptor.elasticSearch=http://54.232.96.63:9200
+      - icaptor.elasticSearch=http://54.232.150.237:9200
 
   icaptor-workflow:
     image: fiveware/icaptor-workflow
