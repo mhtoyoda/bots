@@ -40,9 +40,9 @@ public class ServiceAgentInfra {
 
         logger.debug(uri);
 
-        String forObject = restTemplate.getForObject(uri, String.class);
         Map<String, Object> agentInfra = null;
         try {
+            String forObject = restTemplate.getForObject(uri, String.class);
             agentInfra = objectMapper.readValue(forObject, Map.class);
             agentInfra.put("agent", agent);
 
