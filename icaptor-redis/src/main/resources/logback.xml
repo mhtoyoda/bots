@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="24 hours">
+
+<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+        <pattern>%d{dd-MM-yyyy HH:mm:ss} %-4relative [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </layout>
+</appender>
+
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+        <pattern>%d{yyyy-MM-dd HH:mm:ss} %-4relative [%thread] %-5level %logger{36} - %msg%n</pattern>
+    </layout>
+</appender>
+
+<if condition='"local".equals("${spring.profiles.active}")'>
+    <then>
+        <logger name="com.redis" level="INFO" additivity="false">
+            <appender-ref ref="CONSOLE"/>
+        </logger>
+        <root level="error">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </then>
+    <else>
+        <logger name="com.redis" level="DEBUG"/>
+        <root level="DEBUG">
+            <appender-ref ref="STDOUT"/>
+        </root>
+    </else>
+</if>
+
+</configuration>
