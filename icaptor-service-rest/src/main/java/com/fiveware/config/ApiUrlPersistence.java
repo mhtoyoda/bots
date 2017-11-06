@@ -21,4 +21,10 @@ public class ApiUrlPersistence {
         return String.format("%s/%s", iCaptorApiProperty.getElasticSearch(), baseUrl.concat(endpoint));
         // @formatter:off
     }
+
+    public String endPointRedis(String baseUrl, String endpoint) {
+        // @formatter:on
+        return String.format("%s/%s", iCaptorApiProperty.getRedis(), baseUrl.concat(endpoint));
+        // @formatter:off
+    }
 }

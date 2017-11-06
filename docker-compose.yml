@@ -22,6 +22,20 @@ services:
      - RABBITMQ_DEFAULT_PASS=guest
 #     - CLUSTERED=true
 
+  icaptor-alpine-redis:
+    image: smebberson/alpine-redis
+    networks:
+      - interna
+    ports:
+      - "6379:6379"
+    deploy:
+      mode: replicated
+      replicas: 1
+#    environment:
+#      - MYSQL_DATABASE=icaptor
+#      - MYSQL_USER=root
+#      - MYSQL_PASSWORD=root
+
   icaptor-mysql:
     image: mysql/mysql-server
     networks:
@@ -35,6 +49,23 @@ services:
       - MYSQL_DATABASE=icaptor
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root
+
+  icaptor-redis:
+    image: fiveware/icaptor-redis
+    networks:
+      - interna
+    ports:
+      - "8086:8086"
+      - "8009:8009"
+    depends_on:
+      - icaptor-alpine-redis
+    deploy:
+      mode: replicated
+      replicas: 1
+    environment:
+      - spring.profiles.active=local
+      - spring.redis.hostname=icaptor-alpine-redis
+      - spring.redis.port=6379
 
   icaptor-data:
     image: fiveware/icaptor-persistence
@@ -54,7 +85,6 @@ services:
       - spring.datasource.username=root
       - spring.datasource.password=root
       - spring.datasource.driverClassname=com.mysql.jdbc.Driver
-
 
   icaptor-cloud:
     image: fiveware/icaptor-cloud
@@ -82,7 +112,8 @@ services:
     environment:
       - icaptor.data-source.host=http://icaptor-data:8085
       - icaptor.server.host=icaptor-cloud:8082
-      - icaptor.origin-permitida=http://54.232.96.63:4200
+      - icaptor.origin-permitida=http://localhost:4200
+      - icaptor.redis=http://icaptor-redis:8086
 
   icaptor-monitoring:
     image: fiveware/icaptor-monitoring

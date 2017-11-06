@@ -12,6 +12,7 @@ public class ICaptorApiProperty {
     private Broker broker = new Broker();
 
     private String elasticSearch;
+    private String redis;
 
 
     public DataSource getDataSource() {return dataSource;}
@@ -29,6 +30,14 @@ public class ICaptorApiProperty {
 
     public String getElasticSearch() {
         return elasticSearch;
+    }
+
+    public String getRedis() {
+        return redis;
+    }
+
+    public void setRedis(String redis) {
+        this.redis = redis;
     }
 
     public void setElasticSearch(String elasticSearch) {

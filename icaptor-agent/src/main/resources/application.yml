@@ -19,6 +19,9 @@ icaptor:
     host: 34.231.45.229
     port: 30001
     queue-send-schedular-time: 5000 #milli second
+  redis: http://localhost:8086
+
+  metrics-schedulle-time: 5000 #milli second
 
 io:
   worker.dir: ${user.home}/.icaptor-agent
@@ -59,6 +62,7 @@ icaptor:
   data-source:
     host: http://localhost:8085
   elasticSearch: http://54.232.96.63:9200
+  redis: http://localhost:8086
 
   broker:
     user: guest
@@ -67,6 +71,7 @@ icaptor:
     port: 15672
     queue-send-schedular-time: 5000 #milli second
 
+  metrics-schedulle-time: 5000 #milli second
 io:
   worker.dir: ${user.home}/.icaptor-agent
   worker.file: ${user.home}/.icaptor-out-file

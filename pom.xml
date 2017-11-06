@@ -21,6 +21,7 @@
         <module>icaptor-web-security</module>
         <module>icaptor-monitoring</module>
         <module>icaptor-workflow</module>
+        <module>icaptor-redis</module>
     </modules>
 
 
