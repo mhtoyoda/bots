@@ -10,42 +10,18 @@ import java.net.URL;
 
 public class NetIdentity {
 
-    final static String SPEC = "http://bot.whatismyipaddress.com";
+    final static String SPEC = "https://api.ipify.org";
 
     static Logger logger = LoggerFactory.getLogger(NetIdentity.class);
 
     public static String ipAddress() {
-        URL url = null;
-        BufferedReader in = null;
-        String ipAddress = "";
-        try {
-            url = new URL(SPEC);
-            in = new BufferedReader(new InputStreamReader(url.openStream()));
-            ipAddress = in.readLine().trim();
-            if (!(ipAddress.length() > 0))
-                ipAddress= getIp();
-        } catch (Exception ex) {
-            // This try will give the Private IP of the Host.
-            ipAddress= getIp();
-            //ex.printStackTrace();
-        }
-        System.out.println("IP Address: " + ipAddress);
-        return ipAddress;
-    }
-
-    private static String getIp() {
-        String ipAddress;
-        try {
-            InetAddress ip = InetAddress.getLocalHost();
-            System.out.println((ip.getHostAddress()).trim());
-            ipAddress = (ip.getHostAddress()).trim();
-        } catch (Exception exp) {
-            ipAddress = "ERROR";
+        String ipAddress = null;
+        try (java.util.Scanner s = new java.util.Scanner(new java.net.URL(SPEC).openStream(), "UTF-8").useDelimiter("\\A")) {
+            ipAddress = s.next();
+        } catch (java.io.IOException e) {
+            logger.error("{}", e);
         }
         return ipAddress;
     }
 
-    public static void main(String[] args) {
-        System.out.println("ipAddress() = " + ipAddress());
-    }
 }

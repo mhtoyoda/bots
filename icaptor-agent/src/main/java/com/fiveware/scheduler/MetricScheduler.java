@@ -17,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 @Component
 public class MetricScheduler {
 
@@ -28,9 +30,6 @@ public class MetricScheduler {
 	@Autowired
 	private ServiceAgent serviceAgent;
 
-	@Value("${server.port}")
-	private int port;
-
 	@Autowired
 	Environment environment;
 
@@ -40,12 +39,17 @@ public class MetricScheduler {
 	@Scheduled(fixedDelayString = "${icaptor.metrics-schedulle-time}")
 	public void process() {
 		Optional<List<Agent>> all = Optional.ofNullable(serviceAgent.findAll());
-		all.orElse(Lists.newArrayList())
+		all.orElse(newArrayList())
 				.stream()
-				.filter((agent)->agent.getPort()==agentListener.getAgentPort())
-				.forEach((agent -> {
-					Map<String, Object> metrics = serviceAgentInfra.metrics(agent);
-				}));
+				.filter(this::test)
+				.forEach((this::accept));
 	}
 
+	private void accept(Agent agent) {
+		serviceAgentInfra.metrics(agent);
+	}
+
+	private boolean test(Agent agent) {
+		return agent.getPort() == agentListener.getAgentPort();
+	}
 }
