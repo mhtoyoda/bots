@@ -37,9 +37,6 @@ public class ServiceAgentInfra {
         String uri = null;
         uri = "http://localhost".concat(":").concat(String.valueOf(agent.getPort()))
                 .concat("/management/metrics");
-
-        logger.debug(uri);
-
         Map<String, Object> agentInfra = null;
         try {
             String forObject = restTemplate.getForObject(uri, String.class);

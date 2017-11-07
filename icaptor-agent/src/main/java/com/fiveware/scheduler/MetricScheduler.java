@@ -1,5 +1,6 @@
 package com.fiveware.scheduler;
 
+import com.fiveware.config.agent.AgentListener;
 import com.fiveware.model.Agent;
 import com.fiveware.service.ServiceAgent;
 import com.fiveware.service.infra.ServiceAgentInfra;
@@ -33,15 +34,17 @@ public class MetricScheduler {
 	@Autowired
 	Environment environment;
 
+	@Autowired
+	private AgentListener agentListener;
+
 	@Scheduled(fixedDelayString = "${icaptor.metrics-schedulle-time}")
 	public void process() {
 		Optional<List<Agent>> all = Optional.ofNullable(serviceAgent.findAll());
 		all.orElse(Lists.newArrayList())
 				.stream()
-				.filter((agent)->agent.getPort()==port)
+				.filter((agent)->agent.getPort()==agentListener.getAgentPort())
 				.forEach((agent -> {
 					Map<String, Object> metrics = serviceAgentInfra.metrics(agent);
-					log.debug("{}", metrics);
 				}));
 	}
 
