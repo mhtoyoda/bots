@@ -22,7 +22,7 @@ import static com.fiveware.automate.BotWebBrowser.PHANTOM;
 
 @Icaptor(value = "consultaCEP", classloader = "com.fiveware.TesteBot",
 		description = "Bot para consulta de ceps, serviço do Correio",version = "1.0.0")
-public class TesteBot implements Automation<String, Endereco> {
+public class TesteBot implements Automation<Cep, Endereco> {
 
 	static Logger logger = LoggerFactory.getLogger(TesteBot.class);
 	
@@ -35,11 +35,11 @@ public class TesteBot implements Automation<String, Endereco> {
 	@IcaptorParameter(value = "joao:12345", nameTypeParameter = "login", exclusive = true, credential = true)
 	@IcaptorParameter(value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false, credential = false)
 	@IcaptorParameter(value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
-	@IcaptorMethod(value = "execute", endpoint = "correios-bot", type = String.class)
+	@IcaptorMethod(value = "execute", endpoint = "correios-bot", type = Cep.class)
 	@InputDictionary(fields = {"cep"}, separator = "|", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(String endereco, ParameterValue parameters) throws RuntimeBotException,UnRecoverableException,
+	public Endereco execute(Cep endereco, ParameterValue parameters) throws RuntimeBotException,UnRecoverableException,
 																				RecoverableException, AuthenticationBotException {
 		ParameterIcaptor login = parameters.getByType("login");
 		logger.info("LOGIN {}{}", login.getField(), login.getValue());
@@ -47,8 +47,8 @@ public class TesteBot implements Automation<String, Endereco> {
 		ParameterIcaptor url = parameters.getByType("retry");
 		logger.info("Cloud-Bot: {}{}", login.getField(), login.getValue());
 
-		logger.info("Dados de Endereco: {}",endereco.toString());
-		Endereco endereco1 = getEndereco(endereco);
+		logger.info("Dados de Endereco: {}",endereco.getCep().toString());
+		Endereco endereco1 = getEndereco(endereco.getCep());
 
 		return endereco1;
 	}

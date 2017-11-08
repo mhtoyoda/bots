@@ -13,7 +13,9 @@ import javax.persistence.Table;
 @Table(name = "bot")
 public class Bot implements Serializable {
 
-	@Id
+	public static final int DESCRIPTION_LENGTH = 120;
+
+    @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	

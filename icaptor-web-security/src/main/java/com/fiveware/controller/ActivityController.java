@@ -31,10 +31,10 @@ public class ActivityController {
 	private static final Logger logger = LoggerFactory.getLogger(ActivityController.class);
 
 	@GetMapping("/load")
-	public ResponseEntity<Object> loadUnseenActivities(@RequestHeader("Authorization") String details) {
+	public List<RecentActivity> loadUnseenActivities(@RequestHeader("Authorization") String details) {
 		List<RecentActivity> activities = activityService.findAllActivitiesForUser(getUserId(details));
 		logger.debug("Loading [{}] activities for user [{}]", activities.size(), getUserId(details));
-		return ResponseEntity.ok(activities);
+		return activities;
 	}
 
 	@GetMapping("/count")

@@ -15,6 +15,7 @@ import java.util.Map;
 
 public final class SpringSecurityUtil {
 
+    public static final int SPLIT_PAYLOAD = 1;
     static  Logger logger = LoggerFactory.getLogger(SpringSecurityUtil.class);
 
     public static String decodeAuthorizationKey(final String basicAuthValue) {
@@ -25,13 +26,12 @@ public final class SpringSecurityUtil {
         }
 
 
-        String[] split = basicAuthValue.split("\\.");
         Object payload = null;
 
-        final byte[] decodeBytes = Base64.decodeBase64(split[1].substring(split[1].indexOf(' ') + 1));
-        String decoded = null;
+        String[] split = basicAuthValue.split("\\.");
+        final byte[] decodeBytes = Base64.decodeBase64(split[SPLIT_PAYLOAD].substring(split[SPLIT_PAYLOAD].indexOf(' ') + 1));
         try {
-            decoded = new String(decodeBytes, "UTF-8");
+            String decoded = new String(decodeBytes, "UTF-8");
             payload = objectMapper.readValue(decoded, new TypeReference<LinkedHashMap<String, Object>>() {});
 
 
