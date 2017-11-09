@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,9 +54,7 @@ public class UploadFile {
 
         DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
 
-        resultado.setResult(ResponseEntity.ok().body("OK"));
-
-        Thread[] thread = new Thread[file.length];
+        LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 
         for (int i = 0; i < file.length; i++) {
 
@@ -64,7 +63,6 @@ public class UploadFile {
 
             final MultipartFile multipartFile = file[i];
 
-            LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
             try {
                 ByteArrayResource bytes = new ByteArrayResource(multipartFile.getBytes()) {
                     @Override
@@ -78,10 +76,19 @@ public class UploadFile {
                 throw new Exception("Arquivo nao encontrado!");
             }
 
-            thread[i] = new Thread(getTarget(map, details, url, resultado));
+//            thread[i] = new Thread(getTarget(map, details, url, resultado));
         }
-        for (int i = 0; i < file.length; i++) {
-            thread[i].start();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        headers.add("user", SpringSecurityUtil.decodeAuthorizationKey(details));
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
+        ResponseEntity exchange = null;
+        try {
+            exchange = restTemplate.exchange(url, HttpMethod.POST, (HttpEntity<?>) requestEntity, DeferredResult.class);
+        } catch (HttpClientErrorException e) {
+            resultado.setResult(ResponseEntity.badRequest().body(e.getResponseBodyAsString()));
         }
         return resultado;
     }

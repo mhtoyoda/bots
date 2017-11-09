@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fiveware.io.ReadInputFile;
 import com.fiveware.io.WorkerFile;
 
+import java.io.IOException;
+
 /**
  * Created by valdisnei on 06/06/17.
  */
@@ -34,41 +37,43 @@ public class ResourceInputFile {
     private ReadInputFile readInputFile;
 
     @GetMapping("/up")
-    public String up(HttpServletRequest httpRequest){
+    public String up(HttpServletRequest httpRequest) {
         String remoteAddr = httpRequest.getRemoteAddr();
 
-        logger.info("Agent UP: {}",remoteAddr);
+        logger.info("Agent UP: {}", remoteAddr);
         return "UP";
     }
-    
+
     @GetMapping("/down")
-    public String down(HttpServletRequest httpRequest){
+    public String down(HttpServletRequest httpRequest) {
         String remoteAddr = httpRequest.getRemoteAddr();
 
-        logger.info("Agent DOWN: {}",remoteAddr);
+        logger.info("Agent DOWN: {}", remoteAddr);
         return "DOWN";
     }
 
-    @PostMapping(value = "/{nameBot}/upload",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/{nameBot}/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public DeferredResult<ResponseEntity<String>> upload(@PathVariable String nameBot,
-                                                         @RequestParam("file") MultipartFile file, HttpServletRequest httpRequest){
-    	Long userId = extractUser(httpRequest);
+                                                         @RequestParam("file") MultipartFile file, HttpServletRequest httpRequest) {
+        Long userId = extractUser(httpRequest);
         DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
 
-        Thread thread = new Thread(new WorkerFile(userId, nameBot, file, readInputFile, resultado));
-        thread.start();
+        try {
+            readInputFile.readFile(userId, nameBot, file, resultado);
+        } catch (IOException e) {
+        }
 
         return resultado;
     }
 
-	private Long extractUser(HttpServletRequest httpRequest) {
-		String userJson = httpRequest.getHeader("user");
-    	try {
-			JSONObject jsonObject = new JSONObject(userJson);
-			Integer idUSer = (Integer) jsonObject.get("idUser");
-			return Long.valueOf(idUSer.longValue());
-		} catch (Exception e) {
-			return null;
-		}
-	}
+    private Long extractUser(HttpServletRequest httpRequest) {
+        String userJson = httpRequest.getHeader("user");
+        try {
+            JSONObject jsonObject = new JSONObject(userJson);
+            Integer idUSer = (Integer) jsonObject.get("idUser");
+            return Long.valueOf(idUSer.longValue());
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

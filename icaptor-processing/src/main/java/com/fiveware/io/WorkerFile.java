@@ -7,7 +7,6 @@ import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 
 public class WorkerFile implements Runnable {
 
@@ -34,11 +33,9 @@ public class WorkerFile implements Runnable {
     @Override
     public void run() {
         try {
-            readInputFile.readFile(userId, nameBot, file.getInputStream(), resultado);
+            readInputFile.readFile(userId, nameBot, file, resultado);
         } catch (IOException e) {
-            logger.error("{}", e);
-            resultado.setResult(ResponseEntity.badRequest().body("ERROR"));
+            logger.error("{}",e);
         }
-
     }
 }
