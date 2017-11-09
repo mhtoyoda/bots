@@ -1,5 +1,6 @@
 package com.fiveware.controller.upload;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -46,16 +47,38 @@ public class UploadFile {
     @PreAuthorize("hasAuthority('ROLE_AGENT_LIST') and #oauth2.hasScope('write')")
     public DeferredResult<ResponseEntity<String>> upload(@PathVariable String nameBot,
                                                          @RequestParam("file") MultipartFile[] file,
-                                                         @RequestHeader("Authorization") String details) {
+                                                         @RequestHeader("Authorization") String details) throws Exception {
 
-        String url = String.format("%s/api/bot/%s/upload" ,iCaptorApiProperty.getServer().getHost(),nameBot) ;
+        String url = String.format("%s/api/bot/%s/upload", iCaptorApiProperty.getServer().getHost(), nameBot);
 
         DeferredResult<ResponseEntity<String>> resultado = new DeferredResult<>();
+
         resultado.setResult(ResponseEntity.ok().body("OK"));
+
         Thread[] thread = new Thread[file.length];
 
         for (int i = 0; i < file.length; i++) {
-            thread[i] = new Thread(getTarget(file[i], details, url, resultado));
+
+            if (file[i].getBytes().length == 0)
+                throw new Exception("Arquivo nao encontrado!");
+
+            final MultipartFile multipartFile = file[i];
+
+            LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+            try {
+                ByteArrayResource bytes = new ByteArrayResource(multipartFile.getBytes()) {
+                    @Override
+                    public String getFilename() {
+                        return multipartFile.getOriginalFilename();
+                    }
+                };
+                map.add("file", bytes);
+            } catch (IOException e) {
+                logger.error("{}", e);
+                throw new Exception("Arquivo nao encontrado!");
+            }
+
+            thread[i] = new Thread(getTarget(map, details, url, resultado));
         }
         for (int i = 0; i < file.length; i++) {
             thread[i].start();
@@ -63,29 +86,19 @@ public class UploadFile {
         return resultado;
     }
 
-    private Runnable getTarget(@RequestParam("file") MultipartFile file,
-                               @RequestHeader("Authorization") String details,
-                               String url, DeferredResult<ResponseEntity<String>> resultado) {
+    private Runnable getTarget(LinkedMultiValueMap<String, Object> map,
+                               String details,
+                               String url, DeferredResult<ResponseEntity<String>> resultado)  {
         return new Runnable() {
             @Override
-            public void run() {                    
-            	LinkedMultiValueMap<String, Object> map = new LinkedMultiValueMap<>();                                	 
-            	try {					
-            		ByteArrayResource bytes = new ByteArrayResource(file.getBytes()) {					 
-            			@Override					    
-            			public String getFilename() {					            
-            				return file.getOriginalFilename();					        
-            			}					    
-            		};
-					map.add("file", bytes);                                     
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-            	HttpHeaders headers = new HttpHeaders();                
-            	headers.setContentType(MediaType.MULTIPART_FORM_DATA);                
-            	headers.add("user", SpringSecurityUtil.decodeAuthorizationKey(details));
-            	HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);               
-            	restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+            public void run() {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+                headers.add("user", SpringSecurityUtil.decodeAuthorizationKey(details));
+
+                HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
+
+                restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
             }
         };
     }
