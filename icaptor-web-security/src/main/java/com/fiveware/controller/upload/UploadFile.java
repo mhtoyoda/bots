@@ -1,33 +1,22 @@
 package com.fiveware.controller.upload;
 
-import java.io.File;
-import java.io.IOException;
-
+import com.fiveware.config.ICaptorApiProperty;
+import com.fiveware.security.util.SpringSecurityUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.fiveware.config.ICaptorApiProperty;
-import com.fiveware.security.util.SpringSecurityUtil;
+import java.io.IOException;
 
 /**
  * Created by valdisnei on 29/08/2017.
@@ -84,11 +73,14 @@ public class UploadFile {
         headers.add("user", SpringSecurityUtil.decodeAuthorizationKey(details));
 
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(map, headers);
-        ResponseEntity exchange = null;
         try {
-            exchange = restTemplate.exchange(url, HttpMethod.POST, (HttpEntity<?>) requestEntity, DeferredResult.class);
+           restTemplate.exchange(url, HttpMethod.POST, (HttpEntity<?>) requestEntity, String.class);
+           resultado.setResult(ResponseEntity.ok().body("OK"));
+
         } catch (HttpClientErrorException e) {
             resultado.setResult(ResponseEntity.badRequest().body(e.getResponseBodyAsString()));
+        } catch (Exception e) {
+            resultado.setResult(ResponseEntity.badRequest().body(e.getMessage()));
         }
         return resultado;
     }
