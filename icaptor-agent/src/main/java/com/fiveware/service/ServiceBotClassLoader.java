@@ -70,14 +70,14 @@ public class ServiceBotClassLoader<T> {
         Object obj = null;
         try {
 
-        	obj = execute.invoke(clazz.newInstance(), o1, o2);            
+            obj = execute.invoke(clazz.newInstance(), o1, o2);
 
             processorFields.getMessageBot().setStatuProcessEnum(StatusProcessTaskEnum.SUCCESS);
             processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.SUCCESS);
             processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
             processorFields.getMessageBot().setException(null);
 
-            if (obj instanceof List){
+            if (obj instanceof List) {
                 OutTextRecord outTextRecord = new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
                 serviceElasticSearch.log(o1); // arquivo de entrada
                 serviceElasticSearch.log(o2); // parameters
@@ -86,10 +86,11 @@ public class ServiceBotClassLoader<T> {
                 return outTextRecord;
             }
 
-            if (botClassLoaderContext.get().getOutputDictionary().getFields().length==1
+            if (botClassLoaderContext.get().getOutputDictionary().getFields().length == 1
                     && "listJson".equalsIgnoreCase(botClassLoaderContext.get().getOutputDictionary().getFields()[0])) {
                 List<Map<String, Object>> myObjects = objectMapper.readValue(new String(((String) obj).getBytes()),
-                                                            new TypeReference<ArrayList<HashMap<String, Object>>>() {});
+                        new TypeReference<ArrayList<HashMap<String, Object>>>() {
+                        });
                 Map[] objects = myObjects.toArray(new HashMap[myObjects.size()]);
                 return new OutTextRecord(objects);
             }
@@ -101,6 +102,16 @@ public class ServiceBotClassLoader<T> {
             Map map = objectMapper.convertValue(obj, Map.class);
             HashMap[] hashMaps = {(HashMap) map};
 
+            return new OutTextRecord(hashMaps);
+
+
+        } catch (IllegalStateException e) {
+            logger.error("{}", e);
+            processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.ERROR);
+
+            HashMap[] hashMaps = handleException(processorFields, new UnRecoverableException(e.getMessage()));
+
+            serviceElasticSearch.error(e);
             return new OutTextRecord(hashMaps);
 
         } catch (InvocationTargetException e) {
@@ -137,6 +148,14 @@ public class ServiceBotClassLoader<T> {
 
                 return new OutTextRecord(hashMaps);
             } else {
+                Map map = new HashMap();
+                String fields = getOutputDictionary(processorFields);
+                map.put("ERROR", fields + "|" + e.getMessage());
+                HashMap[] hashMaps = {(HashMap) map};
+
+                processorFields.getMessageBot().setLineResult(fields + "|" + e.getMessage());
+                processorFields.getMessageBot().setException(e);
+
                 serviceElasticSearch.error(e);
                 throw new RuntimeBotException(e.getTargetException().getMessage());
             }
