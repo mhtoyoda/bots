@@ -70,8 +70,6 @@ public class ServiceBotClassLoader<T> {
         Object obj = null;
         try {
 
-
-
         	obj = execute.invoke(clazz.newInstance(), o1, o2);            
 
             processorFields.getMessageBot().setStatuProcessEnum(StatusProcessTaskEnum.SUCCESS);

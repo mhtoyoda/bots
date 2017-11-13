@@ -33,7 +33,7 @@ public class ParameterClassLoader {
 		Class<?> typeParameter = botClassLoaderContext.getTypeParameter();
 		Object instance = typeParameter.newInstance();
 		InputDictionaryContext inputDictionary = botClassLoaderContext.getInputDictionary();
-		String[] fields = getFields(inputDictionary.getFields()[0]);
+		String[] fields = inputDictionary.getFields();
 		
 		if (instance instanceof String || instance instanceof Integer || instance instanceof Double
 			|| instance instanceof Long){
