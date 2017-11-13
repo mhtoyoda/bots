@@ -32,48 +32,7 @@ public class IcaptorAgentApplication {
 
 
 	public static void main(String[] args) throws UnknownHostException {
-		SpringApplication app = new SpringApplication(IcaptorAgentApplication.class);
-
-//		DefaultProfileUtil.addDefaultProfile(app);
-		Map<String, Object> defProperties =  new HashMap<>();
-        /*
-        * The default profile to use when no other profiles are defined
-        * This cannot be set in the <code>application.yml</code> file.
-        * See https://github.com/spring-projects/spring-boot/issues/1219
-        */
-		defProperties.put("spring.profiles.default", "dev");
-		app.setDefaultProperties(defProperties);
-		Environment env = app.run(args).getEnvironment();
-		String protocol = "http";
-		if (env.getProperty("server.ssl.key-store") != null) {
-			protocol = "https";
-		}
-		log.info("\n----------------------------------------------------------\n\t" +
-						"Application '{}' is running! Access URLs:\n\t" +
-						"Local: \t\t{}://localhost:{}\n\t" +
-						"External: \t{}://{}:{}\n\t" +
-						"Profile(s): \t{}\n----------------------------------------------------------",
-				env.getProperty("spring.application.name"),
-				protocol,
-				env.getProperty("server.port"),
-				protocol,
-				InetAddress.getLocalHost().getHostAddress(),
-				env.getProperty("server.port"),
-				env.getActiveProfiles());
-
-		String secretKey = env.getProperty("jhipster.security.authentication.jwt.secret");
-		if (secretKey == null ) {
-			log.error("\n----------------------------------------------------------\n" +
-					"Your JWT secret key is not set up, you will not be able to log into the JHipster.\n"+
-					"Please read the documentation at http://www.jhipster.tech/jhipster-registry/\n" +
-					"----------------------------------------------------------");
-		} else if (secretKey.equals("this-secret-should-not-be-used-read-the-comment")) {
-			log.error("\n----------------------------------------------------------\n" +
-					"Your JWT secret key is not configured using Spring Cloud Config, you will not be able to \n"+
-					"use the JHipster Registry dashboards to monitor external applications. \n" +
-					"Please read the documentation at http://www.jhipster.tech/jhipster-registry/\n" +
-					"----------------------------------------------------------");
-		}
+		SpringApplication.run(IcaptorAgentApplication.class,args);
 
 	}
 
