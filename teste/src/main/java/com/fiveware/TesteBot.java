@@ -1,6 +1,18 @@
 package com.fiveware;
 
-import com.fiveware.annotation.*;
+import static com.fiveware.automate.BotAutomationBuilder.Web;
+import static com.fiveware.automate.BotWebBrowser.PHANTOM;
+
+import java.util.Iterator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.fiveware.annotation.Icaptor;
+import com.fiveware.annotation.IcaptorMethod;
+import com.fiveware.annotation.IcaptorParameter;
+import com.fiveware.annotation.InputDictionary;
+import com.fiveware.annotation.OutputDictionary;
 import com.fiveware.automate.BotScreen;
 import com.fiveware.exception.AuthenticationBotException;
 import com.fiveware.exception.RecoverableException;
@@ -8,13 +20,6 @@ import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.parameter.ParameterIcaptor;
 import com.fiveware.parameter.ParameterValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Iterator;
-
-import static com.fiveware.automate.BotAutomationBuilder.Web;
-import static com.fiveware.automate.BotWebBrowser.PHANTOM;
 
 /**
  * Created by valdisnei on 5/28/17.
@@ -39,23 +44,19 @@ public class TesteBot implements Automation<Cep, Endereco> {
 	@InputDictionary(fields = {"cep"}, separator = "|", typeFileIn = "csv")
 	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"},
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
-	public Endereco execute(Cep endereco, ParameterValue parameters) throws RuntimeBotException,UnRecoverableException,
+	public Endereco execute(Cep cep, ParameterValue parameters) throws RuntimeBotException,UnRecoverableException,
 																				RecoverableException, AuthenticationBotException {
-
 
 		ParameterIcaptor login = parameters.getByType("login");
 		logger.info("LOGIN {}{}", login.getField(), login.getValue());
 
-		ParameterIcaptor url = parameters.getByType("retry");
-		logger.info("Cloud-Bot: {}{}", login.getField(), login.getValue());
+		ParameterIcaptor retry = parameters.getByType("retry");
+		logger.info("Cloud-Bot: {}{}", retry.getField(), retry.getValue());
 
-		logger.info("Dados de Endereco: {}",endereco.getCep().toString());
-
-		throw new RuntimeBotException("erro testando throw runtimeBot");
-
-//		Endereco endereco1 = getEndereco(endereco.getCep());
-
-//		return endereco1;
+		logger.info("Dados de Endereco: {}",cep.getCep().toString());
+		Endereco endereco = getEndereco(cep.getCep());
+		endereco.setArquivo(null);
+		return endereco;
 	}
 
 	public Endereco getEndereco(String args) throws RuntimeBotException, UnRecoverableException, RecoverableException {
