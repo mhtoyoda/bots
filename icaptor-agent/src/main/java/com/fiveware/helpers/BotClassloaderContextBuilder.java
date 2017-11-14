@@ -16,7 +16,6 @@ public class BotClassloaderContextBuilder {
 	private String endpoint;
 	private String nameJar;	
 	private String version;
-	private String classloader;
 	private String description;
 	private InputDictionaryContext inputDictionaryContext;
 	private OutputDictionaryContext outputDictionary;
@@ -78,6 +77,6 @@ public class BotClassloaderContextBuilder {
 	
 	public BotClassLoaderContext build(){
 		return new BotClassLoaderContext(nameBot, classLoader, method, endpoint,
-				nameJar, version, classloader, description, inputDictionaryContext, outputDictionary, url, typeParameter, pameterContexts); 
+				nameJar, version, description, inputDictionaryContext, outputDictionary, url, typeParameter, pameterContexts); 
 	}
 }

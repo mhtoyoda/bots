@@ -17,7 +17,6 @@ public class BotClassLoaderContext implements Serializable {
 	private String endpoint;
 	private String nameJar;
 	private String version;
-	private String classloader;
 	private String description;
 	private InputDictionaryContext inputDictionary;
 	private OutputDictionaryContext outputDictionary;
@@ -26,7 +25,7 @@ public class BotClassLoaderContext implements Serializable {
 	private List<IcaptorPameterContext> parameterContexts;
 	
 	public BotClassLoaderContext(String nameBot, String classLoader, String method, String endpoint, String nameJar,
-								 String version, String classloader, String description, InputDictionaryContext inputDictionary, OutputDictionaryContext outputDictionary,
+								 String version, String description, InputDictionaryContext inputDictionary, OutputDictionaryContext outputDictionary,
 								 URL url, Class<?> typeParameter, List<IcaptorPameterContext> parameterContexts) {
 		this.nameBot = nameBot;
 		this.classLoader = classLoader;
@@ -34,7 +33,6 @@ public class BotClassLoaderContext implements Serializable {
 		this.endpoint = endpoint;
 		this.nameJar = nameJar;
 		this.version = version;
-		this.classloader = classLoader;
 		this.description = description;
 		this.inputDictionary = inputDictionary;
 		this.outputDictionary = outputDictionary;
@@ -65,10 +63,6 @@ public class BotClassLoaderContext implements Serializable {
 	
 	public String getVersion() {
 		return version;
-	}
-	
-	public String getClassloader() {
-		return classloader;
 	}
 
 	public String getDescription() {
