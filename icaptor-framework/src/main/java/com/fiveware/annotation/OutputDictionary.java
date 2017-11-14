@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface OutputDictionary {
 
-	String typeFileOut() default "txt";
+	String typeFileOut() default "json";
 	String[] fields();
 	String separator() default "|";
 	String nameFileOut() default "saida";
