@@ -148,16 +148,10 @@ public class ServiceBotClassLoader<T> {
 
                 return new OutTextRecord(hashMaps);
             } else {
-                Map map = new HashMap();
-                String fields = getOutputDictionary(processorFields);
-                map.put("ERROR", fields + "|" + e.getMessage());
-                HashMap[] hashMaps = {(HashMap) map};
-
-                processorFields.getMessageBot().setLineResult(fields + "|" + e.getMessage());
-                processorFields.getMessageBot().setException(e);
+                HashMap[] hashMaps = handleException(processorFields, new UnRecoverableException(e.getCause()));
 
                 serviceElasticSearch.error(e);
-                throw new RuntimeBotException(e.getTargetException().getMessage());
+                return new OutTextRecord(hashMaps);
             }
         }
 

@@ -41,6 +41,8 @@ public class TesteBot implements Automation<Cep, Endereco> {
 					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
 	public Endereco execute(Cep endereco, ParameterValue parameters) throws RuntimeBotException,UnRecoverableException,
 																				RecoverableException, AuthenticationBotException {
+
+
 		ParameterIcaptor login = parameters.getByType("login");
 		logger.info("LOGIN {}{}", login.getField(), login.getValue());
 
@@ -48,9 +50,12 @@ public class TesteBot implements Automation<Cep, Endereco> {
 		logger.info("Cloud-Bot: {}{}", login.getField(), login.getValue());
 
 		logger.info("Dados de Endereco: {}",endereco.getCep().toString());
-		Endereco endereco1 = getEndereco(endereco.getCep());
 
-		return endereco1;
+		throw new RuntimeBotException("erro testando throw runtimeBot");
+
+//		Endereco endereco1 = getEndereco(endereco.getCep());
+
+//		return endereco1;
 	}
 
 	public Endereco getEndereco(String args) throws RuntimeBotException, UnRecoverableException, RecoverableException {
