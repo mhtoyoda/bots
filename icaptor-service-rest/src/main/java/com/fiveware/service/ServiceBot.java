@@ -24,7 +24,6 @@ public class ServiceBot {
 
 	private static Logger logger = LoggerFactory.getLogger(ServiceBot.class);
 
-
 	@Autowired
 	private ApiUrlPersistence apiUrlPersistence;
 
@@ -87,4 +86,12 @@ public class ServiceBot {
 		ResponseEntity<BotFormatter> botResponseEntity = restTemplate.postForEntity(url, entity, BotFormatter.class);
 		return botResponseEntity.getBody();
 	}
+	
+	public void deleteBotFormatter(List<BotFormatter> formatters) {
+        String url = apiUrlPersistence.endPoint("bot", "/formatter");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<List<BotFormatter>> entity = new HttpEntity<List<BotFormatter>>(formatters, headers);
+        restTemplate.exchange(url, HttpMethod.DELETE, entity, List.class);
+    }
 }

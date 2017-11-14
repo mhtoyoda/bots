@@ -23,6 +23,7 @@ public class BotClassLoaderContext implements Serializable {
 	private URL url;
 	private Class<?> typeParameter;
 	private List<IcaptorPameterContext> parameterContexts;
+	private List<BotReturnTypeFormatter> botReturnTypeFormatters;
 	
 	public BotClassLoaderContext(String nameBot, String classLoader, String method, String endpoint, String nameJar,
 								 String version, String description, InputDictionaryContext inputDictionary, OutputDictionaryContext outputDictionary,
@@ -99,6 +100,14 @@ public class BotClassLoaderContext implements Serializable {
 
 	public void setParameterContexts(List<IcaptorPameterContext> parameterContexts) {
 		this.parameterContexts = parameterContexts;
+	}
+
+	public List<BotReturnTypeFormatter> getBotReturnTypeFormatters() {
+		return botReturnTypeFormatters;
+	}
+
+	public void setBotReturnTypeFormatters(List<BotReturnTypeFormatter> botReturnTypeFormatters) {
+		this.botReturnTypeFormatters = botReturnTypeFormatters;
 	}
 	
 }

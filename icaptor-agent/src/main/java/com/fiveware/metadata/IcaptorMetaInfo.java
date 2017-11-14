@@ -32,7 +32,9 @@ public enum IcaptorMetaInfo {
 	TYPEPARAMETER("type"),
 	NAMETYPEPARAMETER("nameTypeParameter"),
 	EXCLUSIVE("exclusive"),
-	CREDENTIAL("credential");
+	CREDENTIAL("credential"),
+	FIELDINDEX("fieldIndex"),
+	TYPEFILE("typeFile");
 
 	private String value;
 

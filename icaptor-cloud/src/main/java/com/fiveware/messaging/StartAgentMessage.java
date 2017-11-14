@@ -13,12 +13,15 @@ import org.springframework.stereotype.Component;
 import com.fiveware.config.ServerConfig;
 import com.fiveware.model.Agent;
 import com.fiveware.model.Bot;
+import com.fiveware.model.BotFormatter;
 import com.fiveware.model.Parameter;
 import com.fiveware.model.Server;
 import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
 import com.fiveware.model.TypeParameter;
 import com.fiveware.model.message.MessageAgent;
+import com.fiveware.model.message.MessageAgentBot;
+import com.fiveware.model.message.MessageAgentBotFormatter;
 import com.fiveware.model.message.MessageParameterAgentBot;
 import com.fiveware.model.message.MessageTask;
 import com.fiveware.parameter.ScopeParameterEnum;
@@ -109,11 +112,30 @@ public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 					bot = serviceBot.save(bot);
 				}
 
-				saveParametersBot(botMessage.getParameters(), bot);
+				saveParametersBot(botMessage.getParameters(), bot);				
+				saveBotFormatter(botMessage, bot);
 				botList.add(bot);
 			});
 			agent.setBots(botList);
 			agent = serviceAgent.save(agent);
+		}
+	}
+
+	private void saveBotFormatter(MessageAgentBot botMessage, Bot bot) {
+		List<MessageAgentBotFormatter> formatters = botMessage.getFormatters();
+		List<BotFormatter> list = serviceBot.findBotFormatter(bot.getNameBot());
+		if(CollectionUtils.isNotEmpty(list)){
+			serviceBot.deleteBotFormatter(list);
+		}
+		if(CollectionUtils.isNotEmpty(formatters)){
+			formatters.forEach(formatter -> {
+				BotFormatter botFormatter = new BotFormatter();
+				botFormatter.setBot(bot);
+				botFormatter.setFieldIndex(formatter.getFieldIndex());
+				botFormatter.setFieldName(formatter.getNameField());
+				botFormatter.setTypeFile(formatter.getTypeFile());
+				serviceBot.saveBotFormatter(botFormatter);
+			});
 		}
 	}
 

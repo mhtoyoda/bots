@@ -1,14 +1,12 @@
 package com.fiveware.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -50,9 +48,6 @@ public class Bot implements Serializable {
 	
 	@Column(name ="description")
 	private String description;
-	
-	@OneToMany
-	private List<BotFormatter> botFormatters;
 	
 	public Long getId() {
 		return id;
@@ -140,14 +135,6 @@ public class Bot implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public List<BotFormatter> getBotFormatters() {
-		return botFormatters;
-	}
-
-	public void setBotFormatters(List<BotFormatter> botFormatters) {
-		this.botFormatters = botFormatters;
 	}
 	
 }
