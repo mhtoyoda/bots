@@ -10,7 +10,6 @@ import java.net.URLClassLoader;
 import java.util.List;
 import java.util.Set;
 
-import com.fiveware.model.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
@@ -30,6 +29,12 @@ import com.fiveware.helpers.InputDictionaryContextBuilder;
 import com.fiveware.helpers.OutputDictionaryContextBuilder;
 import com.fiveware.helpers.ParameterContextBuilder;
 import com.fiveware.metadata.IcaptorMetaInfo;
+import com.fiveware.model.Bot;
+import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.BotReturnTypeFormatter;
+import com.fiveware.model.IcaptorPameterContext;
+import com.fiveware.model.InputDictionaryContext;
+import com.fiveware.model.OutputDictionaryContext;
 import com.google.common.collect.Lists;
 
 @Component
@@ -43,6 +48,9 @@ public class JarConfiguration {
     @Autowired
     private MessageSource messageSource;
 
+    @Autowired
+    private JarReturnTypeMethod jarReturnTypeMethod;
+    
     @SuppressWarnings("rawtypes")
     public void saveConfigurations(String pathJar) throws MalformedURLException, AttributeLoadException, IllegalAccessException {
         String nameBot = null, classLoaderInfo = null, nameJar = null, version = null, description = null;
@@ -86,16 +94,20 @@ public class JarConfiguration {
                         parameterContext.add(icaptorPameterContext);
                     }
                 }
+                List<BotReturnTypeFormatter> formatters = jarReturnTypeMethod.readReturnTypeConfigurations(classLoader, clazz);        
                 BotClassLoaderContext botClassLoaderContext = getBotClassLoaderContext(nameBot, classLoaderInfo,
                         nameJar, version, method, endpoint, description, inputDictionaryContext, outputDictionaryContext, getUrl(pathJar),
                         typeParameter, parameterContext);
-
+                if(CollectionUtils.isNotEmpty(formatters)){
+                	botClassLoaderContext.setBotReturnTypeFormatters(formatters);                	
+                }
                 saveAttributesClassLoader(botClassLoaderContext);
             } catch (ClassNotFoundException e) {
                 logger.error("Error load jar bot: {}", e.getMessage());
             } catch (AttributeLoadException e) {
                 throw new AttributeLoadException(e.getMessage());
             }
+            
         }
     }
 

@@ -1,23 +1,28 @@
 package com.fiveware.service;
 
-import com.fiveware.config.ApiUrlPersistence;
-import com.fiveware.model.Bot;
+import java.util.List;
+import java.util.Optional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Optional;
+import com.fiveware.config.ApiUrlPersistence;
+import com.fiveware.model.Bot;
+import com.fiveware.model.BotFormatter;
 
 @Service
 public class ServiceBot {
 
 	private static Logger logger = LoggerFactory.getLogger(ServiceBot.class);
-
 
 	@Autowired
 	private ApiUrlPersistence apiUrlPersistence;
@@ -59,4 +64,34 @@ public class ServiceBot {
 		return botResponseEntity.getBody();
 	}
 
+	public List<BotFormatter> findBotFormatter(String nameBot) {
+		String url = apiUrlPersistence.endPoint("bot","/formatter/"+nameBot);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		ParameterizedTypeReference<List<BotFormatter>> typeReference = new ParameterizedTypeReference<List<BotFormatter>>() {};
+		ResponseEntity<List<BotFormatter>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<HttpHeaders>(headers), typeReference);
+
+		return responseEntity.getBody();
+	}
+	
+	public BotFormatter saveBotFormatter(BotFormatter botFormatter) {
+		String url = apiUrlPersistence.endPoint("bot","/formatter");
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		HttpEntity<BotFormatter> entity = new HttpEntity<BotFormatter>(botFormatter, headers);
+		ResponseEntity<BotFormatter> botResponseEntity = restTemplate.postForEntity(url, entity, BotFormatter.class);
+		return botResponseEntity.getBody();
+	}
+	
+	public void deleteBotFormatter(List<BotFormatter> formatters) {
+        String url = apiUrlPersistence.endPoint("bot", "/formatter");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<List<BotFormatter>> entity = new HttpEntity<List<BotFormatter>>(formatters, headers);
+        restTemplate.exchange(url, HttpMethod.DELETE, entity, List.class);
+    }
 }

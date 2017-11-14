@@ -1,12 +1,9 @@
 package com.fiveware.config.agent;
 
-import java.net.Inet4Address;
-import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
-import com.fiveware.helpers.NetIdentity;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,15 +12,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import com.fiveware.helpers.NetIdentity;
 import com.fiveware.loader.ClassLoaderConfig;
 import com.fiveware.messaging.BrokerManager;
 import com.fiveware.messaging.Producer;
 import com.fiveware.messaging.QueueName;
 import com.fiveware.messaging.TypeMessage;
 import com.fiveware.model.BotClassLoaderContext;
+import com.fiveware.model.BotReturnTypeFormatter;
 import com.fiveware.model.IcaptorPameterContext;
 import com.fiveware.model.message.MessageAgent;
 import com.fiveware.model.message.MessageAgentBot;
+import com.fiveware.model.message.MessageAgentBotFormatter;
 import com.fiveware.model.message.MessageParameterAgentBot;
 import com.google.common.collect.Lists;
 @Component
@@ -77,6 +77,7 @@ public class AgentConfig {
 					bot.setDescription(botClassLoader.getDescription());
 					bot.setClassloader(botClassLoader.getClassLoader());
 					bot = saveParametersBot(botClassLoader.getParameterContexts(), bot);
+					bot = saveBotFormatter(botClassLoader.getBotReturnTypeFormatters(), bot);
 					message.addMessageAgentBots(bot);
 				});
 			}
@@ -116,6 +117,18 @@ public class AgentConfig {
 		}
 		return bot;
 	}
-
+	
+	private MessageAgentBot saveBotFormatter(List<BotReturnTypeFormatter> formatters, MessageAgentBot bot){
+		if(CollectionUtils.isNotEmpty(formatters)){
+			formatters.forEach(formatter -> {
+				MessageAgentBotFormatter messageAgentBotFormatter = new MessageAgentBotFormatter();
+				messageAgentBotFormatter.setFieldIndex(formatter.getFieldIndex());
+				messageAgentBotFormatter.setNameField(formatter.getNameField());
+				messageAgentBotFormatter.setTypeFile(formatter.getTypeFile());				
+				bot.addBotFormatter(messageAgentBotFormatter);
+			});
+		}
+		return bot;
+	}
 
 }

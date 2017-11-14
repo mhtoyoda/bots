@@ -18,6 +18,7 @@ public class MessageAgentBot implements Serializable{
 	private String description;
 	private String classloader;
 	private List<MessageParameterAgentBot> parameters;
+	private List<MessageAgentBotFormatter> formatters;
 	
 	public String getNameBot() {
 		return nameBot;
@@ -112,5 +113,20 @@ public class MessageAgentBot implements Serializable{
 			this.parameters = Lists.newArrayList();			
 		}
 		parameters.add(parameter);
+	}
+
+	public List<MessageAgentBotFormatter> getFormatters() {
+		return formatters;
+	}
+
+	public void setFormatters(List<MessageAgentBotFormatter> formatters) {
+		this.formatters = formatters;
+	}
+	
+	public void addBotFormatter(MessageAgentBotFormatter formatter) {
+		if( null == formatters){
+			this.formatters = Lists.newArrayList();			
+		}
+		formatters.add(formatter);
 	}
 }

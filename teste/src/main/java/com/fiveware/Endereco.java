@@ -6,6 +6,7 @@ import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
 import com.fiveware.annotation.Field;
+import com.fiveware.annotation.Formatter;
 
 @AutoProperty
 public class Endereco implements Serializable {
@@ -22,6 +23,9 @@ public class Endereco implements Serializable {
 	@Field(name = "cep", length = 9, regexValidate = "\\d{5}\\-?\\d{3}")
 	private String cep;
 
+	@Formatter(fieldIndex = "cep", typeFile = "pdf")
+	private byte[] arquivo;
+	
 	public Endereco(){}
 
 
@@ -62,6 +66,14 @@ public class Endereco implements Serializable {
 
 	public void setCep(String cep) {
 		this.cep = cep;
+	}
+
+	public byte[] getArquivo() {
+		return arquivo;
+	}
+
+	public void setArquivo(byte[] arquivo) {
+		this.arquivo = arquivo;
 	}
 
 	@Override
