@@ -8,14 +8,10 @@ import org.springframework.amqp.rabbit.core.RabbitManagementTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.embedded.LocalServerPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
-import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
 
 @SpringBootApplication
 public class IcaptorAgentApplication {
@@ -26,10 +22,6 @@ public class IcaptorAgentApplication {
 	public IcaptorAgentApplication(Environment env) {
 		this.env = env;
 	}
-
-	@LocalServerPort
-	private int port;
-
 
 	public static void main(String[] args) throws UnknownHostException {
 		SpringApplication.run(IcaptorAgentApplication.class,args);
