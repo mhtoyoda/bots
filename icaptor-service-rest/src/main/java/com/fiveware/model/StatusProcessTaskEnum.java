@@ -12,7 +12,8 @@ public enum StatusProcessTaskEnum {
 	SUSPENDED(8L, "Suspended"),
 	SUCCESS(9L, "Success"),
 	ERROR(10l, "Error"),
-	CANCELED(11L, "Canceled");
+	CANCELED(11L, "Canceled"),
+	CONSOLIDATED(12L, "Consolidated");
 
 	private StatusProcessTaskEnum(Long id, String name) {
 		this.id = id;
