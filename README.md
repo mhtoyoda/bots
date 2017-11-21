@@ -33,4 +33,6 @@ start api (icaptor-web-security)
 - ```cd icaptor-web-security```
 - ```java -jar -Dspring.profiles.active=dev target/icaptor-web-security-0.0.1-SNAPSHOT.jar```
 
-
+start redis (icaptor-redis)
+- ```cd icaptor-redis```
+- ```java -jar -Dspring.profiles.active=dev target/icaptor-redis-0.0.1-SNAPSHOT.jar```
