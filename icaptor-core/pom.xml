@@ -66,25 +66,23 @@
 			<artifactId>icaptor-framework</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
-
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>22.0</version>
 		</dependency>
-
-
 	</dependencies>
 
 	<build>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 			</plugin>
-
 		</plugins>
 	</build>
 </project>
