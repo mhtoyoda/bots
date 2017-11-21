@@ -30,7 +30,7 @@ Start Redis (icaptor-redis)
 Start Client (icaptor-agent)
 - ```cd icaptor-agent```
 - ```java -jar -Dspring.profiles.active=dev target/icaptor-agent-0.0.1-SNAPSHOT.jar```
-- ```java -Dspring.profiles.active=dev  -Dicaptor.elasticsearch=http://54.232.96.63:9200 -Dicaptor.redis=http://54.232.96.63:8086  -Dicaptor.server.host=54.232.96.63:8082 -Dicaptor.data-source.host=http://54.232.96.63:8085 -Dicaptor.broker.host=54.232.96.63 -Dicaptor.broker.port=15672 -Djava.awt.headless=false -jar target/icaptor-agent-0.0.1-SNAPSHOT.jar```
+
 
 Start Monitoring (icaptor-monitoring)
 - ```cd icaptor-monitoring```
