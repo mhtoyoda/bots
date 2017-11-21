@@ -20,19 +20,21 @@ Start Server (icaptor-cloud)
 -  ```cd icaptor-cloud``` 
 -  ```java -jar -Dspring.profiles.active=dev target/icaptor-cloud-0.0.1-SNAPSHOT.jar``` 
 
-start client (icaptor-agent)
+Start Redis (icaptor-redis)
+- ```cd icaptor-redis```
+- ```java -jar -Dspring.profiles.active=dev target/icaptor-redis-0.0.1-SNAPSHOT.jar```
+
+Start Client (icaptor-agent)
 - ```cd icaptor-agent```
 - ```java -jar -Dspring.profiles.active=dev target/icaptor-agent-0.0.1-SNAPSHOT.jar```
 - ```java -Dspring.profiles.active=dev  -Dicaptor.elasticsearch=http://54.232.96.63:9200 -Dicaptor.redis=http://54.232.96.63:8086  -Dicaptor.server.host=54.232.96.63:8082 -Dicaptor.data-source.host=http://54.232.96.63:8085 -Dicaptor.broker.host=54.232.96.63 -Dicaptor.broker.port=15672 -Djava.awt.headless=false -jar target/icaptor-agent-0.0.1-SNAPSHOT.jar```
 
-start monitoring (icaptor-monitoring)
+Start Monitoring (icaptor-monitoring)
 - ```cd icaptor-monitoring```
 - ```java -jar -Dspring.profiles.active=dev target/icaptor-monitoring-0.0.1-SNAPSHOT.jar```
 
-start api (icaptor-web-security)
+Start Api (icaptor-web-security)
 - ```cd icaptor-web-security```
 - ```java -jar -Dspring.profiles.active=dev target/icaptor-web-security-0.0.1-SNAPSHOT.jar```
 
-start redis (icaptor-redis)
-- ```cd icaptor-redis```
-- ```java -jar -Dspring.profiles.active=dev target/icaptor-redis-0.0.1-SNAPSHOT.jar```
+
