@@ -9,7 +9,7 @@
 Start Resources
 - docker-compose up -d icaptor-mysql icaptor-alpine-redis icaptor-broker
 
-Para gerar os micro servicos
+Para compilar os micro servicos
 -  ``` mvn clean install```
 
 Start DataBase (icaptor-persistence)
