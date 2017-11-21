@@ -1,10 +1,8 @@
 package com.fiveware.pulling;
 
-import com.fiveware.exception.RuntimeBotException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Optional;
+
+import com.fiveware.exception.RuntimeBotException;
 
 public abstract class BrokerPulling<T> {
 
