@@ -1,19 +1,27 @@
 package com.fiveware.task;
 
 
-import com.fiveware.model.ItemTask;
-import com.fiveware.model.StatusProcessItemTaskEnum;
-import com.fiveware.model.StatusProcessTaskEnum;
-import com.fiveware.model.Task;
-import com.fiveware.model.message.MessageBot;
-import com.fiveware.service.*;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
+import com.fiveware.model.ItemTask;
+import com.fiveware.model.ItemTaskFile;
+import com.fiveware.model.StatusProcessItemTaskEnum;
+import com.fiveware.model.StatusProcessTaskEnum;
+import com.fiveware.model.Task;
+import com.fiveware.model.message.MessageBot;
+import com.fiveware.service.ServiceBot;
+import com.fiveware.service.ServiceElasticSearch;
+import com.fiveware.service.ServiceItemTask;
+import com.fiveware.service.ServiceItemTaskFile;
+import com.fiveware.service.ServiceStatusProcessTask;
+import com.fiveware.service.ServiceTask;
+import com.fiveware.service.ServiceUser;
 
 @Component
 public class TaskManager {
@@ -24,6 +32,9 @@ public class TaskManager {
 	@Autowired
 	private ServiceItemTask itemServiceTask;
 
+	@Autowired
+	private ServiceItemTaskFile itemServiceTaskFile;
+	
 	@Autowired
 	private ServiceStatusProcessTask serviceStatusProcessTask;
 
@@ -150,5 +161,18 @@ public class TaskManager {
 	
 	public Long getItemTaskCountByTask(Long taskId){
 		return itemServiceTask.getItemTaskCountByTask(taskId);
+	}
+	
+	public List<ItemTaskFile> fileListByItemTaskId(Long itemTaskId){
+		List<ItemTaskFile> list = itemServiceTaskFile.getItemFileTaskById(itemTaskId);
+		return list;
+	}
+	
+	public ItemTaskFile createItemTaskFile(ItemTask itemTask, byte[] file) {
+		ItemTaskFile itemTaskFile = new ItemTaskFile();
+		itemTaskFile.setItemTask(itemServiceTask.getItemTaskById(itemTask.getId()));	
+		itemTaskFile.setFile(file);
+		itemTaskFile = itemServiceTaskFile.save(itemTaskFile);
+		return itemTaskFile;
 	}
 }
