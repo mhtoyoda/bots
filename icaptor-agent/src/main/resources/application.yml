@@ -62,7 +62,7 @@ icaptor:
   data-source:
     host: http://localhost:8085
   elasticSearch: http://54.232.96.63:9200
-  redis: http://54.232.96.63:8086
+  redis: http://localhost:8086
 
   broker:
     user: guest
