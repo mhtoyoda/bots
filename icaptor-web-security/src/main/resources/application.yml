@@ -12,5 +12,5 @@ icaptor:
     host: http://localhost:8085
   server:
     host: http://localhost:8082
-  elasticSearch: http://54.232.36.27:9200
-  redis: http://54.232.36.27:8086
+  elasticSearch: http://54.232.96.63:9200
+  redis: http://54.232.96.63:8086

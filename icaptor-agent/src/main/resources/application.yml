@@ -12,14 +12,14 @@ icaptor:
     ip: 127.0.0.1
   data-source:
     host: http://localhost:8085
-  elasticSearch: http://54.232.36.27:9200
+  elasticSearch: http://54.232.96.63:9200
   broker:
     user: guest
     pass: guest
-    host: 34.231.45.229
+    host: 54.232.96.63
     port: 30001
     queue-send-schedular-time: 5000 #milli second
-  redis: http://54.232.36.27:8086
+  redis: http://54.232.96.63:8086
 
   metrics-schedulle-time: 5000 #milli second
 
@@ -61,8 +61,8 @@ icaptor:
     ip: localhost
   data-source:
     host: http://localhost:8085
-  elasticSearch: http://54.232.36.27:9200
-  redis: http://54.232.36.27:8086
+  elasticSearch: http://54.232.96.63:9200
+  redis: http://54.232.96.63:8086
 
   broker:
     user: guest

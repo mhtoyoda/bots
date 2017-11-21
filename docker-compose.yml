@@ -125,7 +125,7 @@ services:
     environment:
       - icaptor.data-source.host=http://icaptor-data:8085
       - icaptor.broker.host=icaptor-broker
-      - icaptor.elasticSearch=http://54.232.36.27:9200
+      - icaptor.elasticSearch=http://54.232.96.63:9200
 
   icaptor-workflow:
     image: fiveware/icaptor-workflow
