@@ -5,9 +5,8 @@
 - Maven 3 or later
 - Docker version 17.05.0-ce
 - Docker-Compose version 1.17.1
-  Link para Instalacao Docker-compose:
-  https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04
-Obs.: Instalar a versao 1.17 or maior.
+  * [Docker-compose]: https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04
+  Obs.: Instalar a versao 1.17 or maior.
 
 ### Start Resources
 - docker-compose up -d icaptor-mysql icaptor-alpine-redis icaptor-broker
