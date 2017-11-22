@@ -21,9 +21,4 @@ public class IcaptorPlatformApplication {
 		return new RestTemplate();
 	}
 
-	
-
-
-
-
 }

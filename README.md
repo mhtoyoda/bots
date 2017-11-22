@@ -27,27 +27,44 @@
 
 ### Micro service (icaptor-data)
 -  ```cd icaptor-persistence``` 
--  ```java -jar target/icaptor-persistence-0.0.1-SNAPSHOT.jar``` 
+-  ```java -jar -Dspring.profiles.active=dev target/icaptor-persistence-0.0.1-SNAPSHOT.jar```   
 
+* Para Executar na sua IDE basta executar a classe [IcaptorPersistenceApplication](https://github.com/fiveware-solutions/icaptor-automation/blob/master/icaptor-persistence/src/main/java/com/fiveware/IcaptorPersistenceApplication.java):
+
+
+**Obs.:** Configurar o parametro  -Dspring.profiles.active=dev na sua IDE.  
+  
 ### Micro service (icaptor-cloud)
 -  ```cd icaptor-cloud``` 
 -  ```java -jar -Dspring.profiles.active=dev target/icaptor-cloud-0.0.1-SNAPSHOT.jar``` 
+* Para Executar na sua IDE basta executar a classe [IcaptorPlatformApplication](https://github.com/fiveware-solutions/icaptor-automation/blob/master/icaptor-cloud/src/main/java/com/fiveware/IcaptorPlatformApplication.java):
 
+**Obs.:** Configurar o parametro  -Dspring.profiles.active=dev na sua IDE.  
 ### Micro service (icaptor-redis)
 - ```cd icaptor-redis```
 - ```java -jar -Dspring.profiles.active=dev target/icaptor-redis-0.0.1-SNAPSHOT.jar```
+* Para Executar na sua IDE basta executar a classe [ICaptorRedisApplication](https://github.com/fiveware-solutions/icaptor-automation/blob/master/icaptor-redis/src/main/java/com/redis/ICaptorRedisApplication.java):
 
+**Obs.:** Configurar o parametro  -Dspring.profiles.active=dev na sua IDE.
 ### Micro service (icaptor-monitoring)
 - ```cd icaptor-monitoring```
 - ```java -jar -Dspring.profiles.active=dev target/icaptor-monitoring-0.0.1-SNAPSHOT.jar```
+* Para Executar na sua IDE basta executar a classe [IcaptorMonitoringApplication](https://github.com/fiveware-solutions/icaptor-automation/blob/master/icaptor-monitoring/src/main/java/com/fiveware/IcaptorMonitoringApplication.java):
 
+**Obs.:** Configurar o parametro  -Dspring.profiles.active=dev na sua IDE.
 ### Micro service (icaptor-api)
 - ```cd icaptor-web-security```
 - ```java -jar -Dspring.profiles.active=dev target/icaptor-web-security-0.0.1-SNAPSHOT.jar```
+* Para Executar na sua IDE basta executar a classe [IcaptorWebSecurityApplication](https://github.com/fiveware-solutions/icaptor-automation/blob/master/icaptor-web-security/src/main/java/com/fiveware/IcaptorWebSecurityApplication.java):
 
+**Obs.:** Configurar o parametro  -Dspring.profiles.active=dev na sua IDE.
 ### Micro service (icaptor-agent)
 - ```cd icaptor-agent```
 - ```java -jar -Dspring.profiles.active=dev target/icaptor-agent-0.0.1-SNAPSHOT.jar```
+
+* Para Executar na sua IDE basta executar a classe [IcaptorAgentApplication](https://github.com/fiveware-solutions/icaptor-automation/blob/master/icaptor-agent/src/main/java/com/fiveware/IcaptorAgentApplication.java):
+
+**Obs.:** Configurar o parametro  -Dspring.profiles.active=dev na sua IDE.
 
 ## ICaptor Developers
 
