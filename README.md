@@ -15,6 +15,13 @@
 # Start Resources
 - docker-compose up -d icaptor-mysql icaptor-alpine-redis icaptor-broker
 
+# Start ICaptor-ELK (opcional)
+- Para inicializar o [ICaptor-ELK](https://github.com/fiveware-solutions/icaptor-automation/tree/master/icaptor-elk)  
+  **Obs.:** 
+  Estamos usando por default o ELK instalado no servidor de Testes (QA).  
+  *Motivo:* Não sobrecarregar o ambiente de desenvolvimento.
+     
+
 ## Para compilar os micros serviços
 -  ``` mvn clean install```
 
@@ -43,5 +50,7 @@
 - ```java -jar -Dspring.profiles.active=dev target/icaptor-agent-0.0.1-SNAPSHOT.jar```
 
 ## ICaptor Developers
+
+
 
 Lista de  [developers](https://github.com/orgs/fiveware-solutions/teams/icaptor-developers/members) quem participa do projeto.
