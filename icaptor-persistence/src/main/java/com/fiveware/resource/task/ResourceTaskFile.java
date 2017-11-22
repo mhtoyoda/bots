@@ -17,7 +17,7 @@ import com.fiveware.repository.TaskFileRepository;
 
 @RestController
 @RequestMapping("/api/task-file")
-public class ResourceItemTaskFile {
+public class ResourceTaskFile {
 
 	@Autowired
 	private TaskFileRepository taskFileRepository;
