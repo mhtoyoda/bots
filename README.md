@@ -16,7 +16,9 @@
 - docker-compose up -d icaptor-mysql icaptor-alpine-redis icaptor-broker
 
 # ICaptor-ELK (opcional)
-- Para inicializar o [ICaptor-ELK](https://github.com/fiveware-solutions/icaptor-automation/tree/master/icaptor-elk)  
+- Para inicializar o [ICaptor-ELK](https://github.com/fiveware-solutions/icaptor-automation/tree/master/icaptor-elk)
+- Usar **[http://54.232.96.63:5601/](http://54.232.96.63:5601/)** (Ambiente QA)
+
   **Obs.:** 
   Estamos usando por default o ELK instalado no servidor de Testes (QA).  
   *Motivo:* Não sobrecarregar o ambiente de desenvolvimento.

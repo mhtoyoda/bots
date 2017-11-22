@@ -13,5 +13,5 @@ docker-compose up -d
 
 ### Kibana
 - Foi configurado para ler ```ElasticSearch```
-- Usar **[http://54.232.96.63:5601/](http://54.232.96.63:5601/)** para gerenciar sem credenciais
+- Usar **[http://localhost:5601/](http://localhost:5601/)** para gerenciar sem credenciais
 
