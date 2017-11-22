@@ -9,7 +9,7 @@
 # Instalação
 * [Docker](https://atutoriais.com/linux/como-instalar-o-docker-no-ubuntu-16-04/) - Instalação versão 1.17
 * [Docker-compose](https://www.digitalocean.com/community/tutorials/how-to-install-docker-compose-on-ubuntu-16-04) - Instalação versão 1.17 
-* [MAVEN 3](https://www.vultr.com/docs/how-to-install-apache-maven-on-ubuntu-16-04) - Instalar e copiar arquivo settings.xml
+* [MAVEN 3](https://www.vultr.com/docs/how-to-install-apache-maven-on-ubuntu-16-04) - Instalar e copiar arquivo [settings](https://github.com/fiveware-solutions/icaptor-automation/blob/master/settings.xml) para o diretorio conf
 * [JDK 1.8](https://www.vultr.com/docs/how-to-install-apache-maven-on-ubuntu-16-04) - Instalação Java 8 
 
 # Start Resources
