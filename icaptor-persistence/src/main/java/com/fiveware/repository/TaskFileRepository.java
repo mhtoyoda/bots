@@ -7,11 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.fiveware.model.ItemTaskFile;
+import com.fiveware.model.TaskFile;
 
 @Repository
-public interface ItemTaskFileRepository extends CrudRepository<ItemTaskFile, Long>{
+public interface TaskFileRepository extends CrudRepository<TaskFile, Long>{
 
-	@Query(value = "FROM ItemTaskFile WHERE itemTask.id = :itemTaskId")
-	List<ItemTaskFile> findFilebyItemTaskId(@Param("itemTaskId") Long itemTaskId);
+	@Query(value = "FROM TaskFile WHERE task.id = :taskId")
+	List<TaskFile> findFilebyTaskId(@Param("taskId") Long taskId);
 }

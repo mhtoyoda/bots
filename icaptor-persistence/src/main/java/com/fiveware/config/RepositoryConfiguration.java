@@ -28,8 +28,8 @@ public class RepositoryConfiguration extends RepositoryRestConfigurerAdapter {
         config.exposeIdsFor(StatuProcessItemTask.class);
         config.exposeIdsFor(RecentActivity.class);
         config.exposeIdsFor(IcaptorUser.class);
-
-
+        config.exposeIdsFor(BotFormatter.class);
+        config.exposeIdsFor(TaskFile.class);
     }
 
     @Bean

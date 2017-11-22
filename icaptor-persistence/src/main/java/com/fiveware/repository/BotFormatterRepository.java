@@ -12,7 +12,7 @@ import com.fiveware.model.BotFormatter;
 @Repository
 public interface BotFormatterRepository extends CrudRepository<BotFormatter, Long>{
 
-	@Query("FROM BotFormatter WHERE bot.nameBot = :nameBot")
+	@Query("FROM BotFormatter b WHERE b.bot.nameBot = :nameBot")
 	List<BotFormatter> findByBot(@Param("nameBot") String nameBot);
 
 }

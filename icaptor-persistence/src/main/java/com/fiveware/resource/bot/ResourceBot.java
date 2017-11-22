@@ -67,7 +67,10 @@ public class ResourceBot {
     
     @DeleteMapping("/formatter")
 	public ResponseEntity<Void> deleteBotFormatter(@RequestBody List<BotFormatter> botFormatters) {
-    	botFormatterRepository.delete(botFormatters);
+    	botFormatters.forEach(botFormat -> {
+    		BotFormatter botFormatter = botFormatterRepository.findOne(botFormat.getId());
+    		botFormatterRepository.delete(botFormatter);
+    	});
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }

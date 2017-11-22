@@ -12,16 +12,16 @@ import org.springframework.stereotype.Component;
 import com.fiveware.dsl.file.FileConvert;
 import com.fiveware.model.BotFormatter;
 import com.fiveware.model.ItemTask;
-import com.fiveware.model.ItemTaskFile;
+import com.fiveware.model.TaskFile;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.service.ServiceBot;
-import com.fiveware.service.ServiceItemTaskFile;
+import com.fiveware.service.ServiceTaskFile;
 
 @Component
-public class ItemTaskFileManager {
+public class TaskFileManager {
 
 	@Autowired
-	private ServiceItemTaskFile itemServiceTaskFile;
+	private ServiceTaskFile serviceTaskFile;
 		
 	@Autowired
 	private ServiceBot serviceBot;
@@ -70,21 +70,21 @@ public class ItemTaskFileManager {
 		return null;
 	}
 	
-	public void createItemTaskFile(ItemTask itemTask, BotFormatter botFormatter) {
+	public void createTaskFile(ItemTask itemTask, BotFormatter botFormatter) {
 		byte[] file = generateFile(botFormatter, itemTask.getDataOut());
 		if( null != file){
-			ItemTaskFile itemTaskFile = new ItemTaskFile();
-			itemTaskFile.setItemTask(itemTask);	
-			itemTaskFile.setFile(file);
-			itemTaskFile = itemServiceTaskFile.save(itemTaskFile);			
+			TaskFile taskFile = new TaskFile();
+			taskFile.setTask(itemTask.getTask());	
+			taskFile.setFile(file);
+			taskFile = serviceTaskFile.save(taskFile);			
 		}
 	}
 	
-	public void saveItemTaskFile(MessageBot messageBot, ItemTask itemTask) {
+	public void saveTaskFile(MessageBot messageBot, ItemTask itemTask) {
 		List<BotFormatter> botFormatters = getBotFormatters(messageBot.getBotName());
 		if(CollectionUtils.isNotEmpty(botFormatters)){		
 			for(BotFormatter botFormatter : botFormatters){
-				createItemTaskFile(itemTask, botFormatter);				
+				createTaskFile(itemTask, botFormatter);				
 			}
 		}
 	}

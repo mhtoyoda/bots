@@ -13,13 +13,13 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fiveware.config.ApiUrlPersistence;
 import com.fiveware.model.ItemTask;
-import com.fiveware.model.ItemTaskFile;
+import com.fiveware.model.TaskFile;
 import com.google.common.base.Strings;
 
 @Service
-public class ServiceItemTaskFile {
+public class ServiceTaskFile {
 
-	static Logger logger = LoggerFactory.getLogger(ServiceItemTaskFile.class);
+	static Logger logger = LoggerFactory.getLogger(ServiceTaskFile.class);
 
 	@Autowired
 	private RestTemplate restTemplate;
@@ -32,22 +32,22 @@ public class ServiceItemTaskFile {
 		return !Strings.isNullOrEmpty(itemTask.getDataOut());
 	}
 
-	public ItemTaskFile save(ItemTaskFile itemFile) {
-		String url = apiUrlPersistence.endPoint("item-task-file","");
+	public TaskFile save(TaskFile itemFile) {
+		String url = apiUrlPersistence.endPoint("task-file","");
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		HttpEntity<ItemTaskFile> entity = new HttpEntity<ItemTaskFile>(itemFile, headers);
-		return restTemplate.postForObject(url, entity, ItemTaskFile.class);
+		HttpEntity<TaskFile> entity = new HttpEntity<TaskFile>(itemFile, headers);
+		return restTemplate.postForObject(url, entity, TaskFile.class);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<ItemTaskFile> getItemFileTaskById(Long id) {
-		String url = apiUrlPersistence.endPoint("item-task-file/item-task/",id.toString());
+	public List<TaskFile> getItemFileTaskById(Long id) {
+		String url = apiUrlPersistence.endPoint("task-file/task/",id.toString());
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<ItemTaskFile> itens = restTemplate.getForObject(url, List.class);
+		List<TaskFile> itens = restTemplate.getForObject(url, List.class);
 		return itens;
 	}
 }

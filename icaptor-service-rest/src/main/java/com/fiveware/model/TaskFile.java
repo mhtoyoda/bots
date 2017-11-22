@@ -17,8 +17,8 @@ import org.pojomatic.annotations.AutoProperty;
 
 @AutoProperty
 @Entity
-@Table(name = "item_task_file")
-public class ItemTaskFile implements Log, Serializable {
+@Table(name = "task_file")
+public class TaskFile implements Log, Serializable {
 
 	/**
 	 * 
@@ -30,17 +30,12 @@ public class ItemTaskFile implements Log, Serializable {
 	private Long id;
 
 	@Lob
-	@Column(name = "item_file")
+	@Column(name = "task_file")
 	private byte[] file;
 
 	@ManyToOne
-	@JoinColumn(name = "id_item_task")
-	private ItemTask itemTask;
-
-	@Override
-	public String toString() {
-		return Pojomatic.toString(this);
-	}
+	@JoinColumn(name = "id_task")
+	private Task task;
 
 	public Long getId() {
 		return id;
@@ -58,12 +53,16 @@ public class ItemTaskFile implements Log, Serializable {
 		this.file = file;
 	}
 
-	public ItemTask getItemTask() {
-		return itemTask;
+	public Task getTask() {
+		return task;
 	}
 
-	public void setItemTask(ItemTask itemTask) {
-		this.itemTask = itemTask;
+	public void setTask(Task task) {
+		this.task = task;
 	}
 
+	@Override
+	public String toString() {
+		return Pojomatic.toString(this);
+	}
 }

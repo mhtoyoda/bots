@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.model.ItemTask;
-import com.fiveware.model.ItemTaskFile;
+import com.fiveware.model.TaskFile;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
@@ -18,7 +18,7 @@ import com.fiveware.model.message.MessageBot;
 import com.fiveware.service.ServiceBot;
 import com.fiveware.service.ServiceElasticSearch;
 import com.fiveware.service.ServiceItemTask;
-import com.fiveware.service.ServiceItemTaskFile;
+import com.fiveware.service.ServiceTaskFile;
 import com.fiveware.service.ServiceStatusProcessTask;
 import com.fiveware.service.ServiceTask;
 import com.fiveware.service.ServiceUser;
@@ -33,7 +33,7 @@ public class TaskManager {
 	private ServiceItemTask itemServiceTask;
 
 	@Autowired
-	private ServiceItemTaskFile itemServiceTaskFile;
+	private ServiceTaskFile itemServiceTaskFile;
 	
 	@Autowired
 	private ServiceStatusProcessTask serviceStatusProcessTask;
@@ -46,9 +46,6 @@ public class TaskManager {
 
 	@Autowired
 	private ServiceElasticSearch serviceElasticSearch;
-	
-	@Autowired
-	private ItemTaskFileManager itemTaskFileManager;
 
 	public Task createTask(String nameBot, Long userId) {
 		Task task = new Task();
@@ -142,9 +139,7 @@ public class TaskManager {
 		itemTask.setAttemptsCount(messageBot.getAttemptsCount());
 		itemTask.setStatusProcess(messageBot.getStatusProcessItemTaskEnum().getStatuProcess());
 		itemTask.setDataOut(messageBot.getLineResult());
-
 		itemTask = itemServiceTask.save(itemTask);
-		itemTaskFileManager.saveItemTaskFile(messageBot, itemTask);
 		return itemTask;
 	}
 
@@ -167,8 +162,8 @@ public class TaskManager {
 		return itemServiceTask.getItemTaskCountByTask(taskId);
 	}
 	
-	public List<ItemTaskFile> fileListByItemTaskId(Long itemTaskId){
-		List<ItemTaskFile> list = itemServiceTaskFile.getItemFileTaskById(itemTaskId);
+	public List<TaskFile> fileListByItemTaskId(Long itemTaskId){
+		List<TaskFile> list = itemServiceTaskFile.getItemFileTaskById(itemTaskId);
 		return list;
 	}
 }

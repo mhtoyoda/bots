@@ -12,24 +12,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fiveware.model.ItemTaskFile;
-import com.fiveware.repository.ItemTaskFileRepository;
+import com.fiveware.model.TaskFile;
+import com.fiveware.repository.TaskFileRepository;
 
 @RestController
-@RequestMapping("/api/item-task-file")
+@RequestMapping("/api/task-file")
 public class ResourceItemTaskFile {
 
 	@Autowired
-	private ItemTaskFileRepository itemTaskFileRepository;
+	private TaskFileRepository taskFileRepository;
 
 	@PostMapping
-	public ResponseEntity<?> save(@RequestBody ItemTaskFile itemTaskFile) {
-		itemTaskFile = itemTaskFileRepository.save(itemTaskFile);
-		return ResponseEntity.status(HttpStatus.CREATED).body(itemTaskFile);
+	public ResponseEntity<?> save(@RequestBody TaskFile taskFile) {
+		taskFile = taskFileRepository.save(taskFile);
+		return ResponseEntity.status(HttpStatus.CREATED).body(taskFile);
 	}
 
-	@GetMapping("/item-task/{id}")
-	public ResponseEntity<List<ItemTaskFile>> findAllByTask(@PathVariable Long id) {
-		return ResponseEntity.ok(itemTaskFileRepository.findFilebyItemTaskId(id));
+	@GetMapping("/task/{id}")
+	public ResponseEntity<List<TaskFile>> findAllByTask(@PathVariable Long id) {
+		return ResponseEntity.ok(taskFileRepository.findFilebyTaskId(id));
 	}
 }
