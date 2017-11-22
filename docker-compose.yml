@@ -14,13 +14,9 @@ services:
       replicas: 1
       placement:
             constraints: [node.role == manager]
-#    volumes:
-#     - $PWD/storage/rabbitmq:/var/lib/rabbitmq
     environment:
-#     - RABBITMQ_ERLANG_COOKIE=icaptor-automation
      - RABBITMQ_DEFAULT_USER=guest
      - RABBITMQ_DEFAULT_PASS=guest
-#     - CLUSTERED=true
 
   icaptor-alpine-redis:
     image: smebberson/alpine-redis
@@ -31,10 +27,6 @@ services:
     deploy:
       mode: replicated
       replicas: 1
-#    environment:
-#      - MYSQL_DATABASE=icaptor
-#      - MYSQL_USER=root
-#      - MYSQL_PASSWORD=root
 
   icaptor-mysql:
     image: mysql/mysql-server
