@@ -1,6 +1,6 @@
 # ![Fiveware](https://avatars1.githubusercontent.com/u/23555013?s=200&v=4) ICaptor Automation
 
-## Prerequisitos para o Ambiente de desenvolvimento
+### Pré-requisitos para o Ambiente de desenvolvimento
 - JDK 1.8 or later
 - Maven 3 or later
 - Docker version 17.05.0-ce
