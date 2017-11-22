@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import org.slf4j.Logger;
@@ -16,15 +15,14 @@ public class FileConvert {
 
 	static Logger logger = LoggerFactory.getLogger(FileConvert.class);
 	
-	public void transformByteToFile(byte[] bytes, String nameFile, String typeFile) throws IOException{
+	public byte[] readByte(byte[] bytes, String nameFile, String typeFile) throws IOException{
 		typeFile = typeFile.toLowerCase();		
 		String pathFile = nameFile+"."+typeFile;
-		logger.info("Generate File {}", pathFile);
-		File someFile = new File(pathFile);		
-        FileOutputStream fos = new FileOutputStream(someFile);
-		fos.write(bytes);
-		fos.flush();
-		fos.close();		
+		File file = new File(pathFile);		
+		FileInputStream fileInputStream = new FileInputStream(file);
+		fileInputStream.read(bytes);
+		fileInputStream.close();
+        return bytes;		
 	}
 	
 	@SuppressWarnings("resource")

@@ -5,14 +5,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.model.BotFormatter;
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.ItemTaskFile;
 import com.fiveware.model.StatusProcessItemTaskEnum;
@@ -148,25 +144,7 @@ public class TaskManager {
 		itemTask.setDataOut(messageBot.getLineResult());
 
 		itemTask = itemServiceTask.save(itemTask);
-		JSONObject jsonObject = null;
-		List<BotFormatter> botFormatters = itemTaskFileManager.getBotFormatters(messageBot.getBotName());
-		if(CollectionUtils.isNotEmpty(botFormatters)){
-			try {
-				jsonObject = new JSONObject(itemTask.getDataOut());
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			for(BotFormatter botFormatter : botFormatters){
-				try {
-					String value = (String) jsonObject.get(botFormatter.getFieldName());
-					if(StringUtils.isNotBlank(value)){
-						
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+		itemTaskFileManager.saveItemTaskFile(messageBot, itemTask);
 		return itemTask;
 	}
 
@@ -192,13 +170,5 @@ public class TaskManager {
 	public List<ItemTaskFile> fileListByItemTaskId(Long itemTaskId){
 		List<ItemTaskFile> list = itemServiceTaskFile.getItemFileTaskById(itemTaskId);
 		return list;
-	}
-	
-	public ItemTaskFile createItemTaskFile(ItemTask itemTask, byte[] file) {
-		ItemTaskFile itemTaskFile = new ItemTaskFile();
-		itemTaskFile.setItemTask(itemServiceTask.getItemTaskById(itemTask.getId()));	
-		itemTaskFile.setFile(file);
-		itemTaskFile = itemServiceTaskFile.save(itemTaskFile);
-		return itemTaskFile;
 	}
 }

@@ -3,6 +3,7 @@ package com.fiveware.task;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Component;
 
 import com.fiveware.dsl.file.FileConvert;
 import com.fiveware.model.BotFormatter;
+import com.fiveware.model.ItemTask;
+import com.fiveware.model.ItemTaskFile;
+import com.fiveware.model.message.MessageBot;
 import com.fiveware.service.ServiceBot;
 import com.fiveware.service.ServiceItemTaskFile;
 
@@ -25,7 +29,7 @@ public class ItemTaskFileManager {
 	@Autowired
 	private FileConvert fileConvert;
 	
-	public List<BotFormatter> getBotFormatters(String nameBot){
+	private List<BotFormatter> getBotFormatters(String nameBot){
 		List<BotFormatter> botFormatters = serviceBot.findBotFormatter(nameBot);
 		return botFormatters;
 	}
@@ -52,15 +56,36 @@ public class ItemTaskFileManager {
 		return "";
 	}
 	
-	public void generateFile(BotFormatter botFormatter, String dataOut){
+	private byte[] generateFile(BotFormatter botFormatter, String dataOut){
 		byte[] fileByte = getFileByte(botFormatter, dataOut);
-		String indexField = getIndexField(botFormatter, dataOut);
-		try {
-			//TODO acertar geracao de file
-			fileConvert.transformByteToFile(fileByte, botFormatter.getFieldIndex(), indexField);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if( null != fileByte){
+			String indexField = getIndexField(botFormatter, dataOut);
+			try {
+				byte[] readByte = fileConvert.readByte(fileByte, indexField, botFormatter.getTypeFile());
+				return readByte;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}						
+		}
+		return null;
+	}
+	
+	public void createItemTaskFile(ItemTask itemTask, BotFormatter botFormatter) {
+		byte[] file = generateFile(botFormatter, itemTask.getDataOut());
+		if( null != file){
+			ItemTaskFile itemTaskFile = new ItemTaskFile();
+			itemTaskFile.setItemTask(itemTask);	
+			itemTaskFile.setFile(file);
+			itemTaskFile = itemServiceTaskFile.save(itemTaskFile);			
+		}
+	}
+	
+	public void saveItemTaskFile(MessageBot messageBot, ItemTask itemTask) {
+		List<BotFormatter> botFormatters = getBotFormatters(messageBot.getBotName());
+		if(CollectionUtils.isNotEmpty(botFormatters)){		
+			for(BotFormatter botFormatter : botFormatters){
+				createItemTaskFile(itemTask, botFormatter);				
+			}
 		}
 	}
 }
