@@ -33,7 +33,7 @@ public class TaskManager {
 	private ServiceItemTask itemServiceTask;
 
 	@Autowired
-	private ServiceTaskFile itemServiceTaskFile;
+	private ServiceTaskFile serviceTaskFile;
 	
 	@Autowired
 	private ServiceStatusProcessTask serviceStatusProcessTask;
@@ -163,7 +163,7 @@ public class TaskManager {
 	}
 	
 	public List<TaskFile> fileListByItemTaskId(Long itemTaskId){
-		List<TaskFile> list = itemServiceTaskFile.getItemFileTaskById(itemTaskId);
+		List<TaskFile> list = serviceTaskFile.getFileTaskById(itemTaskId);
 		return list;
 	}
 }

@@ -42,7 +42,7 @@ public class ServiceTaskFile {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<TaskFile> getItemFileTaskById(Long id) {
+	public List<TaskFile> getFileTaskById(Long id) {
 		String url = apiUrlPersistence.endPoint("task-file/task/",id.toString());
 		
 		HttpHeaders headers = new HttpHeaders();
