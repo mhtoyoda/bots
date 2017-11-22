@@ -1,10 +1,10 @@
 spring:
-  profiles.active: local
+  profiles.active: dev
 #logging:
 #  config: classpath:logback.xml
 ---
 spring:
-  profiles: stage
+  profiles: qa
   redis:
     hostname: 54.232.96.63
     port: 6379
@@ -14,7 +14,7 @@ server:
 
 ---
 spring:
-  profiles: local
+  profiles: dev
   redis:
     hostname: localhost
     port: 6379
