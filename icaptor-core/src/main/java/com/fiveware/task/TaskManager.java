@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.model.ItemTask;
-import com.fiveware.model.TaskFile;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
@@ -18,7 +17,6 @@ import com.fiveware.model.message.MessageBot;
 import com.fiveware.service.ServiceBot;
 import com.fiveware.service.ServiceElasticSearch;
 import com.fiveware.service.ServiceItemTask;
-import com.fiveware.service.ServiceTaskFile;
 import com.fiveware.service.ServiceStatusProcessTask;
 import com.fiveware.service.ServiceTask;
 import com.fiveware.service.ServiceUser;
@@ -32,9 +30,6 @@ public class TaskManager {
 	@Autowired
 	private ServiceItemTask itemServiceTask;
 
-	@Autowired
-	private ServiceTaskFile serviceTaskFile;
-	
 	@Autowired
 	private ServiceStatusProcessTask serviceStatusProcessTask;
 
@@ -160,10 +155,5 @@ public class TaskManager {
 	
 	public Long getItemTaskCountByTask(Long taskId){
 		return itemServiceTask.getItemTaskCountByTask(taskId);
-	}
-	
-	public List<TaskFile> fileListByItemTaskId(Long itemTaskId){
-		List<TaskFile> list = serviceTaskFile.getFileTaskById(itemTaskId);
-		return list;
 	}
 }
