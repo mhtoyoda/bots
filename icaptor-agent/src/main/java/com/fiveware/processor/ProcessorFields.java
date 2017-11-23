@@ -1,20 +1,15 @@
 package com.fiveware.processor;
 
-import java.io.Serializable;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-
-import com.fiveware.parameter.ParameterIcaptor;
-import org.apache.commons.codec.binary.Base64;
-import org.springframework.context.MessageSource;
-
 import com.fiveware.model.BotClassLoaderContext;
 import com.fiveware.model.Record;
 import com.fiveware.model.message.MessageBot;
 import com.fiveware.parameter.ParameterValue;
 import com.fiveware.service.IServiceBach;
 import com.fiveware.validate.Validate;
+import org.springframework.context.MessageSource;
+
+import java.io.Serializable;
+import java.util.Optional;
 
 public class ProcessorFields {
 
@@ -74,17 +69,6 @@ public class ProcessorFields {
 
 	public MessageBot getMessageBot() {return messageBot;	}
 
-//	public void decodeCredential(){
-//		ParameterIcaptor parameter = this.parameterValue.getByType("credential");
-//		//@formatter on
-//		if (!Objects.isNull(parameter)){
-//			String decode = new String(Base64.decodeBase64(parameter.getValue().getBytes()));
-//			ParameterIcaptor parameterIcaptor = new ParameterIcaptor(parameter.getType(),parameter.getField(),decode);
-//			this.parameterValue.getParameterList().remove(parameter);
-//			this.parameterValue.getParameterList().add(parameterIcaptor);
-//		}
-//		//@formatter off
-//	}
 
 	public static class ProcessorFieldsBuilder implements Serializable{
 		private String botName;
