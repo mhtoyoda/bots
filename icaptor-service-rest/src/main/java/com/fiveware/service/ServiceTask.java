@@ -174,4 +174,17 @@ public class ServiceTask {
 		return sb.toString();
 	}
 
+	public List<Task> getTaskRecentByStatus(String status) {
+		String BASE_URL = apiUrlPersistence.endPoint("task/recent", "");
+
+		String url = BASE_URL + "/status/" + status;
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<Task> httpEntity = new HttpEntity<>(null, headers);
+		ResponseEntity<List<Task>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, httpEntity,
+				new ParameterizedTypeReference<List<Task>>() {
+				});
+		List<Task> tasks = responseEntity.getBody();
+		return tasks;
+	}
 }
