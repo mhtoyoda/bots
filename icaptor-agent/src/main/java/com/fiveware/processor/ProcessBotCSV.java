@@ -27,6 +27,7 @@ import com.fiveware.util.LineUtil;
 import com.fiveware.util.ListJoinUtil;
 import com.fiveware.validate.Validate;
 import com.google.common.collect.Lists;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -153,7 +154,9 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 				for(String field: fieldValues){
 					String[] values = field.split(":");
 					if(values[0].toString().equals("credential")){
-						parameterValue.add(values[1].toString(), values[2].toString(), values[3].toString());
+						String decode = new String(Base64.decodeBase64(values[2].toString()));
+						String[] value = decode.split(":");
+						parameterValue.add(values[1].toString(), value[0], value[1]);
 					}
 					else{
 						String[] valuesParameters = field.split("\\|");

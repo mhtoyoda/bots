@@ -30,22 +30,23 @@ import com.fiveware.parameter.ParameterValue;
 public class TesteBot implements Automation<Cep, Endereco> {
 
 	static Logger logger = LoggerFactory.getLogger(TesteBot.class);
-	
+
 	public static void main(String[] args) throws RuntimeBotException, UnRecoverableException, RecoverableException, AuthenticationBotException {
 		Endereco endereco = new TesteBot().getEndereco("07077170");
 		logger.info("Resultado: {}", endereco);
 	}
-	
+
+
+	@IcaptorParameter(value = "TANACF:Augusta746!", nameTypeParameter = "credential", credential = true, exclusive = false)
 	@IcaptorParameter(value = "maria:12345", nameTypeParameter = "login", exclusive = true, credential = true)
 	@IcaptorParameter(value = "joao:12345", nameTypeParameter = "login", exclusive = true, credential = true)
 	@IcaptorParameter(value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false, credential = false)
 	@IcaptorParameter(value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot", type = Cep.class)
 	@InputDictionary(fields = {"cep"}, separator = "|", typeFileIn = "csv")
-	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"},
-					  nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
+	@OutputDictionary(fields = {"logradouro", "bairro", "localidade", "cep"},nameFileOut = "saida.txt", separator = "|", typeFileOut = "csv")
 	public Endereco execute(Cep cep, ParameterValue parameters) throws RuntimeBotException,UnRecoverableException,
-																				RecoverableException, AuthenticationBotException {
+			RecoverableException, AuthenticationBotException {
 
 		ParameterIcaptor login = parameters.getByType("login");
 		logger.info("LOGIN {}{}", login.getField(), login.getValue());

@@ -4,6 +4,7 @@ import com.fiveware.model.Parameter;
 import com.fiveware.model.TypeParameter;
 import com.fiveware.security.util.SpringSecurityUtil;
 import com.fiveware.service.ServiceParameter;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,11 @@ public class ParameterController {
 		logger.info("Carregando os parametros");
 
 		List<Parameter> parameters = parameterService.getParametersByBotAndScopeName(botName, scopeName);
+
+		parameters.stream()
+				.filter((param)->param.getTypeParameter().getCredential())
+				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
+
 		return ResponseEntity.ok(parameters);
 	}
 
@@ -34,6 +40,10 @@ public class ParameterController {
 		logger.info("Carregando os parametros");
 
 		List<Parameter> parameters = parameterService.listParametersByScope(scopeName);
+		parameters.stream()
+				.filter((param)->param.getTypeParameter().getCredential())
+				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
+
 		return ResponseEntity.ok(parameters);
 	}
 
@@ -51,6 +61,12 @@ public class ParameterController {
 		logger.info("Carregando os parametros");
 
 		List<Parameter> parameters = parameterService.getParametersByBotAndUserId(botName, userId);
+
+		parameters.stream()
+				.filter((param)->param.getTypeParameter().getCredential())
+				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
+
+
 		return ResponseEntity.ok(parameters);
 	}
 
@@ -59,26 +75,56 @@ public class ParameterController {
 		logger.info("Carregando os parametros");
 		Integer idUser = (Integer) SpringSecurityUtil.decodeAuthorizationKey(details, "idUser");
 
-		Iterable<Parameter> parameters = parameterService.getParametersAll(new Long(idUser));
+		List<Parameter> parameters = parameterService.getParametersAll(new Long(idUser));
+
+		parameters.stream()
+				.filter((param)->param.getTypeParameter().getCredential())
+				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
+
 		return ResponseEntity.ok(parameters);
 	}
 	@GetMapping
 	public ResponseEntity<Object> getParametersAll() {
 		logger.info("Carregando os parametros");
 
-		Iterable<Parameter> parameters = parameterService.getParametersAll(null);
+		List<Parameter> parameters = parameterService.getParametersAll(null);
+
+		parameters.stream()
+				.filter((param)->param.getTypeParameter().getCredential())
+				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
+
+
 		return ResponseEntity.ok(parameters);
 	}
 
 	@PostMapping("/save-single")
 	public ResponseEntity<Parameter> save(@RequestBody Parameter parameter) {
+
+		if (parameter.getTypeParameter().getCredential())
+			parameter.setFieldValue(new String(Base64.encodeBase64(parameter.getFieldValue().getBytes())));
+
+
 		Parameter saved = parameterService.save(parameter);
+		saved.setFieldValue(new String(Base64.decodeBase64(parameter.getFieldValue().getBytes())));
+
 		return ResponseEntity.ok(saved);
 	}
 
 	@PostMapping("/save-several")
 	public ResponseEntity<List<Parameter>> save(@RequestBody List<Parameter> parameters) {
+
+
+		parameters.forEach((parameter -> {
+			if (parameter.getTypeParameter().getCredential())
+				parameter.setFieldValue(new String(Base64.encodeBase64(parameter.getFieldValue().getBytes())));
+		}));
+
+
 		List<Parameter> saved = parameterService.save(parameters,null);
+		saved.stream()
+				.filter((param)->param.getTypeParameter().getCredential())
+				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
+
 		return ResponseEntity.ok(saved);
 	}
 
@@ -87,8 +133,16 @@ public class ParameterController {
 
 		Integer idUser = (Integer) SpringSecurityUtil.decodeAuthorizationKey(details, "idUser");
 
+		parameters.forEach((parameter -> {
+			if (parameter.getTypeParameter().getCredential())
+				parameter.setFieldValue(new String(Base64.encodeBase64(parameter.getFieldValue().getBytes())));
+		}));
 
 		List<Parameter> saved = parameterService.save(parameters,idUser.longValue());
+		saved.stream()
+				.filter((param)->param.getTypeParameter().getCredential())
+				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
+
 		return ResponseEntity.ok(saved);
 	}
 

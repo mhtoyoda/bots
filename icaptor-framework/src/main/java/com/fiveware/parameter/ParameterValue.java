@@ -1,6 +1,7 @@
 package com.fiveware.parameter;
 
 import com.google.common.collect.Lists;
+import org.apache.commons.codec.binary.Base64;
 import org.pojomatic.Pojomatic;
 import org.pojomatic.annotations.AutoProperty;
 
@@ -26,6 +27,7 @@ public class ParameterValue implements Serializable {
 		Optional<ParameterIcaptor> optional = parameterList.stream().filter(p -> p.getType().equals(type)).findFirst();
 		return optional.get();
 	}
+
 
 	public List<ParameterIcaptor> getParameterList() {
 		return parameterList;

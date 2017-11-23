@@ -3,6 +3,7 @@ package com.fiveware.messaging;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -157,12 +158,20 @@ public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 				Parameter param = new Parameter();
 				param.setBot(bot);
 				param.setActive(true);
-				param.setFieldValue(parameter.getParameterValue());
+				param.setFieldValue(encodeFieldCredential(parameter.getParameterValue(),typeParameter));
 				param.setScopeParameter(serviceParameter.getScopeParameterById(ScopeParameterEnum.BOT.getId()));
 				param.setTypeParameter(typeParameter);
 				serviceParameter.save(param);
 			});
 		}
+	}
+
+	private String encodeFieldCredential(String parameterValue, TypeParameter typeParameter) {
+
+		if (typeParameter.getCredential())
+			return new String(Base64.encodeBase64(parameterValue.getBytes()));
+
+		return parameterValue;
 	}
 
 	private Bot findBotByName(String nameBot) {

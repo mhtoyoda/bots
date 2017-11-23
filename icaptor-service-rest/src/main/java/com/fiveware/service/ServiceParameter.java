@@ -4,6 +4,7 @@ import com.fiveware.config.ApiUrlPersistence;
 import com.fiveware.model.Parameter;
 import com.fiveware.model.ScopeParameter;
 import com.fiveware.model.TypeParameter;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -196,7 +197,7 @@ public class ServiceParameter {
         return parameters;
     }
 
-    public Iterable<Parameter> getParametersAll(Long id) {
+    public List<Parameter> getParametersAll(Long id) {
         String url = null;
         if (Objects.isNull(id))
             url = apiUrlPersistence.endPoint("parameter", "");
@@ -206,9 +207,9 @@ public class ServiceParameter {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Parameter> requestEntity = new HttpEntity<>(null, headers);
-        ResponseEntity<Iterable<Parameter>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<Iterable<Parameter>>() {
+        ResponseEntity<List<Parameter>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, new ParameterizedTypeReference<List<Parameter>>() {
         });
-        Iterable<Parameter> scopeParameters = responseEntity.getBody();
+        List<Parameter> scopeParameters = responseEntity.getBody();
         return scopeParameters;
     }
 

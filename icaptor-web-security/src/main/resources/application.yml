@@ -1,3 +1,27 @@
+spring:
+  profiles:
+    active: dev
+---
+server:
+  name: icaptor-web-server
+  host: localhost
+  port: 8014
+
+
+icaptor:
+  seguranca:
+    enable-https: false
+  origin-permitida: http://54.232.96.63
+  data-source:
+    host: http://54.232.96.63:8085
+  server:
+    host: http://54.232.96.63:8082
+  elasticSearch: http://54.232.96.63:9200
+  redis: http://54.232.96.63:8086
+
+spring:
+  profiles: qa
+---
 server:
   name: icaptor-web-server
   host: localhost
@@ -13,4 +37,6 @@ icaptor:
   server:
     host: http://localhost:8082
   elasticSearch: http://54.232.96.63:9200
-  redis: http://54.232.96.63:8086
+  redis: http://localhost:8086
+spring:
+  profiles: dev

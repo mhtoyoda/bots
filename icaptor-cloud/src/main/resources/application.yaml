@@ -26,6 +26,7 @@ server:
 
 spring:
   profiles: dev
+  devtools.livereload.enabled: true
 
 io:
   worker.dir: ${user.home}/.icaptor-agent

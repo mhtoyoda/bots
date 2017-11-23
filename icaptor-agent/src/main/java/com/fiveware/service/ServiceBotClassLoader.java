@@ -8,6 +8,7 @@ import com.fiveware.exception.RuntimeBotException;
 import com.fiveware.exception.UnRecoverableException;
 import com.fiveware.loader.ClassLoaderRunner;
 import com.fiveware.model.*;
+import com.fiveware.parameter.ParameterIcaptor;
 import com.fiveware.parameter.ParameterValue;
 import com.fiveware.processor.ProcessorFields;
 import org.slf4j.Logger;
@@ -42,7 +43,7 @@ public class ServiceBotClassLoader<T> {
     @Autowired
     private ServiceElasticSearch serviceElasticSearch;
 
-    public OutTextRecord getOutTextRecord(T parameter, ProcessorFields processorFields)
+    public OutTextRecord getOutTextRecord(T _input, ProcessorFields processorFields)
             throws ClassNotFoundException, RuntimeBotException, IOException, InstantiationException, IllegalAccessException,
             NoSuchMethodException {
 
@@ -57,30 +58,29 @@ public class ServiceBotClassLoader<T> {
 
         Method execute = clazz.getMethod(botClassLoaderContext.get().getMethod(), o, param);
 
-        Object o1 = null;
-        if (null != parameter) {
-            o1 = objectMapper.convertValue(parameter, aClass);
+
+        Object input = null;
+        if (!Objects.isNull(_input))
+            input = objectMapper.convertValue(_input, aClass);
+
+        Object parameters = null;
+        if (!Objects.isNull(processorFields.getParameterValue())) {
+            parameters = objectMapper.convertValue(processorFields.getParameterValue(), paramClass);
         }
 
-        Object o2 = null;
-        if (null != processorFields.getParameterValue()) {
-            o2 = objectMapper.convertValue(processorFields.getParameterValue(), paramClass);
-        }
-
-        Object obj = null;
         try {
 
-            obj = execute.invoke(clazz.newInstance(), o1, o2);
+            Object output = execute.invoke(clazz.newInstance(), input, parameters);
 
             processorFields.getMessageBot().setStatuProcessEnum(StatusProcessTaskEnum.SUCCESS);
             processorFields.getMessageBot().setStatusProcessItemTaskEnum(StatusProcessItemTaskEnum.SUCCESS);
-            processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(obj));
+            processorFields.getMessageBot().setLineResult(objectMapper.writeValueAsString(output));
             processorFields.getMessageBot().setException(null);
 
-            if (obj instanceof List) {
-                OutTextRecord outTextRecord = new OutTextRecord(objectMapper.convertValue(obj, Map[].class));
-                serviceElasticSearch.log(o1); // arquivo de entrada
-                serviceElasticSearch.log(o2); // parameters
+            if (output instanceof List) {
+                OutTextRecord outTextRecord = new OutTextRecord(objectMapper.convertValue(output, Map[].class));
+                serviceElasticSearch.log(input); // arquivo de entrada
+                serviceElasticSearch.log(parameters); // parameters
                 //Todo implementar para enviar cada item da lista para o elasticSearch
                 //serviceElasticSearch.log(obj); //arquivo de saida
                 return outTextRecord;
@@ -88,18 +88,18 @@ public class ServiceBotClassLoader<T> {
 
             if (botClassLoaderContext.get().getOutputDictionary().getFields().length == 1
                     && "listJson".equalsIgnoreCase(botClassLoaderContext.get().getOutputDictionary().getFields()[0])) {
-                List<Map<String, Object>> myObjects = objectMapper.readValue(new String(((String) obj).getBytes()),
+                List<Map<String, Object>> myObjects = objectMapper.readValue(new String(((String) output).getBytes()),
                         new TypeReference<ArrayList<HashMap<String, Object>>>() {
                         });
                 Map[] objects = myObjects.toArray(new HashMap[myObjects.size()]);
                 return new OutTextRecord(objects);
             }
 
-            serviceElasticSearch.log(o1); // arquivo de entrada
-            serviceElasticSearch.log(o2); // parameters
-            serviceElasticSearch.log(obj); //arquivo de saida
+            serviceElasticSearch.log(input); // arquivo de entrada
+            serviceElasticSearch.log(parameters); // parameters
+            serviceElasticSearch.log(output); //arquivo de saida
 
-            Map map = objectMapper.convertValue(obj, Map.class);
+            Map map = objectMapper.convertValue(output, Map.class);
             HashMap[] hashMaps = {(HashMap) map};
 
             return new OutTextRecord(hashMaps);
@@ -115,6 +115,7 @@ public class ServiceBotClassLoader<T> {
             return new OutTextRecord(hashMaps);
 
         } catch (InvocationTargetException e) {
+
 
             Predicate<Class> predicate = new Predicate<Class>() {
                 @Override
@@ -157,6 +158,7 @@ public class ServiceBotClassLoader<T> {
 
 
     }
+
 
     private HashMap[] handleException(ProcessorFields processorFields, Exception ex) {
         Map map = new HashMap();

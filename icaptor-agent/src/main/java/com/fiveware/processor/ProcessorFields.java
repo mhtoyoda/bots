@@ -1,8 +1,12 @@
 package com.fiveware.processor;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
+import com.fiveware.parameter.ParameterIcaptor;
+import org.apache.commons.codec.binary.Base64;
 import org.springframework.context.MessageSource;
 
 import com.fiveware.model.BotClassLoaderContext;
@@ -70,6 +74,18 @@ public class ProcessorFields {
 
 	public MessageBot getMessageBot() {return messageBot;	}
 
+//	public void decodeCredential(){
+//		ParameterIcaptor parameter = this.parameterValue.getByType("credential");
+//		//@formatter on
+//		if (!Objects.isNull(parameter)){
+//			String decode = new String(Base64.decodeBase64(parameter.getValue().getBytes()));
+//			ParameterIcaptor parameterIcaptor = new ParameterIcaptor(parameter.getType(),parameter.getField(),decode);
+//			this.parameterValue.getParameterList().remove(parameter);
+//			this.parameterValue.getParameterList().add(parameterIcaptor);
+//		}
+//		//@formatter off
+//	}
+
 	public static class ProcessorFieldsBuilder implements Serializable{
 		private String botName;
 		private Class classLoader;
@@ -127,6 +143,8 @@ public class ProcessorFields {
 					this.serviceBot,this.record,this.validate,
 					this.messageSource,this.messageBot, context, parameterValue);
 		}
+
 	}
+
 
 }
