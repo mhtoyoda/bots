@@ -1,7 +1,9 @@
 package com.fiveware.task;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.json.JSONException;
@@ -11,13 +13,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.fiveware.dsl.file.FileConvert;
+import com.fiveware.dsl.file.FileExtractUtil;
 import com.fiveware.model.BotFormatter;
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.Task;
 import com.fiveware.model.TaskFile;
 import com.fiveware.service.ServiceBot;
 import com.fiveware.service.ServiceTaskFile;
+import com.google.common.collect.Lists;
 
 @Component
 public class TaskFileManager {
@@ -31,24 +34,13 @@ public class TaskFileManager {
 	private ServiceBot serviceBot;
 	
 	@Autowired
-	private FileConvert fileConvert;
+	private FileExtractUtil fileExtractUtil;
 	
 	public List<TaskFile> getFileTaskById(Long taskId){
 		List<TaskFile> taskList = serviceTaskFile.getFileTaskById(taskId);
 		return taskList;
 	}
-	
-	private byte[] getFileByte(BotFormatter botFormatter, String dataOut){
-		try {
-			JSONObject jsonObject = new JSONObject(dataOut);
-			String value = (String) jsonObject.get(botFormatter.getFieldName());
-			return value.getBytes();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
+		
 	private String getIndexField(BotFormatter botFormatter, String dataOut){
 		try {
 			JSONObject jsonObject = new JSONObject(dataOut);
@@ -60,18 +52,22 @@ public class TaskFileManager {
 		return "";
 	}
 	
-	private byte[] generateFile(BotFormatter botFormatter, String dataOut){
-		byte[] fileByte = getFileByte(botFormatter, dataOut);
-		if( null != fileByte){
-			String indexField = getIndexField(botFormatter, dataOut);
-			try {
-				byte[] readByte = fileConvert.readByte(fileByte, indexField, botFormatter.getTypeFile());
-				return readByte;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}						
+	private byte[] getFileByteArray(BotFormatter botFormatter, String dataOut){
+		try {
+			JSONObject jsonObject = new JSONObject(dataOut);
+			String value = (String) jsonObject.get(botFormatter.getFieldName());
+			return value.getBytes();
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
-		return null;
+		return null;						
+	}
+	
+	private String generateFileName(BotFormatter botFormatter, String dataOut){
+		String typeFile = botFormatter.getTypeFile().toLowerCase();
+		String indexField = getIndexField(botFormatter, dataOut);
+		String fileName = indexField + "." + typeFile;
+		return fileName;
 	}
 	
 	private void saveTaskFile(Task task, byte[] zip) {			
@@ -82,20 +78,33 @@ public class TaskFileManager {
 	}
 	
 	public void processTaskFile(Task task, List<ItemTask> itemTaskList) {
+		Map<String, List<byte[]>> filesMap = null ; 
 		List<BotFormatter> botFormatters = getBotFormatters(task.getBot().getNameBot());
 		if(CollectionUtils.isNotEmpty(botFormatters)){
-			itemTaskList.forEach(itemTask ->{
+			filesMap = new HashMap<>();
+			for(ItemTask itemTask : itemTaskList){
+				List<byte[]> list = Lists.newArrayList();
 				for(BotFormatter botFormatter: botFormatters){
-					log.info("Generate file to task id: {} - field: {}", task.getId(), botFormatter.getFieldName());
-					//TODO gerar zip
-					//byte[] file = generateFile(botFormatter, itemTask.getDataOut());
-//					if( null != file){
-//						
-//					}					
+					String key = generateFileName(botFormatter, itemTask.getDataOut());
+					log.info("Generate file to task id: {} - item task id: {} - field: {}", task.getId(), itemTask.getId(), botFormatter.getFieldName());
+					byte[] file = getFileByteArray(botFormatter, itemTask.getDataOut());
+					if(null != file){
+						if(filesMap.containsKey(key)){
+							filesMap.get(key).add(file);
+						}else{
+							list.add(file);
+							filesMap.put(key, list);
+						}
+					}
 				}
-			});
-			byte[] zip = null;
-			saveTaskFile(task, zip);
+			}
+			
+			try {
+				byte[] zip = fileExtractUtil.createZipFile(filesMap);
+				saveTaskFile(task, zip);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

@@ -1,6 +1,5 @@
 package com.fiveware;
 
-import com.fiveware.task.TaskResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,20 +7,19 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.fiveware.task.TaskResolver;
+
 @SpringBootApplication
 public class IcaptorMonitoringApplication implements CommandLineRunner {
 
     static final Logger logger = LoggerFactory.getLogger(IcaptorMonitoringApplication.class);
-    private static final String QUEUE_NAME = "q_logstash";
 
     @Autowired
     private TaskResolver taskResolver;
 
-
     public static void main(String[] args) {
         SpringApplication.run(IcaptorMonitoringApplication.class, args);
     }
-
 
     @Override
     public void run(String... arg0) throws Exception {
@@ -29,14 +27,11 @@ public class IcaptorMonitoringApplication implements CommandLineRunner {
             Thread.sleep(5000);
             logger.info("Check Status Task and ItemTask");
             try {
-
                 taskResolver.process();
             } catch (Exception e) {
                 logger.error("Error {}", e);
             }
         }
     }
-
-
 
 }

@@ -3,6 +3,8 @@ package com.fiveware.task;
 import java.util.List;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,8 @@ import com.google.common.collect.Lists;
 @Component
 public class ConsolidatedTaskFile {
 
+	private static Logger log = LoggerFactory.getLogger(ConsolidatedTaskFile.class);
+	
 	@Autowired
 	private ServiceTask serviceTask;
 	
@@ -31,7 +35,8 @@ public class ConsolidatedTaskFile {
 		processFileTaskSuspend();
 	}
 
-	private void processFileTaskProcessed() {
+	private synchronized void processFileTaskProcessed() {
+		log.info("Checking generate zip task Processed");
 		List<Task> taskProcessed = serviceTask.getTaskRecentByStatus(StatusProcessTaskEnum.PROCESSED.getName());
 		taskProcessed.forEach(task -> {
 			List<TaskFile> taskFileList = taskFileManager.getFileTaskById(task.getId());
@@ -43,7 +48,8 @@ public class ConsolidatedTaskFile {
 		});
 	}
 
-	private void processFileTaskSuspend() {
+	private synchronized void processFileTaskSuspend() {
+		log.info("Checking generate zip task Suspended");
 		List<Task> taskPaused = serviceTask.getTaskRecentByStatus(StatusProcessTaskEnum.SUSPENDED.getName());
 		taskPaused.forEach(task -> {
 			List<TaskFile> taskFileList = taskFileManager.getFileTaskById(task.getId());
