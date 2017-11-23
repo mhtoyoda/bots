@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -49,5 +50,14 @@ public class ServiceTaskFile {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		List<TaskFile> itens = restTemplate.getForObject(url, List.class);
 		return itens;
+	}
+	
+	public void delete(TaskFile taskFile) {
+		String url = apiUrlPersistence.endPoint("task-file","");
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		HttpEntity<TaskFile> entity = new HttpEntity<TaskFile>(taskFile, headers);
+	    restTemplate.exchange(url, HttpMethod.DELETE, entity, TaskFile.class);
 	}
 }
