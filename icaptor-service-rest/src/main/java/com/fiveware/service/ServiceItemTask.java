@@ -2,7 +2,6 @@ package com.fiveware.service;
 
 import java.util.List;
 
-import com.google.common.base.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,8 @@ import com.fiveware.model.BotsMetric;
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.StatuProcessItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
-import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 @Service

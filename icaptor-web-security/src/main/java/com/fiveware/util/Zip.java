@@ -45,6 +45,7 @@ public class Zip {
 		zos.close();
 		return baos.toByteArray();
 	}
+	
 	public static byte[] zipBytes(String filename, List<byte[]> input) throws IOException {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(baos);

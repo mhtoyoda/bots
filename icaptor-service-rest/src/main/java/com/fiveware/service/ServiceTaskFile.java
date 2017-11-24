@@ -5,10 +5,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,13 +44,13 @@ public class ServiceTaskFile {
 		return restTemplate.postForObject(url, entity, TaskFile.class);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public List<TaskFile> getFileTaskById(Long id) {
 		String url = apiUrlPersistence.endPoint("task-file/task/",id.toString());
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.setContentType(MediaType.APPLICATION_JSON);
-		List<TaskFile> itens = restTemplate.getForObject(url, List.class);
+		headers.setContentType(MediaType.APPLICATION_JSON);		
+		ResponseEntity<List<TaskFile>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<List<TaskFile>>() {});
+		List<TaskFile> itens = responseEntity.getBody();
 		return itens;
 	}
 	

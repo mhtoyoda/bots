@@ -51,7 +51,7 @@ public class FileExtractUtil {
 			throw e;
 		}
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
-		byte[] buf = new byte[1024];
+		byte[] buf = new byte[4096];
 		try {
 			for (int readNum; (readNum = fileInputStream.read(buf)) != -1;) {
 				bos.write(buf, 0, readNum);

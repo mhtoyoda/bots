@@ -3,7 +3,6 @@ package com.fiveware.controller;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -27,14 +26,15 @@ import com.fiveware.controller.helper.WebModelUtil;
 import com.fiveware.model.Bot;
 import com.fiveware.model.StatuProcessTask;
 import com.fiveware.model.Task;
+import com.fiveware.model.TaskFile;
 import com.fiveware.model.user.IcaptorUser;
 import com.fiveware.security.util.SpringSecurityUtil;
 import com.fiveware.service.ServiceBot;
 import com.fiveware.service.ServiceItemTask;
 import com.fiveware.service.ServiceStatusProcessTask;
 import com.fiveware.service.ServiceTask;
+import com.fiveware.service.ServiceTaskFile;
 import com.fiveware.service.ServiceUser;
-import com.fiveware.util.Zip;
 
 @EnableCaching
 @RestController
@@ -60,6 +60,9 @@ public class ControlPanelController {
 
 	@Autowired
 	private ServiceItemTask serviceItemTask;
+	
+	@Autowired
+	private ServiceTaskFile serviceTaskFile;
 
 	@GetMapping("/loadTasks")
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
@@ -144,24 +147,18 @@ public class ControlPanelController {
 	@GetMapping("/{idTask}/download")
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST')")
 	public String dowloand(@PathVariable Long idTask, HttpServletResponse response) {
-
-		List<byte[]> arrData = serviceItemTask.getItemTaskes(idTask).stream()
-				.filter(ServiceItemTask::dataOutIsNotNullOrNotEmpty)
-				.map(
-						(itemTask) -> itemTask.getDataOut().getBytes())
-				.collect(Collectors.toList());
-
+		List<TaskFile> list = serviceTaskFile.getFileTaskById(idTask);
+		byte[] fileZip = null;
+		if(null != list && !list.isEmpty()){
+			TaskFile taskFile = list.get(0);
+			fileZip = taskFile.getFile();
+		}
 		try {
-			byte[] fileZip = Zip.zipBytes("saida", arrData);
-
 			response.setContentType("application/x-octet-stream");
 			response.setHeader("Content-Disposition", "attachment;filename=Saida.zip");
-
 			writeOut(response, fileZip);
-
 			response.setContentLength(fileZip.length);
-
-		} catch (IOException e) {
+		} catch (Exception e) {
 			logger.error("{}", e);
 		}
 
