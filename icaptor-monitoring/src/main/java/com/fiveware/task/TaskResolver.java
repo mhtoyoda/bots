@@ -21,12 +21,16 @@ public class TaskResolver {
 	@Autowired
 	private CanceledTask canceledTask;
 	
+	@Autowired
+	private ConsolidatedTaskFile consolidatedTaskFile;
+	
 	public void process() {
 		checkTaskProcessing();
 		checkTaskSuspending();
 		checkTimeout();		
 		checkTaskProcessed();
 		checkTaskCanceled();
+		checkTaskFileConsolidated();
 	}
 	
 	private void checkTaskProcessed() {
@@ -51,6 +55,11 @@ public class TaskResolver {
 	
 	private void checkTaskCanceled(){
 		Runnable processingThread = () -> {canceledTask.applyUpdateTaskCanceled();};
+		new Thread(processingThread).start();
+	}
+	
+	private void checkTaskFileConsolidated(){
+		Runnable processingThread = () -> {consolidatedTaskFile.consolidatedFileTask();};
 		new Thread(processingThread).start();
 	}
 }

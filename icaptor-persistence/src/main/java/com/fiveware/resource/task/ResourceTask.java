@@ -1,5 +1,6 @@
 package com.fiveware.resource.task;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,5 +63,12 @@ public class ResourceTask {
 	public ResponseEntity<List<Task>> findByUser(@PathVariable Long userId) {
 		List<Task> tasks= taskRepository.findPeloUsuario(userId);
 		return ResponseEntity.ok(tasks);
+	}
+	
+	@GetMapping("/recent/status/{status}")
+	public ResponseEntity<List<Task>> findRecentTaskByStatus(@PathVariable("status") String status) {		
+		LocalDateTime start = LocalDateTime.now().withMinute(0).withSecond(0);
+		LocalDateTime end = LocalDateTime.now().withMinute(59).withSecond(59);
+		return ResponseEntity.ok(taskRepository.findTaskByStatusProcessAndStartAt(status, start, end));
 	}
 }

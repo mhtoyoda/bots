@@ -36,7 +36,7 @@ public class MetricScheduler {
 	@Autowired
 	private AgentListener agentListener;
 
-	@Scheduled(fixedDelayString = "${icaptor.metrics-schedulle-time}")
+	//@Scheduled(fixedDelayString = "${icaptor.metrics-schedulle-time}")
 	public void process() {
 		Optional<List<Agent>> all = Optional.ofNullable(serviceAgent.findAll());
 		all.orElse(newArrayList())

@@ -69,12 +69,11 @@ public class ServiceBot {
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
-
+		
 		ParameterizedTypeReference<List<BotFormatter>> typeReference = new ParameterizedTypeReference<List<BotFormatter>>() {};
 		ResponseEntity<List<BotFormatter>> responseEntity = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<HttpHeaders>(headers), typeReference);
 
-		return responseEntity.getBody();
-	}
+		return responseEntity.getBody();	}
 	
 	public BotFormatter saveBotFormatter(BotFormatter botFormatter) {
 		String url = apiUrlPersistence.endPoint("bot","/formatter");

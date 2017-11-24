@@ -1,16 +1,16 @@
 package com.fiveware.task;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.fiveware.messaging.BrokerManager;
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
-import com.fiveware.service.ServiceElasticSearch;
 import com.google.common.collect.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class TaskProcessedTask {

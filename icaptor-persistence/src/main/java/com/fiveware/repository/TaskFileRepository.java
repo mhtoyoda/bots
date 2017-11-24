@@ -7,12 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.fiveware.model.BotFormatter;
+import com.fiveware.model.TaskFile;
 
 @Repository
-public interface BotFormatterRepository extends CrudRepository<BotFormatter, Long>{
+public interface TaskFileRepository extends CrudRepository<TaskFile, Long>{
 
-	@Query("FROM BotFormatter b WHERE b.bot.nameBot = :nameBot")
-	List<BotFormatter> findByBot(@Param("nameBot") String nameBot);
-
+	@Query(value = "FROM TaskFile WHERE task.id = :taskId")
+	List<TaskFile> findFilebyTaskId(@Param("taskId") Long taskId);
 }

@@ -1,19 +1,25 @@
 package com.fiveware.task;
 
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.fiveware.model.ItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.StatusProcessTaskEnum;
 import com.fiveware.model.Task;
 import com.fiveware.model.message.MessageBot;
-import com.fiveware.service.*;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
+import com.fiveware.service.ServiceBot;
+import com.fiveware.service.ServiceElasticSearch;
+import com.fiveware.service.ServiceItemTask;
+import com.fiveware.service.ServiceStatusProcessTask;
+import com.fiveware.service.ServiceTask;
+import com.fiveware.service.ServiceUser;
 
 @Component
 public class TaskManager {
@@ -128,7 +134,6 @@ public class TaskManager {
 		itemTask.setAttemptsCount(messageBot.getAttemptsCount());
 		itemTask.setStatusProcess(messageBot.getStatusProcessItemTaskEnum().getStatuProcess());
 		itemTask.setDataOut(messageBot.getLineResult());
-
 		itemTask = itemServiceTask.save(itemTask);
 		return itemTask;
 	}

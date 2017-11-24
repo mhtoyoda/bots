@@ -1,5 +1,6 @@
 package com.fiveware.repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
@@ -21,4 +22,9 @@ public interface TaskRepository extends CrudRepository<Task, Long>, TaskReposito
 
 	@Query("FROM Task WHERE usuario.id = :userId ORDER BY loadTime DESC")
 	List<Task> findPeloUsuario(@Param("userId") Long userId);
+	
+	@Query("FROM Task WHERE statusProcess.name = :statusProcess AND startAt BETWEEN :start AND :end")
+	List<Task> findTaskByStatusProcessAndStartAt(@Param("statusProcess") String statusProcess,
+												 @Param("start") LocalDateTime start,
+												 @Param("end") LocalDateTime end);
 }

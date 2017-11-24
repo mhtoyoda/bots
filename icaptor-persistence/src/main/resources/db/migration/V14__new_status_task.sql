@@ -1,0 +1,1 @@
+insert into status_process_task(id, name) values(12, 'Consolidated');
