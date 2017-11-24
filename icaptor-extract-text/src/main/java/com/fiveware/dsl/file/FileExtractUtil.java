@@ -92,11 +92,16 @@ public class FileExtractUtil {
 					}
 					index++;
 				}
-			}
-			source.close();
-			out.close();
+			}						
 		} catch (IOException e) {
 			throw new IOException(e.getMessage());
+		} finally{
+			if(null != source){
+				source.close();
+			}
+			if(null != out){
+				out.close();
+			}
 		}
 		return byteArrayOutputStream.toByteArray();
 	}
