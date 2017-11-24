@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false
+    url: jdbc:h2:mem:myDb;DB_CLOSE_DELAY=-1
     username: root
     password: root
     driverClassName: com.mysql.jdbc.Driver

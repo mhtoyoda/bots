@@ -153,7 +153,7 @@ public class ProcessBotCSV implements ProcessBot<MessageBot> {
 				List<String> fieldValues = messageParameterAgent.getFieldValue();
 				for(String field: fieldValues){
 					String[] values = field.split(":");
-					if(values[0].toString().equals("credential")){
+					if(values[0].toString().equals("credential") || values[0].toString().equals("login")){
 						String decode = new String(Base64.decodeBase64(values[2].toString()));
 						String[] value = decode.split(":");
 						parameterValue.add(values[1].toString(), value[0], value[1]);

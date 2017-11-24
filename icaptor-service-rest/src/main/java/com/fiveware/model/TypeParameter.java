@@ -3,12 +3,7 @@ package com.fiveware.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.pojomatic.Pojomatic;
@@ -18,6 +13,7 @@ import org.pojomatic.annotations.AutoProperty;
 @Entity
 @Table(name = "type_parameter")
 public class TypeParameter implements Serializable {
+
 
 	/**
 	 * 
@@ -77,5 +73,10 @@ public class TypeParameter implements Serializable {
 	@JsonIgnore
 	public boolean isNew() {
 		return Objects.isNull(this.id);
+	}
+
+	@JsonIgnore
+	public boolean isTypeLoginAndCredential(){
+		return ("login".equalsIgnoreCase(this.getName() ) || "credential".equalsIgnoreCase(this.getName() ));
 	}
 }

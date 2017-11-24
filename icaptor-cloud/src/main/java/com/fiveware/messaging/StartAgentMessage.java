@@ -168,7 +168,7 @@ public class StartAgentMessage implements ConsumerTypeMessage<MessageAgent> {
 
 	private String encodeFieldCredential(String parameterValue, TypeParameter typeParameter) {
 
-		if (typeParameter.getCredential())
+		if (typeParameter.isTypeLoginAndCredential())
 			return new String(Base64.encodeBase64(parameterValue.getBytes()));
 
 		return parameterValue;

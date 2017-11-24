@@ -25,7 +25,6 @@ import java.util.List;
 @Transactional
 @Rollback(true)
 @RunWith(SpringJUnit4ClassRunner.class)
-@Ignore
 public class ParameterTests {
 
 //	@LocalServerPort

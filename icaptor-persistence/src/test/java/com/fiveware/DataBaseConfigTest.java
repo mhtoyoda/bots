@@ -51,8 +51,8 @@ public class DataBaseConfigTest {
     private HikariConfig mysql() {
         HikariConfig config = new HikariConfig();
         config.setMaximumPoolSize(10);
-        config.setDriverClassName("com.mysql.jdbc.Driver");
-        config.setJdbcUrl("jdbc:mysql://localhost:3306/icaptor?createDatabaseIfNotExist=true&useSSL=false");
+        config.setDriverClassName("org.h2.Driver");
+        config.setJdbcUrl("jdbc:h2:mem:myDb;DB_CLOSE_DELAY=-1");
         config.setUsername("root");
         config.setPassword("root");
         return config;

@@ -29,7 +29,7 @@ public class ParameterController {
 		List<Parameter> parameters = parameterService.getParametersByBotAndScopeName(botName, scopeName);
 
 		parameters.stream()
-				.filter((param)->param.getTypeParameter().getCredential())
+				.filter((param)->param.getTypeParameter().isTypeLoginAndCredential())
 				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
 
 		return ResponseEntity.ok(parameters);
@@ -41,7 +41,7 @@ public class ParameterController {
 
 		List<Parameter> parameters = parameterService.listParametersByScope(scopeName);
 		parameters.stream()
-				.filter((param)->param.getTypeParameter().getCredential())
+				.filter((param)->param.getTypeParameter().isTypeLoginAndCredential())
 				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
 
 		return ResponseEntity.ok(parameters);
@@ -63,7 +63,7 @@ public class ParameterController {
 		List<Parameter> parameters = parameterService.getParametersByBotAndUserId(botName, userId);
 
 		parameters.stream()
-				.filter((param)->param.getTypeParameter().getCredential())
+				.filter((param)->param.getTypeParameter().isTypeLoginAndCredential())
 				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
 
 
@@ -78,7 +78,7 @@ public class ParameterController {
 		List<Parameter> parameters = parameterService.getParametersAll(new Long(idUser));
 
 		parameters.stream()
-				.filter((param)->param.getTypeParameter().getCredential())
+				.filter((param)->param.getTypeParameter().isTypeLoginAndCredential())
 				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
 
 		return ResponseEntity.ok(parameters);
@@ -90,7 +90,7 @@ public class ParameterController {
 		List<Parameter> parameters = parameterService.getParametersAll(null);
 
 		parameters.stream()
-				.filter((param)->param.getTypeParameter().getCredential())
+				.filter((param)->param.getTypeParameter().isTypeLoginAndCredential())
 				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
 
 
@@ -100,7 +100,7 @@ public class ParameterController {
 	@PostMapping("/save-single")
 	public ResponseEntity<Parameter> save(@RequestBody Parameter parameter) {
 
-		if (parameter.getTypeParameter().getCredential())
+		if (parameter.getTypeParameter().isTypeLoginAndCredential())
 			parameter.setFieldValue(new String(Base64.encodeBase64(parameter.getFieldValue().getBytes())));
 
 
@@ -115,14 +115,14 @@ public class ParameterController {
 
 
 		parameters.forEach((parameter -> {
-			if (parameter.getTypeParameter().getCredential())
+			if (parameter.getTypeParameter().isTypeLoginAndCredential())
 				parameter.setFieldValue(new String(Base64.encodeBase64(parameter.getFieldValue().getBytes())));
 		}));
 
 
 		List<Parameter> saved = parameterService.save(parameters,null);
 		saved.stream()
-				.filter((param)->param.getTypeParameter().getCredential())
+				.filter((param)->param.getTypeParameter().isTypeLoginAndCredential())
 				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
 
 		return ResponseEntity.ok(saved);
@@ -134,13 +134,13 @@ public class ParameterController {
 		Integer idUser = (Integer) SpringSecurityUtil.decodeAuthorizationKey(details, "idUser");
 
 		parameters.forEach((parameter -> {
-			if (parameter.getTypeParameter().getCredential())
+			if (parameter.getTypeParameter().isTypeLoginAndCredential())
 				parameter.setFieldValue(new String(Base64.encodeBase64(parameter.getFieldValue().getBytes())));
 		}));
 
 		List<Parameter> saved = parameterService.save(parameters,idUser.longValue());
 		saved.stream()
-				.filter((param)->param.getTypeParameter().getCredential())
+				.filter((param)->param.getTypeParameter().isTypeLoginAndCredential())
 				.forEach((param)->param.setFieldValue(new String(Base64.decodeBase64(param.getFieldValue().getBytes()))));
 
 		return ResponseEntity.ok(saved);

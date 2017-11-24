@@ -37,9 +37,8 @@ public class TesteBot implements Automation<Cep, Endereco> {
 	}
 
 
-	@IcaptorParameter(value = "TANACF:Augusta746!", nameTypeParameter = "credential", credential = true, exclusive = false)
 	@IcaptorParameter(value = "maria:12345", nameTypeParameter = "login", exclusive = true, credential = true)
-	@IcaptorParameter(value = "joao:12345", nameTypeParameter = "login", exclusive = true, credential = true)
+	@IcaptorParameter(value = "joao:12345", nameTypeParameter = "login", exclusive = true, credential = false)
 	@IcaptorParameter(value = "10", regexValidate = "[0-9]", nameTypeParameter = "timeout", exclusive = false, credential = false)
 	@IcaptorParameter(value = "1", regexValidate = "[0-9]{1}", nameTypeParameter = "retry", exclusive = false,  credential = false)
 	@IcaptorMethod(value = "execute", endpoint = "correios-bot", type = Cep.class)
@@ -49,10 +48,10 @@ public class TesteBot implements Automation<Cep, Endereco> {
 			RecoverableException, AuthenticationBotException {
 
 		ParameterIcaptor login = parameters.getByType("login");
-		logger.info("LOGIN {}{}", login.getField(), login.getValue());
+		logger.info("LOGIN Field{}: Value{}", login.getField(), login.getValue());
 
 		ParameterIcaptor retry = parameters.getByType("retry");
-		logger.info("Cloud-Bot: {}{}", retry.getField(), retry.getValue());
+		logger.info("Cloud-Bot: Field{}: value{}", retry.getField(), retry.getValue());
 
 		logger.info("Dados de Endereco: {}",cep.getCep().toString());
 		Endereco endereco = getEndereco(cep.getCep());
