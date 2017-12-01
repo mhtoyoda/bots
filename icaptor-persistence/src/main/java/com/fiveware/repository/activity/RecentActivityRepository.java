@@ -15,17 +15,19 @@ import com.fiveware.model.activity.RecentActivity;
 public interface RecentActivityRepository extends CrudRepository<RecentActivity, Long> {
 
 	@Query("FROM RecentActivity WHERE user.id = :userId ORDER BY creation_time DESC")
-	public List<RecentActivity> findAllByUserId(@Param("userId") Long userId);
+	List<RecentActivity> findAllByUserId(@Param("userId") Long userId);
 
 	@Query("FROM RecentActivity WHERE user.id = :userId AND visualized = false")
-	public List<RecentActivity> findAllUnseenByUserId(@Param("userId") Long userId);
+	List<RecentActivity> findAllUnseenByUserId(@Param("userId") Long userId);
 	
 	@Query("SELECT COUNT(*) FROM RecentActivity WHERE user.id = :userId AND visualized = false")
-	public Long countUnseenByUser(@Param("userId") Long userId);
+	Long countUnseenByUser(@Param("userId") Long userId);
 	
 	@Modifying
 	@Transactional
 	@Query("UPDATE RecentActivity SET visualized = true WHERE id IN (:ids)")
-	void setVisualized(@Param("ids") List<Long> activityIds); 
+	void setVisualized(@Param("ids") List<Long> activityIds);
+
+	List<RecentActivity> findByTaskId(Long taskId);
 
 }

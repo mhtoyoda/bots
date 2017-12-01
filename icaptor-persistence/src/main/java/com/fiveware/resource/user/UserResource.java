@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.fiveware.service.user.ServiceUserImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,36 +31,36 @@ import com.fiveware.repository.user.UserRepository;
 public class UserResource {
 	static Logger logger = LoggerFactory.getLogger(UserResource.class);
 
-	@Autowired
-	private ApplicationEventPublisher publisher;
 
 	@Autowired
-	private UserRepository userRepository;
+	private ServiceUserImpl serviceUser;
 
 	@PostMapping
 	public ResponseEntity<IcaptorUser> create(@RequestBody IcaptorUser usuario, HttpServletResponse response) {
-		IcaptorUser usuarioSaved = userRepository.save(usuario);
-		publisher.publishEvent(new RecursoCriadoEvent(this, response, usuarioSaved.getId()));
+
+		IcaptorUser usuarioSaved = serviceUser.create(usuario, response);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(usuarioSaved);
 	}
 
 	@PostMapping(value = "/email")
 	public ResponseEntity<?> getUsuario(@RequestBody IcaptorUser email) {
-		Optional<IcaptorUser> byEmailAndAtivo = userRepository.findByEmailAndActive(email.getEmail(), true);
-		byEmailAndAtivo.orElseThrow(() -> new EmptyResultDataAccessException(1));
-		return ResponseEntity.ok(byEmailAndAtivo.get());
+		IcaptorUser usuario = serviceUser.getUsuario(email);
+		return ResponseEntity.ok(usuario);
 	}
 
 	@GetMapping("/{id}")
 	public IcaptorUser get(@PathVariable Long id) {
-		Optional<IcaptorUser> usuario = Optional.ofNullable(userRepository.findOne(id));
-		return usuario.orElseThrow(() -> new IllegalArgumentException("Usuario nao encontrado!"));
+		IcaptorUser icaptorUser = serviceUser.get(id);
+
+		return icaptorUser;
 	}
 
 	@GetMapping
 	public ResponseEntity<Iterable<IcaptorUser>> list() {
-		return ResponseEntity.ok(userRepository.findAll());
+		Iterable<IcaptorUser> icaptorUsers = serviceUser.list();
+
+		return ResponseEntity.ok(icaptorUsers);
 	}
 
 }

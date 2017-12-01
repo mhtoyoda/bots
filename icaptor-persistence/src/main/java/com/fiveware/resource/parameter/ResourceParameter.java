@@ -1,8 +1,8 @@
 package com.fiveware.resource.parameter;
 
 import java.util.List;
-import java.util.Objects;
 
+import com.fiveware.service.parameter.ServiceParameterImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,69 +17,55 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fiveware.model.Parameter;
 import com.fiveware.model.ScopeParameter;
 import com.fiveware.model.TypeParameter;
-import com.fiveware.model.user.IcaptorUser;
-import com.fiveware.repository.ParameterRepository;
-import com.fiveware.repository.ScopeParameterRepository;
-import com.fiveware.repository.TypeParameterRepository;
 
 @RestController
 @RequestMapping("/api/parameter")
 public class ResourceParameter {
 
 	@Autowired
-	private ParameterRepository parameterRepository;
-
-	@Autowired
-	private ScopeParameterRepository scopeParameterRepository;
-
-	@Autowired
-	private TypeParameterRepository typeParameterRepository;
+	private ServiceParameterImpl serviceParameter;
 
 	@GetMapping("/{id}")
 	public Parameter findParameterById(@PathVariable Long id) {
-		return parameterRepository.findOne(id);
+		return serviceParameter.findOne(id);
 	}
 
 	@GetMapping("/scope/{id}")
 	public ScopeParameter findScopeParameterById(@PathVariable Long id) {
-		return scopeParameterRepository.findOne(id);
+		return serviceParameter.findOneScope(id);
 	}
 
 	@GetMapping("/scope")
 	public ResponseEntity<Iterable<ScopeParameter>> findScopeParameterAll() {
-		return ResponseEntity.ok(scopeParameterRepository.findAll());
+		return ResponseEntity.ok(serviceParameter.findAllScope());
 	}
 
 	@GetMapping("/type/{id}")
 	public TypeParameter findTypeParameterById(@PathVariable Long id) {
-		return typeParameterRepository.findOne(id);
+		return serviceParameter.findOneType(id);
 	}
 
 	@GetMapping("/type/name/{name}")
 	public TypeParameter findTypeParameterByName(@PathVariable String name) {
-		return typeParameterRepository.findByName(name);
+		return serviceParameter.findByNameType(name);
 	}
 
 	@GetMapping("/type")
 	public ResponseEntity<Iterable<TypeParameter>> findTypeParameterAll() {
-		return ResponseEntity.ok(typeParameterRepository.findAll());
+		return ResponseEntity.ok(serviceParameter.findAllType());
 	}
 
 	@PostMapping
 	public ResponseEntity<Parameter> save(@RequestBody Parameter parameter, Long id) {
 
-		if (!Objects.isNull(id))
-			parameter.setUsuario(new IcaptorUser(id));
-
-		parameter = parameterRepository.save(parameter);
+		parameter = serviceParameter.saveParameter(parameter, id);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(parameter);
 	}
-	
+
 	@PostMapping("/several")
 	public ResponseEntity<Object> save(@RequestBody List<Parameter> parameters,Long id) {
-		parameters.stream().forEach((param) -> save(param,id));
-		return ResponseEntity.status(HttpStatus.CREATED).body(parameters);
+		return ResponseEntity.status(HttpStatus.CREATED).body(serviceParameter.saveParameter(parameters, id));
 	}
 
 	@PostMapping("/several/user/{id}")
@@ -90,64 +76,62 @@ public class ResourceParameter {
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> delete(@RequestBody Long id) {
-		parameterRepository.delete(id);
+		serviceParameter.delete(id);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
 	@DeleteMapping("/all")
 	public ResponseEntity<Void> delete(@RequestBody List<Parameter> parameters) {
-		parameterRepository.delete(parameters);
+		serviceParameter.delete(parameters);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 
 	@PostMapping("/type")
 	public ResponseEntity<TypeParameter> save(@RequestBody TypeParameter typeParameter) {
-		typeParameter = typeParameterRepository.save(typeParameter);
+		typeParameter = serviceParameter.save(typeParameter);
 		return ResponseEntity.status(HttpStatus.CREATED).body(typeParameter);
 	}
 
 	@GetMapping("/bot/{botName}")
 	public ResponseEntity<List<Parameter>> findTypeParameterByBotName(@PathVariable("botName") String botName) {
-		return ResponseEntity.ok(parameterRepository.findByBotName(botName));
+		return ResponseEntity.ok(serviceParameter.findByBotName(botName));
 	}
 
 	@GetMapping("/bot/{nameScope}/{nameType}")
-	public ResponseEntity<List<Parameter>> findParameterByScopeAndType(@PathVariable("nameScope") String nameScope, @PathVariable("nameType") String nameType) {
-		return ResponseEntity.ok(parameterRepository.findParameterByScopeParameterNameAndTypeParameterName(nameScope, nameType));
+	public ResponseEntity<List<Parameter>> findParameterByScopeAndType(@PathVariable("nameScope") String nameScope,
+																	   @PathVariable("nameType") String nameType) {
+		return ResponseEntity.ok(serviceParameter.findParameterByScopeParameterNameAndTypeParameterName(nameScope, nameType));
 	}
 
 	@GetMapping("/bot-user/{botName}/{userId}")
-	public ResponseEntity<List<Parameter>> findParametersByBotAndUser(@PathVariable("botName") String botName, @PathVariable("userId") Long userId) {
-		List<Parameter> parameters = parameterRepository.findParametersByBotNameAndUser(botName, userId);
+	public ResponseEntity<List<Parameter>> findParametersByBotAndUser(@PathVariable("botName") String botName,
+																	  @PathVariable("userId") Long userId) {
+		List<Parameter> parameters = serviceParameter.findParametersByBotNameAndUser(botName, userId);
 		return ResponseEntity.ok(parameters);
 	}
 
 	@GetMapping("/bot-scope/{botName}/{scopeName}")
 	public ResponseEntity<List<Parameter>> findParametersByBotAndScope(@PathVariable("botName") String botName, @PathVariable("scopeName") String scopeName) {
-		List<Parameter> parameters = parameterRepository.findParametersByBotNameAndPriority(botName, scopeName);
+		List<Parameter> parameters = serviceParameter.findParametersByBotNameAndPriority(botName, scopeName);
 		return ResponseEntity.ok(parameters);
 	}
 
 	@GetMapping("/scope-parameter/{scopeName}")
 	public ResponseEntity<List<Parameter>> listParametersByScope(@PathVariable("scopeName") String scopeName) {
-		List<Parameter> parameters = parameterRepository.findParameterByScopeParameterName(scopeName);
+		List<Parameter> parameters = serviceParameter.findParameterByScopeParameterName(scopeName);
 		return ResponseEntity.ok(parameters);
 	}
 
 	@GetMapping({"/","/user/{id}"})
 	public ResponseEntity<Iterable<Parameter>> findAll(@PathVariable Long id) {
-		Iterable<Parameter> parameters = null;
-		if (!Objects.isNull(id))
-			parameters = parameterRepository.findByUsuarioId(id);
-		else
-			parameters = parameterRepository.findAll();
+		Iterable<Parameter> parameters = serviceParameter.findAllParametersById(id);
 
 		return ResponseEntity.ok(parameters);
 	}
 
 	@GetMapping
 	public ResponseEntity<Iterable<Parameter>> findAll() {
-		Iterable<Parameter> parameters =  parameterRepository.findAll();
+		Iterable<Parameter> parameters =  serviceParameter.findAll();
 
 		return ResponseEntity.ok(parameters);
 	}

@@ -32,7 +32,7 @@ public enum StatusProcessTaskEnum {
 		return name;
 	}
 
-	public StatuProcessTask getStatuProcess() {
-		return new StatuProcessTask(this.id,this.name);
+	public StatusProcessTask getStatuProcess() {
+		return new StatusProcessTask(this.id,this.name);
 	}
 }

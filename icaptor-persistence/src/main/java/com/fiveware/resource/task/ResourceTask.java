@@ -1,74 +1,62 @@
 package com.fiveware.resource.task;
 
-import java.time.LocalDateTime;
-import java.util.List;
-
+import com.fiveware.model.Task;
+import com.fiveware.repository.task.filter.TaskFilter;
+import com.fiveware.service.task.ServiceTaskImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.fiveware.model.Task;
-import com.fiveware.repository.TaskRepository;
-import com.fiveware.repository.task.filter.TaskFilter;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/task")
 public class ResourceTask {
 
 	@Autowired
-	private TaskRepository taskRepository;
+	private ServiceTaskImpl serviceTask;
 
 	@PostMapping
 	public ResponseEntity<?> save(@RequestBody Task task) {
-		task = taskRepository.save(task);
+		task = serviceTask.save(task);
 		return ResponseEntity.status(HttpStatus.CREATED).body(task);
 	}
 
 	@PutMapping("/{id}/status")
 	public ResponseEntity<?> update(@RequestBody Task task,@PathVariable Long id) {
-		Task one = taskRepository.findOne(id);
-		one.setStatusProcess(task.getStatusProcess());
-		taskRepository.save(one);
+		Task one = serviceTask.findOne(id);
 		return ResponseEntity.status(HttpStatus.OK).body(one);
 	}
 
 	@GetMapping("/{id}")
 	public Task findOne(@PathVariable Long id) {
-		return taskRepository.findOne(id);
+		return serviceTask.findOne(id);
 	}
 
 	@GetMapping
 	public List<Task> search(TaskFilter taskFilter) {
-		return taskRepository.filter(taskFilter);
+		return serviceTask.filter(taskFilter);
 	}
 	
 	@GetMapping("/nameBot/{nameBot}")
 	public ResponseEntity<List<Task>> findByBot(@PathVariable("nameBot") String nameBot) {
-		return ResponseEntity.ok(taskRepository.findTaskbyBot(nameBot));
+		return ResponseEntity.ok(serviceTask.findTaskbyBot(nameBot));
 	}
 	
 	@GetMapping("/status/{status}")
 	public ResponseEntity<List<Task>> findByStatus(@PathVariable("status") String status) {
-		return ResponseEntity.ok(taskRepository.findTaskbyStatusProcess(status));
+		return ResponseEntity.ok(serviceTask.findTaskbyStatusProcess(status));
 	}
 	
 	@GetMapping("/user/{userId}")
 	public ResponseEntity<List<Task>> findByUser(@PathVariable Long userId) {
-		List<Task> tasks= taskRepository.findPeloUsuario(userId);
+		List<Task> tasks= serviceTask.findPeloUsuario(userId);
 		return ResponseEntity.ok(tasks);
 	}
 	
 	@GetMapping("/recent/status/{status}")
 	public ResponseEntity<List<Task>> findRecentTaskByStatus(@PathVariable("status") String status) {		
-		LocalDateTime start = LocalDateTime.now().withMinute(0).withSecond(0);
-		LocalDateTime end = LocalDateTime.now().withMinute(59).withSecond(59);
-		return ResponseEntity.ok(taskRepository.findTaskByStatusProcessAndStartAt(status, start, end));
+		return ResponseEntity.ok(serviceTask.findRecentTaskByStatus(status));
 	}
 }

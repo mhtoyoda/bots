@@ -24,8 +24,8 @@ public class RepositoryConfiguration extends RepositoryRestConfigurerAdapter {
         config.exposeIdsFor(Parameter.class);
         config.exposeIdsFor(ItemTask.class);
         config.exposeIdsFor(AgentParameter.class);
-        config.exposeIdsFor(StatuProcessTask.class);
-        config.exposeIdsFor(StatuProcessItemTask.class);
+        config.exposeIdsFor(StatusProcessTask.class);
+        config.exposeIdsFor(StatusProcessItemTask.class);
         config.exposeIdsFor(RecentActivity.class);
         config.exposeIdsFor(IcaptorUser.class);
         config.exposeIdsFor(BotFormatter.class);

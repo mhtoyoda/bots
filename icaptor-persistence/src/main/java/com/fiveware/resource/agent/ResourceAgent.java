@@ -3,9 +3,8 @@ package com.fiveware.resource.agent;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
+import com.fiveware.service.agent.ServiceAgentImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,10 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fiveware.model.Agent;
 import com.fiveware.model.AgentParameter;
 import com.fiveware.model.Bot;
-import com.fiveware.model.Server;
 import com.fiveware.repository.AgentParameterRepository;
 import com.fiveware.repository.AgentRepository;
-import com.fiveware.repository.ServerRepository;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -33,107 +30,62 @@ import com.fiveware.repository.ServerRepository;
 public class ResourceAgent {
 
 	@Autowired
-    private AgentRepository agentRepository;
+	private ServiceAgentImpl serviceAgent;
 
-	@Autowired
-	private ServerRepository serverRepository;
-	
-	@Autowired
-	private AgentParameterRepository agentParameterRepository;
-	
 	@Transactional(readOnly = false)
     @PostMapping
     public Agent save(@RequestBody Agent agent){
-        Agent agentdb = agentRepository.findByNameAgent(agent.getNameAgent());
-        
-        Optional<Agent> byNameAgent = (Optional<Agent>) Optional.ofNullable(agentdb);
-
-        byNameAgent.ifPresent(new Consumer<Agent>() {
-            @Override
-            public void accept(Agent _agent) {
-                _agent.setPort(agent.getPort());                
-            }
-        });
-
-        Agent agent1 = byNameAgent
-                .orElseGet(new Supplier<Agent>() {
-                    @Override
-                    public Agent get() {
-                        return agent;
-                    }
-                });
-        
-        if(null != agent.getServer()){
-        	Optional<Server> serverOptional = serverRepository.findByName(agent.getServer().getName());
-        	if(serverOptional.isPresent()){
-        		Server server = serverOptional.get();
-        		agent1.setServer(server);                	
-        	}        	
-        }
-        if(null != agent.getBots() && agent.getBots().size() > 0){
-        	agent1.setBots(agent.getBots());
-        }
-        agentRepository.save(agent1);
-
-        return agent1;
+        return serviceAgent.save(agent);
     }
 	
 	@Transactional(readOnly = false)
     @DeleteMapping
     public void remove(@RequestBody Agent agent){
-        Agent agentdb = agentRepository.findByNameAgent(agent.getNameAgent());
-        
-        Optional<Agent> byNameAgent = (Optional<Agent>) Optional.ofNullable(agentdb);
-
-        if(byNameAgent.isPresent()){
-        	agentRepository.delete(agentdb);        	
-        }
+        serviceAgent.remove(agent);
     }
 
     @GetMapping("/{name}/name")
     public Agent findByNameAgent(@PathVariable String name){
-        Agent byNameAgent = agentRepository.findByNameAgent(name);
-
-        return byNameAgent;
+        return serviceAgent.findByNameAgent(name);
     }
 
     @GetMapping("/{id}")
     public Agent findOne(@PathVariable Long id){
 
-        return agentRepository.findOne(id);
+        return serviceAgent.findOne(id);
     }
 
     @GetMapping
     public ResponseEntity<Iterable<Agent>> findAll(){
-        return ResponseEntity.ok(agentRepository.findAll());
+        return ResponseEntity.ok(serviceAgent.findAll());
     }
 
     @GetMapping("/count")
     public Long count(){
-        return agentRepository.count();
+        return serviceAgent.count();
     }
 
     @GetMapping("/bots/nameAgent/{nameAgent}")
     public List<Bot> findBotsByAgent(@PathVariable("nameAgent") String nameAgent){
-        List<Bot> botsByAgent = agentRepository.findBynameAgent(nameAgent);
+        List<Bot> botsByAgent = serviceAgent.findBotsByAgent(nameAgent);
         return botsByAgent;
     }
     
     @GetMapping("/agents/nameBot/{nameBot}")
     public List<Agent> findByNameBot(@PathVariable("nameBot") String nameBot){
-        List<Agent> agents = agentRepository.findByBot(nameBot);
+        List<Agent> agents = serviceAgent.findByNameBot(nameBot);
         return agents;
     }
     
     @GetMapping("/parameter/id/{parameterId}")
     public AgentParameter findByParameterId(@PathVariable("parameterId") Long parameterId){
-        AgentParameter agentParameter = agentParameterRepository.findByParameterId(parameterId);
+        AgentParameter agentParameter = serviceAgent.findByParameterId(parameterId);
         return agentParameter;
     }
     
     @GetMapping("/parameter/nameAgent/{nameAgent}")
     public AgentParameter findByAgentName(@PathVariable("nameAgent") String nameAgent){
-        AgentParameter agentParameter = agentParameterRepository.findByNameAgent(nameAgent);
+        AgentParameter agentParameter = serviceAgent.findByAgentName(nameAgent);
         return agentParameter;
     }
     
@@ -141,18 +93,12 @@ public class ResourceAgent {
     @PostMapping("/parameter")
     public AgentParameter save(@RequestBody AgentParameter agentParameter){
     	agentParameter.setUseDate(LocalDateTime.now());
-    	return agentParameterRepository.save(agentParameter);    	
+    	return serviceAgent.save(agentParameter);
     }
     
     @Transactional(readOnly = false)
     @DeleteMapping("/parameter")
     public void remove(@RequestBody AgentParameter agentParameter){
-    	agentParameter = agentParameterRepository.findOne(agentParameter.getId());
-        
-        Optional<AgentParameter> byAgentParameter = (Optional<AgentParameter>) Optional.ofNullable(agentParameter);
-
-        if(byAgentParameter.isPresent()){
-        	agentParameterRepository.delete(agentParameter);        	
-        }
+        serviceAgent.remove(agentParameter);
     }
 }

@@ -44,7 +44,7 @@ public class ItemTask implements Log, Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "id_status")
-	private StatuProcessItemTask statusProcess;
+	private StatusProcessItemTask statusProcess;
 
 	@Column(name = "data_in")
 	private String dataIn;
@@ -92,11 +92,11 @@ public class ItemTask implements Log, Serializable {
 		this.task = task;
 	}
 
-	public StatuProcessItemTask getStatusProcess() {
+	public StatusProcessItemTask getStatusProcess() {
 		return statusProcess;
 	}
 
-	public void setStatusProcess(StatuProcessItemTask statusProcess) {
+	public void setStatusProcess(StatusProcessItemTask statusProcess) {
 		this.statusProcess = statusProcess;
 	}
 

@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fiveware.config.ApiUrlPersistence;
 import com.fiveware.model.BotsMetric;
 import com.fiveware.model.ItemTask;
-import com.fiveware.model.StatuProcessItemTask;
+import com.fiveware.model.StatusProcessItemTask;
 import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.Task;
 import com.google.common.base.Strings;
@@ -66,7 +66,7 @@ public class ServiceItemTask {
 		return item;
 	}
 	
-	public ItemTask updateStatus(Long id, StatuProcessItemTask status) {
+	public ItemTask updateStatus(Long id, StatusProcessItemTask status) {
 		String url = apiUrlPersistence.endPoint("item-task/",id+"/status");
 
 		HttpHeaders headers = new HttpHeaders();

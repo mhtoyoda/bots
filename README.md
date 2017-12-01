@@ -12,7 +12,14 @@
 * [MAVEN 3](https://www.vultr.com/docs/how-to-install-apache-maven-on-ubuntu-16-04) - Instalar e copiar arquivo [settings](https://github.com/fiveware-solutions/icaptor-automation/blob/master/settings.xml) para o diretorio conf
 * [JDK 1.8](https://www.vultr.com/docs/how-to-install-apache-maven-on-ubuntu-16-04) - Instalação Java 8 
 
+ **Depois de Instalar**
+
+ * mkdir [nome-diretorio] && cd [nome-diretorio]
+ * git clone https://github.com/fiveware-solutions/icaptor-automation.git
+
+
 # Servers - Mysql, Redis e RabbitMQ
+- cd [nome-diretorio]
 - docker-compose up -d icaptor-mysql icaptor-alpine-redis icaptor-broker
 
 # ICaptor-ELK (opcional)

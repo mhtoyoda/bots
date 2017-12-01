@@ -1,5 +1,8 @@
 package com.fiveware.model;
 
+import org.pojomatic.Pojomatic;
+import org.pojomatic.annotations.AutoProperty;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -15,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+@AutoProperty
 @Entity
 @Table(name = "agent")
 public class Agent implements Serializable {
@@ -111,6 +115,11 @@ public class Agent implements Serializable {
 
 	public void setServer(Server server) {
 		this.server = server;
+	}
+
+	@Override
+	public String toString() {
+		return Pojomatic.toString(this);
 	}
 
 	public static class BuilderAgent{

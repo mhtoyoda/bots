@@ -1,8 +1,8 @@
 package com.fiveware.service;
 
 import com.fiveware.config.ApiUrlPersistence;
-import com.fiveware.model.StatuProcessItemTask;
-import com.fiveware.model.StatuProcessTask;
+import com.fiveware.model.StatusProcessItemTask;
+import com.fiveware.model.StatusProcessTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,25 +26,25 @@ public class ServiceStatusProcessTask {
 	private RestTemplate restTemplate;
 
 	@SuppressWarnings("unchecked")
-	public List<StatuProcessTask> getAllPossibleTaskStatus() {
+	public List<StatusProcessTask> getAllPossibleTaskStatus() {
 		String url = apiUrlPersistence.endPoint("status","");
 
-		List<StatuProcessTask> statusList = restTemplate.getForObject(url, List.class);
+		List<StatusProcessTask> statusList = restTemplate.getForObject(url, List.class);
 		logger.debug("Loading all [{}] possible statuses for a task.", statusList.size());
 		return statusList;
 	}
 
-	public StatuProcessTask getStatusProcessById(Long id) {
+	public StatusProcessTask getStatusProcessById(Long id) {
 		String url = apiUrlPersistence.endPoint("status/",id.toString());
 
-		StatuProcessTask status = restTemplate.getForObject(url, StatuProcessTask.class);
+		StatusProcessTask status = restTemplate.getForObject(url, StatusProcessTask.class);
 		return status;
 	}
 
-	public StatuProcessItemTask getStatusProcessItemTaskById(Long id) {
+	public StatusProcessItemTask getStatusProcessItemTaskById(Long id) {
 		String url = apiUrlPersistence.endPoint( "item/status/",id.toString());
 
-		StatuProcessItemTask status = restTemplate.getForObject(url, StatuProcessItemTask.class);
+		StatusProcessItemTask status = restTemplate.getForObject(url, StatusProcessItemTask.class);
 		return status;
 	}
 

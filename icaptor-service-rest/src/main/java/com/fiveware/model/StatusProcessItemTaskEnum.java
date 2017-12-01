@@ -26,7 +26,7 @@ public enum StatusProcessItemTaskEnum {
 		return name;
 	}
 
-	public StatuProcessItemTask getStatuProcess() {
-		return new StatuProcessItemTask(this.id,this.name);
+	public StatusProcessItemTask getStatuProcess() {
+		return new StatusProcessItemTask(this.id,this.name);
 	}
 }

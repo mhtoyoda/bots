@@ -25,21 +25,28 @@ import java.util.Properties;
 
 @Configuration
 @EnableJpaRepositories(basePackages = {"com.fiveware.repository"},
-                       entityManagerFactoryRef = "managerFactoryBean",
-                       transactionManagerRef = "transactionManager")
+        entityManagerFactoryRef = "managerFactoryBean",
+        transactionManagerRef = "transactionManager")
 @EnableTransactionManagement
 public class DataBaseConfig {
 
-    @Value("${spring.datasource.url}") private String url;
+    @Value("${spring.datasource.url}")
+    private String url;
 
-    @Value("${spring.datasource.username}") private String userName;
+    @Value("${spring.datasource.username}")
+    private String userName;
 
-    @Value("${spring.datasource.password}") private String password;
+    @Value("${spring.datasource.password}")
+    private String password;
 
-    @Value("${spring.datasource.driverClassName}") private String driverClassName;
+    @Value("${spring.datasource.driverClassName}")
+    private String driverClassName;
 
     @Value("${spring.jpa.hibernate.dialect}")
     private String dialeto;
+
+    @Value("${flyway.enabled}")
+    private boolean flyway;
 
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource")
@@ -62,7 +69,7 @@ public class DataBaseConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
         em.setPackagesToScan(
-                new String[] { "com.fiveware.model" });
+                new String[]{"com.fiveware.model"});
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
@@ -89,9 +96,11 @@ public class DataBaseConfig {
         properties.setProperty("hibernate.naming.physical-strategy", "org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl");
         properties.setProperty("hibernate.dialect", dialeto);
 
+        if (!flyway)
+            properties.setProperty("hibernate.hbm2ddl.auto", "create");
+
         return properties;
     }
-
 
 
 }

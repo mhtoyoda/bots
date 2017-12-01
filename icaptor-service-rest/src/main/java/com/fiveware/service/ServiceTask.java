@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.fiveware.config.ApiUrlPersistence;
-import com.fiveware.model.StatuProcessTask;
+import com.fiveware.model.StatusProcessTask;
 import com.fiveware.model.Task;
 
 @Service
@@ -67,7 +67,7 @@ public class ServiceTask {
 		return task;
 	}
 
-	public Task updateStatus(Long id, StatuProcessTask status) {
+	public Task updateStatus(Long id, StatusProcessTask status) {
 		String BASE_URL = apiUrlPersistence.endPoint("task", "");
 
 		String url = BASE_URL + "/" + id + "/status";

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fiveware.controller.helper.WebModelUtil;
 import com.fiveware.model.Bot;
-import com.fiveware.model.StatuProcessTask;
+import com.fiveware.model.StatusProcessTask;
 import com.fiveware.model.Task;
 import com.fiveware.model.TaskFile;
 import com.fiveware.model.user.IcaptorUser;
@@ -94,7 +94,7 @@ public class ControlPanelController {
 	@GetMapping("/tasks-filter")
 	@PreAuthorize("hasAuthority('ROLE_TASK_LIST') and #oauth2.hasScope('read')")
 	public ResponseEntity<Object> loadFilterOptions() {
-		List<StatuProcessTask> allPossibleTaskStatus = statusTaskService.getAllPossibleTaskStatus();
+		List<StatusProcessTask> allPossibleTaskStatus = statusTaskService.getAllPossibleTaskStatus();
 		return ResponseEntity.ok(allPossibleTaskStatus);
 	}
 
@@ -115,7 +115,7 @@ public class ControlPanelController {
 	@PutMapping("/{taskId}/pause")
 	@PreAuthorize("hasAuthority('ROLE_TASK_PAUSE') and #oauth2.hasScope('write')")
 	public ResponseEntity<Object> pauseTask(@PathVariable Long taskId) {
-		StatuProcessTask statusTask = new StatuProcessTask();
+		StatusProcessTask statusTask = new StatusProcessTask();
 		statusTask.setId(7l);
 		statusTask.setName("Suspending");
 
@@ -127,7 +127,7 @@ public class ControlPanelController {
 	@PutMapping("/{taskId}/resume")
 	@PreAuthorize("hasAuthority('ROLE_TASK_RESUME') and #oauth2.hasScope('write')")
 	public ResponseEntity<Object> resumeTask(@PathVariable Long taskId) {
-		StatuProcessTask statusTask = statusTaskService.getStatusProcessById(5l);
+		StatusProcessTask statusTask = statusTaskService.getStatusProcessById(5l);
 
 		changeTaskStatus(taskId, statusTask);
 
@@ -137,7 +137,7 @@ public class ControlPanelController {
 	@PutMapping("/{taskId}/cancel")
 	@PreAuthorize("hasAuthority('ROLE_TASK_CANCEL') and #oauth2.hasScope('write')")
 	public ResponseEntity<Object> cancelTask(@PathVariable Long taskId) {
-		StatuProcessTask statusTask = statusTaskService.getStatusProcessById(11l);
+		StatusProcessTask statusTask = statusTaskService.getStatusProcessById(11l);
 
 		changeTaskStatus(taskId, statusTask);
 
@@ -166,7 +166,7 @@ public class ControlPanelController {
 
 	}
 
-	protected void changeTaskStatus(Long taskId, StatuProcessTask status) {
+	protected void changeTaskStatus(Long taskId, StatusProcessTask status) {
 		taskService.updateStatus(taskId, status);
 		logger.debug("Task [{}] status updated to [{}]", taskId, status.getName());
 	}

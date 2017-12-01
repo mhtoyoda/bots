@@ -3,6 +3,7 @@ package com.fiveware.resource.cache;
 import java.util.Map;
 import java.util.Set;
 
+import com.fiveware.service.cache.ServiceCacheImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,68 +19,57 @@ import com.fiveware.cache.CacheManager;
 @RequestMapping("/api/cache")
 public class ResourceCache {
 
-	@Autowired
-	private CacheManager<String> cacheManager;
-	
-	@PostMapping
-	public Boolean add(@RequestBody Map<String,Set<String>> cache) {
-		String key = cache.keySet().iterator().next();
-		Set<String> o = cache.get(key);
-		return cacheManager.add(key, o.iterator().next());
-	}
 
-	@DeleteMapping
-	public Boolean remove(@RequestBody Map<String,Set<String>> cache) {
-		String key = cache.keySet().iterator().next();
-		Set<String> o = cache.get(key);
-		return cacheManager.remove(key, o.iterator().next());
-	}
+    @Autowired
+    private ServiceCacheImpl serviceCache;
 
-	@GetMapping
-	public Set<Map.Entry<String, Set<String>>> list() {
-		return cacheManager.list();
-	}
+    @PostMapping
+    public Boolean add(@RequestBody Map<String, Set<String>> cache) {
+        return serviceCache.add(cache);
+    }
 
-	@GetMapping("/get/{key}")
-	public Set<String> getValues(@PathVariable("key") String key) {
-		return cacheManager.getValues(key);
-	}
-	
-	@GetMapping("/has/{key}")
-	public boolean hasValue(@PathVariable("key") String key) {
-		return cacheManager.hasValue(key);
-	}
-	
-	@PostMapping("/hm")
-	public Boolean hmAdd(@RequestBody Map<String, Map<String, Set<String>>> cache) {
-		String key = cache.keySet().iterator().next();
-		Map<String, Set<String>> map = cache.get(key);
-		String keyValue = map.keySet().iterator().next();
-		Set<String> value = map.get(keyValue);
-		return cacheManager.add(key, keyValue, value.iterator().next());
-	}
+    @DeleteMapping
+    public Boolean remove(@RequestBody Map<String, Set<String>> cache) {
+        return serviceCache.remove(cache);
+    }
 
-	@DeleteMapping("/hm")
-	public Boolean hmRemove(@RequestBody Map<String, Map<String, Set<String>>> cache) {
-		String key = cache.keySet().iterator().next();
-		Map<String, Set<String>> map = cache.get(key);
-		String keyValue = map.keySet().iterator().next();
-		Set<String> value = map.get(keyValue);
-		return cacheManager.remove(key, keyValue, value.iterator().next());
-	}
+    @GetMapping
+    public Set<Map.Entry<String, Set<String>>> list() {
+        return serviceCache.list();
+    }
 
-	@GetMapping("/hm")
-	public Set<Map.Entry<String,Map<String,Set<String>>>> map() {
-		return cacheManager.map();
-	}
+    @GetMapping("/get/{key}")
+    public Set<String> getValues(@PathVariable("key") String key) {
+        return serviceCache.getValues(key);
+    }
 
-	@GetMapping("/hm/get/{key}/{keyValue}")
-	public Set<String> hmGetValues(@PathVariable("key") String key, @PathVariable("keyValue") String keyValue) {
-		return cacheManager.getValues(key, keyValue);
-	}
-	
-	@GetMapping("/hm/has/{key}/{keyValue}")
-	public boolean hmHasValue(@PathVariable("key") String key, @PathVariable("keyValue") String keyValue) {
-		return cacheManager.hasValue(key, keyValue);
-	}
+    @GetMapping("/has/{key}")
+    public boolean hasValue(@PathVariable("key") String key) {
+        return serviceCache.hasValue(key);
+    }
+
+    @PostMapping("/hm")
+    public Boolean hmAdd(@RequestBody Map<String, Map<String, Set<String>>> cache) {
+        return serviceCache.hmAdd(cache);
+    }
+
+    @DeleteMapping("/hm")
+    public Boolean hmRemove(@RequestBody Map<String, Map<String, Set<String>>> cache) {
+        return serviceCache.hmRemove(cache);
+    }
+
+    @GetMapping("/hm")
+    public Set<Map.Entry<String, Map<String, Set<String>>>> map() {
+        return serviceCache.map();
+    }
+
+    @GetMapping("/hm/get/{key}/{keyValue}")
+    public Set<String> hmGetValues(@PathVariable("key") String key, @PathVariable("keyValue") String keyValue) {
+        return serviceCache.hmGetValues(key, keyValue);
+    }
+
+    @GetMapping("/hm/has/{key}/{keyValue}")
+    public boolean hmHasValue(@PathVariable("key") String key, @PathVariable("keyValue") String keyValue) {
+        return serviceCache.hmHasValue(key, keyValue);
+    }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.fiveware.service.bot.ServiceBotImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,50 +28,39 @@ import com.fiveware.repository.BotRepository;
 @RequestMapping("/api/bot")
 public class ResourceBot {
 
+
     @Autowired
-    private BotRepository botRepository;
-    
-    @Autowired
-    private BotFormatterRepository botFormatterRepository;
-    
+    private ServiceBotImpl serviceBot;
+
     @PostMapping
     public Bot save(@RequestBody Bot bot){
-        Optional<Bot> optional = botRepository.findByNameBot(bot.getNameBot());
-        return optional.orElseGet(new Supplier<Bot>() {
-            @Override
-            public Bot get() {
-                return botRepository.save(bot);
-            }
-        });
+       return serviceBot.save(bot);
     }
 
     @GetMapping
     public ResponseEntity<Iterable<Bot>> findAll(){
-        return ResponseEntity.ok(botRepository.findAll());
+        return ResponseEntity.ok(serviceBot.findAll());
     }
 
     @GetMapping("/name/{name}")
     public Bot findByNameBot(@PathVariable("name") String name){
-        Optional<Bot> byNameBot = botRepository.findByNameBot(name);
+        Optional<Bot> byNameBot = serviceBot.findByNameBot(name);
         return byNameBot.orElseThrow(() -> new IllegalArgumentException("Bot nao encontrado!"));
     }
 
     @GetMapping("/formatter/{nameBot}")
     public ResponseEntity<List<BotFormatter>> findBotFormatter(@PathVariable("nameBot") String nameBot){
-        return ResponseEntity.ok(botFormatterRepository.findByBot(nameBot));
+        return ResponseEntity.ok(serviceBot.findByBot(nameBot));
     }
     
     @PostMapping("/formatter")
     public BotFormatter saveBotFormatter(@RequestBody BotFormatter botFormatter){    	      
-    	return botFormatterRepository.save(botFormatter);
+    	return serviceBot.save(botFormatter);
     }
     
     @DeleteMapping("/formatter")
 	public ResponseEntity<Void> deleteBotFormatter(@RequestBody List<BotFormatter> botFormatters) {
-    	botFormatters.forEach(botFormat -> {
-    		BotFormatter botFormatter = botFormatterRepository.findOne(botFormat.getId());
-    		botFormatterRepository.delete(botFormatter);
-    	});
+    	serviceBot.deleteBotFormatter(botFormatters);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 }

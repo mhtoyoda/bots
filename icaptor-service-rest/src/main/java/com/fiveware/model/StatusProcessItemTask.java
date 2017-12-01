@@ -10,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "status_process_task")
-public class StatuProcessTask implements Serializable {
+@Table(name = "status_process_item_task")
+public class StatusProcessItemTask implements Serializable {
 
 	/**
 	 * 
@@ -25,10 +25,10 @@ public class StatuProcessTask implements Serializable {
 	@Column(name = "name")
 	private String name;
 
-	public StatuProcessTask() {
+	public StatusProcessItemTask() {
 	}
 
-	public StatuProcessTask(Long id, String name) {
+	public StatusProcessItemTask(Long id, String name) {
 		this.id=id;
 		this.name = name;
 	}

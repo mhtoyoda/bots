@@ -14,6 +14,12 @@ public  class Parameters {
     @Autowired
     private EntityManager entityManager;
 
+    public Parameters(){
+    }
+
+    public Parameters(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
 
     @Transactional
     public Parameter save(Parameter parameter) {
@@ -29,4 +35,6 @@ public  class Parameters {
         }));
         return parameters;
     }
+
+
 }
