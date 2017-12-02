@@ -31,7 +31,7 @@ public class RecentActivity {
 	@JoinColumn(name = "task_id")
 	private Task task;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "bot_id")
 	private Bot bot;
 
