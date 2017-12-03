@@ -25,9 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringRunner.class)
-//@ProfileValueSourceConfiguration(TestProfileValueSource.class)
-
-//@IfProfileValue(name=ACTIVE_PROFILES_PROPERTY_NAME, value = "test")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         classes = IcaptorPersistenceApplication.class)
 @AutoConfigureMockMvc
