@@ -27,7 +27,7 @@ public class RecentActivity {
 	@JoinColumn(name = "user_id")
 	private IcaptorUser user;
 
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "task_id")
 	private Task task;
 
