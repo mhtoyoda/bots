@@ -23,7 +23,7 @@ public class RecentActivity {
 	@Column(name = "creation_time")
 	private LocalDateTime creationTime;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	@JoinColumn(name = "user_id")
 	private IcaptorUser user;
 	
