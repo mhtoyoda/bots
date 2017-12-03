@@ -16,10 +16,10 @@
 
  * mkdir [nome-diretorio] && cd [nome-diretorio]
  * git clone https://github.com/fiveware-solutions/icaptor-automation.git
-
+ * cd icaptor-automation
 
 # Servers - Mysql, Redis e RabbitMQ
-- cd [nome-diretorio]
+- cd [nome-diretorio]/icaptor-automation
 - docker-compose up -d icaptor-mysql icaptor-alpine-redis icaptor-broker
 
 # ICaptor-ELK (opcional)
