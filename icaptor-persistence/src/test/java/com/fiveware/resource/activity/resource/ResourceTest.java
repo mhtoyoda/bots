@@ -118,14 +118,6 @@ public class ResourceTest {
 
     }
 
-    private ResultActions getResultActions(String json, String endPoint) throws Exception {
-        return mockMvc.perform(
-                    MockMvcRequestBuilders.post(endPoint)
-                            .accept(MediaTypes.HAL_JSON)
-                            .content(json)
-                            .contentType(MediaType.APPLICATION_JSON));
-    }
-
     @Test
     public void save1() throws Exception {
     }
@@ -169,5 +161,13 @@ public class ResourceTest {
         ResultActions perform = getResultActions(json, API_BOT);
         String contentAsString = perform.andReturn().getResponse().getContentAsString();
         return objectMapper.readValue(contentAsString,Bot.class);
+    }
+
+    private ResultActions getResultActions(String json, String endPoint) throws Exception {
+        return mockMvc.perform(
+                MockMvcRequestBuilders.post(endPoint)
+                        .accept(MediaTypes.HAL_JSON)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON));
     }
 }
