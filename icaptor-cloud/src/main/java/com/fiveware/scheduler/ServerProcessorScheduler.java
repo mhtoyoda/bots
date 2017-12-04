@@ -126,6 +126,10 @@ public class ServerProcessorScheduler extends BrokerPulling<MessageBot>{
 			taskManager.updateTask(messageBot.getTaskId(), StatusProcessTaskEnum.ERROR);
 			return;
 		}
+		sendMessageBot(messageBot, queueName);
+	}
+
+	private void sendMessageBot(MessageBot messageBot, String queueName) {
 		producer.send(queueName, messageBot);
 	}
 
