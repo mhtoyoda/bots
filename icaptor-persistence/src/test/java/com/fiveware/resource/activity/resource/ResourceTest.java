@@ -6,6 +6,8 @@ import com.fiveware.model.Bot;
 import com.fiveware.model.Task;
 import com.fiveware.model.activity.RecentActivity;
 import com.fiveware.model.user.IcaptorUser;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringExpression;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +22,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +40,12 @@ public class ResourceTest {
     public static final String API_RECENT_ACTIVITIES_NEW_ACTIVITY = "/api/recent-activities/new-activity";
     public static final String API_USER = "/api/usuario";
     public static final String API_BOT = "/api/bot";
+    private static final String API_MARK_SEEN = "/api/recent-activities/mark-seen";
+    private static final String API_LOAD_UNSEEN = "/api/recent-activities/load-unseen/";
+    private static final String API_RECENT_ACTIVITIES_USER = "/api/recent-activities/user/";
+    private static final String API_COUNT_UNSEEN = "/api/recent-activities/count-unseen/";
+    private static final String API_TASK = "/api/task";
+    private static final String API_RECENT_ACTIVITIES_TASK = "/api/recent-activities/task/";
 
 
     @Autowired
@@ -68,7 +80,7 @@ public class ResourceTest {
         recentActivity.setUser(user);
         String json = objectMapper.writeValueAsString(recentActivity);
 
-        ResultActions perform = getResultActions(json, API_RECENT_ACTIVITIES_NEW_ACTIVITY);
+        ResultActions perform = postResultActions(json, API_RECENT_ACTIVITIES_NEW_ACTIVITY);
 
         perform.andExpect((status().isBadRequest()))
                  .andExpect(jsonPath("status").value("BAD_REQUEST"))
@@ -79,7 +91,7 @@ public class ResourceTest {
         recentActivityBot.setBot(bot);
         json = objectMapper.writeValueAsString(recentActivityBot);
 
-        perform = getResultActions(json, API_RECENT_ACTIVITIES_NEW_ACTIVITY);
+        perform = postResultActions(json, API_RECENT_ACTIVITIES_NEW_ACTIVITY);
 
         perform.andExpect((status().isBadRequest()))
                 .andExpect(jsonPath("status").value("BAD_REQUEST"))
@@ -90,7 +102,7 @@ public class ResourceTest {
         recentActivityTask.setTask(task);
         json = objectMapper.writeValueAsString(recentActivityTask);
 
-        perform = getResultActions(json, API_RECENT_ACTIVITIES_NEW_ACTIVITY);
+        perform = postResultActions(json, API_RECENT_ACTIVITIES_NEW_ACTIVITY);
 
         perform.andExpect((status().isBadRequest()))
                 .andExpect(jsonPath("status").value("BAD_REQUEST"))
@@ -106,42 +118,99 @@ public class ResourceTest {
         recentActivity.setMessage("task processed!");
         String json = objectMapper.writeValueAsString(recentActivity);
 
-        ResultActions perform = getResultActions(json, API_RECENT_ACTIVITIES_NEW_ACTIVITY);
+        ResultActions perform = postResultActions(json, API_RECENT_ACTIVITIES_NEW_ACTIVITY);
 
         perform.andExpect((status().isCreated()))
-                .andExpect(jsonPath("id").value(new Long(1)))
+                .andExpect(jsonPath("id").value(new Long(2)))
                 .andExpect(jsonPath("user.active").value(true))
                 .andExpect(jsonPath("user.email").value("admin@icaptor.com"))
                 .andExpect(jsonPath("user.name").value("Administrator"))
-                .andExpect(jsonPath("user.id").value(1))
+                .andExpect(jsonPath("user.id").value(2))
                 .andExpect(jsonPath("message").value("task processed!"));
 
     }
 
     @Test
-    public void save1() throws Exception {
-    }
-
-    @Test
     public void updateVisualized() throws Exception {
+
+        RecentActivity recentActivity = new RecentActivity();
+        IcaptorUser icaptorUser = saveUser();
+
+        recentActivity.setUser(icaptorUser);
+        recentActivity.setMessage("task processed!");
+        String json = objectMapper.writeValueAsString(recentActivity);
+
+        postResultActions(json, API_RECENT_ACTIVITIES_NEW_ACTIVITY);
+
+
+        List<Integer> integers = Arrays.asList(1, 3, 4);
+
+        json = objectMapper.writeValueAsString(integers);
+
+        ResultActions perform = putResultActions(json, API_MARK_SEEN);
+
+        ResultActions perform2 = getResultActions(API_RECENT_ACTIVITIES_USER.concat("1"));
+        perform2.andExpect((status().isOk()))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].visualized").value(true));
     }
 
     @Test
     public void getUnseenByUserId() throws Exception {
+        RecentActivity recentActivity = new RecentActivity();
+        IcaptorUser icaptorUser = saveUser();
 
+        recentActivity.setUser(icaptorUser);
+        recentActivity.setMessage("task processed!");
+        String json = objectMapper.writeValueAsString(recentActivity);
 
+        postResultActions(json, API_RECENT_ACTIVITIES_NEW_ACTIVITY);
+
+        ResultActions perform = getResultActions(API_LOAD_UNSEEN.concat("2"));
+        perform.andExpect((status().isOk()))
+                .andExpect(jsonPath("$[0].user.id").value(new Long(2)));
     }
 
     @Test
     public void countUnseenByUserId() throws Exception {
+        ResultActions perform = getResultActions(API_COUNT_UNSEEN.concat("2"));
+        perform.andExpect((status().isOk()))
+                .andExpect(jsonPath("$").value(new Long(1)));
     }
 
     @Test
     public void getByUserId() throws Exception {
+        ResultActions perform = getResultActions(API_RECENT_ACTIVITIES_USER.concat("1"));
+        perform.andExpect((status().isOk()))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].user.id").value(new Long(1)));
+
     }
 
     @Test
     public void getByTaskId() throws Exception {
+        RecentActivity recentActivity = new RecentActivity();
+        Task task = saveTask();
+
+        recentActivity.setTask(task);
+        recentActivity.setMessage("task processed!");
+        String json = objectMapper.writeValueAsString(recentActivity);
+
+        postResultActions(json,API_RECENT_ACTIVITIES_NEW_ACTIVITY);
+
+        ResultActions perform = getResultActions(API_RECENT_ACTIVITIES_TASK.concat("1"));
+        perform.andExpect((status().isOk()))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].task.id").value(new Long(1)));
+
+    }
+
+    private Task saveTask() throws Exception{
+        Task task = new Task();
+        String json = objectMapper.writeValueAsString(task);
+        ResultActions perform = postResultActions(json, API_TASK);
+        String contentAsString = perform.andReturn().getResponse().getContentAsString();
+        return objectMapper.readValue(contentAsString,Task.class);
     }
 
 
@@ -150,7 +219,7 @@ public class ResourceTest {
         user.setEmail("admin@icaptor.com");
         user.setName("Administrator");
         String json = objectMapper.writeValueAsString(user);
-        ResultActions perform = getResultActions(json, API_USER);
+        ResultActions perform = postResultActions(json, API_USER);
         String contentAsString = perform.andReturn().getResponse().getContentAsString();
         return objectMapper.readValue(contentAsString,IcaptorUser.class);
     }
@@ -158,16 +227,30 @@ public class ResourceTest {
     private Bot saveBot() throws Exception {
         bot.setNameBot("bot-teste");
         String json = objectMapper.writeValueAsString(bot);
-        ResultActions perform = getResultActions(json, API_BOT);
+        ResultActions perform = postResultActions(json, API_BOT);
         String contentAsString = perform.andReturn().getResponse().getContentAsString();
         return objectMapper.readValue(contentAsString,Bot.class);
     }
 
-    private ResultActions getResultActions(String json, String endPoint) throws Exception {
+    private ResultActions postResultActions(String json, String endPoint) throws Exception {
         return mockMvc.perform(
                 MockMvcRequestBuilders.post(endPoint)
                         .accept(MediaTypes.HAL_JSON)
                         .content(json)
+                        .contentType(MediaType.APPLICATION_JSON));
+    }
+    private ResultActions putResultActions(String json, String endPoint) throws Exception {
+        return mockMvc.perform(
+                MockMvcRequestBuilders.put(endPoint)
+                        .accept(MediaTypes.HAL_JSON)
+                        .content(json)
+                        .contentType(MediaType.APPLICATION_JSON));
+    }
+
+    private ResultActions getResultActions(String endPoint) throws Exception {
+        return mockMvc.perform(
+                MockMvcRequestBuilders.get(endPoint)
+                        .accept(MediaTypes.HAL_JSON)
                         .contentType(MediaType.APPLICATION_JSON));
     }
 }
