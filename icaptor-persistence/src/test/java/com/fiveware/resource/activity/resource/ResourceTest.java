@@ -6,8 +6,6 @@ import com.fiveware.model.Bot;
 import com.fiveware.model.Task;
 import com.fiveware.model.activity.RecentActivity;
 import com.fiveware.model.user.IcaptorUser;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.StringExpression;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
