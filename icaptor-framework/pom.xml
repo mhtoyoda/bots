@@ -36,6 +36,7 @@
             <scope>runtime</scope>
         </dependency>
 
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
@@ -99,8 +100,20 @@
             <groupId>icaptor-service-rest</groupId>
             <artifactId>icaptor-service-rest</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+		<dependency>	
+		<dependency>
+            <groupId>com.sikulix</groupId>
+            <artifactId>sikulixapi</artifactId>
+            <version>1.1.0</version>
         </dependency>
 
+        
+
+        <dependency>
+            <groupId>jxgrabkey</groupId>
+            <artifactId>jxgrabkey</artifactId>
+            <version>1.0</version>
+        </dependency>
 
     </dependencies>
 
