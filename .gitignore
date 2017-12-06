@@ -10,3 +10,5 @@ icaptor-extract-text/excel.xls
 icaptor-extract-text/out.pdf
 .classpath
 bin
+.tar
+
