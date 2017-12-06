@@ -100,7 +100,7 @@
             <groupId>icaptor-service-rest</groupId>
             <artifactId>icaptor-service-rest</artifactId>
             <version>0.0.1-SNAPSHOT</version>
-		<dependency>	
+		</dependency>	
 		<dependency>
             <groupId>com.sikulix</groupId>
             <artifactId>sikulixapi</artifactId>
