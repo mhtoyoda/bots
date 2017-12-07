@@ -35,12 +35,12 @@
 -  ``` mvn clean install```
 
 ** Para start os micros servicos abaixo segui a sequencia:
-  1o - Icaptor-data
-  2o - icaptor-cloud
-  3o - icaptor-redis
-  4o - icaptor-monitoring
-  5o - icaptor-api (Opcional, necessário se for usar aplicacao Web (UX))
-  6o - icaptor-agent
+ -  1o - Icaptor-data
+ -  2o - icaptor-cloud
+ -  3o - icaptor-redis
+ -  4o - icaptor-monitoring
+ -  5o - icaptor-api (Opcional, necessário se for usar aplicacao Web (UX))
+ -  6o - icaptor-agent
 
 ### Micro service (icaptor-data)
 -  ```cd icaptor-persistence``` 
