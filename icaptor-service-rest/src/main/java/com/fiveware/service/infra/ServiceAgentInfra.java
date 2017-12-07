@@ -28,14 +28,12 @@ public class ServiceAgentInfra {
     @Autowired
     private ApiUrlPersistence apiUrlPersistence;
 
-
     @Autowired
     private ObjectMapper objectMapper;
 
 
     public Map<String, Object> metrics(Agent agent) {
-        String uri = null;
-        uri = "http://localhost".concat(":").concat(String.valueOf(agent.getPort()))
+        String uri = "http://localhost".concat(":").concat(String.valueOf(agent.getPort()))
                 .concat("/management/metrics");
         Map<String, Object> agentInfra = null;
         try {

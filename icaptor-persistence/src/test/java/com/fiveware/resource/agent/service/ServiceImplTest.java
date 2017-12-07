@@ -1,4 +1,4 @@
-package com.fiveware.resource.agent;
+package com.fiveware.resource.agent.service;
 
 import com.fiveware.model.Agent;
 import com.fiveware.model.AgentParameter;
@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
-public class ServiceAgentImplTest {
+public class ServiceImplTest {
 
     @Mock
     AgentRepository agentRepository;

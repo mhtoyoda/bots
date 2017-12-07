@@ -1,13 +1,9 @@
 package com.fiveware.model;
 
-import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "bot")
@@ -48,6 +44,9 @@ public class Bot implements Serializable {
 	
 	@Column(name ="description")
 	private String description;
+
+	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	private Set<InputField> inputFields;
 	
 	public Long getId() {
 		return id;
@@ -136,5 +135,12 @@ public class Bot implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
+	public Set<InputField> getInputFields() {
+		return inputFields;
+	}
+
+	public void setInputFields(Set<InputField> inputFields) {
+		this.inputFields = inputFields;
+	}
 }

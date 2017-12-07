@@ -1,4 +1,4 @@
-package com.fiveware.resource.bot;
+package com.fiveware.resource.bot.service;
 
 import com.fiveware.model.Bot;
 import com.fiveware.model.BotFormatter;

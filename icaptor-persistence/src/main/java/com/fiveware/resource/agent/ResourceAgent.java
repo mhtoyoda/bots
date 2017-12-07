@@ -6,15 +6,10 @@ import java.util.Optional;
 
 import com.fiveware.service.agent.ServiceAgentImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.fiveware.model.Agent;
 import com.fiveware.model.AgentParameter;
@@ -32,14 +27,14 @@ public class ResourceAgent {
 	@Autowired
 	private ServiceAgentImpl serviceAgent;
 
-	@Transactional(readOnly = false)
     @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
     public Agent save(@RequestBody Agent agent){
         return serviceAgent.save(agent);
     }
 	
-	@Transactional(readOnly = false)
     @DeleteMapping
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void remove(@RequestBody Agent agent){
         serviceAgent.remove(agent);
     }

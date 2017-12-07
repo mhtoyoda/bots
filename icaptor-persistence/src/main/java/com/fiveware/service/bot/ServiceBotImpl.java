@@ -17,6 +17,7 @@ public class ServiceBotImpl {
 
     @Autowired
     private final BotRepository botRepository;
+
     @Autowired
     private final BotFormatterRepository botFormatterRepository;
 
@@ -56,5 +57,9 @@ public class ServiceBotImpl {
             BotFormatter botFormatter = botFormatterRepository.findOne(botFormat.getId());
             botFormatterRepository.delete(botFormatter);
         });
+    }
+
+    public Bot findOne(Long id) {
+        return botRepository.findOne(id);
     }
 }

@@ -2,8 +2,10 @@ package com.fiveware.resource.bot;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 
+import com.fiveware.model.InputField;
 import com.fiveware.service.bot.ServiceBotImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -63,4 +65,10 @@ public class ResourceBot {
     	serviceBot.deleteBotFormatter(botFormatters);
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
+
+    @GetMapping("/{id}/input-fields")
+    public ResponseEntity<Set<InputField>> listInputFields(@PathVariable("id") Long id){
+        return ResponseEntity.ok(serviceBot.findOne(id).getInputFields());
+    }
+
 }

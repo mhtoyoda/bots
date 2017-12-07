@@ -1,4 +1,4 @@
-ALTER TABLE bot ADD fields_input VARCHAR(120) NOT NULL;
+ALTER TABLE bot ADD fields_input VARCHAR(520) NOT NULL;
 ALTER TABLE bot ADD fields_output VARCHAR(120) NOT NULL;
 ALTER TABLE bot ADD type_file_in VARCHAR(4) NOT NULL;
 ALTER TABLE bot ADD separator_file VARCHAR(1) NULL;
