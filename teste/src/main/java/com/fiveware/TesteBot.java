@@ -47,13 +47,13 @@ public class TesteBot implements Automation<Cep, Endereco> {
 	public Endereco execute(Cep cep, ParameterValue parameters) throws RuntimeBotException,UnRecoverableException,
 			RecoverableException, AuthenticationBotException {
 
-		ParameterIcaptor login = parameters.getByType("login");
-		logger.info("LOGIN Field{}: Value{}", login.getField(), login.getValue());
-
-		ParameterIcaptor retry = parameters.getByType("retry");
-		logger.info("Cloud-Bot: Field{}: value{}", retry.getField(), retry.getValue());
-
-		logger.info("Dados de Endereco: {}",cep.getCep().toString());
+//		ParameterIcaptor login = parameters.getByType("login");
+//		logger.info("LOGIN Field{}: Value{}", login.getField(), login.getValue());
+//
+//		ParameterIcaptor retry = parameters.getByType("retry");
+//		logger.info("Cloud-Bot: Field{}: value{}", retry.getField(), retry.getValue());
+//
+//		logger.info("Dados de Endereco: {}",cep.getCep().toString());
 		Endereco endereco = getEndereco(cep.getCep());
 		endereco.setArquivo(null);
 		return endereco;

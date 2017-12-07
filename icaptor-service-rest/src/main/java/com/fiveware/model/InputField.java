@@ -5,6 +5,7 @@ import com.google.common.base.Objects;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "input_field")
@@ -14,7 +15,12 @@ public class InputField implements Serializable,Comparable<InputField>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String name;
+
+    @ManyToMany(mappedBy="inputFields")
+    private List<Bot> bots;
 
     public InputField(){}
 
@@ -39,13 +45,24 @@ public class InputField implements Serializable,Comparable<InputField>{
         this.name = name;
     }
 
+
+
+
+    public List<Bot> getBots() {
+        return bots;
+    }
+
+
+    public void setBots(List<Bot> bots) {
+        this.bots = bots;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         InputField that = (InputField) o;
-        return Objects.equal(id, that.id) &&
-                Objects.equal(name, that.name);
+        return Objects.equal(name, that.name);
     }
 
     @Override

@@ -15,8 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        classes = IcaptorPersistenceApplication.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = IcaptorPersistenceApplication.class)
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class ResourceBotTest {
@@ -25,7 +24,6 @@ public class ResourceBotTest {
     private MockMvc mockMvc;
 
     private ObjectMapper objectMapper;
-
 
     @Before
     public void setUp() throws Exception {

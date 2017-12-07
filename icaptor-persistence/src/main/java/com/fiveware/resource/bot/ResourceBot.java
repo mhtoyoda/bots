@@ -2,8 +2,6 @@ package com.fiveware.resource.bot;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.function.Supplier;
 
 import com.fiveware.model.InputField;
 import com.fiveware.service.bot.ServiceBotImpl;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fiveware.model.Bot;
 import com.fiveware.model.BotFormatter;
-import com.fiveware.repository.BotFormatterRepository;
-import com.fiveware.repository.BotRepository;
 
 /**
  * Created by valdisnei on 13/07/17.
@@ -29,7 +25,6 @@ import com.fiveware.repository.BotRepository;
 @RestController
 @RequestMapping("/api/bot")
 public class ResourceBot {
-
 
     @Autowired
     private ServiceBotImpl serviceBot;
@@ -67,7 +62,7 @@ public class ResourceBot {
 	}
 
     @GetMapping("/{id}/input-fields")
-    public ResponseEntity<Set<InputField>> listInputFields(@PathVariable("id") Long id){
+    public ResponseEntity<List<InputField>> listInputFields(@PathVariable("id") Long id){
         return ResponseEntity.ok(serviceBot.findOne(id).getInputFields());
     }
 

@@ -3,7 +3,7 @@ package com.fiveware.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "bot")
@@ -45,8 +45,11 @@ public class Bot implements Serializable {
 	@Column(name ="description")
 	private String description;
 
-	@ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
-	private Set<InputField> inputFields;
+	@ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE},fetch = FetchType.EAGER)
+	@JoinTable(name="bot_has_inputFields", joinColumns=
+			{@JoinColumn(name="bot_id")}, inverseJoinColumns=
+			{@JoinColumn(name="inputField_id")})
+	private List<InputField> inputFields;
 	
 	public Long getId() {
 		return id;
@@ -136,11 +139,11 @@ public class Bot implements Serializable {
 		this.description = description;
 	}
 
-	public Set<InputField> getInputFields() {
+	public List<InputField> getInputFields() {
 		return inputFields;
 	}
 
-	public void setInputFields(Set<InputField> inputFields) {
+	public void setInputFields(List<InputField> inputFields) {
 		this.inputFields = inputFields;
 	}
 }
