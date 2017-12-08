@@ -53,7 +53,7 @@ public class ServiceTaskImpl {
 
     public List<Task> findRecentTaskByStatus(String status) {
         LocalDateTime start = LocalDateTime.now().withMinute(0).withSecond(0);
-        LocalDateTime end = LocalDateTime.now().withMinute(59).withSecond(59);
+        LocalDateTime end = LocalDateTime.now().plusMinutes(90).withSecond(59);
         return taskRepository.findTaskByStatusProcessAndStartAt(status, start, end);
     }
 }

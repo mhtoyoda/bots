@@ -41,7 +41,7 @@ public class ConsolidatedTaskFile {
 		taskProcessed.forEach(task -> {
 			List<TaskFile> taskFileList = taskFileManager.getFileTaskById(task.getId());
 			if(CollectionUtils.isEmpty(taskFileList)){
-				List<String> status = Lists.newArrayList(StatusProcessItemTaskEnum.SUCCESS.getName());
+				List<String> status = Lists.newArrayList(StatusProcessItemTaskEnum.SUCCESS.getName(), StatusProcessItemTaskEnum.ERROR.getName());
 				List<ItemTask> itemTaskList = taskManager.itemTaskListStatus(status, task.getId());
 				taskFileManager.processTaskFile(task, itemTaskList);
 			}

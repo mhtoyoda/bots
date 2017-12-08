@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.lang3.StringUtils;
@@ -65,9 +66,7 @@ public class FileExtractUtil {
 	}
 
 	public byte[] createZipFile(Map<String, List<byte[]>> files) throws IOException {
-		int cont;
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		byte[] data = new byte[4096];
 		BufferedInputStream source = null;
 		InputStream streamInput = null;
 		ZipOutputStream out = null;
@@ -86,10 +85,9 @@ public class FileExtractUtil {
 					streamInput = new ByteArrayInputStream(bs);
 					source = new BufferedInputStream(streamInput, 4096);
 					entry = new ZipEntry(StringUtils.replaceFirst(nameFile, "\\.", "_"+index+"."));
+					entry.setSize(bs.length);
 					out.putNextEntry(entry);
-					while ((cont = source.read(data, 0, 4096)) != -1) {
-						out.write(data, 0, cont);
-					}
+					out.write(bs);
 					index++;
 				}
 			}						
@@ -112,5 +110,24 @@ public class FileExtractUtil {
 		out.write(bytes);
 		out.close();		
 		return file;
+	}
+	
+	public byte[] unzip(byte[] file) throws Exception {
+		ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(file);
+		
+		ZipInputStream zipInputStream = new ZipInputStream(arrayInputStream);
+		ZipEntry zipEntry = zipInputStream.getNextEntry();
+		BufferedInputStream bufferedInputStream = new BufferedInputStream(zipInputStream);
+
+		if (zipEntry != null) {
+			byte[] buffer = new byte[5000000];
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+	        int len;
+	        while ((len = bufferedInputStream.read(buffer)) > 0) {
+	        	baos.write(buffer, 0, len);
+	        }
+	        return baos.toByteArray();
+		}		
+		return null;
 	}
 }

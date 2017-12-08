@@ -4,10 +4,12 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -20,8 +22,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.fiveware.dsl.file.FileExtractUtil;
+import com.fiveware.model.Bot;
 import com.fiveware.model.BotFormatter;
 import com.fiveware.model.ItemTask;
+import com.fiveware.model.StatusProcessItemTaskEnum;
 import com.fiveware.model.Task;
 import com.fiveware.model.TaskFile;
 import com.fiveware.service.ServiceBot;
@@ -47,17 +51,25 @@ public class TaskFileManager {
 		return taskList;
 	}
 
-	private String getIndexField(BotFormatter botFormatter, String dataOut) {
+	private Integer getDataIndex(BotFormatter botFormatter){
+		AtomicInteger position = new AtomicInteger();
+		Bot bot = botFormatter.getBot();
+		String[] inputFields = bot.getFieldsInput().split(bot.getSeparatorFile());
+		List<String> list = Lists.newArrayList(inputFields);
+		list.stream().peek(x -> position.incrementAndGet()).filter(in -> in.equals(botFormatter.getFieldIndex())).findFirst().get();
+		return position.get();
+	}
+	
+	private String getIndexFieldIn(String dataIn, String separator, Integer position) {
 		try {
-			JSONObject jsonObject = new JSONObject(dataOut);
-			String value = (String) jsonObject.get(botFormatter.getFieldIndex());
-			return value;
-		} catch (JSONException e) {
+			String[] dataInArray = dataIn.split(separator);
+			return dataInArray[position];
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "";
+		return "out";
 	}
-
+	
 	private byte[] getFileByteArray(BotFormatter botFormatter, String dataOut) {
 		try {
 			JSONObject jsonObject = new JSONObject(dataOut);
@@ -70,10 +82,10 @@ public class TaskFileManager {
 		return null;
 	}
 
-	private String generateFileName(BotFormatter botFormatter, String dataOut) {
-		String typeFile = botFormatter.getTypeFile().toLowerCase();
-		String indexField = getIndexField(botFormatter, dataOut);
-		String fileName = indexField + "." + typeFile;
+	private String generateFileName(BotFormatter botFormatter, String dataIn, Integer indexField) {
+		String typeFile = botFormatter.getTypeFile().toLowerCase();		
+		String field = getIndexFieldIn(dataIn, botFormatter.getBot().getSeparatorFile(), indexField);
+		String fileName = field + "." + typeFile;
 		return fileName;
 	}
 
@@ -96,18 +108,20 @@ public class TaskFileManager {
 		List<BotFormatter> botFormatters = getBotFormatters(task.getBot().getNameBot());
 		if (CollectionUtils.isNotEmpty(botFormatters)) {
 			for (ItemTask itemTask : itemTaskList) {
-				List<byte[]> list = Lists.newArrayList();
-				for (BotFormatter botFormatter : botFormatters) {
-					String key = generateFileName(botFormatter, itemTask.getDataOut());
-					log.info("Generate file to task id: {} - item task id: {} - field: {}", task.getId(),
-							itemTask.getId(), botFormatter.getFieldName());
-					byte[] file = getFileByteArray(botFormatter, itemTask.getDataOut());
-					if (null != file) {
-						if (filesMap.containsKey(key)) {
-							filesMap.get(key).add(file);
-						} else {
-							list.add(file);
-							filesMap.put(key, list);
+				if(itemTask.getStatusProcess().getName().equals(StatusProcessItemTaskEnum.SUCCESS.getName())){
+					List<byte[]> list = Lists.newArrayList();
+					for (BotFormatter botFormatter : botFormatters) {
+						Integer dataIndex = getDataIndex(botFormatter);
+						String key = generateFileName(botFormatter, itemTask.getDataIn(), dataIndex);
+						log.info("Generate file to task id: {} - item task id: {} - field: {}", task.getId(), itemTask.getId(), botFormatter.getFieldName());
+						byte[] file = getFileByteArray(botFormatter, itemTask.getDataOut());
+						if (null != file) {
+							if (filesMap.containsKey(key)) {
+								filesMap.get(key).add(file);
+							} else {
+								list.add(file);
+								filesMap.put(key, list);
+							}
 						}
 					}
 				}
@@ -126,8 +140,8 @@ public class TaskFileManager {
 
 	private byte[] writeFileDataOut(List<String> itens) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(baos))){
-			itens.forEach(item -> {
+		try(BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(baos, Charset.forName("UTF-8")))){
+			itens.forEach(item -> {				
 				try {
 					writer.write(item);
 					writer.newLine();
