@@ -157,7 +157,9 @@ public class ControlPanelController {
 			response.setContentType("application/x-octet-stream");
 			response.setHeader("Content-Disposition", "attachment;filename=Saida.zip");
 			writeOut(response, fileZip);
-			response.setContentLength(fileZip.length);
+			if(null != fileZip){
+				response.setContentLength(fileZip.length);				
+			}
 		} catch (Exception e) {
 			logger.error("{}", e);
 		}

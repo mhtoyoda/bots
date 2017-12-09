@@ -9,6 +9,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -67,7 +68,7 @@ public class TaskFileManager {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return "out";
+		return UUID.randomUUID().toString();
 	}
 	
 	private byte[] getFileByteArray(BotFormatter botFormatter, String dataOut) {
@@ -75,7 +76,6 @@ public class TaskFileManager {
 			JSONObject jsonObject = new JSONObject(dataOut);
 			String value = (String) jsonObject.get(botFormatter.getFieldName());
 			return Base64.getDecoder().decode(value.getBytes());
-//			return value.getBytes();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -109,16 +109,16 @@ public class TaskFileManager {
 		if (CollectionUtils.isNotEmpty(botFormatters)) {
 			for (ItemTask itemTask : itemTaskList) {
 				if(itemTask.getStatusProcess().getName().equals(StatusProcessItemTaskEnum.SUCCESS.getName())){
-					List<byte[]> list = Lists.newArrayList();
 					for (BotFormatter botFormatter : botFormatters) {
 						Integer dataIndex = getDataIndex(botFormatter);
-						String key = generateFileName(botFormatter, itemTask.getDataIn(), dataIndex);
+						String key = "itemId_"+itemTask.getId()+"_"+generateFileName(botFormatter, itemTask.getDataIn(), dataIndex);
 						log.info("Generate file to task id: {} - item task id: {} - field: {}", task.getId(), itemTask.getId(), botFormatter.getFieldName());
 						byte[] file = getFileByteArray(botFormatter, itemTask.getDataOut());
 						if (null != file) {
 							if (filesMap.containsKey(key)) {
 								filesMap.get(key).add(file);
 							} else {
+								List<byte[]> list = Lists.newArrayList();
 								list.add(file);
 								filesMap.put(key, list);
 							}
