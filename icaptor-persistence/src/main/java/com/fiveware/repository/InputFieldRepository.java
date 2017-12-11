@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 public interface InputFieldRepository extends CrudRepository<InputField, Long>{
 
 
+    InputField findByName(String name);
 }

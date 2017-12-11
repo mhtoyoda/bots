@@ -16,10 +16,9 @@ public class InputField implements Serializable,Comparable<InputField>{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String name;
 
-    @ManyToMany(mappedBy="inputFields")
+    @ManyToMany(mappedBy="inputFields",fetch = FetchType.EAGER)
     private List<Bot> bots;
 
     public InputField(){}
@@ -44,8 +43,6 @@ public class InputField implements Serializable,Comparable<InputField>{
     public void setName(String name) {
         this.name = name;
     }
-
-
 
 
     public List<Bot> getBots() {

@@ -4,6 +4,7 @@ import com.fiveware.model.Bot;
 import com.fiveware.model.BotFormatter;
 import com.fiveware.repository.BotFormatterRepository;
 import com.fiveware.repository.BotRepository;
+import com.fiveware.repository.InputFieldRepository;
 import com.fiveware.service.bot.ServiceBotImpl;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
@@ -24,14 +25,18 @@ public class ServiceBotImplTest {
     BotRepository botRepository;
 
     @Mock
+    InputFieldRepository inputFieldRepository;
+
+    @Mock
     BotFormatterRepository botFormatterRepository;
 
     ServiceBotImpl serviceBot;
 
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        this.serviceBot = new ServiceBotImpl(botRepository,botFormatterRepository);
+        this.serviceBot = new ServiceBotImpl(botRepository, inputFieldRepository, botFormatterRepository);
     }
 
     @Test
@@ -109,5 +114,8 @@ public class ServiceBotImplTest {
 
         verify(botFormatterRepository).delete(formatterBot);
     }
+
+
+
 
 }
