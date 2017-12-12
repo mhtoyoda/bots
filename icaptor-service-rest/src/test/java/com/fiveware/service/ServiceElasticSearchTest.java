@@ -36,7 +36,7 @@ public class ServiceElasticSearchTest {
         restTemplate = new RestTemplate();
 
        when(apiUrlPersistence.endPointElasticSearch("icaptor-automation","Test"))
-               .thenReturn("http://54.232.96.63:9200/icaptor-automation/Test");
+               .thenReturn("http://54.232.103.97:9200/icaptor-automation/Test");
         serviceElasticSearch = new ServiceElasticSearch(apiUrlPersistence,restTemplate);
     }
 
@@ -70,7 +70,7 @@ public class ServiceElasticSearchTest {
         assertTrue(!Objects.isNull(id));
 
         when(apiUrlPersistence.endPointElasticSearch("icaptor-automation","Test/"+id))
-                .thenReturn("http://54.232.96.63:9200/icaptor-automation/Test/"+id);
+                .thenReturn("http://54.232.103.97:9200/icaptor-automation/Test/"+id);
         serviceElasticSearch.delete(test,id);
 
     }

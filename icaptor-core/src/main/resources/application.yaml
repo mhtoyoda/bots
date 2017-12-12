@@ -5,7 +5,7 @@ icaptor:
     ip: localhost
     data-source:
       host: http://localhost:8085
-  elasticSearch: http://54.232.96.63:9200
+  elasticSearch: http://54.232.103.97:9200
 
   broker:
     user: guest

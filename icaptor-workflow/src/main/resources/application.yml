@@ -15,7 +15,7 @@ icaptor:
   broker:
     user: guest
     pass: guest
-    host: 54.232.96.63
+    host: 54.232.103.97
     port: 15672
     queue.send.schedularTime: 5000 #milli second
 

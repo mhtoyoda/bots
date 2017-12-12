@@ -7,4 +7,4 @@ ${Ansi.CYAN}  \_\  \_\  \___/  \___| \__,_|| .__/  \__| \___/ |_|    \_| |_/ \__
 ${Ansi.CYAN}                               | |                                __/ |
 ${Ansi.CYAN}                               |_|                               |___/
 ${Ansi.YELLOW} :: ${info.app.name} ::    ${info.app.description}                                  ( v${info.app.build} )${Ansi.DEFAULT}
-${Ansi.YELLOW} :: PlataForma - http://54.232.96.63/icaptor/#/dashboard ${Ansi.DEFAULT}
+${Ansi.YELLOW} :: PlataForma - http://54.232.103.97/icaptor/#/dashboard ${Ansi.DEFAULT}

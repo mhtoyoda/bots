@@ -6,7 +6,7 @@ logging:
 spring:
   profiles: qa
   redis:
-    hostname: 54.232.96.63
+    hostname: 54.232.103.97
     port: 6379
 server:
   port : 8086

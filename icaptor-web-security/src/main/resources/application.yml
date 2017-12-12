@@ -11,13 +11,13 @@ server:
 icaptor:
   seguranca:
     enable-https: false
-  origin-permitida: http://54.232.96.63
+  origin-permitida: http://54.232.103.97
   data-source:
-    host: http://54.232.96.63:8085
+    host: http://54.232.103.97:8085
   server:
-    host: http://54.232.96.63:8082
-  elasticSearch: http://54.232.96.63:9200
-  redis: http://54.232.96.63:8086
+    host: http://54.232.103.97:8082
+  elasticSearch: http://54.232.103.97:9200
+  redis: http://54.232.103.97:8086
 
 spring:
   profiles: qa
@@ -36,7 +36,7 @@ icaptor:
     host: http://localhost:8085
   server:
     host: http://localhost:8082
-  elasticSearch: http://54.232.96.63:9200
+  elasticSearch: http://54.232.103.97:9200
   redis: http://localhost:8086
 spring:
   profiles: dev
