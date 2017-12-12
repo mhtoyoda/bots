@@ -25,8 +25,8 @@ public class ResourceTask {
 
 	@PutMapping("/{id}/status")
 	public ResponseEntity<?> update(@RequestBody Task task,@PathVariable Long id) {
-		Task one = serviceTask.findOne(id);
-		return ResponseEntity.status(HttpStatus.OK).body(one);
+		Task update = serviceTask.update(task, id);
+		return ResponseEntity.status(HttpStatus.OK).body(update);
 	}
 
 	@GetMapping("/{id}")
